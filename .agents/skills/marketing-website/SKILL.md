@@ -1,15 +1,17 @@
 ---
 name: marketing-website
-description: Build or review public business websites and paid-ad landing pages for conversions, Google Ads, Meta Ads, GA4, GTM, attribution, consent-aware tracking, and lead-generation behavior. Use for marketing readiness and conversion structure, not framework mechanics, visual styling, or general accessibility implementation.
+description: Plan, implement, or audit lead-generation and paid-acquisition behavior on public websites, including landing-page conversion paths, CTA hierarchy, forms, business events, campaign attribution, and consent-aware analytics. Use when conversion, paid traffic, or measurement is in scope; not for general site building, visual design, SEO-only work, campaign creative or targeting, or framework mechanics.
 ---
 
 # Marketing Website
 
-Build or review public business websites so paid traffic can reach a clear offer, complete meaningful lead actions, and be measured accurately.
+Improve the path from visitor intent to a meaningful business conversion and make that path measurable without coupling the interface to advertising vendors.
 
-This skill focuses on marketing structure, conversion paths, paid-ad readiness, analytics architecture, attribution, consent-aware tracking, and business-impact review.
+## Boundaries
 
-Let dedicated framework, performance, accessibility, SEO, copywriting, and visual-design skills govern their respective areas when available.
+This skill owns landing-page conversion strategy, offer and CTA hierarchy, lead flows, paid-ad-to-page message match, business-event design, campaign attribution, consent-aware analytics architecture, and reviews prioritized by business impact.
+
+Use dedicated skills for detailed SEO, accessibility, visual design, framework architecture, React performance, ad creative, and programmatic page generation. Do not use this skill for campaign targeting, bidding, or budget management.
 
 ## Start With the Business Outcome
 
@@ -17,27 +19,11 @@ Before changing or assessing a page:
 
 1. Identify the primary business conversion and any legitimate secondary conversions.
 2. Understand the visitor intent and likely traffic source.
-3. Inspect the relevant page structure, lead forms, analytics, consent handling, and current conversion path.
+3. Inspect the page, conversion path, forms, analytics boundary, attribution handling, and consent behavior.
 4. Reuse the project's existing architecture and conventions.
-5. Make only the changes needed for the requested marketing outcome.
+5. Limit changes to the requested marketing outcome.
 
-Meaningful conversions can include:
-
-- `contact_form_submitted`
-- `quote_requested`
-- `phone_clicked`
-- `email_clicked`
-- `whatsapp_clicked`
-- `messenger_clicked`
-- `viber_clicked`
-- `appointment_requested`
-- `site_survey_requested`
-- `calculator_completed`
-- `package_selected`
-
-Choose stable event names that describe business outcomes rather than UI mechanics.
-
-Do not create tracking events merely because an interaction exists.
+If campaign context, runtime behavior, vendor configuration, or conversion data is unavailable, state the resulting verification gap instead of inventing it.
 
 ## Conversion Structure and Landing Pages
 
@@ -111,86 +97,49 @@ Over generic wording such as:
 
 Do not add CTAs solely to increase their count.
 
-## Paid Advertising Readiness
+## Paid-Traffic Readiness
 
-Prepare pages so they can support traffic from:
+- Preserve message match between the ad and landing page.
+- Align the page with the campaign's visitor intent.
+- Provide a focused, fast mobile path to a meaningful conversion.
+- Capture only useful campaign attribution.
+- Keep Google Ads, Meta, and other vendor code behind a shared tracking boundary.
+- Leave room for server-side or enhanced-conversion integrations without building them speculatively.
 
-- Google Ads;
-- Meta / Facebook / Instagram Ads;
-- other paid channels when requested.
-
-### Google Ads
-
-Support:
-
-- campaign-specific landing pages;
-- strong message match between ad and page;
-- relevant conversion actions;
-- clean attribution;
-- fast mobile experience;
-- clear offer and trust signals.
-
-### Meta Ads
-
-Support:
-
-- focused mobile landing experiences;
-- clear lead actions;
-- campaign attribution;
-- Meta Pixel integration boundaries;
-- future Conversions API integration without prematurely building it.
-
-Do not couple business UI directly to Google Ads or Meta-specific implementation details.
+This skill governs the landing page and measurement layer, not ad copy, creative formats, audiences, bidding, or campaign operations.
 
 ## Analytics and Tracking Architecture
 
-Prefer a small event-based boundary between business UI and marketing vendors when repeated tracking needs justify it.
-
-UI code should emit meaningful business events.
-
-Vendor-specific loading and mapping should remain isolated.
+Use a small event boundary when repeated tracking needs justify it. UI code should emit stable events describing business outcomes; vendor loading and mapping should remain isolated from page components.
 
 ### Preferred architecture
 
 Business interaction
-→ marketing event
+→ business event
 → tracking boundary
 → GTM / analytics vendor
 
-Prefer Google Tag Manager as the central tag layer when it suits the existing project.
-
-Keep integrations localized and simple.
-
-Avoid independently scattering:
-
-- GTM;
-- GA4;
-- Google Ads;
-- Meta Pixel;
-- other vendor scripts
-
-through page and component code unless the project has a strong documented reason.
+Use Google Tag Manager as the central tag layer only when it fits the existing project. Do not scatter GTM, GA4, Google Ads, Meta Pixel, or other vendor scripts throughout page and component code.
 
 ### Event quality
 
-Track events that answer useful business questions.
+Track an interaction only when it answers a useful business question. Useful events can include:
 
-Examples:
+- `calculator_started`
+- `calculator_completed`
+- `package_viewed`
+- `package_selected`
+- `quote_started`
+- `quote_submitted`
+- `phone_clicked`
+- `email_clicked`
+- `appointment_requested`
 
-- calculator started;
-- calculator completed;
-- package viewed;
-- package selected;
-- quote started;
-- quote submitted;
-- phone clicked;
-- email clicked.
-
-Avoid tracking meaningless UI noise.
+Do not turn incidental UI activity into analytics noise.
 
 ## Attribution
 
-Preserve campaign attribution only as needed for the requested measurement flow.
+Preserve only the attribution required by the measurement flow.
 
 Support relevant campaign values such as:
 
@@ -199,24 +148,23 @@ Support relevant campaign values such as:
 - referrer;
 - campaign identifiers where applicable.
 
-When a visitor submits a lead, preserve relevant attribution data if it is useful and permitted by the site's privacy and consent model.
+Attach useful and permitted attribution to a submitted lead when the business process needs it.
 
 Do not create unnecessary persistent tracking storage.
 
 ## Lead Forms
 
-Lead forms should support the conversion goal without unnecessary friction.
-
-Prefer:
+Ask only for information required to qualify or fulfill the lead. Forms need:
 
 - only fields needed for the business process;
-- clear labels;
+- clear labels and instructions;
 - clear success state;
 - clear error state;
 - meaningful validation;
-- mobile-friendly controls.
+- mobile-friendly controls;
+- an accessible keyboard and assistive-technology experience.
 
-If the visitor has already provided useful information through a calculator, package selector, configurator, or previous step, pass that information with the lead instead of asking them to enter it again.
+Carry forward useful information already supplied through a calculator, package selector, configurator, or earlier step instead of asking for it again.
 
 Useful lead context can include:
 
@@ -228,20 +176,20 @@ Useful lead context can include:
 - requested survey;
 - business/home customer type.
 
-Do not collect personal information merely because it might be useful later.
+Do not collect personal information on the possibility that it might be useful later.
 
 ## Consent and Privacy
 
-Assume sites targeting Bulgaria or the European Economic Area need consent-aware tracking architecture.
+When the target market includes Bulgaria or the European Economic Area, design tracking around the site's approved consent model.
 
-Keep the implementation compatible with:
+Keep the architecture compatible with:
 
 - cookie consent management;
 - Google Consent Mode;
 - analytics consent;
 - advertising consent.
 
-Ensure analytics and advertising tags respect the user's consent state where required.
+Ensure analytics and advertising tags respect the applicable consent state.
 
 Avoid collecting or forwarding personal information unless it is:
 
@@ -251,7 +199,7 @@ Avoid collecting or forwarding personal information unless it is:
 
 Enhanced conversions may involve personal information.
 
-Implement them only when explicitly requested and when the required consent and privacy design is established.
+Implement them only when explicitly in scope and when the required consent and privacy design is established.
 
 Separate technical implementation from legal advice.
 
@@ -263,147 +211,44 @@ Do not:
 
 Flag where approved legal wording or a legal decision is required.
 
-## SEO Awareness
+## Cross-Domain Guardrails
 
-Marketing changes must not unnecessarily damage organic discoverability.
+Marketing work must not:
 
-When a dedicated SEO skill is available, let it govern detailed SEO implementation.
+- damage crawlability or create unnecessary duplicate organic pages;
+- degrade mobile performance with excessive scripts, media, or overlays;
+- make navigation, forms, dialogs, validation, or consent controls less accessible;
+- override the project's framework and component conventions.
 
-For this skill, ensure that:
-
-- campaign landing pages have a clear purpose;
-- duplicate landing pages are not created unnecessarily;
-- pages remain crawlable when they are intended to rank;
-- paid-campaign architecture does not conflict with important organic pages;
-- local service intent is reflected where relevant and supported by real business information.
-
-Do not keyword-stuff content or generate location/service pages solely for volume.
-
-## Performance Awareness
-
-Paid traffic should reach a fast, stable experience.
-
-When a dedicated performance or framework skill is available, let it govern implementation details.
-
-Marketing work must avoid unnecessarily degrading:
-
-- mobile loading speed;
-- Core Web Vitals;
-- layout stability;
-- responsiveness.
-
-Be especially cautious with:
-
-- third-party tracking scripts;
-- large media;
-- unnecessary client-side JavaScript;
-- intrusive overlays.
-
-## Accessibility Awareness
-
-Conversion work must not reduce accessibility.
-
-When a dedicated accessibility skill is available, let it govern implementation details.
-
-Do not introduce conversion patterns that make:
-
-- navigation;
-- forms;
-- buttons;
-- links;
-- validation;
-- dialogs;
-- consent controls
-
-harder to use with keyboards or assistive technologies.
-
-Do not trade accessibility for conversion pressure.
-
-## Relationship With Other Skills
-
-When other specialized skills are available, use them for their domain:
-
-- framework skill → framework mechanics and architecture;
-- React / performance skill → rendering and performance optimization;
-- accessibility skill → WCAG and interaction accessibility;
-- SEO skill → detailed technical and content SEO;
-- copywriting skill → final marketing copy;
-- design skill → visual styling and polish;
-- testing skill → automated tests.
-
-This skill remains responsible for:
-
-- conversion strategy;
-- landing-page behavior;
-- paid-ad message match;
-- CTA hierarchy;
-- lead flow;
-- analytics event strategy;
-- attribution;
-- Google Ads readiness;
-- Meta Ads readiness;
-- consent-aware marketing architecture;
-- business-impact review.
+Apply the relevant dedicated skill when work requires a detailed SEO, performance, accessibility, framework, or design decision.
 
 ## Scope and Implementation Discipline
 
-Prefer the simplest correct implementation.
-
-Do not add:
-
-- unrelated functionality;
-- speculative integrations;
-- unnecessary wrappers;
-- unnecessary services;
-- duplicate analytics layers;
-- premature CRM integrations;
-- premature Conversions API infrastructure;
-- unnecessary lead fields;
-- unnecessary tracking events.
-
-Create reusable marketing infrastructure only for a clear repeated use case.
-
-Keep vendor integrations isolated from business UI.
-
-Respect the project's existing architecture.
+- Keep vendor integrations isolated from business UI.
+- Avoid duplicate analytics layers.
+- Do not build speculative CRM, Conversions API, or server-side tracking infrastructure.
+- Add reusable marketing infrastructure only for a demonstrated repeated need.
+- Preserve existing architecture unless the marketing requirement makes a change necessary.
 
 ## Review Mode
 
-When reviewing an existing site, inspect the implementation and report findings in descending order of actual business impact.
+Report findings in descending order of business impact.
 
 For each finding:
 
-1. explain the affected conversion, measurement issue, or business risk;
-2. distinguish an observed defect from an optional improvement;
-3. give a concrete and proportionate recommendation;
-4. identify important verification gaps.
+1. identify the observed evidence;
+2. explain the affected conversion, measurement issue, or business risk;
+3. distinguish a defect from an optional experiment;
+4. recommend a proportionate change;
+5. state any verification gap.
 
 Evaluate:
 
-1. primary conversion path;
-2. offer and CTA clarity;
-3. paid-ad message consistency;
-4. mobile lead flow;
-5. landing-page relevance;
-6. form friction;
-7. meaningful analytics events;
-8. Google Ads and Meta Ads readiness;
-9. attribution preservation;
-10. vendor isolation;
-11. consent handling;
-12. privacy-sensitive data flows;
-13. trust signals;
-14. unnecessary implementation complexity.
+1. conversion path and mobile lead flow;
+2. offer, CTA, trust, and ad-to-page message match;
+3. form friction and lead quality;
+4. business events, attribution, and vendor isolation;
+5. consent and privacy-sensitive data flows;
+6. paid-traffic readiness.
 
-Coordinate with dedicated SEO, performance, accessibility, framework, and design skills rather than duplicating their audits.
-
-Do not recommend changes solely from stylistic preference.
-
-Call out important verification gaps when:
-
-- runtime data is unavailable;
-- vendor configuration cannot be inspected;
-- consent behavior is unknown;
-- legal wording has not been approved;
-- conversion data is unavailable;
-- ad campaign context is missing.
+Do not present stylistic preferences as conversion findings. Use observed behavior or data when available, and label hypotheses that still require testing.

@@ -1,7 +1,7 @@
 interface:
   display_name: "Marketing Website"
-  short_description: "Build ad-ready, conversion-focused websites"
-  default_prompt: "Use $marketing-website to build or review this site for conversions, paid-ad readiness, lead flow, analytics, attribution, consent-aware tracking, and marketing effectiveness. Coordinate with dedicated SEO, performance, accessibility, framework, copywriting, and design skills when available."
+  short_description: "Improve landing-page conversion and measurement"
+  default_prompt: "Use $marketing-website to plan, implement, or audit this site's landing-page conversion path, CTA hierarchy, lead flow, business events, attribution, and consent-aware measurement. Keep campaign creative, SEO, accessibility, visual design, and framework mechanics within their dedicated skills."
 
 policy:
   allow_implicit_invocation: true
