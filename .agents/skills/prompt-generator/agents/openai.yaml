@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prompt Generator"
+  short_description: "Rewrite rough requests into execution prompts"
+  default_prompt: "Use $prompt-generator to rewrite my request as a clear execution prompt with the right skills and execution settings."
