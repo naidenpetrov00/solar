@@ -1,7 +1,7 @@
 interface:
   display_name: "Marketing Website"
   short_description: "Build ad-ready, conversion-focused websites"
-  default_prompt: "Use $marketing-website to build or review this site for conversions, paid ads, analytics, SEO, privacy, performance, and accessibility."
+  default_prompt: "Use $marketing-website to build or review this site for conversions, paid-ad readiness, lead flow, analytics, attribution, consent-aware tracking, and marketing effectiveness. Coordinate with dedicated SEO, performance, accessibility, framework, copywriting, and design skills when available."
 
 policy:
   allow_implicit_invocation: true
