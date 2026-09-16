@@ -222,6 +222,7 @@ Core skills may include:
 * marketing-website
 * copywriting
 * impeccable
+* and more in the .agents/skills folder
 
 Apply specialized skills only when relevant to the current task.
 
