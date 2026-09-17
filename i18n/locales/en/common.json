@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "Solar solutions",
+    "description": "Explore solar solutions for your home or business."
+  },
+  "home": {
+    "logoAlt": "Next.js logo",
+    "headingBefore": "To get started, edit the",
+    "pageFile": "page.tsx",
+    "headingAfter": "file.",
+    "descriptionBefore": "Looking for a starting point or more instructions? Head over to",
+    "templatesLink": "the templates",
+    "descriptionMiddle": "or visit the",
+    "learningLink": "learning center",
+    "descriptionAfter": ".",
+    "vercelLogoAlt": "Vercel logomark",
+    "deployButton": "Deploy Now",
+    "documentationButton": "Documentation"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "Соларни решения",
+    "description": "Разгледайте соларни решения за вашия дом или бизнес."
+  },
+  "home": {
+    "logoAlt": "Лого на Next.js",
+    "headingBefore": "За да започнете, редактирайте",
+    "pageFile": "page.tsx",
+    "headingAfter": "файла.",
+    "descriptionBefore": "Търсите начална точка или още инструкции? Разгледайте",
+    "templatesLink": "шаблоните",
+    "descriptionMiddle": "или посетете",
+    "learningLink": "учебния център",
+    "descriptionAfter": ".",
+    "vercelLogoAlt": "Лого на Vercel",
+    "deployButton": "Публикувайте сега",
+    "documentationButton": "Документация"
+  }
+}

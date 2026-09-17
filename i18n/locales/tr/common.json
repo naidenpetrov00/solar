@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "Güneş enerjisi çözümleri",
+    "description": "Eviniz veya işletmeniz için güneş enerjisi çözümlerini keşfedin."
+  },
+  "home": {
+    "logoAlt": "Next.js logosu",
+    "headingBefore": "Başlamak için",
+    "pageFile": "page.tsx",
+    "headingAfter": "dosyasını düzenleyin.",
+    "descriptionBefore": "Bir başlangıç noktası veya daha fazla talimat mı arıyorsunuz?",
+    "templatesLink": "şablonlara göz atın",
+    "descriptionMiddle": "ya da",
+    "learningLink": "öğrenme merkezini ziyaret edin",
+    "descriptionAfter": ".",
+    "vercelLogoAlt": "Vercel logosu",
+    "deployButton": "Şimdi yayınla",
+    "documentationButton": "Belgeler"
+  }
+}

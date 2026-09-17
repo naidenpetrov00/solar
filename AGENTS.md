@@ -20,6 +20,8 @@ The experience should guide users naturally from interest to understanding to ac
 
 Use the project's installed versions and existing conventions.
 
+Internationalization requirements are defined in [`.agents/i18n.md`](.agents/i18n.md). Read and follow that file for all localization, locale routing, translated content, metadata, SEO, and language-switching work.
+
 ## Engineering Principles
 
 * Reuse existing components and patterns before introducing new ones.
@@ -227,6 +229,8 @@ Core skills may include:
 Apply specialized skills only when relevant to the current task.
 
 ## Task Discipline
+
+Do not run tests, production builds, development servers, previews, or the application itself unless the user explicitly requests it. This includes commands such as `npm test`, `npm run build`, `npm run dev`, and equivalent package-manager commands. Static inspection and code changes are allowed without running them.
 
 For each task:
 
