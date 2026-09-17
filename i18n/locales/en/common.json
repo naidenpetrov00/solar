@@ -3,18 +3,34 @@
     "title": "Solar solutions",
     "description": "Explore solar solutions for your home or business."
   },
-  "home": {
-    "logoAlt": "Next.js logo",
-    "headingBefore": "To get started, edit the",
-    "pageFile": "page.tsx",
-    "headingAfter": "file.",
-    "descriptionBefore": "Looking for a starting point or more instructions? Head over to",
-    "templatesLink": "the templates",
-    "descriptionMiddle": "or visit the",
-    "learningLink": "learning center",
-    "descriptionAfter": ".",
-    "vercelLogoAlt": "Vercel logomark",
-    "deployButton": "Deploy Now",
-    "documentationButton": "Documentation"
+  "navigation": {
+    "brand": "Solar",
+    "home": "Home",
+    "solutions": "Solutions",
+    "projects": "Projects",
+    "packages": "Packages",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "accessibility": {
+    "skipToContent": "Skip to main content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainNavigation": "Main navigation",
+    "languageNavigation": "Language selection"
+  },
+  "languages": {
+    "bg": "Bulgarian",
+    "en": "English",
+    "tr": "Turkish",
+    "uk": "Ukrainian"
+  },
+  "pages": {
+    "home": { "title": "Home" },
+    "solutions": { "title": "Solutions" },
+    "projects": { "title": "Projects" },
+    "packages": { "title": "Packages" },
+    "about": { "title": "About" },
+    "contact": { "title": "Contact" }
   }
 }

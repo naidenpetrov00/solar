@@ -3,18 +3,34 @@
     "title": "Güneş enerjisi çözümleri",
     "description": "Eviniz veya işletmeniz için güneş enerjisi çözümlerini keşfedin."
   },
-  "home": {
-    "logoAlt": "Next.js logosu",
-    "headingBefore": "Başlamak için",
-    "pageFile": "page.tsx",
-    "headingAfter": "dosyasını düzenleyin.",
-    "descriptionBefore": "Bir başlangıç noktası veya daha fazla talimat mı arıyorsunuz?",
-    "templatesLink": "şablonlara göz atın",
-    "descriptionMiddle": "ya da",
-    "learningLink": "öğrenme merkezini ziyaret edin",
-    "descriptionAfter": ".",
-    "vercelLogoAlt": "Vercel logosu",
-    "deployButton": "Şimdi yayınla",
-    "documentationButton": "Belgeler"
+  "navigation": {
+    "brand": "Solar",
+    "home": "Ana sayfa",
+    "solutions": "Çözümler",
+    "projects": "Projeler",
+    "packages": "Paketler",
+    "about": "Hakkımızda",
+    "contact": "İletişim"
+  },
+  "accessibility": {
+    "skipToContent": "Ana içeriğe geç",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "mainNavigation": "Ana navigasyon",
+    "languageNavigation": "Dil seçimi"
+  },
+  "languages": {
+    "bg": "Bulgarca",
+    "en": "İngilizce",
+    "tr": "Türkçe",
+    "uk": "Ukraynaca"
+  },
+  "pages": {
+    "home": { "title": "Ana sayfa" },
+    "solutions": { "title": "Güneş enerjisi çözümleri" },
+    "projects": { "title": "Projeler" },
+    "packages": { "title": "Paketler" },
+    "about": { "title": "Hakkımızda" },
+    "contact": { "title": "İletişim" }
   }
 }

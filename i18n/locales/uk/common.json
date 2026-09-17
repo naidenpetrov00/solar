@@ -3,18 +3,34 @@
     "title": "Сонячні рішення",
     "description": "Дізнайтеся про сонячні рішення для вашого дому чи бізнесу."
   },
-  "home": {
-    "logoAlt": "Логотип Next.js",
-    "headingBefore": "Щоб почати, відредагуйте",
-    "pageFile": "page.tsx",
-    "headingAfter": "файл.",
-    "descriptionBefore": "Шукаєте відправну точку або додаткові інструкції? Перегляньте",
-    "templatesLink": "шаблони",
-    "descriptionMiddle": "або завітайте до",
-    "learningLink": "навчального центру",
-    "descriptionAfter": ".",
-    "vercelLogoAlt": "Логотип Vercel",
-    "deployButton": "Опублікувати зараз",
-    "documentationButton": "Документація"
+  "navigation": {
+    "brand": "Solar",
+    "home": "Головна",
+    "solutions": "Рішення",
+    "projects": "Проєкти",
+    "packages": "Пакети",
+    "about": "Про нас",
+    "contact": "Контакти"
+  },
+  "accessibility": {
+    "skipToContent": "Перейти до основного вмісту",
+    "openMenu": "Відкрити меню",
+    "closeMenu": "Закрити меню",
+    "mainNavigation": "Основна навігація",
+    "languageNavigation": "Вибір мови"
+  },
+  "languages": {
+    "bg": "Болгарська",
+    "en": "Англійська",
+    "tr": "Турецька",
+    "uk": "Українська"
+  },
+  "pages": {
+    "home": { "title": "Головна" },
+    "solutions": { "title": "Сонячні рішення" },
+    "projects": { "title": "Проєкти" },
+    "packages": { "title": "Пакети" },
+    "about": { "title": "Про нас" },
+    "contact": { "title": "Контакти" }
   }
 }
