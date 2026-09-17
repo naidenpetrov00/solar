@@ -10,7 +10,8 @@
     "projects": "Projects",
     "packages": "Packages",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "requestQuote": "Request a quote"
   },
   "accessibility": {
     "skipToContent": "Skip to main content",

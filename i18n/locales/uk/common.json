@@ -10,7 +10,8 @@
     "projects": "Проєкти",
     "packages": "Пакети",
     "about": "Про нас",
-    "contact": "Контакти"
+    "contact": "Контакти",
+    "requestQuote": "Запросити пропозицію"
   },
   "accessibility": {
     "skipToContent": "Перейти до основного вмісту",

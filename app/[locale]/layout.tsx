@@ -80,6 +80,7 @@ export default async function LocaleLayout({
           <Navigation
             locale={locale}
             brandLabel={t("navigation.brand")}
+            ctaLabel={t("navigation.requestQuote")}
             menuLabel={t("accessibility.openMenu")}
             closeMenuLabel={t("accessibility.closeMenu")}
             navigationLabel={t("accessibility.mainNavigation")}
