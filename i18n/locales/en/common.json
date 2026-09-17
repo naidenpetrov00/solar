@@ -18,7 +18,10 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "mainNavigation": "Main navigation",
-    "languageNavigation": "Language selection"
+    "languageNavigation": "Language selection",
+    "themeLabel": "Color theme",
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme"
   },
   "languages": {
     "bg": "Bulgarian",

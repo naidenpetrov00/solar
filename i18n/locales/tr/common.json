@@ -18,7 +18,10 @@
     "openMenu": "Menüyü aç",
     "closeMenu": "Menüyü kapat",
     "mainNavigation": "Ana navigasyon",
-    "languageNavigation": "Dil seçimi"
+    "languageNavigation": "Dil seçimi",
+    "themeLabel": "Renk teması",
+    "themeLight": "Açık tema",
+    "themeDark": "Koyu tema"
   },
   "languages": {
     "bg": "Bulgarca",

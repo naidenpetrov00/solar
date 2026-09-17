@@ -18,7 +18,10 @@
     "openMenu": "Отвори менюто",
     "closeMenu": "Затвори менюто",
     "mainNavigation": "Основна навигация",
-    "languageNavigation": "Избор на език"
+    "languageNavigation": "Избор на език",
+    "themeLabel": "Цветова тема",
+    "themeLight": "Светла тема",
+    "themeDark": "Тъмна тема"
   },
   "languages": {
     "bg": "Български",

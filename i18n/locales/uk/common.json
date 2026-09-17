@@ -18,7 +18,10 @@
     "openMenu": "Відкрити меню",
     "closeMenu": "Закрити меню",
     "mainNavigation": "Основна навігація",
-    "languageNavigation": "Вибір мови"
+    "languageNavigation": "Вибір мови",
+    "themeLabel": "Кольорова тема",
+    "themeLight": "Світла тема",
+    "themeDark": "Темна тема"
   },
   "languages": {
     "bg": "Болгарська",

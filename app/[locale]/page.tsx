@@ -21,9 +21,9 @@ export default async function HomePage({
   return (
     <main
       id="main-content"
-      className="flex min-h-[calc(100vh-5rem)] items-center justify-center px-6 py-16"
+      className="site-page flex min-h-[calc(100vh-5rem)] items-center justify-center px-6 py-16"
     >
-      <h1 className="text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">
+      <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
         {t("pages.home.title")}
       </h1>
     </main>
