@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { getT } from "@/i18n.server";
+import { HomepageHashSync } from "./_components/homepage-hash-sync";
 import { getPageMetadata } from "./_lib/metadata";
 
 // Temporary image: https://unsplash.com/photos/n2Q4QtRNeUg (Unsplash License).
@@ -34,6 +35,7 @@ export default async function HomePage({
 
   return (
     <main id="main-content" className="welcome-page">
+      <HomepageHashSync />
       <section
         className="welcome-hero"
         aria-labelledby="welcome-heading"
