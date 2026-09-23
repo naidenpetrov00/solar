@@ -30,7 +30,20 @@
     "uk": "Ukrainian"
   },
   "pages": {
-    "home": { "title": "Home" },
+    "home": {
+      "title": "Solar systems for homes and businesses",
+      "description": "Explore solar systems for homes and businesses.",
+      "hero": {
+        "headline": "We build solar systems for homes and businesses.",
+        "pathsLabel": "Choose a solar solution type",
+        "homePath": "Home",
+        "businessPath": "Business"
+      },
+      "sections": {
+        "residentialTitle": "Home",
+        "businessTitle": "Business"
+      }
+    },
     "solutions": { "title": "Solutions" },
     "projects": { "title": "Projects" },
     "packages": { "title": "Packages" },

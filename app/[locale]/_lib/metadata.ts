@@ -6,10 +6,11 @@ export async function getPageMetadata(
   locale: string,
   slug: string,
   pageKey: string,
+  descriptionKey = "metadata.description",
 ): Promise<Metadata> {
   const { t } = await getT("common", { lng: locale });
   const title = t(`pages.${pageKey}.title`);
-  const description = t("metadata.description");
+  const description = t(descriptionKey);
 
   return {
     title,

@@ -56,6 +56,7 @@ export function Navigation({
     ? pathname.replace(/^\/(bg|en|tr|uk)(?=\/|$)/, "") || "/"
     : pathname;
   const activeSlug = pathWithoutLocale === "/" ? "" : pathWithoutLocale.slice(1);
+  const isHomePage = activeSlug === "";
   const homeRoute = routes[0];
   const interiorRoutes = routes.slice(1);
   const localizedRoute = (targetLocale: string, slug: string) =>
@@ -142,7 +143,10 @@ export function Navigation({
   }, [locale]);
 
   return (
-    <header className="site-header border-b">
+    <header
+      className={`site-header border-b ${isHomePage ? "site-header-overlay" : ""}`}
+      data-overlay={isHomePage ? "true" : undefined}
+    >
       <div className="mx-auto flex min-h-[4.5rem] w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
         <Link
           className="site-brand group flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
@@ -256,7 +260,7 @@ export function Navigation({
 
       <div
         id="primary-navigation"
-        className={`${menuOpen ? "block" : "hidden"} site-divider border-t px-5 pb-5 sm:px-8 md:hidden`}
+        className={`${menuOpen ? "block" : "hidden"} site-mobile-navigation site-divider border-t px-5 pb-5 sm:px-8 md:hidden`}
       >
         <nav aria-label={navigationLabel}>
           <ul className="flex flex-col gap-1 pt-3">

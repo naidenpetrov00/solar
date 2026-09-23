@@ -30,7 +30,20 @@
     "uk": "Ukraynaca"
   },
   "pages": {
-    "home": { "title": "Ana sayfa" },
+    "home": {
+      "title": "Evler ve işletmeler için güneş enerjisi sistemleri",
+      "description": "Evler ve işletmeler için güneş enerjisi sistemlerini keşfedin.",
+      "hero": {
+        "headline": "Evler ve işletmeler için güneş enerjisi sistemleri kuruyoruz.",
+        "pathsLabel": "Güneş enerjisi çözümü türünü seçin",
+        "homePath": "Ev için",
+        "businessPath": "İşletmeler için"
+      },
+      "sections": {
+        "residentialTitle": "Ev için",
+        "businessTitle": "İşletmeler için"
+      }
+    },
     "solutions": { "title": "Güneş enerjisi çözümleri" },
     "projects": { "title": "Projeler" },
     "packages": { "title": "Paketler" },

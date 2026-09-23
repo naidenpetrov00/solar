@@ -30,7 +30,20 @@
     "uk": "Украински"
   },
   "pages": {
-    "home": { "title": "Начало" },
+    "home": {
+      "title": "Соларни системи за дома и бизнеса",
+      "description": "Разгледайте соларни системи за дома и бизнеса.",
+      "hero": {
+        "headline": "Изграждаме соларни системи за дома и бизнеса.",
+        "pathsLabel": "Изберете тип соларно решение",
+        "homePath": "За дома",
+        "businessPath": "За бизнеса"
+      },
+      "sections": {
+        "residentialTitle": "За дома",
+        "businessTitle": "За бизнеса"
+      }
+    },
     "solutions": { "title": "Соларни решения" },
     "projects": { "title": "Проекти" },
     "packages": { "title": "Пакети" },
