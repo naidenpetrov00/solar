@@ -82,7 +82,10 @@ export default async function HomePage({
         className="welcome-destination welcome-destination-residential"
         aria-labelledby="residential-heading"
       >
-        <h2 id="residential-heading" className="welcome-destination-title">
+        <h2
+          id="residential-heading"
+          className="welcome-destination-title welcome-destination-title-from-right"
+        >
           {t("pages.home.sections.residentialTitle")}
         </h2>
       </section>
@@ -92,7 +95,10 @@ export default async function HomePage({
         className="welcome-destination welcome-destination-business"
         aria-labelledby="business-heading"
       >
-        <h2 id="business-heading" className="welcome-destination-title">
+        <h2
+          id="business-heading"
+          className="welcome-destination-title welcome-destination-title-from-left"
+        >
           {t("pages.home.sections.businessTitle")}
         </h2>
       </section>

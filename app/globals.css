@@ -175,16 +175,20 @@ html {
   min-height: 76svh;
   padding: clamp(5rem, 12vw, 10rem) clamp(1.25rem, 6vw, 6rem);
   scroll-margin-block-start: 2rem;
-  background: var(--page-background);
-  color: var(--page-foreground);
+  background: var(--destination-background);
+  color: var(--destination-foreground);
   transition: background-color 250ms ease, color 250ms ease;
 }
 
 .welcome-destination-residential {
+  --destination-background: #f4f3ee;
+  --destination-foreground: #11130f;
   align-items: flex-start;
 }
 
 .welcome-destination-business {
+  --destination-background: #e7ebe5;
+  --destination-foreground: #11130f;
   min-height: 84svh;
   align-items: flex-end;
   justify-content: flex-end;
@@ -331,4 +335,89 @@ html {
   .welcome-destination {
     transition: none;
   }
+}
+
+@keyframes welcome-destination-title-from-right {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 0 24%);
+    filter: blur(12px);
+    transform: translateX(clamp(5rem, 14vw, 12rem));
+  }
+  38%,
+  62% {
+    opacity: 1;
+    clip-path: inset(0);
+    filter: blur(0);
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    clip-path: inset(0 24% 0 0);
+    filter: blur(12px);
+    transform: translateX(clamp(-12rem, -14vw, -5rem));
+  }
+}
+
+@keyframes welcome-destination-title-from-left {
+  from {
+    opacity: 0;
+    clip-path: inset(0 24% 0 0);
+    filter: blur(12px);
+    transform: translateX(clamp(-12rem, -14vw, -5rem));
+  }
+  38%,
+  62% {
+    opacity: 1;
+    clip-path: inset(0);
+    filter: blur(0);
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    clip-path: inset(0 0 0 24%);
+    filter: blur(12px);
+    transform: translateX(clamp(5rem, 14vw, 12rem));
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .welcome-destination-title {
+      animation-duration: 1ms;
+      animation-fill-mode: both;
+      animation-timeline: view(block);
+      animation-range: entry 0% exit 100%;
+    }
+
+    .welcome-destination-title-from-right {
+      animation-name: welcome-destination-title-from-right;
+    }
+
+    .welcome-destination-title-from-left {
+      animation-name: welcome-destination-title-from-left;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .welcome-destination-residential {
+    --destination-background: #101511;
+    --destination-foreground: #f3f4ef;
+  }
+
+  :root:not([data-theme]) .welcome-destination-business {
+    --destination-background: #18201a;
+    --destination-foreground: #f3f4ef;
+  }
+}
+
+:root[data-theme="dark"] .welcome-destination-residential {
+  --destination-background: #101511;
+  --destination-foreground: #f3f4ef;
+}
+
+:root[data-theme="dark"] .welcome-destination-business {
+  --destination-background: #18201a;
+  --destination-foreground: #f3f4ef;
 }
