@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { getT } from "@/i18n.server";
+import { HomepageDestinationLink } from "./_components/homepage-destination-link";
 import { HomepageHashSync } from "./_components/homepage-hash-sync";
 import { getPageMetadata } from "./_lib/metadata";
 
@@ -62,18 +63,18 @@ export default async function HomePage({
           aria-label={t("pages.home.hero.pathsLabel")}
           className="welcome-paths"
         >
-          <a className="welcome-path" href="#residential">
+          <HomepageDestinationLink className="welcome-path" sectionId="residential">
             <span>{t("pages.home.hero.homePath")}</span>
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h13M13 6l6 6-6 6" />
             </svg>
-          </a>
-          <a className="welcome-path" href="#business">
+          </HomepageDestinationLink>
+          <HomepageDestinationLink className="welcome-path" sectionId="business">
             <span>{t("pages.home.hero.businessPath")}</span>
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h13M13 6l6 6-6 6" />
             </svg>
-          </a>
+          </HomepageDestinationLink>
         </nav>
       </section>
 
@@ -84,9 +85,12 @@ export default async function HomePage({
       >
         <h2
           id="residential-heading"
-          className="welcome-destination-title welcome-destination-title-from-right"
+          className="welcome-destination-title welcome-destination-title-from-left"
+          data-destination-title
         >
-          {t("pages.home.sections.residentialTitle")}
+          <span className="welcome-destination-title-content">
+            {t("pages.home.sections.residentialTitle")}
+          </span>
         </h2>
       </section>
 
@@ -97,9 +101,12 @@ export default async function HomePage({
       >
         <h2
           id="business-heading"
-          className="welcome-destination-title welcome-destination-title-from-left"
+          className="welcome-destination-title welcome-destination-title-from-right"
+          data-destination-title
         >
-          {t("pages.home.sections.businessTitle")}
+          <span className="welcome-destination-title-content">
+            {t("pages.home.sections.businessTitle")}
+          </span>
         </h2>
       </section>
     </main>
