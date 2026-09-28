@@ -1,25 +1,152 @@
 {
-  "metadata": { "title": "Solar solutions", "description": "Explore solar solutions for your home or business." },
-  "navigation": { "brand": "Solar", "home": "Home", "solutions": "Solutions", "projects": "Projects", "packages": "Packages", "about": "About", "contact": "Contact", "requestQuote": "Request a quote" },
-  "accessibility": { "skipToContent": "Skip to main content", "openMenu": "Open menu", "closeMenu": "Close menu", "mainNavigation": "Main navigation", "languageNavigation": "Language selection", "themeLabel": "Color theme", "themeLight": "Light theme", "themeDark": "Dark theme" },
-  "languages": { "bg": "Bulgarian", "en": "English", "tr": "Turkish", "uk": "Ukrainian" },
+  "metadata": {
+    "title": "Solar solutions",
+    "description": "Explore solar solutions for your home or business."
+  },
+  "navigation": {
+    "brand": "Solar",
+    "home": "Home",
+    "solutions": "Solutions",
+    "projects": "Projects",
+    "packages": "Packages",
+    "about": "About",
+    "contact": "Contact",
+    "requestQuote": "Request a quote"
+  },
+  "accessibility": {
+    "skipToContent": "Skip to main content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainNavigation": "Main navigation",
+    "languageNavigation": "Language selection",
+    "themeLabel": "Color theme",
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme"
+  },
+  "languages": {
+    "bg": "Bulgarian",
+    "en": "English",
+    "tr": "Turkish",
+    "uk": "Ukrainian"
+  },
   "pages": {
     "home": {
-      "title": "Solar systems for homes and businesses", "description": "Explore solar systems for homes and businesses.",
-      "hero": { "headline": "We build solar systems for homes and businesses.", "pathsLabel": "Choose a solar solution type", "homePath": "Home", "businessPath": "Business" },
-      "sections": { "residentialTitle": "Home", "businessTitle": "Business" },
+      "title": "Solar systems for homes and businesses",
+      "description": "Explore solar systems for homes and businesses.",
+      "hero": {
+        "headline": "We build solar systems for homes and businesses.",
+        "pathsLabel": "Choose a solar solution type",
+        "homePath": "Home",
+        "businessPath": "Business"
+      },
+      "sections": {
+        "residentialTitle": "Home",
+        "businessTitle": "Business"
+      },
       "residential": {
         "introduction": "Explore four clear starting points for a home solar system. Choose how to describe your energy use, then compare what each package includes.",
-        "input": { "legend": "How would you like to describe your energy use?", "bill": "Monthly electricity bill", "consumption": "Monthly electricity use", "billPlaceholder": "For example, 180 BGN", "consumptionPlaceholder": "For example, 450 kWh", "note": "Your value will support future recommendations. It does not change the packages yet." },
-        "packagesHeading": "Choose a starting point", "packagePrice": "Temporary price", "packagePriceValue": "1 000 BGN", "packagePriceNote": "Temporary value for this local version. Confirm the price when requesting a quote.", "quote": "Request a quote",
+        "input": {
+          "legend": "How would you like to describe your energy use?",
+          "bill": "Monthly electricity bill",
+          "consumption": "Monthly electricity use",
+          "billPlaceholder": "For example, 180 BGN",
+          "consumptionPlaceholder": "For example, 450 kWh",
+          "note": "Your value will support future recommendations. It does not change the packages yet."
+        },
+        "packagesHeading": "Choose a starting point",
+        "packagePrice": "Temporary price",
+        "packagePriceValue": "1 000 BGN",
+        "packagePriceNote": "Temporary value for this local version. Confirm the price when requesting a quote.",
+        "quote": "Request a quote",
         "packages": {
-          "essentials": { "name": "Solar Essentials", "profile": "For an apartment or lower-use home.", "energyType": "Solar only", "features": ["Solar panels", "Grid-connected inverter"] },
-          "smart": { "name": "Solar Smart", "profile": "For a typical family home.", "energyType": "Solar only", "features": ["Solar panels", "Larger solar array", "Grid-connected inverter"] },
-          "storage": { "name": "Solar Storage", "profile": "For households considering energy storage.", "energyType": "With battery", "features": ["Solar panels", "Hybrid inverter", "Battery"] },
-          "complete": { "name": "Solar Complete", "profile": "For homes with higher electricity use.", "energyType": "With battery", "features": ["Larger solar array", "Hybrid inverter", "Battery"] }
-        }
+          "essentials": {
+            "name": "Solar Essentials",
+            "profile": "For an apartment or lower-use home.",
+            "energyType": "Solar only",
+            "features": [
+              "Solar panels",
+              "Grid-connected inverter"
+            ],
+            "description": "A starting configuration for the home that brings together the core parts of a solar system. Final quantities and equipment are confirmed after consultation.",
+            "specifications": [
+              "Solar panel quantity — to be confirmed",
+              "Inverter — to be confirmed",
+              "Battery — not included"
+            ]
+          },
+          "smart": {
+            "name": "Solar Smart",
+            "profile": "For a typical family home.",
+            "energyType": "Solar only",
+            "features": [
+              "Solar panels",
+              "Larger solar array",
+              "Grid-connected inverter"
+            ],
+            "description": "A starting configuration with a larger solar array for a typical family home. Final quantities and equipment are confirmed after consultation.",
+            "specifications": [
+              "Solar panel quantity — to be confirmed",
+              "Inverter — to be confirmed",
+              "Battery — not included"
+            ]
+          },
+          "storage": {
+            "name": "Solar Storage",
+            "profile": "For households considering energy storage.",
+            "energyType": "With battery",
+            "features": [
+              "Solar panels",
+              "Hybrid inverter",
+              "Battery"
+            ],
+            "description": "A starting configuration for households considering energy storage. Final quantities and equipment are confirmed after consultation.",
+            "specifications": [
+              "Solar panel quantity — to be confirmed",
+              "Hybrid inverter — to be confirmed",
+              "Battery capacity — to be confirmed"
+            ]
+          },
+          "complete": {
+            "name": "Solar Complete",
+            "profile": "For homes with higher electricity use.",
+            "energyType": "With battery",
+            "features": [
+              "Larger solar array",
+              "Hybrid inverter",
+              "Battery"
+            ],
+            "description": "A starting configuration for homes with higher electricity use and energy storage needs. Final quantities and equipment are confirmed after consultation.",
+            "specifications": [
+              "Solar panel quantity — to be confirmed",
+              "Hybrid inverter — to be confirmed",
+              "Battery capacity — to be confirmed"
+            ]
+          }
+        },
+        "viewPackage": "View package",
+        "detailHeading": "Package details",
+        "backToPackages": "Back to packages",
+        "breadcrumbLabel": "Package navigation"
       }
     },
-    "solutions": { "title": "Solutions" }, "projects": { "title": "Projects" }, "packages": { "title": "Packages" }, "about": { "title": "About" }, "contact": { "title": "Contact" }
+    "solutions": {
+      "title": "Solutions"
+    },
+    "projects": {
+      "title": "Projects"
+    },
+    "packages": {
+      "title": "Packages"
+    },
+    "about": {
+      "title": "About"
+    },
+    "contact": {
+      "title": "Contact"
+    },
+    "solarPackages": {
+      "title": "Solar packages",
+      "description": "Explore starting points for a home solar system."
+    }
   }
 }

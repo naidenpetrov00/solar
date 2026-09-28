@@ -1,25 +1,152 @@
 {
-  "metadata": { "title": "Güneş enerjisi çözümleri", "description": "Eviniz veya işletmeniz için güneş enerjisi çözümlerini keşfedin." },
-  "navigation": { "brand": "Solar", "home": "Ana sayfa", "solutions": "Çözümler", "projects": "Projeler", "packages": "Paketler", "about": "Hakkımızda", "contact": "İletişim", "requestQuote": "Teklif isteyin" },
-  "accessibility": { "skipToContent": "Ana içeriğe geç", "openMenu": "Menüyü aç", "closeMenu": "Menüyü kapat", "mainNavigation": "Ana navigasyon", "languageNavigation": "Dil seçimi", "themeLabel": "Renk teması", "themeLight": "Açık tema", "themeDark": "Koyu tema" },
-  "languages": { "bg": "Bulgarca", "en": "İngilizce", "tr": "Türkçe", "uk": "Ukraynaca" },
+  "metadata": {
+    "title": "Güneş enerjisi çözümleri",
+    "description": "Eviniz veya işletmeniz için güneş enerjisi çözümlerini keşfedin."
+  },
+  "navigation": {
+    "brand": "Solar",
+    "home": "Ana sayfa",
+    "solutions": "Çözümler",
+    "projects": "Projeler",
+    "packages": "Paketler",
+    "about": "Hakkımızda",
+    "contact": "İletişim",
+    "requestQuote": "Teklif isteyin"
+  },
+  "accessibility": {
+    "skipToContent": "Ana içeriğe geç",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "mainNavigation": "Ana navigasyon",
+    "languageNavigation": "Dil seçimi",
+    "themeLabel": "Renk teması",
+    "themeLight": "Açık tema",
+    "themeDark": "Koyu tema"
+  },
+  "languages": {
+    "bg": "Bulgarca",
+    "en": "İngilizce",
+    "tr": "Türkçe",
+    "uk": "Ukraynaca"
+  },
   "pages": {
     "home": {
-      "title": "Evler ve işletmeler için güneş enerjisi sistemleri", "description": "Evler ve işletmeler için güneş enerjisi sistemlerini keşfedin.",
-      "hero": { "headline": "Evler ve işletmeler için güneş enerjisi sistemleri kuruyoruz.", "pathsLabel": "Güneş enerjisi çözümü türünü seçin", "homePath": "Ev için", "businessPath": "İşletmeler için" },
-      "sections": { "residentialTitle": "Ev için", "businessTitle": "İşletmeler için" },
+      "title": "Evler ve işletmeler için güneş enerjisi sistemleri",
+      "description": "Evler ve işletmeler için güneş enerjisi sistemlerini keşfedin.",
+      "hero": {
+        "headline": "Evler ve işletmeler için güneş enerjisi sistemleri kuruyoruz.",
+        "pathsLabel": "Güneş enerjisi çözümü türünü seçin",
+        "homePath": "Ev için",
+        "businessPath": "İşletmeler için"
+      },
+      "sections": {
+        "residentialTitle": "Ev için",
+        "businessTitle": "İşletmeler için"
+      },
       "residential": {
         "introduction": "Ev güneş enerjisi sistemi için dört net başlangıç seçeneğini inceleyin. Enerji kullanımınızı nasıl anlatacağınızı seçin, ardından her paketin içeriğini karşılaştırın.",
-        "input": { "legend": "Enerji kullanımınızı nasıl belirtmek istersiniz?", "bill": "Aylık elektrik faturası", "consumption": "Aylık elektrik tüketimi", "billPlaceholder": "Örneğin 180 BGN", "consumptionPlaceholder": "Örneğin 450 kWh", "note": "Girdiğiniz değer gelecekteki öneriler için kullanılacaktır. Henüz paketleri değiştirmez." },
-        "packagesHeading": "Bir başlangıç noktası seçin", "packagePrice": "Geçici fiyat", "packagePriceValue": "1 000 BGN", "packagePriceNote": "Bu yerel sürüm için geçici değerdir. Teklif isterken fiyatı doğrulayın.", "quote": "Teklif isteyin",
+        "input": {
+          "legend": "Enerji kullanımınızı nasıl belirtmek istersiniz?",
+          "bill": "Aylık elektrik faturası",
+          "consumption": "Aylık elektrik tüketimi",
+          "billPlaceholder": "Örneğin 180 BGN",
+          "consumptionPlaceholder": "Örneğin 450 kWh",
+          "note": "Girdiğiniz değer gelecekteki öneriler için kullanılacaktır. Henüz paketleri değiştirmez."
+        },
+        "packagesHeading": "Bir başlangıç noktası seçin",
+        "packagePrice": "Geçici fiyat",
+        "packagePriceValue": "1 000 BGN",
+        "packagePriceNote": "Bu yerel sürüm için geçici değerdir. Teklif isterken fiyatı doğrulayın.",
+        "quote": "Teklif isteyin",
         "packages": {
-          "essentials": { "name": "Solar Essentials", "profile": "Daireler veya daha düşük tüketimli evler için.", "energyType": "Yalnızca güneş enerjisi", "features": ["Güneş panelleri", "Şebeke bağlantılı inverter"] },
-          "smart": { "name": "Solar Smart", "profile": "Tipik aile evleri için.", "energyType": "Yalnızca güneş enerjisi", "features": ["Güneş panelleri", "Daha büyük güneş paneli dizisi", "Şebeke bağlantılı inverter"] },
-          "storage": { "name": "Solar Storage", "profile": "Enerji depolamayı düşünen haneler için.", "energyType": "Bataryalı", "features": ["Güneş panelleri", "Hibrit inverter", "Batarya"] },
-          "complete": { "name": "Solar Complete", "profile": "Daha yüksek elektrik tüketimi olan evler için.", "energyType": "Bataryalı", "features": ["Daha büyük güneş paneli dizisi", "Hibrit inverter", "Batarya"] }
-        }
+          "essentials": {
+            "name": "Solar Essentials",
+            "profile": "Daireler veya daha düşük tüketimli evler için.",
+            "energyType": "Yalnızca güneş enerjisi",
+            "features": [
+              "Güneş panelleri",
+              "Şebeke bağlantılı inverter"
+            ],
+            "description": "Bir güneş enerjisi sisteminin temel parçalarını bir araya getiren ev için başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
+            "specifications": [
+              "Güneş paneli adedi — netleştirilecek",
+              "İnverter — netleştirilecek",
+              "Batarya — dahil değildir"
+            ]
+          },
+          "smart": {
+            "name": "Solar Smart",
+            "profile": "Tipik aile evleri için.",
+            "energyType": "Yalnızca güneş enerjisi",
+            "features": [
+              "Güneş panelleri",
+              "Daha büyük güneş paneli dizisi",
+              "Şebeke bağlantılı inverter"
+            ],
+            "description": "Tipik aile evleri için daha büyük güneş paneli dizisine sahip başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
+            "specifications": [
+              "Güneş paneli adedi — netleştirilecek",
+              "İnverter — netleştirilecek",
+              "Batarya — dahil değildir"
+            ]
+          },
+          "storage": {
+            "name": "Solar Storage",
+            "profile": "Enerji depolamayı düşünen haneler için.",
+            "energyType": "Bataryalı",
+            "features": [
+              "Güneş panelleri",
+              "Hibrit inverter",
+              "Batarya"
+            ],
+            "description": "Enerji depolamayı değerlendiren haneler için başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
+            "specifications": [
+              "Güneş paneli adedi — netleştirilecek",
+              "Hibrit inverter — netleştirilecek",
+              "Batarya kapasitesi — netleştirilecek"
+            ]
+          },
+          "complete": {
+            "name": "Solar Complete",
+            "profile": "Daha yüksek elektrik tüketimi olan evler için.",
+            "energyType": "Bataryalı",
+            "features": [
+              "Daha büyük güneş paneli dizisi",
+              "Hibrit inverter",
+              "Batarya"
+            ],
+            "description": "Yüksek elektrik tüketimi ve enerji depolama ihtiyacı olan evler için başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
+            "specifications": [
+              "Güneş paneli adedi — netleştirilecek",
+              "Hibrit inverter — netleştirilecek",
+              "Batarya kapasitesi — netleştirilecek"
+            ]
+          }
+        },
+        "viewPackage": "Paketi inceleyin",
+        "detailHeading": "Paket ayrıntıları",
+        "backToPackages": "Paketlere dön",
+        "breadcrumbLabel": "Paket gezintisi"
       }
     },
-    "solutions": { "title": "Güneş enerjisi çözümleri" }, "projects": { "title": "Projeler" }, "packages": { "title": "Paketler" }, "about": { "title": "Hakkımızda" }, "contact": { "title": "İletişim" }
+    "solutions": {
+      "title": "Güneş enerjisi çözümleri"
+    },
+    "projects": {
+      "title": "Projeler"
+    },
+    "packages": {
+      "title": "Paketler"
+    },
+    "about": {
+      "title": "Hakkımızda"
+    },
+    "contact": {
+      "title": "İletişim"
+    },
+    "solarPackages": {
+      "title": "Güneş enerjisi paketleri",
+      "description": "Ev güneş enerjisi sistemi için başlangıç seçeneklerini inceleyin."
+    }
   }
 }

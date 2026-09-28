@@ -1,19 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useId, useState, ViewTransition } from "react";
 
 type Package = {
   id: string;
+  href: string;
   name: string;
   profile: string;
   energyType: string;
-  features: string[];
+  specifications: string[];
 };
 
 type ResidentialConfiguratorProps = {
   packages: Package[];
-  quoteHref: string;
   labels: {
     bill: string;
     billPlaceholder: string;
@@ -22,14 +22,14 @@ type ResidentialConfiguratorProps = {
     inputLegend: string;
     inputNote: string;
     packagePrice: string;
-    packagePriceValue: string;
     packagePriceNote: string;
+    packagePriceValue: string;
     packagesHeading: string;
-    quote: string;
+    viewPackage: string;
   };
 };
 
-export function ResidentialConfigurator({ packages, quoteHref, labels }: ResidentialConfiguratorProps) {
+export function ResidentialConfigurator({ packages, labels }: ResidentialConfiguratorProps) {
   const [inputMode, setInputMode] = useState<"bill" | "consumption">("bill");
   const billInputId = useId();
   const consumptionInputId = useId();
@@ -64,27 +64,40 @@ export function ResidentialConfigurator({ packages, quoteHref, labels }: Residen
       </fieldset>
 
       <section aria-labelledby="residential-packages-heading" className="residential-packages">
-        <h3 id="residential-packages-heading">{labels.packagesHeading}</h3>
-        <div className="residential-package-list">
+        <div className="residential-packages-heading">
+          <h3 id="residential-packages-heading">{labels.packagesHeading}</h3>
+          <p>{labels.packagePriceNote}</p>
+        </div>
+        <ViewTransition
+          default="none"
+          exit={{ "package-detail": "package-detail-out", default: "none" }}
+        >
+          <div className="residential-package-grid">
           {packages.map((solarPackage) => (
-            <article className="residential-package" key={solarPackage.id}>
-              <div className="residential-package-main">
-                <p className="residential-package-type">{solarPackage.energyType}</p>
-                <h4>{solarPackage.name}</h4>
-                <p className="residential-package-profile">{solarPackage.profile}</p>
-                <ul>{solarPackage.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-              </div>
-              <div className="residential-package-action">
-                <p className="residential-package-price"><span>{labels.packagePrice}</span><strong>{labels.packagePriceValue}</strong></p>
-                <p className="residential-package-price-note">{labels.packagePriceNote}</p>
-                <Link className="residential-package-cta" href={quoteHref}>
-                  {labels.quote}
-                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                </Link>
-              </div>
+            <article className="residential-package-card" key={solarPackage.id}>
+              <Link className="residential-package-card-link" href={solarPackage.href} scroll transitionTypes={["package-detail"]}>
+                <div aria-hidden="true" className="residential-package-visual" />
+                <div className="residential-package-card-content">
+                  <p className="residential-package-type">{solarPackage.energyType}</p>
+                  <h4>{solarPackage.name}</h4>
+                  <p className="residential-package-profile">{solarPackage.profile}</p>
+                  <ul className="residential-package-specifications">
+                    {solarPackage.specifications.map((specification) => <li key={specification}>{specification}</li>)}
+                  </ul>
+                  <p className="residential-package-price">
+                    <span>{labels.packagePrice}</span>
+                    <strong>{labels.packagePriceValue}</strong>
+                  </p>
+                  <span className="residential-package-card-action">
+                    {labels.viewPackage}
+                    <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                  </span>
+                </div>
+              </Link>
             </article>
           ))}
-        </div>
+          </div>
+        </ViewTransition>
       </section>
     </div>
   );

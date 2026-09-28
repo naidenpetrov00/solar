@@ -4,6 +4,7 @@ import { getT } from "@/i18n.server";
 import { HomepageDestinationLink } from "./_components/homepage-destination-link";
 import { HomepageHashSync } from "./_components/homepage-hash-sync";
 import { ResidentialConfigurator } from "./_components/residential-configurator";
+import { getSolarPackagePath, solarPackages } from "./_lib/solar-packages";
 import { getPageMetadata } from "./_lib/metadata";
 import { localizedPath } from "./_lib/routes";
 
@@ -35,12 +36,13 @@ export default async function HomePage({
     "--hero-position-desktop": heroMedia.desktopFocalPoint,
     "--hero-position-mobile": heroMedia.mobileFocalPoint,
   } as CSSProperties;
-  const packages = ["essentials", "smart", "storage", "complete"].map((id) => ({
+  const packages = solarPackages.map(({ id, slug }) => ({
     id,
+    href: localizedPath(locale, getSolarPackagePath(slug)),
     name: t(`pages.home.residential.packages.${id}.name`),
     profile: t(`pages.home.residential.packages.${id}.profile`),
     energyType: t(`pages.home.residential.packages.${id}.energyType`),
-    features: t(`pages.home.residential.packages.${id}.features`, {
+    specifications: t(`pages.home.residential.packages.${id}.specifications`, {
       returnObjects: true,
     }) as string[],
   }));
@@ -110,13 +112,12 @@ export default async function HomePage({
               inputLegend: t("pages.home.residential.input.legend"),
               inputNote: t("pages.home.residential.input.note"),
               packagePrice: t("pages.home.residential.packagePrice"),
-              packagePriceValue: t("pages.home.residential.packagePriceValue"),
               packagePriceNote: t("pages.home.residential.packagePriceNote"),
+              packagePriceValue: t("pages.home.residential.packagePriceValue"),
               packagesHeading: t("pages.home.residential.packagesHeading"),
-              quote: t("pages.home.residential.quote"),
+              viewPackage: t("pages.home.residential.viewPackage"),
             }}
             packages={packages}
-            quoteHref={localizedPath(locale, "contact")}
           />
         </div>
       </section>
