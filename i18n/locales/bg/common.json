@@ -1,53 +1,25 @@
 {
-  "metadata": {
-    "title": "Соларни решения",
-    "description": "Разгледайте соларни решения за вашия дом или бизнес."
-  },
-  "navigation": {
-    "brand": "Solar",
-    "home": "Начало",
-    "solutions": "Решения",
-    "projects": "Проекти",
-    "packages": "Пакети",
-    "about": "За нас",
-    "contact": "Контакти",
-    "requestQuote": "Поискайте оферта"
-  },
-  "accessibility": {
-    "skipToContent": "Към основното съдържание",
-    "openMenu": "Отвори менюто",
-    "closeMenu": "Затвори менюто",
-    "mainNavigation": "Основна навигация",
-    "languageNavigation": "Избор на език",
-    "themeLabel": "Цветова тема",
-    "themeLight": "Светла тема",
-    "themeDark": "Тъмна тема"
-  },
-  "languages": {
-    "bg": "Български",
-    "en": "Английски",
-    "tr": "Турски",
-    "uk": "Украински"
-  },
+  "metadata": { "title": "Соларни решения", "description": "Разгледайте соларни решения за вашия дом или бизнес." },
+  "navigation": { "brand": "Solar", "home": "Начало", "solutions": "Решения", "projects": "Проекти", "packages": "Пакети", "about": "За нас", "contact": "Контакти", "requestQuote": "Поискайте оферта" },
+  "accessibility": { "skipToContent": "Към основното съдържание", "openMenu": "Отвори менюто", "closeMenu": "Затвори менюто", "mainNavigation": "Основна навигация", "languageNavigation": "Избор на език", "themeLabel": "Цветова тема", "themeLight": "Светла тема", "themeDark": "Тъмна тема" },
+  "languages": { "bg": "Български", "en": "Английски", "tr": "Турски", "uk": "Украински" },
   "pages": {
     "home": {
-      "title": "Соларни системи за дома и бизнеса",
-      "description": "Разгледайте соларни системи за дома и бизнеса.",
-      "hero": {
-        "headline": "Изграждаме соларни системи за дома и бизнеса.",
-        "pathsLabel": "Изберете тип соларно решение",
-        "homePath": "За дома",
-        "businessPath": "За бизнеса"
-      },
-      "sections": {
-        "residentialTitle": "За дома",
-        "businessTitle": "За бизнеса"
+      "title": "Соларни системи за дома и бизнеса", "description": "Разгледайте соларни системи за дома и бизнеса.",
+      "hero": { "headline": "Изграждаме соларни системи за дома и бизнеса.", "pathsLabel": "Изберете тип соларно решение", "homePath": "За дома", "businessPath": "За бизнеса" },
+      "sections": { "residentialTitle": "За дома", "businessTitle": "За бизнеса" },
+      "residential": {
+        "introduction": "Вижте четири ясни отправни точки за соларна система у дома. Изберете как предпочитате да опишете потреблението си и сравнете включеното във всеки пакет.",
+        "input": { "legend": "Как предпочитате да опишете потреблението си?", "bill": "Месечна сметка за ток", "consumption": "Месечно потребление", "billPlaceholder": "Например 180 лв.", "consumptionPlaceholder": "Например 450 kWh", "note": "Въведената стойност ще се използва за бъдещи препоръки. Засега не променя пакетите." },
+        "packagesHeading": "Изберете отправна точка", "packagePrice": "Временна цена", "packagePriceValue": "1 000 BGN", "packagePriceNote": "Временна стойност за тази локална версия. Потвърдете цената при запитване.", "quote": "Поискайте оферта",
+        "packages": {
+          "essentials": { "name": "Solar Essentials", "profile": "За апартамент или дом с по-ниско потребление.", "energyType": "Само соларна система", "features": ["Соларни панели", "Мрежов инвертор"] },
+          "smart": { "name": "Solar Smart", "profile": "За типично семейно домакинство.", "energyType": "Само соларна система", "features": ["Соларни панели", "По-голям соларен масив", "Мрежов инвертор"] },
+          "storage": { "name": "Solar Storage", "profile": "За домакинства, които обмислят съхранение на енергия.", "energyType": "С батерия", "features": ["Соларни панели", "Хибриден инвертор", "Батерия"] },
+          "complete": { "name": "Solar Complete", "profile": "За домове с по-високо потребление.", "energyType": "С батерия", "features": ["По-голям соларен масив", "Хибриден инвертор", "Батерия"] }
+        }
       }
     },
-    "solutions": { "title": "Соларни решения" },
-    "projects": { "title": "Проекти" },
-    "packages": { "title": "Пакети" },
-    "about": { "title": "За нас" },
-    "contact": { "title": "Контакти" }
+    "solutions": { "title": "Соларни решения" }, "projects": { "title": "Проекти" }, "packages": { "title": "Пакети" }, "about": { "title": "За нас" }, "contact": { "title": "Контакти" }
   }
 }

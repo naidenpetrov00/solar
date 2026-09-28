@@ -3,7 +3,9 @@ import type { CSSProperties } from "react";
 import { getT } from "@/i18n.server";
 import { HomepageDestinationLink } from "./_components/homepage-destination-link";
 import { HomepageHashSync } from "./_components/homepage-hash-sync";
+import { ResidentialConfigurator } from "./_components/residential-configurator";
 import { getPageMetadata } from "./_lib/metadata";
+import { localizedPath } from "./_lib/routes";
 
 // Temporary image: https://unsplash.com/photos/n2Q4QtRNeUg (Unsplash License).
 // Replace the file at this path and adjust the focal points here if needed.
@@ -33,6 +35,15 @@ export default async function HomePage({
     "--hero-position-desktop": heroMedia.desktopFocalPoint,
     "--hero-position-mobile": heroMedia.mobileFocalPoint,
   } as CSSProperties;
+  const packages = ["essentials", "smart", "storage", "complete"].map((id) => ({
+    id,
+    name: t(`pages.home.residential.packages.${id}.name`),
+    profile: t(`pages.home.residential.packages.${id}.profile`),
+    energyType: t(`pages.home.residential.packages.${id}.energyType`),
+    features: t(`pages.home.residential.packages.${id}.features`, {
+      returnObjects: true,
+    }) as string[],
+  }));
 
   return (
     <main id="main-content" className="welcome-page">
@@ -83,15 +94,31 @@ export default async function HomePage({
         className="welcome-destination welcome-destination-residential"
         aria-labelledby="residential-heading"
       >
-        <h2
-          id="residential-heading"
-          className="welcome-destination-title welcome-destination-title-from-left"
-          data-destination-title
-        >
-          <span className="welcome-destination-title-content">
-            {t("pages.home.sections.residentialTitle")}
-          </span>
-        </h2>
+        <div className="residential-content">
+          <div className="residential-introduction">
+            <h2 id="residential-heading">{t("pages.home.sections.residentialTitle")}</h2>
+            <p>{t("pages.home.residential.introduction")}</p>
+          </div>
+          <ResidentialConfigurator
+            labels={{
+              bill: t("pages.home.residential.input.bill"),
+              billPlaceholder: t("pages.home.residential.input.billPlaceholder"),
+              consumption: t("pages.home.residential.input.consumption"),
+              consumptionPlaceholder: t(
+                "pages.home.residential.input.consumptionPlaceholder",
+              ),
+              inputLegend: t("pages.home.residential.input.legend"),
+              inputNote: t("pages.home.residential.input.note"),
+              packagePrice: t("pages.home.residential.packagePrice"),
+              packagePriceValue: t("pages.home.residential.packagePriceValue"),
+              packagePriceNote: t("pages.home.residential.packagePriceNote"),
+              packagesHeading: t("pages.home.residential.packagesHeading"),
+              quote: t("pages.home.residential.quote"),
+            }}
+            packages={packages}
+            quoteHref={localizedPath(locale, "contact")}
+          />
+        </div>
       </section>
 
       <section
