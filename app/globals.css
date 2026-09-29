@@ -1076,27 +1076,42 @@ html {
   outline-offset: 4px;
 }
 
-.solar-packages-page {
+.shop-page,
+.cart-page {
   background: var(--page-background);
   color: var(--page-foreground);
   padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
 }
 
-.solar-packages-page-introduction,
-.solar-packages-page-grid {
+.shop-page {
+  --residential-detail: #7a5700;
+}
+
+:root[data-theme="dark"] .shop-page {
+  --residential-detail: #fcd34d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .shop-page { --residential-detail: #fcd34d; }
+}
+
+.shop-introduction,
+.shop-layout,
+.cart-page-inner {
   width: min(100%, 80rem);
   margin-inline: auto;
 }
 
-.solar-packages-page-introduction {
+.shop-introduction,
+.cart-introduction {
   display: grid;
-  max-width: 70rem;
   gap: 1.25rem;
-  margin-bottom: clamp(3rem, 7vw, 6rem);
+  margin-bottom: clamp(3rem, 6vw, 5rem);
 }
 
-.solar-packages-page-introduction h1 {
-  max-width: 10ch;
+.shop-introduction h1,
+.cart-introduction h1 {
+  max-width: 12ch;
   margin: 0;
   font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 600;
@@ -1105,9 +1120,185 @@ html {
   text-wrap: balance;
 }
 
-.solar-packages-page-introduction p {
-  max-width: 56ch;
+.shop-introduction p,
+.cart-introduction p {
+  max-width: 60ch;
   margin: 0;
   font-size: clamp(1rem, 1.5vw, 1.15rem);
   line-height: 1.55;
+}
+
+.shop-layout {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 5rem);
+}
+
+.shop-categories {
+  align-self: start;
+  border-top: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+}
+
+.shop-categories h2 {
+  margin: 0;
+  padding: 1.2rem 0;
+  font-size: 0.8rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shop-categories ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.shop-categories a {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  transition: padding 180ms ease, color 180ms ease;
+}
+
+.shop-categories a:hover,
+.shop-categories a[aria-current="page"] {
+  color: var(--residential-detail);
+  padding-inline-start: 0.5rem;
+}
+
+.shop-categories a:focus-visible,
+.shop-product-card a:focus-visible,
+.cart-page a:focus-visible,
+.cart-page button:focus-visible,
+.shop-add-button:focus-visible {
+  outline: 3px solid var(--residential-detail, currentColor);
+  outline-offset: 3px;
+}
+
+.shop-categories svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.shop-results-heading {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.shop-results-heading h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.shop-results-heading p,
+.solar-package-price-note,
+.cart-price-note {
+  max-width: 58ch;
+  margin: 0;
+  color: color-mix(in srgb, currentColor 75%, transparent);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.shop-results section + section { margin-top: clamp(4rem, 8vw, 7rem); }
+.shop-product-grid { grid-template-columns: minmax(0, 1fr); }
+.shop-product-card { display: grid; align-content: space-between; border-right: 0; }
+.shop-product-card .residential-package-card-content { min-height: 0; padding-bottom: 1rem; }
+.shop-product-card h3 {
+  margin: 0;
+  font-size: clamp(1.65rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.shop-product-purchase {
+  display: grid;
+  gap: 1.25rem;
+  padding: 0 0 1.75rem;
+}
+
+.shop-add-button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  padding: 0.65rem 0.8rem;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.shop-add-button:hover:not(:disabled) { background: var(--page-foreground); color: var(--page-background); }
+.shop-add-button:disabled { opacity: 0.55; cursor: wait; }
+.solar-package-detail-summary > .shop-add-button { margin-top: 0; }
+
+.cart-content { display: grid; gap: 2.5rem; }
+.cart-storage-note { margin: 0; padding: 1rem; border: 1px solid currentColor; }
+.cart-state { margin: 0; }
+.cart-empty { display: grid; justify-items: start; gap: 1rem; padding-block: 2rem; border-top: 1px solid currentColor; }
+.cart-empty h2 { margin: 0; font-size: clamp(1.75rem, 4vw, 3rem); letter-spacing: -0.035em; }
+.cart-empty p { max-width: 55ch; margin: 0; line-height: 1.5; }
+.cart-items { display: grid; margin: 0; padding: 0; border-top: 1px solid currentColor; list-style: none; }
+.cart-item {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+}
+.cart-item-main a { color: inherit; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.03em; text-underline-offset: 0.2em; }
+.cart-item-main p { margin: 0.5rem 0 0; font-size: 0.9rem; }
+.cart-item-controls { display: grid; justify-items: start; gap: 0.5rem; font-size: 0.9rem; }
+.cart-quantity-control { display: flex; align-items: center; border: 1px solid currentColor; }
+.cart-quantity-control button { display: grid; width: 2.75rem; height: 2.75rem; place-items: center; background: transparent; color: inherit; cursor: pointer; }
+.cart-quantity-control button:disabled { opacity: 0.35; cursor: not-allowed; }
+.cart-quantity-control svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.cart-quantity-control output { min-width: 2.25rem; text-align: center; font-variant-numeric: tabular-nums; }
+.cart-remove { min-height: 2.75rem; padding: 0; background: transparent; color: inherit; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+.cart-line-total { display: grid; gap: 0.35rem; align-content: start; margin: 0; font-size: 0.9rem; }
+.cart-line-total strong { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.cart-summary { display: grid; gap: 1rem; width: min(100%, 28rem); margin-left: auto; }
+.cart-summary > p:not(.cart-price-note) { display: flex; justify-content: space-between; gap: 1rem; margin: 0; }
+.cart-summary strong { font-variant-numeric: tabular-nums; }
+.cart-grand-total { padding-top: 1rem; border-top: 1px solid currentColor; font-size: 1.35rem; font-weight: 600; }
+.cart-shop-link { display: inline-flex; min-height: 2.75rem; width: fit-content; align-items: center; padding: 0.65rem 0.85rem; background: #fcd34d; color: #11130f; font-weight: 650; text-decoration: none; }
+.cart-shop-link:hover { background: #fde68a; }
+
+@media (min-width: 48rem) {
+  .shop-product-purchase { padding: 0 1.75rem 1.75rem; }
+  .cart-item { grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.5fr) minmax(8rem, 0.4fr); align-items: start; }
+  .cart-line-total { justify-items: end; text-align: right; }
+}
+
+@media (min-width: 64rem) {
+  .shop-layout { grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1.55fr); }
+  .shop-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shop-product-card:nth-child(odd) { border-right: 1px solid color-mix(in srgb, currentColor 28%, transparent); }
+  .shop-product-card:nth-child(even) { border-right: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-categories a,
+  .shop-add-button { transition: none; }
 }

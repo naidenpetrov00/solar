@@ -6,10 +6,10 @@
   "navigation": {
     "brand": "Solar",
     "home": "Home",
-    "solutions": "Solutions",
+    "shop": "Shop",
     "projects": "Projects",
     "packages": "Packages",
-    "about": "About",
+    "cart": "Cart",
     "contact": "Contact",
     "requestQuote": "Request a quote"
   },
@@ -55,7 +55,6 @@
         },
         "packagesHeading": "Choose a starting point",
         "packagePrice": "Temporary price",
-        "packagePriceValue": "1 000 BGN",
         "packagePriceNote": "Temporary value for this local version. Confirm the price when requesting a quote.",
         "quote": "Request a quote",
         "packages": {
@@ -129,8 +128,14 @@
         "breadcrumbLabel": "Package navigation"
       }
     },
-    "solutions": {
-      "title": "Solutions"
+    "shop": {
+      "title": "Shop",
+      "description": "Browse solar packages and choose a starting point for your home.",
+      "categories": "Categories",
+      "categoryNavigation": "Product categories",
+      "addToCart": "Add to cart",
+      "addedToCart": "Added to cart",
+      "addNamedToCart": "Add {{name}} to cart"
     },
     "projects": {
       "title": "Projects"
@@ -138,8 +143,24 @@
     "packages": {
       "title": "Packages"
     },
-    "about": {
-      "title": "About"
+    "cart": {
+      "title": "Cart",
+      "description": "Review your selected solar packages and temporary total.",
+      "loading": "Loading cart…",
+      "empty": "Your cart is empty",
+      "emptyDescription": "Browse solar packages to add a starting point.",
+      "continueShopping": "Back to Shop",
+      "itemCount": "Total items",
+      "quantity": "Quantity",
+      "unitPrice": "Temporary unit price",
+      "lineTotal": "Line total",
+      "total": "Temporary total",
+      "increaseQuantity": "Increase quantity",
+      "decreaseQuantity": "Decrease quantity",
+      "removeItem": "Remove",
+      "quantityChanged": "quantity updated",
+      "itemRemoved": "removed from cart",
+      "storageUnavailable": "Cart changes cannot be saved in this browser."
     },
     "contact": {
       "title": "Contact"

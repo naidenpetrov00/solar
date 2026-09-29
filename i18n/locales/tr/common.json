@@ -6,10 +6,10 @@
   "navigation": {
     "brand": "Solar",
     "home": "Ana sayfa",
-    "solutions": "Çözümler",
+    "shop": "Mağaza",
     "projects": "Projeler",
     "packages": "Paketler",
-    "about": "Hakkımızda",
+    "cart": "Sepet",
     "contact": "İletişim",
     "requestQuote": "Teklif isteyin"
   },
@@ -55,7 +55,6 @@
         },
         "packagesHeading": "Bir başlangıç noktası seçin",
         "packagePrice": "Geçici fiyat",
-        "packagePriceValue": "1 000 BGN",
         "packagePriceNote": "Bu yerel sürüm için geçici değerdir. Teklif isterken fiyatı doğrulayın.",
         "quote": "Teklif isteyin",
         "packages": {
@@ -129,8 +128,14 @@
         "breadcrumbLabel": "Paket gezintisi"
       }
     },
-    "solutions": {
-      "title": "Güneş enerjisi çözümleri"
+    "shop": {
+      "title": "Mağaza",
+      "description": "Güneş enerjisi paketlerini inceleyin ve eviniz için bir başlangıç noktası seçin.",
+      "categories": "Kategoriler",
+      "categoryNavigation": "Ürün kategorileri",
+      "addToCart": "Sepete ekle",
+      "addedToCart": "Sepete eklendi",
+      "addNamedToCart": "{{name}} paketini sepete ekle"
     },
     "projects": {
       "title": "Projeler"
@@ -138,8 +143,24 @@
     "packages": {
       "title": "Paketler"
     },
-    "about": {
-      "title": "Hakkımızda"
+    "cart": {
+      "title": "Sepet",
+      "description": "Seçtiğiniz güneş enerjisi paketlerini ve geçici toplamı inceleyin.",
+      "loading": "Sepet yükleniyor…",
+      "empty": "Sepetiniz boş",
+      "emptyDescription": "Bir başlangıç noktası eklemek için güneş enerjisi paketlerini inceleyin.",
+      "continueShopping": "Mağazaya dön",
+      "itemCount": "Toplam ürün",
+      "quantity": "Adet",
+      "unitPrice": "Geçici birim fiyat",
+      "lineTotal": "Ara toplam",
+      "total": "Geçici toplam",
+      "increaseQuantity": "Adedi artır",
+      "decreaseQuantity": "Adedi azalt",
+      "removeItem": "Kaldır",
+      "quantityChanged": "adet güncellendi",
+      "itemRemoved": "sepetten kaldırıldı",
+      "storageUnavailable": "Sepetteki değişiklikler bu tarayıcıda kaydedilemiyor."
     },
     "contact": {
       "title": "İletişim"

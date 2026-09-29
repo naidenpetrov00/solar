@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { localizedPath } from "../_lib/routes";
+import { findSolarPackage } from "../_lib/solar-packages";
+import { useCart } from "./cart-store";
 
 type NavigationRoute = {
   slug: string;
@@ -14,6 +16,7 @@ type NavigationProps = {
   locale: string;
   brandLabel: string;
   ctaLabel: string;
+  cartLabel: string;
   menuLabel: string;
   closeMenuLabel: string;
   navigationLabel: string;
@@ -32,6 +35,7 @@ export function Navigation({
   locale,
   brandLabel,
   ctaLabel,
+  cartLabel,
   menuLabel,
   closeMenuLabel,
   navigationLabel,
@@ -50,6 +54,7 @@ export function Navigation({
   const desktopNavItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const languageItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const pathname = usePathname();
+  const { count, ready } = useCart();
   const pathWithoutLocale = locales.some(
     (candidate) => pathname === `/${candidate}` || pathname.startsWith(`/${candidate}/`),
   )
@@ -59,12 +64,15 @@ export function Navigation({
   const isHomePage = activeSlug === "";
   const homeRoute = routes[0];
   const interiorRoutes = routes.slice(1);
-  const localizedRoute = (targetLocale: string, slug: string) =>
-    localizedPath(targetLocale, slug);
-  const isActive = (slug: string) => activeSlug === slug;
-  const activeNavSlug = interiorRoutes.some((route) => isActive(route.slug))
+  const equivalentSlug = activeSlug === "" || activeSlug === "cart" ||
+    routes.some((route) => route.slug === activeSlug) ||
+    activeSlug === "shop/solar-packages" ||
+    (activeSlug.startsWith("shop/solar-packages/") && findSolarPackage(activeSlug.split("/")[2]))
     ? activeSlug
-    : null;
+    : "";
+  const localizedRoute = (targetLocale: string) => localizedPath(targetLocale, equivalentSlug);
+  const isActive = (slug: string) => activeSlug === slug || (slug === "shop" && activeSlug.startsWith("shop/"));
+  const activeNavSlug = interiorRoutes.find((route) => isActive(route.slug))?.slug ?? null;
 
   useEffect(() => {
     let savedTheme: string | null = null;
@@ -161,22 +169,34 @@ export function Navigation({
           <span className="text-lg font-semibold tracking-[-0.03em]">{brandLabel}</span>
         </Link>
 
-        <button
-          type="button"
-          className="site-menu-button inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 md:hidden"
-          aria-controls="primary-navigation"
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? closeMenuLabel : menuLabel}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span aria-hidden="true" className="flex flex-col gap-1.5">
-            <span className="block h-0.5 w-5 bg-current" />
-            <span className="block h-0.5 w-5 bg-current" />
-            <span className="block h-0.5 w-5 bg-current" />
-          </span>
-        </button>
+        <div className="flex items-center gap-2 xl:hidden">
+          <Link
+            className="site-cart-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+            href={localizedPath(locale, "cart")}
+            aria-current={activeSlug === "cart" ? "page" : undefined}
+            aria-label={ready && count > 0 ? `${cartLabel} (${count})` : cartLabel}
+            onClick={() => setMenuOpen(false)}
+          >
+            <span>{cartLabel}</span>
+            {ready && count > 0 && <span className="site-cart-count" aria-hidden="true">{count}</span>}
+          </Link>
+          <button
+            type="button"
+            className="site-menu-button inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            aria-controls="primary-navigation"
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? closeMenuLabel : menuLabel}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span aria-hidden="true" className="flex flex-col gap-1.5">
+              <span className="block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
+            </span>
+          </button>
+        </div>
 
-        <nav aria-label={navigationLabel} className="hidden md:block">
+        <nav aria-label={navigationLabel} className="hidden xl:block">
           <ul className="relative flex items-center gap-1">
             <span
               aria-hidden="true"
@@ -195,7 +215,7 @@ export function Navigation({
                   className="site-nav-link relative z-10 inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
                   data-active={isActive(route.slug)}
                   href={localizedPath(locale, route.slug)}
-                  aria-current={isActive(route.slug) ? "page" : undefined}
+                  aria-current={activeSlug === route.slug ? "page" : isActive(route.slug) ? "location" : undefined}
                 >
                   {route.label}
                 </Link>
@@ -204,7 +224,7 @@ export function Navigation({
           </ul>
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           <nav aria-label={languageLabel}>
             <ul className="site-divider relative flex items-center gap-1 border-r pr-3">
               <span
@@ -223,7 +243,7 @@ export function Navigation({
                     }}
                     className="site-language relative z-10 inline-flex min-h-10 items-center rounded px-2 text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
                     data-active={targetLocale === locale}
-                    href={localizedRoute(targetLocale, activeSlug)}
+                    href={localizedRoute(targetLocale)}
                     aria-current={targetLocale === locale ? "page" : undefined}
                     aria-label={languageNames[targetLocale]}
                   >
@@ -250,6 +270,15 @@ export function Navigation({
             <span className="sr-only">{currentThemeLabel}</span>
           </button>
           <Link
+            className="site-cart-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+            href={localizedPath(locale, "cart")}
+            aria-current={activeSlug === "cart" ? "page" : undefined}
+            aria-label={ready && count > 0 ? `${cartLabel} (${count})` : cartLabel}
+          >
+            <span>{cartLabel}</span>
+            {ready && count > 0 && <span className="site-cart-count" aria-hidden="true">{count}</span>}
+          </Link>
+          <Link
             className="site-cta inline-flex min-h-11 items-center rounded-md px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
             href={localizedPath(locale, "contact")}
           >
@@ -260,7 +289,7 @@ export function Navigation({
 
       <div
         id="primary-navigation"
-        className={`${menuOpen ? "block" : "hidden"} site-mobile-navigation site-divider border-t px-5 pb-5 sm:px-8 md:hidden`}
+        className={`${menuOpen ? "block" : "hidden"} site-mobile-navigation site-divider border-t px-5 pb-5 sm:px-8 xl:hidden`}
       >
         <nav aria-label={navigationLabel}>
           <ul className="flex flex-col gap-1 pt-3">
@@ -269,7 +298,7 @@ export function Navigation({
                 <Link
                   className={`site-nav-link flex min-h-11 items-center rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${isActive(route.slug) ? "site-active-surface" : ""}`}
                   href={localizedPath(locale, route.slug)}
-                  aria-current={isActive(route.slug) ? "page" : undefined}
+                  aria-current={activeSlug === route.slug ? "page" : isActive(route.slug) ? "location" : undefined}
                   onClick={() => setMenuOpen(false)}
                 >
                   {route.label}
@@ -310,7 +339,7 @@ export function Navigation({
                       <Link
                         className={`site-language inline-flex min-h-10 items-center rounded px-3 text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${targetLocale === locale ? "site-active-surface" : ""}`}
                         data-active={targetLocale === locale}
-                        href={localizedRoute(targetLocale, activeSlug)}
+                        href={localizedRoute(targetLocale)}
                         aria-current={targetLocale === locale ? "page" : undefined}
                         aria-label={languageNames[targetLocale]}
                       >

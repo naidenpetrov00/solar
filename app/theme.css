@@ -58,6 +58,7 @@
 
 .site-brand,
 .site-nav-link,
+.site-cart-link,
 .site-language,
 .site-menu-button,
 .site-theme-button {
@@ -68,6 +69,22 @@
 .site-nav-link { color: var(--header-muted); }
 .site-nav-link:hover,
 .site-nav-link[data-active="true"] { color: var(--header-foreground); }
+.site-cart-link { color: var(--header-foreground); text-decoration: none; }
+.site-cart-link:hover,
+.site-cart-link[aria-current="page"] { background: var(--header-hover); }
+.site-cart-count {
+  display: inline-grid;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+  border-radius: 999px;
+  padding-inline: 0.3rem;
+  background: var(--accent);
+  color: var(--accent-foreground);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
 .site-language { color: var(--header-muted); }
 .site-language:hover {
   background: var(--accent);

@@ -6,10 +6,10 @@
   "navigation": {
     "brand": "Solar",
     "home": "Головна",
-    "solutions": "Рішення",
+    "shop": "Магазин",
     "projects": "Проєкти",
     "packages": "Пакети",
-    "about": "Про нас",
+    "cart": "Кошик",
     "contact": "Контакти",
     "requestQuote": "Запросити пропозицію"
   },
@@ -55,7 +55,6 @@
         },
         "packagesHeading": "Оберіть відправну точку",
         "packagePrice": "Тимчасова ціна",
-        "packagePriceValue": "1 000 BGN",
         "packagePriceNote": "Тимчасове значення для цієї локальної версії. Уточніть ціну під час запиту пропозиції.",
         "quote": "Запросити пропозицію",
         "packages": {
@@ -129,8 +128,14 @@
         "breadcrumbLabel": "Навігація пакетом"
       }
     },
-    "solutions": {
-      "title": "Сонячні рішення"
+    "shop": {
+      "title": "Магазин",
+      "description": "Перегляньте сонячні пакети та виберіть початковий варіант для свого дому.",
+      "categories": "Категорії",
+      "categoryNavigation": "Категорії товарів",
+      "addToCart": "Додати до кошика",
+      "addedToCart": "Додано до кошика",
+      "addNamedToCart": "Додати {{name}} до кошика"
     },
     "projects": {
       "title": "Проєкти"
@@ -138,8 +143,24 @@
     "packages": {
       "title": "Пакети"
     },
-    "about": {
-      "title": "Про нас"
+    "cart": {
+      "title": "Кошик",
+      "description": "Перегляньте вибрані сонячні пакети та тимчасову загальну вартість.",
+      "loading": "Завантаження кошика…",
+      "empty": "Ваш кошик порожній",
+      "emptyDescription": "Перегляньте сонячні пакети, щоб додати початковий варіант.",
+      "continueShopping": "До магазину",
+      "itemCount": "Усього товарів",
+      "quantity": "Кількість",
+      "unitPrice": "Тимчасова ціна за одиницю",
+      "lineTotal": "Вартість позиції",
+      "total": "Тимчасова загальна вартість",
+      "increaseQuantity": "Збільшити кількість",
+      "decreaseQuantity": "Зменшити кількість",
+      "removeItem": "Видалити",
+      "quantityChanged": "кількість змінено",
+      "itemRemoved": "видалено з кошика",
+      "storageUnavailable": "Зміни в кошику не можна зберегти в цьому браузері."
     },
     "contact": {
       "title": "Контакти"

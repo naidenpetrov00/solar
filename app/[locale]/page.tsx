@@ -4,9 +4,10 @@ import { getT } from "@/i18n.server";
 import { HomepageDestinationLink } from "./_components/homepage-destination-link";
 import { HomepageHashSync } from "./_components/homepage-hash-sync";
 import { ResidentialConfigurator } from "./_components/residential-configurator";
-import { getSolarPackagePath, solarPackages } from "./_lib/solar-packages";
+import { getSolarPackagePath, solarPackages, temporaryPackagePriceBgn } from "./_lib/solar-packages";
 import { getPageMetadata } from "./_lib/metadata";
 import { localizedPath } from "./_lib/routes";
+import { formatBgnPrice } from "./_lib/shop-catalog";
 
 // Temporary image: https://unsplash.com/photos/n2Q4QtRNeUg (Unsplash License).
 // Replace the file at this path and adjust the focal points here if needed.
@@ -113,7 +114,7 @@ export default async function HomePage({
               inputNote: t("pages.home.residential.input.note"),
               packagePrice: t("pages.home.residential.packagePrice"),
               packagePriceNote: t("pages.home.residential.packagePriceNote"),
-              packagePriceValue: t("pages.home.residential.packagePriceValue"),
+              packagePriceValue: formatBgnPrice(locale, temporaryPackagePriceBgn),
               packagesHeading: t("pages.home.residential.packagesHeading"),
               viewPackage: t("pages.home.residential.viewPackage"),
             }}

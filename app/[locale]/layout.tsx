@@ -86,6 +86,7 @@ export default async function LocaleLayout({
             locale={locale}
             brandLabel={t("navigation.brand")}
             ctaLabel={t("navigation.requestQuote")}
+            cartLabel={t("navigation.cart")}
             menuLabel={t("accessibility.openMenu")}
             closeMenuLabel={t("accessibility.closeMenu")}
             navigationLabel={t("accessibility.mainNavigation")}

@@ -2,10 +2,9 @@ export const supportedLocales = ["bg", "en", "tr", "uk"] as const;
 
 export const routeDefinitions = [
   { slug: "", key: "home" },
-  { slug: "solutions", key: "solutions" },
+  { slug: "shop", key: "shop" },
   { slug: "projects", key: "projects" },
   { slug: "packages", key: "packages" },
-  { slug: "about", key: "about" },
   { slug: "contact", key: "contact" },
 ] as const;
 

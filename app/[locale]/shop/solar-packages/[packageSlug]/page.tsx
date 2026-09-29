@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 import { getT } from "@/i18n.server";
 import { PackageDetailScrollReset } from "../../../_components/package-detail-scroll-reset";
+import { AddToCartButton } from "../../../_components/add-to-cart-button";
 import { findSolarPackage, getSolarPackagePath, solarPackages } from "../../../_lib/solar-packages";
+import { formatBgnPrice } from "../../../_lib/shop-catalog";
 import { localizedAlternates, localizedPath } from "../../../_lib/routes";
 
 type PackagePageProps = {
@@ -77,8 +79,9 @@ export default async function SolarPackagePage({ params }: PackagePageProps) {
             <p className="solar-package-detail-profile">{t(key("profile"))}</p>
             <p className="solar-package-detail-price">
               <span>{t("pages.home.residential.packagePrice")}</span>
-              <strong>{t("pages.home.residential.packagePriceValue")}</strong>
+              <strong>{formatBgnPrice(locale, solarPackage.priceBgn)}</strong>
             </p>
+            <p className="solar-package-price-note">{t("pages.home.residential.packagePriceNote")}</p>
             <ul className="solar-package-detail-specifications">
               {specifications.map((specification) => <li key={specification}>{specification}</li>)}
             </ul>
@@ -86,6 +89,13 @@ export default async function SolarPackagePage({ params }: PackagePageProps) {
               {t("pages.home.residential.quote")}
               <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
             </Link>
+            <AddToCartButton
+              id={solarPackage.id}
+              name={t(key("name"))}
+              addLabel={t("pages.shop.addToCart")}
+              addedLabel={t("pages.shop.addedToCart")}
+              accessibleLabel={t("pages.shop.addNamedToCart", { name: t(key("name")) })}
+            />
           </div>
         </article>
       </ViewTransition>

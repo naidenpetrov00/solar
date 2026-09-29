@@ -6,10 +6,10 @@
   "navigation": {
     "brand": "Solar",
     "home": "Начало",
-    "solutions": "Решения",
+    "shop": "Магазин",
     "projects": "Проекти",
     "packages": "Пакети",
-    "about": "За нас",
+    "cart": "Количка",
     "contact": "Контакти",
     "requestQuote": "Поискайте оферта"
   },
@@ -55,7 +55,6 @@
         },
         "packagesHeading": "Изберете отправна точка",
         "packagePrice": "Временна цена",
-        "packagePriceValue": "1 000 BGN",
         "packagePriceNote": "Временна стойност за тази локална версия. Потвърдете цената при запитване.",
         "quote": "Поискайте оферта",
         "packages": {
@@ -129,8 +128,14 @@
         "breadcrumbLabel": "Навигация за пакета"
       }
     },
-    "solutions": {
-      "title": "Соларни решения"
+    "shop": {
+      "title": "Магазин",
+      "description": "Разгледайте соларните пакети и изберете отправна точка за вашия дом.",
+      "categories": "Категории",
+      "categoryNavigation": "Категории продукти",
+      "addToCart": "Добавете в количката",
+      "addedToCart": "Добавено в количката",
+      "addNamedToCart": "Добавете {{name}} в количката"
     },
     "projects": {
       "title": "Проекти"
@@ -138,8 +143,24 @@
     "packages": {
       "title": "Пакети"
     },
-    "about": {
-      "title": "За нас"
+    "cart": {
+      "title": "Количка",
+      "description": "Прегледайте избраните соларни пакети и временната обща стойност.",
+      "loading": "Зареждане на количката…",
+      "empty": "Количката ви е празна",
+      "emptyDescription": "Разгледайте соларните пакети, за да добавите отправна точка.",
+      "continueShopping": "Към магазина",
+      "itemCount": "Общо артикули",
+      "quantity": "Количество",
+      "unitPrice": "Временна единична цена",
+      "lineTotal": "Междинна стойност",
+      "total": "Временна обща стойност",
+      "increaseQuantity": "Увеличете количеството",
+      "decreaseQuantity": "Намалете количеството",
+      "removeItem": "Премахнете",
+      "quantityChanged": "количеството е променено",
+      "itemRemoved": "премахнато от количката",
+      "storageUnavailable": "Промените в количката не могат да се запазят в този браузър."
     },
     "contact": {
       "title": "Контакти"
