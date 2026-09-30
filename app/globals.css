@@ -721,7 +721,7 @@ html {
   --product-card-rule: color-mix(in srgb, currentColor 26%, transparent);
   --product-card-surface: color-mix(in srgb, var(--page-background) 96%, currentColor);
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(0.75rem, 1.5vw, 1.25rem);
 }
 
@@ -833,7 +833,7 @@ html {
 .solar-package-page {
   background: var(--page-background);
   color: var(--page-foreground);
-  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
+  padding: clamp(0.75rem, 2vw, 1.5rem) clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 9vw, 8rem);
 }
 
 .solar-package-detail,
@@ -938,7 +938,7 @@ html {
 
 @media (min-width: 48rem) {
   .residential-package-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   }
 
   .residential-package-card-content {
@@ -1221,7 +1221,6 @@ html {
 }
 
 .shop-results section + section { margin-top: clamp(4rem, 8vw, 7rem); }
-.shop-product-grid { grid-template-columns: minmax(0, 1fr); }
 .shop-product-card { display: grid; align-content: space-between; border-right: 0; }
 .shop-product-card .residential-package-card-content { min-height: 0; padding-bottom: 1.25rem; }
 .shop-product-card > .residential-package-card-link { border-bottom: 1px solid var(--product-card-rule); }
@@ -1296,13 +1295,8 @@ html {
   .cart-line-total { justify-items: end; text-align: right; }
 }
 
-@media (min-width: 40rem) {
-  .shop-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
 @media (min-width: 64rem) {
   .shop-layout { grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1.55fr); }
-  .shop-product-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
