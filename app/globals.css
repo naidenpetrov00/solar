@@ -1302,3 +1302,55 @@ html {
   .shop-categories a,
   .shop-add-button { transition: none; }
 }
+
+/* Shop experiment B: photovoltaic geometry recedes behind a high-contrast dark hero. */
+.shop-introduction-copy { display: grid; gap: 1.25rem; }
+.shop-page-variant-b { padding: 0; }
+.shop-page-variant-b .shop-introduction {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  width: 100%;
+  max-width: none;
+  min-height: clamp(26rem, 42vw, 38rem);
+  align-items: center;
+  overflow: hidden;
+  gap: 0;
+  margin: 0;
+  background: #090b0a;
+  color: #ffffff;
+}
+.shop-page-variant-b .shop-introduction::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(5, 8, 7, 0.94) 0%, rgba(5, 8, 7, 0.76) 48%, rgba(5, 8, 7, 0.48) 100%);
+  content: "";
+}
+.shop-page-variant-b .shop-introduction-copy {
+  display: grid;
+  align-content: center;
+  gap: 1.5rem;
+  width: min(100%, 80rem);
+  margin-inline: auto;
+  padding: clamp(3rem, 6vw, 6rem) clamp(1.25rem, 6vw, 6rem);
+}
+.shop-page-variant-b .shop-introduction p { max-width: 46ch; color: rgba(255, 255, 255, 0.88); }
+.shop-page-variant-b .shop-hero-media { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.shop-page-variant-b .shop-hero-media img {
+  object-fit: cover;
+  object-position: center;
+  filter: blur(5px) brightness(0.72) saturate(0.82);
+  transform: scale(1.04);
+}
+.shop-page-variant-b .shop-layout {
+  padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 9vw, 8rem);
+}
+@media (max-width: 47.999rem) {
+  .shop-page-variant-b .shop-introduction { min-height: 25rem; }
+  .shop-page-variant-b .shop-introduction-copy { padding-block: 4rem; }
+  .shop-page-variant-b .shop-introduction::after {
+    background: linear-gradient(90deg, rgba(5, 8, 7, 0.92), rgba(5, 8, 7, 0.66));
+  }
+  .shop-page-variant-b .shop-hero-media img { object-position: 58% center; }
+}

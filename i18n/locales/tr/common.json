@@ -129,6 +129,7 @@
       }
     },
     "shop": {
+      "heroImageAlt": "Havadan görülen fotovoltaik panel sıraları",
       "title": "Mağaza",
       "description": "Güneş enerjisi paketlerini inceleyin ve eviniz için bir başlangıç noktası seçin.",
       "categories": "Kategoriler",

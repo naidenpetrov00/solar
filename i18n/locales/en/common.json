@@ -129,6 +129,7 @@
       }
     },
     "shop": {
+      "heroImageAlt": "Aerial view of rows of photovoltaic panels",
       "title": "Shop",
       "description": "Browse solar packages and choose a starting point for your home.",
       "categories": "Categories",

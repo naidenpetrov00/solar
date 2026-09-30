@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getT } from "@/i18n.server";
 import { AddToCartButton } from "./add-to-cart-button";
 import { formatBgnPrice, shopCategories } from "../_lib/shop-catalog";
@@ -12,10 +13,24 @@ export async function ShopCatalog({ locale, categorySlug }: Props) {
   const visibleCategories = activeCategory ? [activeCategory] : shopCategories;
 
   return (
-    <main id="main-content" className="shop-page">
+    <main id="main-content" className={activeCategory ? "shop-page" : "shop-page shop-page-variant-b"}>
       <header className="shop-introduction">
-        <h1>{t(activeCategory?.titleKey ?? "pages.shop.title")}</h1>
-        <p>{t(activeCategory?.descriptionKey ?? "pages.shop.description")}</p>
+        <div className="shop-introduction-copy">
+          <h1>{t(activeCategory?.titleKey ?? "pages.shop.title")}</h1>
+          <p>{t(activeCategory?.descriptionKey ?? "pages.shop.description")}</p>
+        </div>
+        {!activeCategory && (
+          <div className="shop-hero-media">
+            {/* Temporary licensed image already used on the welcome page. Replace with verified project photography when available. */}
+            <Image
+              src="/images/welcome-solar-hero.jpg"
+              alt={t("pages.shop.heroImageAlt")}
+              fill
+              preload
+              sizes="100vw"
+            />
+          </div>
+        )}
       </header>
       <div className="shop-layout">
         <nav aria-label={t("pages.shop.categoryNavigation")} className="shop-categories">
