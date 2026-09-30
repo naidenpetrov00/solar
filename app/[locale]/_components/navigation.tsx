@@ -171,13 +171,17 @@ export function Navigation({
 
         <div className="flex items-center gap-2 xl:hidden">
           <Link
-            className="site-cart-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="site-cart-link relative inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
             href={localizedPath(locale, "cart")}
             aria-current={activeSlug === "cart" ? "page" : undefined}
             aria-label={ready && count > 0 ? `${cartLabel} (${count})` : cartLabel}
             onClick={() => setMenuOpen(false)}
           >
-            <span>{cartLabel}</span>
+            <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+              <path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L21 8H6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="9.5" cy="20" r="1" fill="currentColor" />
+              <circle cx="18" cy="20" r="1" fill="currentColor" />
+            </svg>
             {ready && count > 0 && <span className="site-cart-count" aria-hidden="true">{count}</span>}
           </Link>
           <button
@@ -270,12 +274,16 @@ export function Navigation({
             <span className="sr-only">{currentThemeLabel}</span>
           </button>
           <Link
-            className="site-cart-link inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="site-cart-link relative inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
             href={localizedPath(locale, "cart")}
             aria-current={activeSlug === "cart" ? "page" : undefined}
             aria-label={ready && count > 0 ? `${cartLabel} (${count})` : cartLabel}
           >
-            <span>{cartLabel}</span>
+            <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+              <path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L21 8H6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="9.5" cy="20" r="1" fill="currentColor" />
+              <circle cx="18" cy="20" r="1" fill="currentColor" />
+            </svg>
             {ready && count > 0 && <span className="site-cart-count" aria-hidden="true">{count}</span>}
           </Link>
           <Link

@@ -76,31 +76,37 @@ export default async function SolarPackagePage({ params }: PackagePageProps) {
         default="none"
         enter={{ "package-detail": "package-detail-in", default: "none" }}
       >
-        <article className="solar-package-detail">
-          <div aria-hidden="true" className="solar-package-detail-visual" />
-          <div className="solar-package-detail-summary">
-            <p className="solar-package-detail-type">{t(key("energyType"))}</p>
-            <h1>{t(key("name"))}</h1>
-            <p className="solar-package-detail-profile">{t(key("profile"))}</p>
-            <p className="solar-package-detail-price">
-              <span>{t("pages.home.residential.packagePrice")}</span>
-              <strong>{formatBgnPrice(locale, solarPackage.priceBgn)}</strong>
-            </p>
+        <article className="solar-package">
+          <div className="solar-package-detail">
+            <div aria-hidden="true" className="solar-package-detail-visual" />
+            <div className="solar-package-detail-summary">
+              <p className="solar-package-detail-type">{t(key("energyType"))}</p>
+              <h1>{t(key("name"))}</h1>
+              <p className="solar-package-detail-profile">{t(key("profile"))}</p>
+              <p className="solar-package-detail-price">
+                <span>{t("pages.home.residential.packagePrice")}</span>
+                <strong>{formatBgnPrice(locale, solarPackage.priceBgn)}</strong>
+              </p>
+              <div className="solar-package-detail-actions">
+                <Link className="solar-package-detail-cta" href={localizedPath(locale, "contact")}>
+                  {t("pages.home.residential.quote")}
+                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                </Link>
+                <AddToCartButton
+                  id={solarPackage.id}
+                  name={t(key("name"))}
+                  addLabel={t("pages.shop.addToCart")}
+                  addedLabel={t("pages.shop.addedToCart")}
+                  accessibleLabel={t("pages.shop.addNamedToCart", { name: t(key("name")) })}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="solar-package-detail-secondary">
             <p className="solar-package-price-note">{t("pages.home.residential.packagePriceNote")}</p>
             <ul className="solar-package-detail-specifications">
               {specifications.map((specification) => <li key={specification}>{specification}</li>)}
             </ul>
-            <Link className="solar-package-detail-cta" href={localizedPath(locale, "contact")}>
-              {t("pages.home.residential.quote")}
-              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-            </Link>
-            <AddToCartButton
-              id={solarPackage.id}
-              name={t(key("name"))}
-              addLabel={t("pages.shop.addToCart")}
-              addedLabel={t("pages.shop.addedToCart")}
-              accessibleLabel={t("pages.shop.addNamedToCart", { name: t(key("name")) })}
-            />
           </div>
         </article>
       </ViewTransition>
