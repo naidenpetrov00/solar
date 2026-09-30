@@ -718,13 +718,17 @@ html {
 }
 
 .residential-package-grid {
+  --product-card-rule: color-mix(in srgb, currentColor 26%, transparent);
+  --product-card-surface: color-mix(in srgb, var(--page-background) 96%, currentColor);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  border-top: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
 }
 
 .residential-package-card {
-  border-bottom: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  min-width: 0;
+  border: 1px solid var(--product-card-rule);
+  background: var(--product-card-surface);
 }
 
 .residential-package-card-link {
@@ -739,11 +743,15 @@ html {
   background: #11130f;
 }
 
+.residential-package-card .residential-package-visual {
+  border-bottom: 1px solid var(--product-card-rule);
+}
+
 .residential-package-card-content {
   display: grid;
   align-content: start;
   gap: 0.8rem;
-  padding: 1.5rem 0 1.75rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
 }
 
 .residential-package-card h4 {
@@ -933,17 +941,8 @@ html {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .residential-package-card {
-    border-right: 1px solid color-mix(in srgb, currentColor 28%, transparent);
-  }
-
-  .residential-package-card:nth-child(3n) {
-    border-right: 0;
-  }
-
   .residential-package-card-content {
     min-height: 24rem;
-    padding: 1.75rem;
   }
 
   .solar-package-detail {
@@ -1085,6 +1084,7 @@ html {
 
 .shop-page {
   --residential-detail: #7a5700;
+  padding-inline: clamp(1rem, 3vw, 3rem);
 }
 
 :root[data-theme="dark"] .shop-page {
@@ -1096,7 +1096,11 @@ html {
 }
 
 .shop-introduction,
-.shop-layout,
+.shop-layout {
+  width: min(100%, 100rem);
+  margin-inline: auto;
+}
+
 .cart-page-inner {
   width: min(100%, 80rem);
   margin-inline: auto;
@@ -1219,7 +1223,8 @@ html {
 .shop-results section + section { margin-top: clamp(4rem, 8vw, 7rem); }
 .shop-product-grid { grid-template-columns: minmax(0, 1fr); }
 .shop-product-card { display: grid; align-content: space-between; border-right: 0; }
-.shop-product-card .residential-package-card-content { min-height: 0; padding-bottom: 1rem; }
+.shop-product-card .residential-package-card-content { min-height: 0; padding-bottom: 1.25rem; }
+.shop-product-card > .residential-package-card-link { border-bottom: 1px solid var(--product-card-rule); }
 .shop-product-card h3 {
   margin: 0;
   font-size: clamp(1.65rem, 3vw, 2.25rem);
@@ -1231,7 +1236,7 @@ html {
 .shop-product-purchase {
   display: grid;
   gap: 1.25rem;
-  padding: 0 0 1.75rem;
+  padding: 1.25rem;
 }
 
 .shop-add-button {
@@ -1286,16 +1291,18 @@ html {
 .cart-shop-link:hover { background: #fde68a; }
 
 @media (min-width: 48rem) {
-  .shop-product-purchase { padding: 0 1.75rem 1.75rem; }
+  .shop-product-purchase { padding: 1.5rem 1.75rem 1.75rem; }
   .cart-item { grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.5fr) minmax(8rem, 0.4fr); align-items: start; }
   .cart-line-total { justify-items: end; text-align: right; }
 }
 
+@media (min-width: 40rem) {
+  .shop-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (min-width: 64rem) {
   .shop-layout { grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1.55fr); }
-  .shop-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .shop-product-card:nth-child(odd) { border-right: 1px solid color-mix(in srgb, currentColor 28%, transparent); }
-  .shop-product-card:nth-child(even) { border-right: 0; }
+  .shop-product-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
