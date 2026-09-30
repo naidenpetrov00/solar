@@ -60,6 +60,11 @@ export default async function SolarPackagePage({ params }: PackagePageProps) {
       <nav aria-label={t("pages.home.residential.breadcrumbLabel")} className="solar-package-breadcrumb">
         <ol>
           <li>
+            <Link href={localizedPath(locale, "shop")} scroll>
+              {t("navigation.shop")}
+            </Link>
+          </li>
+          <li>
             <Link href={localizedPath(locale, "shop/solar-packages")} scroll>
               {t("pages.solarPackages.title")}
             </Link>
