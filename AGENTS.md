@@ -228,6 +228,8 @@ Core skills may include:
 
 Apply specialized skills only when relevant to the current task.
 
+If repository context and applicable skills leave an unresolved or version-sensitive technical gap, or the local implementation uses questionable, stale, or legacy patterns, consult Context7 when it is available and retrieve only the missing information. Use web search only as the final permitted fallback when Context7 is unavailable or inadequate and current external information is still necessary.
+
 ## Task Discipline
 
 Do not run tests, production builds, development servers, previews, or the application itself unless the user explicitly requests it. This includes commands such as `npm test`, `npm run build`, `npm run dev`, and equivalent package-manager commands. Static inspection and code changes are allowed without running them.
