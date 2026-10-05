@@ -11,9 +11,10 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "auth:check": "auth check schema --config ./lib/auth.ts",
+    "auth:generate": "node --import ./scripts/better-auth-cli.mjs ./node_modules/auth/dist/index.mjs generate --config ./lib/auth.ts --output ./db/schema/auth.generated.ts --adapter drizzle --dialect postgresql --yes",
+    "auth:check": "node --import ./scripts/better-auth-cli.mjs ./node_modules/auth/dist/index.mjs check schema --config ./lib/auth.ts",
     "auth:secret": "auth secret",
-    "auth:provision-admin": "auth create-admin --config ./lib/auth.ts"
+    "auth:provision-admin": "node --import ./scripts/better-auth-cli.mjs ./node_modules/auth/dist/index.mjs create-admin --config ./lib/auth.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.7.7",

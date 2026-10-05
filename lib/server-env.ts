@@ -1,3 +1,5 @@
+import "server-only";
+
 type ServerEnvironmentVariable =
   | "DATABASE_URL"
   | "BETTER_AUTH_SECRET"

@@ -91,7 +91,7 @@ Do not use `drizzle-kit push` for shared environments. Commit reviewed SQL migra
 When changing Better Auth options or plugins, regenerate its expected Drizzle schema first:
 
 ```powershell
-npm exec auth -- generate --config ./lib/auth.ts --output ./db/schema/auth.generated.ts --adapter drizzle --dialect postgresql --yes
+npm run auth:generate
 ```
 
 Compare the generated file with `db/schema/auth.ts`, organize verified changes into the modular schema, remove the temporary file, and then run:
