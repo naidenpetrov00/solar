@@ -1358,6 +1358,7 @@ html {
   --auth-muted: #5d625a;
   --auth-rule: rgba(17, 19, 15, 0.2);
   --auth-error: #9f1239;
+  --auth-success: #18864b;
   min-height: calc(100svh - 4.5rem);
   background: var(--auth-surface);
   color: var(--auth-foreground);
@@ -1370,6 +1371,7 @@ html {
   --auth-muted: #b8bcb4;
   --auth-rule: rgba(244, 243, 238, 0.22);
   --auth-error: #fda4af;
+  --auth-success: #6ee7a0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1380,6 +1382,7 @@ html {
     --auth-muted: #b8bcb4;
     --auth-rule: rgba(244, 243, 238, 0.22);
     --auth-error: #fda4af;
+    --auth-success: #6ee7a0;
   }
 }
 
@@ -1620,7 +1623,7 @@ html {
 }
 
 .auth-state[data-tone="success"] .auth-state-mark {
-  background: #18864b;
+  background: var(--auth-success);
 }
 
 .auth-state[data-tone="error"] .auth-state-mark {

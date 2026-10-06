@@ -22,6 +22,7 @@ export default async function VerifyEmailPage({
 }) {
   const [{ locale }, query] = await Promise.all([params, searchParams]);
   const { t } = await getT("common", { lng: locale });
+  const status = getQueryValue(query.status)?.toLowerCase().replaceAll("_", "-");
   const error = getQueryValue(query.error)?.toLowerCase().replaceAll("_", "-");
   const signInHref = localizedAuthPath(locale, "sign-in");
   const expiredErrors = new Set([
@@ -35,11 +36,12 @@ export default async function VerifyEmailPage({
     "invalid-verification-token",
   ]);
 
-  let state: "prepared" | "expired" | "invalid" | "failure" = "prepared";
+  let state: "prepared" | "success" | "expired" | "invalid" | "failure" = "prepared";
 
   if (error && expiredErrors.has(error)) state = "expired";
   else if (error && invalidErrors.has(error)) state = "invalid";
   else if (error) state = "failure";
+  else if (status === "success" || status === "verified") state = "success";
 
   return (
     <AuthShell
@@ -47,7 +49,7 @@ export default async function VerifyEmailPage({
       description={t("pages.auth.verifyEmail.description")}
     >
       <AuthState
-        tone={state === "prepared" ? "neutral" : "error"}
+        tone={state === "success" ? "success" : state === "prepared" ? "neutral" : "error"}
         title={t(`pages.auth.verifyEmail.states.${state}.title`)}
         description={t(`pages.auth.verifyEmail.states.${state}.description`)}
         link={{ href: signInHref, label: t("pages.auth.common.backToSignIn") }}

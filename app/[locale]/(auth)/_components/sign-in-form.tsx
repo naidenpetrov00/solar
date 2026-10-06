@@ -77,10 +77,16 @@ export function SignInForm({
       const result = await authClient.signIn.email({ email, password });
 
       if (result.error) {
+        const invalidCredentials =
+          result.error.status === 401 &&
+          result.error.code === "INVALID_EMAIL_OR_PASSWORD";
+
         setFormError(
           result.error.status === 429
             ? labels.rateLimited
-            : labels.invalidCredentials,
+            : invalidCredentials
+              ? labels.invalidCredentials
+              : labels.genericError,
         );
         focusSummary();
         return;
