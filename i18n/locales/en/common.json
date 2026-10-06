@@ -29,6 +29,24 @@
     "tr": "Turkish",
     "uk": "Ukrainian"
   },
+  "emails": {
+    "verification": {
+      "subject": "Verify your email address",
+      "title": "Verify your email address",
+      "introduction": "Confirm the email address used for your Solar account.",
+      "action": "Verify email",
+      "expiry": "This link is valid for 1 hour.",
+      "ignore": "If you did not create an account, you can ignore this email."
+    },
+    "passwordReset": {
+      "subject": "Reset your Solar password",
+      "title": "Reset your password",
+      "introduction": "Use the secure link below to choose a new password for your Solar account.",
+      "action": "Set a new password",
+      "expiry": "This link is valid for 1 hour.",
+      "ignore": "If you did not request a password reset, you can ignore this email."
+    }
+  },
   "pages": {
     "home": {
       "title": "Solar systems for homes and businesses",
@@ -191,6 +209,8 @@
         "rateLimited": "Too many attempts. Wait a moment and try again.",
         "signInFailed": "We could not sign you in. Try again.",
         "signUpFailed": "We could not create the account. Check your details or try again later.",
+        "verificationRequestFailed": "We could not request another verification email. Try again.",
+        "recoveryRequestFailed": "We could not accept the recovery request. Try again.",
         "resetTokenInvalid": "This reset link is invalid or has expired.",
         "resetFailed": "We could not reset the password. Try again."
       },
@@ -199,45 +219,57 @@
         "description": "Use your email address and password to continue.",
         "submit": "Sign in",
         "submitting": "Signing in…",
+        "forgotPassword": "Forgot your password?",
+        "unverifiedTitle": "Verify your email before signing in",
+        "unverifiedDescription": "This account still needs email verification. Request another link if the first message did not arrive.",
+        "tryAnotherEmail": "Use a different email address",
         "noAccount": "Need an account?",
         "createAccount": "Create one"
       },
       "signUp": {
         "title": "Create your account",
-        "description": "Register with an email address and password. Email ownership is not verified until the next development step.",
+        "description": "Register with an email address and password, then verify your email to sign in.",
         "submit": "Create account",
         "submitting": "Creating account…",
+        "checkEmailTitle": "Check your email",
+        "checkEmailDescription": "We accepted your registration. Open the verification link in the email to activate sign-in.",
+        "deliveryHelp": "If the message does not arrive, use the resend action below. You do not need to recreate your account.",
         "hasAccount": "Already have an account?",
         "signIn": "Sign in"
       },
+      "verificationRequest": {
+        "submit": "Resend verification email",
+        "submitting": "Requesting another email…",
+        "accepted": "If an account at that address needs verification, a new link has been sent."
+      },
       "forgotPassword": {
         "title": "Forgot password",
-        "description": "Password recovery will use a secure email link.",
-        "unavailableTitle": "Email recovery is not available yet",
-        "unavailableDescription": "This route is prepared, but reset email delivery will be connected in the next development step. No request has been sent."
+        "description": "Enter your email address to request a secure password-reset link.",
+        "submit": "Send reset link",
+        "submitting": "Requesting reset link…",
+        "successTitle": "Check your email",
+        "successDescription": "If an account exists for that address, we sent a password-reset link. It is valid for 1 hour."
       },
       "resetPassword": {
         "title": "Set a new password",
         "description": "A valid reset link is required before a password can be changed.",
-        "preparedTitle": "Reset links are not active yet",
-        "preparedDescription": "This page is ready for the secure links that will be delivered after email support is connected. No password can be reset from this page alone.",
-        "deliveryNotice": "Email delivery is not active yet. This form only works with a valid reset token created by Better Auth.",
-        "invalidTitle": "Invalid reset link",
-        "invalidDescription": "This reset link cannot be used. Requesting a new link will become available when email recovery is connected.",
-        "expiredTitle": "Reset link expired",
-        "expiredDescription": "This reset link is no longer valid. Requesting another link will become available when email recovery is connected.",
+        "invalidOrExpiredTitle": "Reset link invalid or expired",
+        "invalidOrExpiredDescription": "This reset link cannot be used. Request a new link to continue.",
+        "failureTitle": "Password reset could not continue",
+        "failureDescription": "We could not validate this reset link. Request a new link and try again.",
+        "requestAnother": "Request another reset link",
         "submit": "Save new password",
         "submitting": "Saving password…",
         "successTitle": "Password updated",
-        "successDescription": "Your new password is ready to use."
+        "successDescription": "Your new password is ready to use. Other active sessions have been signed out."
       },
       "verifyEmail": {
         "title": "Email verification",
-        "description": "This page is prepared for secure verification links from Better Auth.",
+        "description": "Confirm your email before signing in to your account.",
         "states": {
-          "prepared": {
-            "title": "Verification email is not active yet",
-            "description": "Email delivery and verification callbacks will be connected in the next development step."
+          "initial": {
+            "title": "Request a verification link",
+            "description": "Enter your email address and we will send a new verification link if the account needs one."
           },
           "success": {
             "title": "Email verified",
@@ -245,15 +277,15 @@
           },
           "expired": {
             "title": "Verification link expired",
-            "description": "This verification link is no longer valid."
+            "description": "This verification link is no longer valid. Request another link below."
           },
           "invalid": {
             "title": "Invalid verification link",
-            "description": "This verification link cannot be used."
+            "description": "This verification link cannot be used. Request another link below."
           },
           "failure": {
             "title": "Email could not be verified",
-            "description": "The verification could not be completed."
+            "description": "The verification could not be completed. Request another link and try again."
           }
         }
       }

@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { isLocaleEquivalentSlug, localizedPath } from "../_lib/routes";
+import {
+  isAuthRouteSlug,
+  isLocaleEquivalentSlug,
+  localizedAuthLanguagePath,
+  localizedPath,
+} from "../_lib/routes";
 import { findSolarPackage } from "../_lib/solar-packages";
 import { useCart } from "./cart-store";
 
@@ -54,6 +59,7 @@ export function Navigation({
   const desktopNavItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const languageItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { count, ready } = useCart();
   const pathWithoutLocale = locales.some(
     (candidate) => pathname === `/${candidate}` || pathname.startsWith(`/${candidate}/`),
@@ -69,7 +75,15 @@ export function Navigation({
     (activeSlug.startsWith("shop/solar-packages/") && findSolarPackage(activeSlug.split("/")[2]))
     ? activeSlug
     : "";
-  const localizedRoute = (targetLocale: string) => localizedPath(targetLocale, equivalentSlug);
+  const localizedRoute = (targetLocale: string) =>
+    isAuthRouteSlug(equivalentSlug)
+      ? localizedAuthLanguagePath(
+          locale,
+          targetLocale,
+          equivalentSlug,
+          searchParams,
+        )
+      : localizedPath(targetLocale, equivalentSlug);
   const isActive = (slug: string) => activeSlug === slug || (slug === "shop" && activeSlug.startsWith("shop/"));
   const activeNavSlug = interiorRoutes.find((route) => isActive(route.slug))?.slug ?? null;
 

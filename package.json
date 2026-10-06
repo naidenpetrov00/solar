@@ -12,7 +12,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "auth:generate": "node --conditions=react-server ./node_modules/auth/dist/index.mjs generate --config ./lib/auth.ts --output ./db/schema/auth.generated.ts --adapter drizzle --dialect postgresql --yes",
-    "auth:check": "node --conditions=react-server ./node_modules/auth/dist/index.mjs check schema --config ./lib/auth.ts",
+    "auth:check": "node ./node_modules/auth/dist/index.mjs check schema --config ./lib/auth-schema-check.ts",
     "auth:secret": "auth secret",
     "auth:provision-admin": "node --conditions=react-server ./node_modules/auth/dist/index.mjs create-admin --config ./lib/auth.ts"
   },

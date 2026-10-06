@@ -29,6 +29,24 @@
     "tr": "Türkçe",
     "uk": "Ukraynaca"
   },
+  "emails": {
+    "verification": {
+      "subject": "E-posta adresinizi doğrulayın",
+      "title": "E-posta adresinizi doğrulayın",
+      "introduction": "Solar hesabınız için kullanılan e-posta adresini doğrulayın.",
+      "action": "E-postayı doğrula",
+      "expiry": "Bu bağlantı 1 saat geçerlidir.",
+      "ignore": "Hesap oluşturmadıysanız bu e-postayı yok sayabilirsiniz."
+    },
+    "passwordReset": {
+      "subject": "Solar parolanızı sıfırlayın",
+      "title": "Parolanızı sıfırlayın",
+      "introduction": "Solar hesabınız için yeni bir parola belirlemek üzere aşağıdaki güvenli bağlantıyı kullanın.",
+      "action": "Yeni parola belirle",
+      "expiry": "Bu bağlantı 1 saat geçerlidir.",
+      "ignore": "Parola sıfırlama talebinde bulunmadıysanız bu e-postayı yok sayabilirsiniz."
+    }
+  },
   "pages": {
     "home": {
       "title": "Evler ve işletmeler için güneş enerjisi sistemleri",
@@ -191,6 +209,8 @@
         "rateLimited": "Çok fazla deneme yapıldı. Biraz bekleyip tekrar deneyin.",
         "signInFailed": "Giriş yapılamadı. Tekrar deneyin.",
         "signUpFailed": "Hesap oluşturulamadı. Bilgilerinizi kontrol edin veya daha sonra tekrar deneyin.",
+        "verificationRequestFailed": "Yeni bir doğrulama e-postası istenemedi. Tekrar deneyin.",
+        "recoveryRequestFailed": "Kurtarma isteği alınamadı. Tekrar deneyin.",
         "resetTokenInvalid": "Bu parola sıfırlama bağlantısı geçersiz veya süresi dolmuş.",
         "resetFailed": "Parola sıfırlanamadı. Tekrar deneyin."
       },
@@ -199,45 +219,57 @@
         "description": "E-posta adresiniz ve parolanızla devam edin.",
         "submit": "Giriş yap",
         "submitting": "Giriş yapılıyor…",
+        "forgotPassword": "Parolanızı mı unuttunuz?",
+        "unverifiedTitle": "Giriş yapmadan önce e-postanızı doğrulayın",
+        "unverifiedDescription": "Bu hesap için e-posta doğrulaması hâlâ gerekiyor. İlk mesaj ulaşmadıysa yeni bir bağlantı isteyin.",
+        "tryAnotherEmail": "Farklı bir e-posta adresi kullan",
         "noAccount": "Hesabınız yok mu?",
         "createAccount": "Hesap oluşturun"
       },
       "signUp": {
         "title": "Hesabınızı oluşturun",
-        "description": "E-posta adresi ve parolayla kaydolun. E-posta sahipliği bir sonraki geliştirme adımına kadar doğrulanmayacaktır.",
+        "description": "E-posta adresi ve parolayla kaydolun, ardından giriş yapmak için e-postanızı doğrulayın.",
         "submit": "Hesap oluştur",
         "submitting": "Hesap oluşturuluyor…",
+        "checkEmailTitle": "E-postanızı kontrol edin",
+        "checkEmailDescription": "Kaydınız alındı. Girişi etkinleştirmek için e-postadaki doğrulama bağlantısını açın.",
+        "deliveryHelp": "Mesaj ulaşmazsa aşağıdaki yeniden gönderme işlemini kullanın. Hesabınızı yeniden oluşturmanız gerekmez.",
         "hasAccount": "Zaten bir hesabınız var mı?",
         "signIn": "Giriş yapın"
       },
+      "verificationRequest": {
+        "submit": "Doğrulama e-postasını yeniden gönder",
+        "submitting": "Yeni e-posta isteniyor…",
+        "accepted": "Bu adresteki hesabın doğrulanması gerekiyorsa yeni bir bağlantı gönderildi."
+      },
       "forgotPassword": {
         "title": "Parolamı unuttum",
-        "description": "Parola kurtarma güvenli bir e-posta bağlantısı kullanacaktır.",
-        "unavailableTitle": "E-posta ile kurtarma henüz kullanılamıyor",
-        "unavailableDescription": "Bu sayfa hazırlandı ancak parola sıfırlama e-postaları bir sonraki geliştirme adımında bağlanacak. Herhangi bir istek gönderilmedi."
+        "description": "Güvenli parola sıfırlama bağlantısı istemek için e-posta adresinizi girin.",
+        "submit": "Sıfırlama bağlantısı gönder",
+        "submitting": "Sıfırlama bağlantısı isteniyor…",
+        "successTitle": "E-postanızı kontrol edin",
+        "successDescription": "Bu adres için bir hesap varsa parola sıfırlama bağlantısı gönderdik. Bağlantı 1 saat geçerlidir."
       },
       "resetPassword": {
         "title": "Yeni parola belirleyin",
         "description": "Parolanın değiştirilebilmesi için geçerli bir sıfırlama bağlantısı gerekir.",
-        "preparedTitle": "Sıfırlama bağlantıları henüz etkin değil",
-        "preparedDescription": "Bu sayfa, e-posta desteği bağlandıktan sonra gönderilecek güvenli bağlantılar için hazırdır. Yalnızca bu sayfadan parola sıfırlanamaz.",
-        "deliveryNotice": "E-posta teslimi henüz etkin değil. Bu form yalnızca Better Auth tarafından oluşturulmuş geçerli bir sıfırlama koduyla çalışır.",
-        "invalidTitle": "Geçersiz sıfırlama bağlantısı",
-        "invalidDescription": "Bu sıfırlama bağlantısı kullanılamaz. E-posta kurtarma bağlandığında yeni bağlantı isteme özelliği kullanıma açılacaktır.",
-        "expiredTitle": "Sıfırlama bağlantısının süresi doldu",
-        "expiredDescription": "Bu sıfırlama bağlantısı artık geçerli değil. E-posta kurtarma bağlandığında yeni bağlantı isteme özelliği kullanıma açılacaktır.",
+        "invalidOrExpiredTitle": "Sıfırlama bağlantısı geçersiz veya süresi dolmuş",
+        "invalidOrExpiredDescription": "Bu sıfırlama bağlantısı kullanılamaz. Devam etmek için yeni bir bağlantı isteyin.",
+        "failureTitle": "Parola sıfırlama işlemine devam edilemedi",
+        "failureDescription": "Bu sıfırlama bağlantısı doğrulanamadı. Yeni bir bağlantı isteyip tekrar deneyin.",
+        "requestAnother": "Yeni sıfırlama bağlantısı iste",
         "submit": "Yeni parolayı kaydet",
         "submitting": "Parola kaydediliyor…",
         "successTitle": "Parola güncellendi",
-        "successDescription": "Yeni parolanız kullanıma hazır."
+        "successDescription": "Yeni parolanız kullanıma hazır. Diğer etkin oturumlar kapatıldı."
       },
       "verifyEmail": {
         "title": "E-posta doğrulama",
-        "description": "Bu sayfa Better Auth güvenli doğrulama bağlantıları için hazırlandı.",
+        "description": "Hesabınıza giriş yapmadan önce e-postanızı doğrulayın.",
         "states": {
-          "prepared": {
-            "title": "E-posta doğrulama henüz etkin değil",
-            "description": "E-posta teslimi ve doğrulama geri çağrıları bir sonraki geliştirme adımında bağlanacak."
+          "initial": {
+            "title": "Doğrulama bağlantısı isteyin",
+            "description": "E-posta adresinizi girin; hesabın doğrulanması gerekiyorsa yeni bir bağlantı gönderelim."
           },
           "success": {
             "title": "E-posta doğrulandı",
@@ -245,15 +277,15 @@
           },
           "expired": {
             "title": "Doğrulama bağlantısının süresi doldu",
-            "description": "Bu doğrulama bağlantısı artık geçerli değil."
+            "description": "Bu doğrulama bağlantısı artık geçerli değil. Aşağıdan yeni bir bağlantı isteyin."
           },
           "invalid": {
             "title": "Geçersiz doğrulama bağlantısı",
-            "description": "Bu doğrulama bağlantısı kullanılamaz."
+            "description": "Bu doğrulama bağlantısı kullanılamaz. Aşağıdan yeni bir bağlantı isteyin."
           },
           "failure": {
             "title": "E-posta doğrulanamadı",
-            "description": "Doğrulama tamamlanamadı."
+            "description": "Doğrulama tamamlanamadı. Yeni bir bağlantı isteyip tekrar deneyin."
           }
         }
       }

@@ -9,6 +9,10 @@ import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { authRoles } from "@/lib/auth-roles";
 import {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} from "@/lib/email/auth-emails";
+import {
   normalizeCustomerName,
   validateCustomerName,
 } from "@/lib/auth-validation";
@@ -27,6 +31,22 @@ export const auth = betterAuth({
     disableSignUp: false,
     minPasswordLength: 8,
     maxPasswordLength: 128,
+    requireEmailVerification: true,
+    autoSignIn: false,
+    resetPasswordTokenExpiresIn: 60 * 60,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendPasswordResetEmail(user.email, url);
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    sendOnSignIn: false,
+    autoSignInAfterVerification: false,
+    expiresIn: 60 * 60,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendVerificationEmail(user.email, url);
+    },
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => {

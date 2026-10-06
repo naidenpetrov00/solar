@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { authClient } from "@/lib/auth-client";
 import {
@@ -12,6 +11,10 @@ import {
   validateEmail,
   validateNewPassword,
 } from "@/lib/auth-validation";
+import {
+  VerificationRequestForm,
+  type VerificationRequestLabels,
+} from "./verification-request-form";
 
 type FieldName = "name" | "email" | "password" | "confirmPassword";
 type FieldErrors = Partial<Record<FieldName, string>>;
@@ -34,20 +37,31 @@ export type SignUpFormLabels = {
   passwordMismatch: string;
   rateLimited: string;
   genericError: string;
+  checkEmailTitle: string;
+  checkEmailDescription: string;
+  deliveryHelp: string;
+  verificationRequest: VerificationRequestLabels;
 };
 
 export function SignUpForm({
   labels,
-  returnTo,
+  verificationCallbackURL,
 }: {
   labels: SignUpFormLabels;
-  returnTo: string;
+  verificationCallbackURL: string;
 }) {
-  const router = useRouter();
   const summaryRef = useRef<HTMLDivElement>(null);
+  const statusHeadingRef = useRef<HTMLHeadingElement>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (registeredEmail) {
+      statusHeadingRef.current?.focus();
+    }
+  }, [registeredEmail]);
 
   const focusSummary = () => {
     requestAnimationFrame(() => summaryRef.current?.focus());
@@ -96,7 +110,12 @@ export function SignUpForm({
     setPending(true);
 
     try {
-      const result = await authClient.signUp.email({ name, email, password });
+      const result = await authClient.signUp.email({
+        name,
+        email,
+        password,
+        callbackURL: verificationCallbackURL,
+      });
 
       if (result.error) {
         setFormError(
@@ -108,8 +127,7 @@ export function SignUpForm({
         return;
       }
 
-      router.replace(returnTo);
-      router.refresh();
+      setRegisteredEmail(email);
     } catch {
       setFormError(labels.genericError);
       focusSummary();
@@ -117,6 +135,26 @@ export function SignUpForm({
       setPending(false);
     }
   };
+
+  if (registeredEmail) {
+    return (
+      <div className="auth-state" data-tone="neutral" role="status">
+        <span className="auth-state-mark" aria-hidden="true" />
+        <div>
+          <h2 ref={statusHeadingRef} tabIndex={-1}>{labels.checkEmailTitle}</h2>
+          <p>{labels.checkEmailDescription}</p>
+          <p>{labels.deliveryHelp}</p>
+        </div>
+        <div className="auth-state-content">
+          <VerificationRequestForm
+            callbackURL={verificationCallbackURL}
+            initialEmail={registeredEmail}
+            labels={labels.verificationRequest}
+          />
+        </div>
+      </div>
+    );
+  }
 
   const errors = [...Object.values(fieldErrors), ...(formError ? [formError] : [])];
 

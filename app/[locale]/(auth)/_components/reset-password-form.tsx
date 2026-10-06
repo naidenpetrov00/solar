@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { authClient } from "@/lib/auth-client";
 import {
@@ -41,10 +41,17 @@ export function ResetPasswordForm({
   signInHref: string;
 }) {
   const summaryRef = useRef<HTMLDivElement>(null);
+  const statusHeadingRef = useRef<HTMLHeadingElement>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [complete, setComplete] = useState(false);
+
+  useEffect(() => {
+    if (complete) {
+      statusHeadingRef.current?.focus();
+    }
+  }, [complete]);
 
   const focusSummary = () => {
     requestAnimationFrame(() => summaryRef.current?.focus());
@@ -94,7 +101,7 @@ export function ResetPasswordForm({
         setFormError(
           result.error.status === 429
             ? labels.rateLimited
-            : result.error.status === 400
+            : result.error.code === "INVALID_TOKEN"
               ? labels.invalidToken
               : labels.genericError,
         );
@@ -116,7 +123,7 @@ export function ResetPasswordForm({
       <div className="auth-state" data-tone="success" role="status">
         <span className="auth-state-mark" aria-hidden="true" />
         <div>
-          <h2>{labels.successTitle}</h2>
+          <h2 ref={statusHeadingRef} tabIndex={-1}>{labels.successTitle}</h2>
           <p>{labels.successDescription}</p>
         </div>
         <Link className="auth-primary-action" href={signInHref}>{labels.signIn}</Link>

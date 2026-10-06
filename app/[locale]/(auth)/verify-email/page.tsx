@@ -1,12 +1,17 @@
 import { getT } from "@/i18n.server";
 import { AuthShell } from "../_components/auth-shell";
 import { AuthState } from "../_components/auth-state";
+import { VerificationRequestForm } from "../_components/verification-request-form";
 import {
   getAuthPageMetadata,
   getQueryValue,
   type AuthSearchParams,
 } from "../_lib/auth-page";
-import { localizedAuthPath } from "../../_lib/routes";
+import {
+  localizedAuthPath,
+  localizedVerificationCallbackPath,
+  safeInternalReturnPath,
+} from "../../_lib/routes";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -22,26 +27,20 @@ export default async function VerifyEmailPage({
 }) {
   const [{ locale }, query] = await Promise.all([params, searchParams]);
   const { t } = await getT("common", { lng: locale });
-  const status = getQueryValue(query.status)?.toLowerCase().replaceAll("_", "-");
-  const error = getQueryValue(query.error)?.toLowerCase().replaceAll("_", "-");
-  const signInHref = localizedAuthPath(locale, "sign-in");
-  const expiredErrors = new Set([
-    "token-expired",
-    "expired-token",
-    "verification-token-expired",
-  ]);
-  const invalidErrors = new Set([
-    "invalid-token",
-    "token-invalid",
-    "invalid-verification-token",
-  ]);
+  const status = getQueryValue(query.status);
+  const error = getQueryValue(query.error);
+  const returnTo = safeInternalReturnPath(query.returnTo, locale);
+  const signInHref = localizedAuthPath(locale, "sign-in", returnTo);
+  const callbackURL = localizedVerificationCallbackPath(locale, returnTo);
 
-  let state: "prepared" | "success" | "expired" | "invalid" | "failure" = "prepared";
+  let state: "initial" | "success" | "expired" | "invalid" | "failure" = "initial";
 
-  if (error && expiredErrors.has(error)) state = "expired";
-  else if (error && invalidErrors.has(error)) state = "invalid";
+  if (error === "TOKEN_EXPIRED") state = "expired";
+  else if (error === "INVALID_TOKEN") state = "invalid";
   else if (error) state = "failure";
-  else if (status === "success" || status === "verified") state = "success";
+  else if (status === "success") state = "success";
+
+  const showResend = state !== "success";
 
   return (
     <AuthShell
@@ -49,11 +48,27 @@ export default async function VerifyEmailPage({
       description={t("pages.auth.verifyEmail.description")}
     >
       <AuthState
-        tone={state === "success" ? "success" : state === "prepared" ? "neutral" : "error"}
+        tone={state === "success" ? "success" : state === "initial" ? "neutral" : "error"}
         title={t(`pages.auth.verifyEmail.states.${state}.title`)}
         description={t(`pages.auth.verifyEmail.states.${state}.description`)}
         link={{ href: signInHref, label: t("pages.auth.common.backToSignIn") }}
       />
+      {showResend ? (
+        <VerificationRequestForm
+          callbackURL={callbackURL}
+          labels={{
+            email: t("pages.auth.fields.email"),
+            submit: t("pages.auth.verificationRequest.submit"),
+            submitting: t("pages.auth.verificationRequest.submitting"),
+            accepted: t("pages.auth.verificationRequest.accepted"),
+            validationSummary: t("pages.auth.errors.validationSummary"),
+            emailRequired: t("pages.auth.errors.emailRequired"),
+            emailInvalid: t("pages.auth.errors.emailInvalid"),
+            rateLimited: t("pages.auth.errors.rateLimited"),
+            genericError: t("pages.auth.errors.verificationRequestFailed"),
+          }}
+        />
+      ) : null}
     </AuthShell>
   );
 }

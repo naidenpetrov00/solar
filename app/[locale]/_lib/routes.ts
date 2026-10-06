@@ -1,4 +1,5 @@
 export const supportedLocales = ["bg", "en", "tr", "uk"] as const;
+export type SupportedLocale = (typeof supportedLocales)[number];
 
 export const routeDefinitions = [
   { slug: "", key: "home" },
@@ -17,6 +18,14 @@ export const authRouteSlugs = [
 ] as const;
 
 export type AuthRouteSlug = (typeof authRouteSlugs)[number];
+
+const authQueryParameters: Record<AuthRouteSlug, readonly string[]> = {
+  "sign-in": ["returnTo"],
+  "sign-up": ["returnTo"],
+  "forgot-password": ["returnTo"],
+  "reset-password": ["token", "error", "returnTo"],
+  "verify-email": ["status", "error", "returnTo"],
+};
 
 export function localizedPath(locale: string, slug = "") {
   const path = slug ? `/${slug}` : "/";
@@ -44,6 +53,60 @@ export function localizedAuthPath(
   return `${path}?${query.toString()}`;
 }
 
+export function isAuthRouteSlug(slug: string): slug is AuthRouteSlug {
+  return authRouteSlugs.some((authSlug) => authSlug === slug);
+}
+
+export function localizedAuthLanguagePath(
+  sourceLocale: string,
+  targetLocale: string,
+  slug: AuthRouteSlug,
+  searchParams: Pick<URLSearchParams, "get">,
+) {
+  const query = new URLSearchParams();
+
+  for (const parameter of authQueryParameters[slug]) {
+    const value = searchParams.get(parameter);
+
+    if (value === null) {
+      continue;
+    }
+
+    query.set(
+      parameter,
+      parameter === "returnTo"
+        ? localizedReturnPath(sourceLocale, targetLocale, value)
+        : value,
+    );
+  }
+
+  const path = localizedPath(targetLocale, slug);
+  return query.size === 0 ? path : `${path}?${query.toString()}`;
+}
+
+export function localizedVerificationCallbackPath(
+  locale: string,
+  returnTo: string | string[] | undefined,
+) {
+  const query = new URLSearchParams({
+    status: "success",
+    returnTo: safeInternalReturnPath(returnTo, locale),
+  });
+
+  return `${localizedPath(locale, "verify-email")}?${query.toString()}`;
+}
+
+export function localizedPasswordResetCallbackPath(
+  locale: string,
+  returnTo: string | string[] | undefined,
+) {
+  const query = new URLSearchParams({
+    returnTo: safeInternalReturnPath(returnTo, locale),
+  });
+
+  return `${localizedPath(locale, "reset-password")}?${query.toString()}`;
+}
+
 export function isLocaleEquivalentSlug(slug: string) {
   return (
     slug === "" ||
@@ -51,6 +114,25 @@ export function isLocaleEquivalentSlug(slug: string) {
     routeDefinitions.some((route) => route.slug === slug) ||
     authRouteSlugs.some((authSlug) => authSlug === slug)
   );
+}
+
+function localizedReturnPath(
+  sourceLocale: string,
+  targetLocale: string,
+  value: string,
+) {
+  const safePath = safeInternalReturnPath(value, sourceLocale);
+  const sourcePrefix = sourceLocale === "bg" ? "" : `/${sourceLocale}`;
+  const pathWithoutLocale = sourcePrefix
+    ? safePath.slice(sourcePrefix.length) || "/"
+    : safePath;
+  const target = new URL(pathWithoutLocale, "https://internal.invalid");
+  const localizedTarget = localizedPath(
+    targetLocale,
+    target.pathname.replace(/^\/+|\/+$/gu, ""),
+  );
+
+  return `${localizedTarget}${target.search}${target.hash}`;
 }
 
 export function safeInternalReturnPath(

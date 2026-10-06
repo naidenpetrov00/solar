@@ -9,7 +9,7 @@ import {
   getQueryValue,
   type AuthSearchParams,
 } from "../_lib/auth-page";
-import { localizedAuthPath } from "../../_lib/routes";
+import { localizedAuthPath, safeInternalReturnPath } from "../../_lib/routes";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -27,58 +27,60 @@ export default async function ResetPasswordPage({
   const { t } = await getT("common", { lng: locale });
   const tokenValue = getQueryValue(query.token);
   const token = tokenValue && tokenValue.length <= 2048 ? tokenValue : undefined;
-  const error = getQueryValue(query.error)?.toLowerCase().replaceAll("_", "-");
-  const signInHref = localizedAuthPath(locale, "sign-in");
-  const expiredErrors = new Set([
-    "token-expired",
-    "expired-token",
-    "reset-token-expired",
-  ]);
-  const expired = error ? expiredErrors.has(error) : false;
+  const error = getQueryValue(query.error);
+  const returnTo = safeInternalReturnPath(query.returnTo, locale);
+  const signInHref = localizedAuthPath(locale, "sign-in", returnTo);
+  const forgotPasswordHref = localizedAuthPath(locale, "forgot-password", returnTo);
 
   let content;
 
-  if (error) {
+  if (error && error !== "INVALID_TOKEN") {
     content = (
       <AuthState
         tone="error"
-        title={t(expired ? "pages.auth.resetPassword.expiredTitle" : "pages.auth.resetPassword.invalidTitle")}
-        description={t(expired ? "pages.auth.resetPassword.expiredDescription" : "pages.auth.resetPassword.invalidDescription")}
+        title={t("pages.auth.resetPassword.failureTitle")}
+        description={t("pages.auth.resetPassword.failureDescription")}
+        link={{
+          href: forgotPasswordHref,
+          label: t("pages.auth.resetPassword.requestAnother"),
+        }}
       />
     );
-  } else if (!token) {
+  } else if (!token || error === "INVALID_TOKEN") {
     content = (
       <AuthState
-        title={t("pages.auth.resetPassword.preparedTitle")}
-        description={t("pages.auth.resetPassword.preparedDescription")}
+        tone="error"
+        title={t("pages.auth.resetPassword.invalidOrExpiredTitle")}
+        description={t("pages.auth.resetPassword.invalidOrExpiredDescription")}
+        link={{
+          href: forgotPasswordHref,
+          label: t("pages.auth.resetPassword.requestAnother"),
+        }}
       />
     );
   } else {
     content = (
-      <>
-        <p className="auth-flow-notice">{t("pages.auth.resetPassword.deliveryNotice")}</p>
-        <ResetPasswordForm
-          token={token}
-          signInHref={signInHref}
-          labels={{
-            password: t("pages.auth.fields.newPassword"),
-            passwordHint: t("pages.auth.fields.passwordHint"),
-            confirmPassword: t("pages.auth.fields.confirmPassword"),
-            submit: t("pages.auth.resetPassword.submit"),
-            submitting: t("pages.auth.resetPassword.submitting"),
-            validationSummary: t("pages.auth.errors.validationSummary"),
-            passwordRequired: t("pages.auth.errors.passwordRequired"),
-            passwordLength: t("pages.auth.errors.passwordLength"),
-            passwordMismatch: t("pages.auth.errors.passwordMismatch"),
-            invalidToken: t("pages.auth.errors.resetTokenInvalid"),
-            rateLimited: t("pages.auth.errors.rateLimited"),
-            genericError: t("pages.auth.errors.resetFailed"),
-            successTitle: t("pages.auth.resetPassword.successTitle"),
-            successDescription: t("pages.auth.resetPassword.successDescription"),
-            signIn: t("pages.auth.common.backToSignIn"),
-          }}
-        />
-      </>
+      <ResetPasswordForm
+        token={token}
+        signInHref={signInHref}
+        labels={{
+          password: t("pages.auth.fields.newPassword"),
+          passwordHint: t("pages.auth.fields.passwordHint"),
+          confirmPassword: t("pages.auth.fields.confirmPassword"),
+          submit: t("pages.auth.resetPassword.submit"),
+          submitting: t("pages.auth.resetPassword.submitting"),
+          validationSummary: t("pages.auth.errors.validationSummary"),
+          passwordRequired: t("pages.auth.errors.passwordRequired"),
+          passwordLength: t("pages.auth.errors.passwordLength"),
+          passwordMismatch: t("pages.auth.errors.passwordMismatch"),
+          invalidToken: t("pages.auth.errors.resetTokenInvalid"),
+          rateLimited: t("pages.auth.errors.rateLimited"),
+          genericError: t("pages.auth.errors.resetFailed"),
+          successTitle: t("pages.auth.resetPassword.successTitle"),
+          successDescription: t("pages.auth.resetPassword.successDescription"),
+          signIn: t("pages.auth.common.backToSignIn"),
+        }}
+      />
     );
   }
 

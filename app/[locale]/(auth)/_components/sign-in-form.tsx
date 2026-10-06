@@ -1,10 +1,15 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { authClient } from "@/lib/auth-client";
 import { validateEmail } from "@/lib/auth-validation";
+import {
+  VerificationRequestForm,
+  type VerificationRequestLabels,
+} from "./verification-request-form";
 
 type FieldName = "email" | "password";
 type FieldErrors = Partial<Record<FieldName, string>>;
@@ -21,20 +26,37 @@ export type SignInFormLabels = {
   invalidCredentials: string;
   rateLimited: string;
   genericError: string;
+  forgotPassword: string;
+  unverifiedTitle: string;
+  unverifiedDescription: string;
+  tryAnotherEmail: string;
+  verificationRequest: VerificationRequestLabels;
 };
 
 export function SignInForm({
   labels,
   returnTo,
+  forgotPasswordHref,
+  verificationCallbackURL,
 }: {
   labels: SignInFormLabels;
   returnTo: string;
+  forgotPasswordHref: string;
+  verificationCallbackURL: string;
 }) {
   const router = useRouter();
   const summaryRef = useRef<HTMLDivElement>(null);
+  const statusHeadingRef = useRef<HTMLHeadingElement>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (unverifiedEmail) {
+      statusHeadingRef.current?.focus();
+    }
+  }, [unverifiedEmail]);
 
   const focusSummary = () => {
     requestAnimationFrame(() => summaryRef.current?.focus());
@@ -77,6 +99,11 @@ export function SignInForm({
       const result = await authClient.signIn.email({ email, password });
 
       if (result.error) {
+        if (result.error.code === "EMAIL_NOT_VERIFIED") {
+          setUnverifiedEmail(email);
+          return;
+        }
+
         const invalidCredentials =
           result.error.status === 401 &&
           result.error.code === "INVALID_EMAIL_OR_PASSWORD";
@@ -101,6 +128,32 @@ export function SignInForm({
       setPending(false);
     }
   };
+
+  if (unverifiedEmail) {
+    return (
+      <div className="auth-state" data-tone="neutral" role="status">
+        <span className="auth-state-mark" aria-hidden="true" />
+        <div>
+          <h2 ref={statusHeadingRef} tabIndex={-1}>{labels.unverifiedTitle}</h2>
+          <p>{labels.unverifiedDescription}</p>
+        </div>
+        <div className="auth-state-content">
+          <VerificationRequestForm
+            callbackURL={verificationCallbackURL}
+            initialEmail={unverifiedEmail}
+            labels={labels.verificationRequest}
+          />
+          <button
+            className="auth-text-action"
+            type="button"
+            onClick={() => setUnverifiedEmail(null)}
+          >
+            {labels.tryAnotherEmail}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const errors = [...Object.values(fieldErrors), ...(formError ? [formError] : [])];
 
@@ -150,6 +203,10 @@ export function SignInForm({
         />
         {fieldErrors.password ? <p id="sign-in-password-error" className="auth-field-error">{fieldErrors.password}</p> : null}
       </div>
+
+      <Link className="auth-form-link" href={forgotPasswordHref}>
+        {labels.forgotPassword}
+      </Link>
 
       <button className="auth-primary-action" type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}

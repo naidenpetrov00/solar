@@ -8,7 +8,7 @@ Public solar-installation website built with Next.js. This repository also conta
 - npm
 - Docker Desktop or another Docker Engine with Docker Compose
 
-The Compose file provisions PostgreSQL for local development only. It is not production infrastructure, and Docker does not need to be running for schema generation or static validation.
+The Compose file provisions PostgreSQL and Mailpit for local development only. They are not production infrastructure, and Docker does not need to be running for schema generation or static validation.
 
 ## Environment configuration
 
@@ -26,7 +26,7 @@ npm run auth:secret
 
 Copy the generated value into `BETTER_AUTH_SECRET`. The variables are server-only; do not rename them with a `NEXT_PUBLIC_` prefix.
 
-Required variables:
+Configuration variables:
 
 | Variable | Purpose |
 | --- | --- |
@@ -37,6 +37,14 @@ Required variables:
 | `DATABASE_URL` | PostgreSQL connection string used by the application and Drizzle |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
 | `BETTER_AUTH_URL` | Canonical application origin, such as `http://localhost:3000` locally |
+| `MAILPIT_UI_PORT` | Loopback-only host port for the local Mailpit inbox |
+| `MAILPIT_SMTP_PORT` | Loopback-only host port for Mailpit SMTP |
+| `SMTP_HOST` | SMTP server hostname; use `127.0.0.1` when Next.js runs on the host |
+| `SMTP_PORT` | SMTP server port; Mailpit uses `1025` locally |
+| `SMTP_SECURE` | Whether SMTP uses implicit TLS; Mailpit uses `false` locally |
+| `SMTP_FROM` | Sender name and address used for authentication emails |
+| `SMTP_USERNAME` | Optional SMTP username; production must set it together with `SMTP_PASSWORD` |
+| `SMTP_PASSWORD` | Optional SMTP password; production must set it together with `SMTP_USERNAME` |
 
 Keep `.env` out of source control. Production credentials must come from the deployment environment or its secret manager.
 
@@ -60,7 +68,7 @@ Stop the container while preserving the named volume:
 docker compose down
 ```
 
-The following command also deletes the local database volume and all of its data. Use it only when a deliberate reset is required:
+The following command deletes both the local PostgreSQL data and Mailpit's stored emails. Use it only when a deliberate reset is required:
 
 ```powershell
 docker compose down --volumes
@@ -115,7 +123,11 @@ Use the real administrator email and name at invocation time. Deliberately omit 
 
 Localized customer routes are available for sign-up, sign-in, forgot-password, reset-password, and email-verification states. They use the existing Better Auth API at `/api/auth/*`; there are no parallel credential endpoints.
 
-This step is for development only and is not production-ready. Registration currently creates an immediately usable account without verifying ownership of the email address. Forgot-password is an unavailable placeholder, while reset-password and verification only prepare the UI for future email callbacks and delivery. Do not present those email-driven flows as active until the next milestone step is complete.
+Password accounts must verify their email address before a new sign-in. Registration does not create a session and moves to a neutral check-email state with a resend action. Password recovery also uses a neutral response so the interface does not disclose whether an account exists. Verification and password-reset links expire after one hour, and a successful password reset revokes the user's existing sessions.
+
+Email delivery failures are intentionally hidden from account-dependent browser responses and recorded only as a sanitized `email_delivery_failed` operational event. Registration may therefore succeed even when the first delivery attempt fails; the user can resend without deleting or recreating the account.
+
+Existing unverified development accounts remain unverified. Their next password sign-in is blocked and offers a resend action. Existing sessions created before verification enforcement remain valid until expiry or explicit revocation.
 
 Better Auth's installed version enables its built-in limiter by default in production, including stricter limits for sign-in and sign-up routes. A later milestone must still review and configure persistent rate limiting suitable for the final self-hosted or multi-instance deployment.
 
@@ -141,19 +153,21 @@ docker compose exec database sh -c 'pg_restore --exit-on-error --username="$POST
 
 Store backups outside the Docker volume and test restoration periodically. A production deployment needs automated, encrypted, off-server backups with a defined retention policy.
 
-## Later email and Google OAuth configuration
+## Local email with Mailpit
 
-SMTP and Google OAuth are intentionally not enabled in this milestone.
+Mailpit captures development email in a persistent named volume. Start only the local mail service when it is needed:
 
-Email verification and password reset will later require a selected mail provider and deployment secrets equivalent to:
+```powershell
+docker compose up -d mailpit
+```
 
-- `SMTP_HOST`
-- `SMTP_PORT`
-- `SMTP_USERNAME`
-- `SMTP_PASSWORD`
-- `SMTP_FROM`
+Open the loopback-only inbox at `http://localhost:8025`. The local SMTP server listens on `127.0.0.1:1025` and does not require a username or password.
 
-The sender domain and address must be verified with the selected provider before enabling those Better Auth callbacks.
+When Next.js runs directly on the host, keep `SMTP_HOST=127.0.0.1`. If the application is later placed in the same Compose network, use `SMTP_HOST=mailpit` instead. None of the mail variables should use the `NEXT_PUBLIC_` prefix.
+
+Mailpit is a development capture service, not a production delivery provider. Production still requires a selected SMTP account, a verified sender domain, delivery monitoring, and both SMTP credentials when the provider requires authentication.
+
+## Later Google OAuth configuration
 
 Google OAuth will later require `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Configure these external URLs in Google Cloud:
 

@@ -1451,10 +1451,17 @@ html {
 }
 
 .auth-form,
+.auth-compact-form,
 .auth-state {
   display: grid;
   width: min(100%, 32rem);
   gap: 1.5rem;
+}
+
+.auth-compact-form {
+  display: grid;
+  width: min(100%, 32rem);
+  gap: 1rem;
 }
 
 .auth-field {
@@ -1587,9 +1594,41 @@ html {
 
 .auth-primary-action:focus-visible,
 .auth-secondary-action:focus-visible,
+.auth-text-action:focus-visible,
+.auth-form-link:focus-visible,
 .auth-footer a:focus-visible {
   outline: 3px solid #fcd34d;
   outline-offset: 3px;
+}
+
+.auth-form-link {
+  width: fit-content;
+  color: var(--auth-foreground);
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-underline-offset: 0.22em;
+}
+
+.auth-text-action {
+  min-height: 2.75rem;
+  width: fit-content;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--auth-foreground);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+.auth-inline-status {
+  min-height: 1.5rem;
+  margin: 0;
+  color: var(--auth-muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
 }
 
 .auth-footer {
@@ -1642,6 +1681,11 @@ html {
   line-height: 1.08;
 }
 
+.auth-state h2:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 4px;
+}
+
 .auth-state p {
   margin-top: 0.75rem;
   color: var(--auth-muted);
@@ -1652,6 +1696,18 @@ html {
 .auth-state .auth-secondary-action {
   grid-column: 2;
   margin-top: 0.5rem;
+}
+
+.auth-state-content {
+  display: grid;
+  grid-column: 2;
+  gap: 1rem;
+  min-width: 0;
+  margin-top: 0.5rem;
+}
+
+.auth-state-content .auth-compact-form {
+  width: 100%;
 }
 
 @media (min-width: 56rem) {
@@ -1673,7 +1729,8 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .auth-field input,
   .auth-primary-action,
-  .auth-secondary-action {
+  .auth-secondary-action,
+  .auth-text-action {
     transition: none;
   }
 }

@@ -8,7 +8,10 @@ import {
   getSignedOutReturnPath,
   type AuthSearchParams,
 } from "../_lib/auth-page";
-import { localizedAuthPath } from "../../_lib/routes";
+import {
+  localizedAuthPath,
+  localizedVerificationCallbackPath,
+} from "../../_lib/routes";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -40,7 +43,7 @@ export default async function SignUpPage({
       }
     >
       <SignUpForm
-        returnTo={returnTo}
+        verificationCallbackURL={localizedVerificationCallbackPath(locale, returnTo)}
         labels={{
           name: t("pages.auth.fields.name"),
           email: t("pages.auth.fields.email"),
@@ -59,6 +62,20 @@ export default async function SignUpPage({
           passwordMismatch: t("pages.auth.errors.passwordMismatch"),
           rateLimited: t("pages.auth.errors.rateLimited"),
           genericError: t("pages.auth.errors.signUpFailed"),
+          checkEmailTitle: t("pages.auth.signUp.checkEmailTitle"),
+          checkEmailDescription: t("pages.auth.signUp.checkEmailDescription"),
+          deliveryHelp: t("pages.auth.signUp.deliveryHelp"),
+          verificationRequest: {
+            email: t("pages.auth.fields.email"),
+            submit: t("pages.auth.verificationRequest.submit"),
+            submitting: t("pages.auth.verificationRequest.submitting"),
+            accepted: t("pages.auth.verificationRequest.accepted"),
+            validationSummary: t("pages.auth.errors.validationSummary"),
+            emailRequired: t("pages.auth.errors.emailRequired"),
+            emailInvalid: t("pages.auth.errors.emailInvalid"),
+            rateLimited: t("pages.auth.errors.rateLimited"),
+            genericError: t("pages.auth.errors.verificationRequestFailed"),
+          },
         }}
       />
     </AuthShell>
