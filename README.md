@@ -103,7 +103,7 @@ npm run db:generate
 
 ## First administrator
 
-Public sign-up is disabled. After migrations have been applied, provision the first administrator through Better Auth's CLI:
+Public registration can create `customer` accounts only. It cannot select or submit the `admin` role. After migrations have been applied, provision the first administrator through Better Auth's CLI:
 
 ```powershell
 npm run auth:provision-admin -- --email admin@example.com --name "Administrator" --role admin
@@ -111,7 +111,15 @@ npm run auth:provision-admin -- --email admin@example.com --name "Administrator"
 
 Use the real administrator email and name at invocation time. Deliberately omit `--password`: the CLI will prompt without placing the password in source code, `.env`, or shell history. The CLI marks the email as verified by default and warns before creating an administrator when users already exist. Do not bypass that warning with `--force` or `--yes` during normal provisioning.
 
-The milestone exposes Better Auth at `/api/auth/*` for provisioned identities but adds no public sign-in, sign-up, password-reset, profile, or admin UI.
+## Customer authentication status
+
+Localized customer routes are available for sign-up, sign-in, forgot-password, reset-password, and email-verification states. They use the existing Better Auth API at `/api/auth/*`; there are no parallel credential endpoints.
+
+This step is for development only and is not production-ready. Registration currently creates an immediately usable account without verifying ownership of the email address. Forgot-password is an unavailable placeholder, while reset-password and verification only prepare the UI for future email callbacks and delivery. Do not present those email-driven flows as active until the next milestone step is complete.
+
+Better Auth's installed version enables its built-in limiter by default in production, including stricter limits for sign-in and sign-up routes. A later milestone must still review and configure persistent rate limiting suitable for the final self-hosted or multi-instance deployment.
+
+No customer profile menu or admin interface is included yet.
 
 ## Database backup expectation
 

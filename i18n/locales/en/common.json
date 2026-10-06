@@ -166,6 +166,98 @@
     "contact": {
       "title": "Contact"
     },
+    "auth": {
+      "common": {
+        "backToSignIn": "Back to sign in"
+      },
+      "fields": {
+        "name": "Name",
+        "email": "Email address",
+        "password": "Password",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm password",
+        "passwordHint": "Use between 8 and 128 characters."
+      },
+      "errors": {
+        "validationSummary": "Check the highlighted information and try again.",
+        "nameRequired": "Enter your name.",
+        "nameLength": "Name must be between 2 and 100 characters.",
+        "emailRequired": "Enter your email address.",
+        "emailInvalid": "Enter a valid email address.",
+        "passwordRequired": "Enter your password.",
+        "passwordLength": "Password must be between 8 and 128 characters.",
+        "passwordMismatch": "The passwords do not match.",
+        "invalidCredentials": "The email address or password is incorrect.",
+        "rateLimited": "Too many attempts. Wait a moment and try again.",
+        "signInFailed": "We could not sign you in. Try again.",
+        "signUpFailed": "We could not create the account. Check your details or try again later.",
+        "resetTokenInvalid": "This reset link is invalid or has expired.",
+        "resetFailed": "We could not reset the password. Try again."
+      },
+      "signIn": {
+        "title": "Sign in",
+        "description": "Use your email address and password to continue.",
+        "submit": "Sign in",
+        "submitting": "Signing in…",
+        "noAccount": "Need an account?",
+        "createAccount": "Create one"
+      },
+      "signUp": {
+        "title": "Create your account",
+        "description": "Register with an email address and password. Email ownership is not verified until the next development step.",
+        "submit": "Create account",
+        "submitting": "Creating account…",
+        "hasAccount": "Already have an account?",
+        "signIn": "Sign in"
+      },
+      "forgotPassword": {
+        "title": "Forgot password",
+        "description": "Password recovery will use a secure email link.",
+        "unavailableTitle": "Email recovery is not available yet",
+        "unavailableDescription": "This route is prepared, but reset email delivery will be connected in the next development step. No request has been sent."
+      },
+      "resetPassword": {
+        "title": "Set a new password",
+        "description": "A valid reset link is required before a password can be changed.",
+        "preparedTitle": "Reset links are not active yet",
+        "preparedDescription": "This page is ready for the secure links that will be delivered after email support is connected. No password can be reset from this page alone.",
+        "deliveryNotice": "Email delivery is not active yet. This form only works with a valid reset token created by Better Auth.",
+        "invalidTitle": "Invalid reset link",
+        "invalidDescription": "This reset link cannot be used. Requesting a new link will become available when email recovery is connected.",
+        "expiredTitle": "Reset link expired",
+        "expiredDescription": "This reset link is no longer valid. Requesting another link will become available when email recovery is connected.",
+        "submit": "Save new password",
+        "submitting": "Saving password…",
+        "successTitle": "Password updated",
+        "successDescription": "Your new password is ready to use."
+      },
+      "verifyEmail": {
+        "title": "Email verification",
+        "description": "This page is prepared for secure verification links from Better Auth.",
+        "states": {
+          "prepared": {
+            "title": "Verification email is not active yet",
+            "description": "Email delivery and verification callbacks will be connected in the next development step."
+          },
+          "success": {
+            "title": "Email verified",
+            "description": "Your email address has been verified."
+          },
+          "expired": {
+            "title": "Verification link expired",
+            "description": "This verification link is no longer valid."
+          },
+          "invalid": {
+            "title": "Invalid verification link",
+            "description": "This verification link cannot be used."
+          },
+          "failure": {
+            "title": "Email could not be verified",
+            "description": "The verification could not be completed."
+          }
+        }
+      }
+    },
     "solarPackages": {
       "title": "Solar packages",
       "description": "Explore starting points for a home solar system."

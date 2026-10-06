@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { localizedPath } from "../_lib/routes";
+import { isLocaleEquivalentSlug, localizedPath } from "../_lib/routes";
 import { findSolarPackage } from "../_lib/solar-packages";
 import { useCart } from "./cart-store";
 
@@ -64,8 +64,7 @@ export function Navigation({
   const isHomePage = activeSlug === "";
   const homeRoute = routes[0];
   const interiorRoutes = routes.slice(1);
-  const equivalentSlug = activeSlug === "" || activeSlug === "cart" ||
-    routes.some((route) => route.slug === activeSlug) ||
+  const equivalentSlug = isLocaleEquivalentSlug(activeSlug) ||
     activeSlug === "shop/solar-packages" ||
     (activeSlug.startsWith("shop/solar-packages/") && findSolarPackage(activeSlug.split("/")[2]))
     ? activeSlug
