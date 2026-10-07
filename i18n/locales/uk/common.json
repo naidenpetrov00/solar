@@ -11,7 +11,13 @@
     "packages": "Пакети",
     "cart": "Кошик",
     "contact": "Контакти",
-    "requestQuote": "Запросити пропозицію"
+    "requestQuote": "Запросити пропозицію",
+    "signIn": "Увійти",
+    "createAccount": "Створити обліковий запис",
+    "account": "Обліковий запис",
+    "signOut": "Вийти",
+    "signingOut": "Вихід…",
+    "signOutError": "Не вдалося вийти. Спробуйте ще раз."
   },
   "accessibility": {
     "skipToContent": "Перейти до основного вмісту",
@@ -21,7 +27,10 @@
     "languageNavigation": "Вибір мови",
     "themeLabel": "Кольорова тема",
     "themeLight": "Світла тема",
-    "themeDark": "Темна тема"
+    "themeDark": "Темна тема",
+    "accountMenu": "Меню облікового запису",
+    "openAccountMenu": "Відкрити меню облікового запису",
+    "closeAccountMenu": "Закрити меню облікового запису"
   },
   "languages": {
     "bg": "Болгарська",

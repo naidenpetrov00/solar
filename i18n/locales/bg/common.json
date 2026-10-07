@@ -11,7 +11,13 @@
     "packages": "Пакети",
     "cart": "Количка",
     "contact": "Контакти",
-    "requestQuote": "Поискайте оферта"
+    "requestQuote": "Поискайте оферта",
+    "signIn": "Вход",
+    "createAccount": "Създаване на акаунт",
+    "account": "Акаунт",
+    "signOut": "Изход",
+    "signingOut": "Излизане…",
+    "signOutError": "Неуспешен изход. Опитайте отново."
   },
   "accessibility": {
     "skipToContent": "Към основното съдържание",
@@ -21,7 +27,10 @@
     "languageNavigation": "Избор на език",
     "themeLabel": "Цветова тема",
     "themeLight": "Светла тема",
-    "themeDark": "Тъмна тема"
+    "themeDark": "Тъмна тема",
+    "accountMenu": "Меню на акаунта",
+    "openAccountMenu": "Отвори менюто на акаунта",
+    "closeAccountMenu": "Затвори менюто на акаунта"
   },
   "languages": {
     "bg": "Български",

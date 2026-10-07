@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/authorization";
 import { getPageMetadata } from "../../_lib/metadata";
 import {
-  safeInternalReturnPath,
+  safePublicReturnPath,
   type AuthRouteSlug,
 } from "../../_lib/routes";
 
@@ -20,7 +20,7 @@ export async function getSignedOutReturnPath(
   locale: string,
   value: string | string[] | undefined,
 ) {
-  const returnTo = safeInternalReturnPath(value, locale);
+  const returnTo = safePublicReturnPath(value, locale);
 
   if (await getCurrentUser()) {
     redirect(returnTo);

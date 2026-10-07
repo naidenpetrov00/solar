@@ -1,3 +1,5 @@
+import { findSolarPackage } from "./solar-packages";
+
 export const supportedLocales = ["bg", "en", "tr", "uk"] as const;
 export type SupportedLocale = (typeof supportedLocales)[number];
 
@@ -90,7 +92,7 @@ export function localizedVerificationCallbackPath(
 ) {
   const query = new URLSearchParams({
     status: "success",
-    returnTo: safeInternalReturnPath(returnTo, locale),
+    returnTo: safePublicReturnPath(returnTo, locale),
   });
 
   return `${localizedPath(locale, "verify-email")}?${query.toString()}`;
@@ -101,7 +103,7 @@ export function localizedPasswordResetCallbackPath(
   returnTo: string | string[] | undefined,
 ) {
   const query = new URLSearchParams({
-    returnTo: safeInternalReturnPath(returnTo, locale),
+    returnTo: safePublicReturnPath(returnTo, locale),
   });
 
   return `${localizedPath(locale, "reset-password")}?${query.toString()}`;
@@ -121,7 +123,7 @@ function localizedReturnPath(
   targetLocale: string,
   value: string,
 ) {
-  const safePath = safeInternalReturnPath(value, sourceLocale);
+  const safePath = safePublicReturnPath(value, sourceLocale);
   const sourcePrefix = sourceLocale === "bg" ? "" : `/${sourceLocale}`;
   const pathWithoutLocale = sourcePrefix
     ? safePath.slice(sourcePrefix.length) || "/"
@@ -196,4 +198,35 @@ export function safeInternalReturnPath(
   }
 
   return `${target.pathname}${target.search}${target.hash}`;
+}
+
+export function safePublicReturnPath(
+  value: string | string[] | undefined,
+  locale: string,
+) {
+  const fallback = localizedPath(locale);
+  const safePath = safeInternalReturnPath(value, locale);
+
+  if (safePath === fallback) {
+    return fallback;
+  }
+
+  const localePrefix = locale === "bg" ? "" : `/${locale}`;
+  const pathname = safePath.split(/[?#]/u, 1)[0];
+  const pathWithoutLocale = localePrefix
+    ? pathname.slice(localePrefix.length) || "/"
+    : pathname;
+  const slug = pathWithoutLocale.replace(/^\/+|\/+$/gu, "");
+  const isKnownPackageDetail =
+    slug.startsWith("shop/solar-packages/") &&
+    slug.split("/").length === 3 &&
+    Boolean(findSolarPackage(slug.split("/")[2]));
+  const isPublicRoute =
+    slug === "" ||
+    slug === "cart" ||
+    routeDefinitions.some((route) => route.slug === slug) ||
+    slug === "shop/solar-packages" ||
+    isKnownPackageDetail;
+
+  return isPublicRoute ? safePath : fallback;
 }

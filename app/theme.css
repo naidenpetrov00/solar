@@ -61,7 +61,11 @@
 .site-cart-link,
 .site-language,
 .site-menu-button,
-.site-theme-button {
+.site-theme-button,
+.site-auth-link,
+.site-account-trigger,
+.site-account-logout,
+.site-mobile-auth-action {
   outline-color: var(--focus);
 }
 
@@ -102,17 +106,48 @@
 .site-theme-button:hover { background: var(--header-hover); }
 
 .site-menu-button,
-.site-theme-button {
+.site-theme-button,
+.site-account-trigger {
   border-color: color-mix(in srgb, var(--header-foreground) 20%, transparent);
   color: var(--header-foreground);
 }
 
 .site-menu-button:hover,
-.site-theme-button:hover { border-color: color-mix(in srgb, var(--header-foreground) 40%, transparent); }
+.site-theme-button:hover,
+.site-account-trigger:hover { border-color: color-mix(in srgb, var(--header-foreground) 40%, transparent); }
 .site-cta { background: var(--accent); color: var(--accent-foreground); }
 .site-cta:hover { background: var(--accent-hover); }
+.site-auth-link,
+.site-mobile-auth-action { color: var(--header-foreground); text-decoration: none; }
+.site-auth-link:hover,
+.site-mobile-auth-action:hover { background: var(--header-hover); }
+.site-auth-link-outlined,
+.site-mobile-auth-action-outlined { border-color: color-mix(in srgb, var(--header-foreground) 38%, transparent); }
+.site-account-panel {
+  border-color: var(--header-border);
+  background: var(--header-background);
+  color: var(--header-foreground);
+}
+.site-account-panel > div { border-color: var(--header-border); }
+.site-account-email { color: var(--header-muted); }
+.site-account-error { margin: 1rem 0 0; color: #b91c1c; font-size: 0.875rem; line-height: 1.4; }
+.site-account-logout {
+  border-color: color-mix(in srgb, var(--header-foreground) 30%, transparent);
+  background: transparent;
+  color: var(--header-foreground);
+  cursor: pointer;
+}
+.site-account-logout:hover:not(:disabled) { background: var(--header-hover); }
+.site-account-logout:disabled { cursor: wait; opacity: 0.6; }
 .site-divider { border-color: color-mix(in srgb, var(--header-foreground) 15%, transparent); }
 .site-accent { color: var(--accent); }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .site-account-error { color: #fecaca; }
+}
+
+:root[data-theme="dark"] .site-account-error,
+.site-header-overlay .site-account-error { color: #fecaca; }
 
 .theme-switch {
   position: relative;

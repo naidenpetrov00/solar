@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { authClient } from "@/lib/auth-client";
 import {
   isAuthRouteSlug,
   isLocaleEquivalentSlug,
   localizedAuthLanguagePath,
+  localizedAuthPath,
   localizedPath,
+  safePublicReturnPath,
 } from "../_lib/routes";
 import { findSolarPackage } from "../_lib/solar-packages";
 import { useCart } from "./cart-store";
@@ -15,6 +18,11 @@ import { useCart } from "./cart-store";
 type NavigationRoute = {
   slug: string;
   label: string;
+};
+
+type NavigationUser = {
+  name: string;
+  email: string;
 };
 
 type NavigationProps = {
@@ -29,6 +37,16 @@ type NavigationProps = {
   themeLabel: string;
   themeLight: string;
   themeDark: string;
+  user?: NavigationUser;
+  signInLabel: string;
+  signUpLabel: string;
+  accountLabel: string;
+  signOutLabel: string;
+  signingOutLabel: string;
+  signOutError: string;
+  accountMenuLabel: string;
+  openAccountMenuLabel: string;
+  closeAccountMenuLabel: string;
   initialTheme?: "light" | "dark";
   languageNames: Record<string, string>;
   routes: NavigationRoute[];
@@ -48,16 +66,32 @@ export function Navigation({
   themeLabel,
   themeLight,
   themeDark,
+  user,
+  signInLabel,
+  signUpLabel,
+  accountLabel,
+  signOutLabel,
+  signingOutLabel,
+  signOutError,
+  accountMenuLabel,
+  openAccountMenuLabel,
+  closeAccountMenuLabel,
   initialTheme,
   languageNames,
   routes,
 }: NavigationProps) {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [logoutPending, setLogoutPending] = useState(false);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
   const [activeIndicator, setActiveIndicator] = useState({ left: 0, width: 0 });
   const [languageIndicator, setLanguageIndicator] = useState({ left: 0, width: 0 });
   const [themeMode, setThemeMode] = useState<"light" | "dark">(initialTheme ?? "light");
   const desktopNavItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const languageItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const profileTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const profilePanelRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { count, ready } = useCart();
@@ -70,6 +104,11 @@ export function Navigation({
   const isHomePage = activeSlug === "";
   const homeRoute = routes[0];
   const interiorRoutes = routes.slice(1);
+  const currentSearch = searchParams.toString();
+  const currentPath = `${pathname}${currentSearch ? `?${currentSearch}` : ""}`;
+  const returnTo = safePublicReturnPath(currentPath, locale);
+  const signInHref = localizedAuthPath(locale, "sign-in", returnTo);
+  const signUpHref = localizedAuthPath(locale, "sign-up", returnTo);
   const equivalentSlug = isLocaleEquivalentSlug(activeSlug) ||
     activeSlug === "shop/solar-packages" ||
     (activeSlug.startsWith("shop/solar-packages/") && findSolarPackage(activeSlug.split("/")[2]))
@@ -86,6 +125,23 @@ export function Navigation({
       : localizedPath(targetLocale, equivalentSlug);
   const isActive = (slug: string) => activeSlug === slug || (slug === "shop" && activeSlug.startsWith("shop/"));
   const activeNavSlug = interiorRoutes.find((route) => isActive(route.slug))?.slug ?? null;
+
+  const closeMenus = () => {
+    setMenuOpen(false);
+    setProfileOpen(false);
+  };
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setProfileOpen(false);
+  }, [pathname, currentSearch]);
+
+  const toggleProfile = (trigger: HTMLButtonElement) => {
+    profileTriggerRef.current = trigger;
+    setLogoutError(null);
+    setMenuOpen(false);
+    setProfileOpen((open) => !open);
+  };
 
   useEffect(() => {
     let savedTheme: string | null = null;
@@ -110,12 +166,61 @@ export function Navigation({
     return () => mediaQuery.removeEventListener("change", updateFromSystem);
   }, []);
 
+  useEffect(() => {
+    if (!profileOpen) return;
+
+    const closeFromOutsidePointer = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (
+        !profilePanelRef.current?.contains(target) &&
+        !profileTriggerRef.current?.contains(target)
+      ) {
+        setProfileOpen(false);
+      }
+    };
+    const closeFromEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setProfileOpen(false);
+      profileTriggerRef.current?.focus();
+    };
+
+    document.addEventListener("pointerdown", closeFromOutsidePointer);
+    document.addEventListener("keydown", closeFromEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeFromOutsidePointer);
+      document.removeEventListener("keydown", closeFromEscape);
+    };
+  }, [profileOpen]);
+
   const cycleTheme = () => {
     const nextTheme = themeMode === "light" ? "dark" : "light";
     setThemeMode(nextTheme);
       document.documentElement.dataset.theme = nextTheme;
       window.localStorage.setItem("solar-theme", nextTheme);
       document.cookie = `solar-theme=${nextTheme}; Max-Age=31536000; Path=/; SameSite=Lax`;
+  };
+
+  const handleSignOut = async () => {
+    setLogoutPending(true);
+    setLogoutError(null);
+
+    try {
+      const result = await authClient.signOut();
+
+      if (result.error) {
+        setLogoutError(signOutError);
+        return;
+      }
+
+      closeMenus();
+      router.replace(safePublicReturnPath(currentPath, locale));
+      router.refresh();
+    } catch {
+      setLogoutError(signOutError);
+    } finally {
+      setLogoutPending(false);
+    }
   };
 
   const currentThemeLabel = themeMode === "light" ? themeLight : themeDark;
@@ -168,12 +273,12 @@ export function Navigation({
       className={`site-header border-b ${isHomePage ? "site-header-overlay" : ""}`}
       data-overlay={isHomePage ? "true" : undefined}
     >
-      <div className="mx-auto flex min-h-[4.5rem] w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
+      <div className="relative mx-auto flex min-h-[4.5rem] w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
         <Link
           className="site-brand group flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
           href={localizedPath(locale)}
           aria-current={isActive(homeRoute.slug) ? "page" : undefined}
-          onClick={() => setMenuOpen(false)}
+          onClick={closeMenus}
         >
           <svg aria-hidden="true" className="site-accent size-8 transition-transform duration-300 group-hover:rotate-12" viewBox="0 0 32 32" fill="none">
             <circle cx="16" cy="16" r="5" fill="currentColor" />
@@ -183,12 +288,27 @@ export function Navigation({
         </Link>
 
         <div className="flex items-center gap-2 xl:hidden">
+          {user ? (
+            <button
+              type="button"
+              className="site-account-trigger inline-flex size-11 items-center justify-center rounded-md border focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-controls="account-menu"
+              aria-expanded={profileOpen}
+              aria-label={profileOpen ? closeAccountMenuLabel : openAccountMenuLabel}
+              onClick={(event) => toggleProfile(event.currentTarget)}
+            >
+              <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="3.25" stroke="currentColor" strokeWidth="1.7" />
+                <path d="M5 20c.9-3.2 3.3-5 7-5s6.1 1.8 7 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+            </button>
+          ) : null}
           <Link
             className="site-cart-link relative inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
             href={localizedPath(locale, "cart")}
             aria-current={activeSlug === "cart" ? "page" : undefined}
             aria-label={ready && count > 0 ? `${cartLabel} (${count})` : cartLabel}
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenus}
           >
             <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
               <path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L21 8H6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -203,7 +323,10 @@ export function Navigation({
             aria-controls="primary-navigation"
             aria-expanded={menuOpen}
             aria-label={menuOpen ? closeMenuLabel : menuLabel}
-            onClick={() => setMenuOpen((open) => !open)}
+            onClick={() => {
+              setProfileOpen(false);
+              setMenuOpen((open) => !open);
+            }}
           >
             <span aria-hidden="true" className="flex flex-col gap-1.5">
               <span className="block h-0.5 w-5 bg-current" />
@@ -233,6 +356,7 @@ export function Navigation({
                   data-active={isActive(route.slug)}
                   href={localizedPath(locale, route.slug)}
                   aria-current={activeSlug === route.slug ? "page" : isActive(route.slug) ? "location" : undefined}
+                  onClick={closeMenus}
                 >
                   {route.label}
                 </Link>
@@ -263,6 +387,7 @@ export function Navigation({
                     href={localizedRoute(targetLocale)}
                     aria-current={targetLocale === locale ? "page" : undefined}
                     aria-label={languageNames[targetLocale]}
+                    onClick={closeMenus}
                   >
                     {targetLocale}
                   </Link>
@@ -291,6 +416,7 @@ export function Navigation({
             href={localizedPath(locale, "cart")}
             aria-current={activeSlug === "cart" ? "page" : undefined}
             aria-label={ready && count > 0 ? `${cartLabel} (${count})` : cartLabel}
+            onClick={closeMenus}
           >
             <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
               <path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L21 8H6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -299,13 +425,65 @@ export function Navigation({
             </svg>
             {ready && count > 0 && <span className="site-cart-count" aria-hidden="true">{count}</span>}
           </Link>
+          {user ? (
+            <button
+              type="button"
+              className="site-account-trigger inline-flex min-h-11 items-center gap-2 rounded-md border px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-controls="account-menu"
+              aria-expanded={profileOpen}
+              aria-label={profileOpen ? closeAccountMenuLabel : openAccountMenuLabel}
+              onClick={(event) => toggleProfile(event.currentTarget)}
+            >
+              <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="3.25" stroke="currentColor" strokeWidth="1.7" />
+                <path d="M5 20c.9-3.2 3.3-5 7-5s6.1 1.8 7 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+              <span>{accountLabel}</span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link className="site-auth-link inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2" href={signInHref}>
+                {signInLabel}
+              </Link>
+              <Link className="site-auth-link site-auth-link-outlined inline-flex min-h-11 items-center rounded-md border px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2" href={signUpHref}>
+                {signUpLabel}
+              </Link>
+            </div>
+          )}
           <Link
             className="site-cta inline-flex min-h-11 items-center rounded-md px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
             href={localizedPath(locale, "contact")}
+            onClick={closeMenus}
           >
             {ctaLabel}
           </Link>
         </div>
+        {user && profileOpen ? (
+          <div
+            ref={profilePanelRef}
+            id="account-menu"
+            className="site-account-panel absolute right-5 top-full z-50 mt-2 w-[min(22rem,calc(100vw-2.5rem))] border p-4 sm:right-8 xl:right-8"
+            role="group"
+            aria-label={accountMenuLabel}
+          >
+            <div className="border-b pb-4">
+              <p className="m-0 break-words text-sm font-semibold tracking-[-0.015em]">{user.name}</p>
+              <p className="site-account-email m-0 mt-1 break-all text-sm">{user.email}</p>
+            </div>
+            {logoutError ? <p className="site-account-error" role="alert">{logoutError}</p> : null}
+            <button
+              type="button"
+              className="site-account-logout mt-4 inline-flex min-h-11 w-full items-center justify-center border px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+              onClick={handleSignOut}
+              disabled={logoutPending}
+            >
+              {logoutPending ? signingOutLabel : signOutLabel}
+            </button>
+            <p className="sr-only" aria-live="polite" aria-atomic="true">
+              {logoutPending ? signingOutLabel : ""}
+            </p>
+          </div>
+        ) : null}
       </div>
 
       <div
@@ -320,12 +498,30 @@ export function Navigation({
                   className={`site-nav-link flex min-h-11 items-center rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${isActive(route.slug) ? "site-active-surface" : ""}`}
                   href={localizedPath(locale, route.slug)}
                   aria-current={activeSlug === route.slug ? "page" : isActive(route.slug) ? "location" : undefined}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={closeMenus}
                 >
                   {route.label}
                 </Link>
               </li>
             ))}
+            {!user ? (
+              <li className="grid grid-cols-2 gap-2 pt-3">
+                <Link
+                  className="site-mobile-auth-action flex min-h-11 items-center justify-center rounded-md px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+                  href={signInHref}
+                  onClick={closeMenus}
+                >
+                  {signInLabel}
+                </Link>
+                <Link
+                  className="site-mobile-auth-action site-mobile-auth-action-outlined flex min-h-11 items-center justify-center rounded-md border px-3 text-center text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+                  href={signUpHref}
+                  onClick={closeMenus}
+                >
+                  {signUpLabel}
+                </Link>
+              </li>
+            ) : null}
             <li className="pt-3">
               <button
                 type="button"
@@ -347,7 +543,7 @@ export function Navigation({
               <Link
                 className="site-cta flex min-h-12 items-center justify-center rounded-md px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
                 href={localizedPath(locale, "contact")}
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenus}
               >
                 {ctaLabel}
               </Link>
@@ -363,6 +559,7 @@ export function Navigation({
                         href={localizedRoute(targetLocale)}
                         aria-current={targetLocale === locale ? "page" : undefined}
                         aria-label={languageNames[targetLocale]}
+                        onClick={closeMenus}
                       >
                         {targetLocale}
                       </Link>

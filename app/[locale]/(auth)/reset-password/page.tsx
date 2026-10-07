@@ -9,7 +9,7 @@ import {
   getQueryValue,
   type AuthSearchParams,
 } from "../_lib/auth-page";
-import { localizedAuthPath, safeInternalReturnPath } from "../../_lib/routes";
+import { localizedAuthPath, safePublicReturnPath } from "../../_lib/routes";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -28,7 +28,7 @@ export default async function ResetPasswordPage({
   const tokenValue = getQueryValue(query.token);
   const token = tokenValue && tokenValue.length <= 2048 ? tokenValue : undefined;
   const error = getQueryValue(query.error);
-  const returnTo = safeInternalReturnPath(query.returnTo, locale);
+  const returnTo = safePublicReturnPath(query.returnTo, locale);
   const signInHref = localizedAuthPath(locale, "sign-in", returnTo);
   const forgotPasswordHref = localizedAuthPath(locale, "forgot-password", returnTo);
 

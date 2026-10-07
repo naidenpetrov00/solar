@@ -11,7 +11,13 @@
     "packages": "Packages",
     "cart": "Cart",
     "contact": "Contact",
-    "requestQuote": "Request a quote"
+    "requestQuote": "Request a quote",
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "account": "Account",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…",
+    "signOutError": "We couldn't sign you out. Please try again."
   },
   "accessibility": {
     "skipToContent": "Skip to main content",
@@ -21,7 +27,10 @@
     "languageNavigation": "Language selection",
     "themeLabel": "Color theme",
     "themeLight": "Light theme",
-    "themeDark": "Dark theme"
+    "themeDark": "Dark theme",
+    "accountMenu": "Account menu",
+    "openAccountMenu": "Open account menu",
+    "closeAccountMenu": "Close account menu"
   },
   "languages": {
     "bg": "Bulgarian",

@@ -11,7 +11,13 @@
     "packages": "Paketler",
     "cart": "Sepet",
     "contact": "İletişim",
-    "requestQuote": "Teklif isteyin"
+    "requestQuote": "Teklif isteyin",
+    "signIn": "Giriş yap",
+    "createAccount": "Hesap oluştur",
+    "account": "Hesap",
+    "signOut": "Çıkış yap",
+    "signingOut": "Çıkış yapılıyor…",
+    "signOutError": "Çıkış yapılamadı. Lütfen tekrar deneyin."
   },
   "accessibility": {
     "skipToContent": "Ana içeriğe geç",
@@ -21,7 +27,10 @@
     "languageNavigation": "Dil seçimi",
     "themeLabel": "Renk teması",
     "themeLight": "Açık tema",
-    "themeDark": "Koyu tema"
+    "themeDark": "Koyu tema",
+    "accountMenu": "Hesap menüsü",
+    "openAccountMenu": "Hesap menüsünü aç",
+    "closeAccountMenu": "Hesap menüsünü kapat"
   },
   "languages": {
     "bg": "Bulgarca",
