@@ -197,6 +197,21 @@
       "common": {
         "backToSignIn": "Girişe dön"
       },
+      "google": {
+        "continueWithGoogle": "Google ile devam et",
+        "unavailable": "Google ile giriş şu anda kullanılamıyor.",
+        "redirecting": "Google’a yönlendiriliyorsunuz…",
+        "failureTitle": "Google ile giriş tamamlanamadı",
+        "failureDescription": "Tekrar deneyin veya e-posta adresinizi ve parolanızı kullanın.",
+        "accountNotLinkedTitle": "Google’ı kullanmadan önce mevcut hesabınızı doğrulayın",
+        "accountNotLinkedDescription": "Güvenlik nedeniyle Google, doğrulanmamış parola hesabına bağlanamaz. Parolanızı sıfırlamak e-posta adresinizi doğrulamaz.",
+        "recoverySteps": {
+          "resetPassword": "Parolanızı sıfırlayın",
+          "signIn": "Yeni parolanızla giriş yapın.",
+          "verifyEmail": "E-posta doğrulamasını tamamlayın veya yeniden gönderin; yalnızca parolayı sıfırlamak e-posta adresinizi doğrulamaz.",
+          "retry": "Google ile yeniden giriş yapmayı deneyin."
+        }
+      },
       "fields": {
         "name": "Ad",
         "email": "E-posta adresi",

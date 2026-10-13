@@ -10,6 +10,7 @@ import {
   VerificationRequestForm,
   type VerificationRequestLabels,
 } from "./verification-request-form";
+import { GoogleSignIn, type GoogleSignInLabels } from "./google-sign-in";
 
 type FieldName = "email" | "password";
 type FieldErrors = Partial<Record<FieldName, string>>;
@@ -30,6 +31,7 @@ export type SignInFormLabels = {
   unverifiedTitle: string;
   unverifiedDescription: string;
   tryAnotherEmail: string;
+  google: GoogleSignInLabels;
   verificationRequest: VerificationRequestLabels;
 };
 
@@ -38,11 +40,18 @@ export function SignInForm({
   returnTo,
   forgotPasswordHref,
   verificationCallbackURL,
+  googleSignIn,
 }: {
   labels: SignInFormLabels;
   returnTo: string;
   forgotPasswordHref: string;
   verificationCallbackURL: string;
+  googleSignIn: {
+    enabled: boolean;
+    callbackURL: string;
+    errorCallbackURL: string;
+    errorCode?: string;
+  };
 }) {
   const router = useRouter();
   const summaryRef = useRef<HTMLDivElement>(null);
@@ -211,6 +220,11 @@ export function SignInForm({
       <button className="auth-primary-action" type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
       </button>
+      <GoogleSignIn
+        {...googleSignIn}
+        forgotPasswordHref={forgotPasswordHref}
+        labels={labels.google}
+      />
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pending ? labels.submitting : ""}
       </p>

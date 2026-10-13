@@ -1,10 +1,12 @@
 import Link from "next/link";
 
 import { getT } from "@/i18n.server";
+import { isGoogleSignInEnabled } from "@/lib/google-auth";
 import { AuthShell } from "../_components/auth-shell";
 import { SignInForm } from "../_components/sign-in-form";
 import {
   getAuthPageMetadata,
+  getQueryValue,
   getSignedOutReturnPath,
   type AuthSearchParams,
 } from "../_lib/auth-page";
@@ -46,6 +48,12 @@ export default async function SignInPage({
         returnTo={returnTo}
         forgotPasswordHref={localizedAuthPath(locale, "forgot-password", returnTo)}
         verificationCallbackURL={localizedVerificationCallbackPath(locale, returnTo)}
+        googleSignIn={{
+          enabled: isGoogleSignInEnabled,
+          callbackURL: returnTo,
+          errorCallbackURL: localizedAuthPath(locale, "sign-in", returnTo),
+          errorCode: getQueryValue(query.error),
+        }}
         labels={{
           email: t("pages.auth.fields.email"),
           password: t("pages.auth.fields.password"),
@@ -62,6 +70,21 @@ export default async function SignInPage({
           unverifiedTitle: t("pages.auth.signIn.unverifiedTitle"),
           unverifiedDescription: t("pages.auth.signIn.unverifiedDescription"),
           tryAnotherEmail: t("pages.auth.signIn.tryAnotherEmail"),
+          google: {
+            continueWithGoogle: t("pages.auth.google.continueWithGoogle"),
+            unavailable: t("pages.auth.google.unavailable"),
+            redirecting: t("pages.auth.google.redirecting"),
+            failureTitle: t("pages.auth.google.failureTitle"),
+            failureDescription: t("pages.auth.google.failureDescription"),
+            accountNotLinkedTitle: t("pages.auth.google.accountNotLinkedTitle"),
+            accountNotLinkedDescription: t("pages.auth.google.accountNotLinkedDescription"),
+            recoverySteps: {
+              resetPassword: t("pages.auth.google.recoverySteps.resetPassword"),
+              signIn: t("pages.auth.google.recoverySteps.signIn"),
+              verifyEmail: t("pages.auth.google.recoverySteps.verifyEmail"),
+              retry: t("pages.auth.google.recoverySteps.retry"),
+            },
+          },
           verificationRequest: {
             email: t("pages.auth.fields.email"),
             submit: t("pages.auth.verificationRequest.submit"),

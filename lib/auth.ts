@@ -8,6 +8,7 @@ import { admin } from "better-auth/plugins";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { authRoles } from "@/lib/auth-roles";
+import { googleSocialProvider } from "@/lib/google-auth";
 import {
   sendPasswordResetEmail,
   sendVerificationEmail,
@@ -48,6 +49,9 @@ export const auth = betterAuth({
       await sendVerificationEmail(user.email, url);
     },
   },
+  socialProviders: googleSocialProvider
+    ? { google: googleSocialProvider }
+    : undefined,
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
       if (ctx.path !== "/sign-up/email") {

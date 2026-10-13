@@ -37,6 +37,8 @@ Configuration variables:
 | `DATABASE_URL` | PostgreSQL connection string used by the application and Drizzle |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
 | `BETTER_AUTH_URL` | Canonical application origin, such as `http://localhost:3000` locally |
+| `GOOGLE_CLIENT_ID` | Optional Google OAuth client ID; enable it together with `GOOGLE_CLIENT_SECRET` |
+| `GOOGLE_CLIENT_SECRET` | Optional Google OAuth client secret; never expose it to browser code |
 | `MAILPIT_UI_PORT` | Loopback-only host port for the local Mailpit inbox |
 | `MAILPIT_SMTP_PORT` | Loopback-only host port for Mailpit SMTP |
 | `SMTP_HOST` | SMTP server hostname; use `127.0.0.1` when Next.js runs on the host |
@@ -129,9 +131,11 @@ Email delivery failures are intentionally hidden from account-dependent browser 
 
 Existing unverified development accounts remain unverified. Their next password sign-in is blocked and offers a resend action. Existing sessions created before verification enforcement remain valid until expiry or explicit revocation.
 
+When both Google OAuth variables are configured, the same localized sign-in and registration pages offer Google sign-in through the existing Better Auth handler. Better Auth's secure implicit-linking defaults remain in place: Google is not a trusted provider, and a matching Google email links only when both the Google claim and the existing local password account are verified. A matching unverified local account is not linked and receives no session; Google never marks that account verified. New Google accounts use the existing default `customer` role, and no role is taken from browser input or the Google profile.
+
 Better Auth's installed version enables its built-in limiter by default in production, including stricter limits for sign-in and sign-up routes. A later milestone must still review and configure persistent rate limiting suitable for the final self-hosted or multi-instance deployment.
 
-No customer profile menu or admin interface is included yet.
+The customer profile menu and logout experience are available. An admin interface is not included yet.
 
 ## Database backup expectation
 
@@ -167,16 +171,16 @@ When Next.js runs directly on the host, keep `SMTP_HOST=127.0.0.1`. If the appli
 
 Mailpit is a development capture service, not a production delivery provider. Production still requires a selected SMTP account, a verified sender domain, delivery monitoring, and both SMTP credentials when the provider requires authentication.
 
-## Later Google OAuth configuration
+## Google OAuth configuration
 
-Google OAuth will later require `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Configure these external URLs in Google Cloud:
+To enable Google sign-in, set both server-only `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. In Google Auth Platform, complete the Branding details, set the Audience to External, and add intended External test users while the app remains unpublished. Under Data Access, use only the default `openid`, `email`, and `profile` scopes. Register the production authorized domain before adding its redirect URI. Configure these external URLs:
 
 - Local authorized origin: `http://localhost:3000`
 - Local redirect URI: `http://localhost:3000/api/auth/callback/google`
 - Production authorized origin: the exact HTTPS value of `BETTER_AUTH_URL`
 - Production redirect URI: `<BETTER_AUTH_URL>/api/auth/callback/google`
 
-Do not add Google credentials until the provider is actually enabled, and never expose the client secret to browser code.
+Redirect URIs must match exactly. Never expose the client secret to browser code. See [Google OAuth setup](https://developers.google.com/identity/protocols/oauth2/web-server) for the provider configuration flow.
 
 ## Available validation commands
 

@@ -197,6 +197,21 @@
       "common": {
         "backToSignIn": "Back to sign in"
       },
+      "google": {
+        "continueWithGoogle": "Continue with Google",
+        "unavailable": "Google sign-in is not available right now.",
+        "redirecting": "Taking you to Google…",
+        "failureTitle": "Google sign-in could not be completed",
+        "failureDescription": "Try again, or use your email address and password.",
+        "accountNotLinkedTitle": "Verify your existing account before using Google",
+        "accountNotLinkedDescription": "For security, Google cannot be connected to an unverified password account. Resetting your password does not verify your email address.",
+        "recoverySteps": {
+          "resetPassword": "Reset your password",
+          "signIn": "Sign in with your new password.",
+          "verifyEmail": "Complete or resend email verification; resetting your password alone does not verify your email address.",
+          "retry": "Try Google sign-in again."
+        }
+      },
       "fields": {
         "name": "Name",
         "email": "Email address",
