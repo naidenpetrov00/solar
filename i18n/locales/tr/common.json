@@ -63,11 +63,136 @@
       "title": "Yönetim paneli",
       "description": "Sitenin yönetim araçları için merkezi çalışma alanı.",
       "navigation": {
-        "overview": "Genel bakış"
+        "overview": "Genel bakış",
+        "users": "Kullanıcılar"
       },
       "overview": {
         "title": "Genel bakış",
         "description": "Yönetim altyapısı hazır. Gereken ek araçlar daha sonra burada yer alabilir."
+      },
+      "users": {
+        "title": "Kullanıcılar",
+        "description": "Müşteri erişimini ve sahip olarak yönetici hesaplarını yönetin.",
+        "search": {
+          "regionLabel": "Kullanıcı ara",
+          "label": "Ad veya e-posta ile ara",
+          "placeholder": "Ad veya e-posta",
+          "submit": "Ara",
+          "clear": "Temizle"
+        },
+        "list": {
+          "count": "{{count}} hesap",
+          "selectUser": "Hesabı görüntüle"
+        },
+        "empty": {
+          "title": "Yönetilebilir hesap yok",
+          "description": "Yönetme izniniz olan hesaplar burada görünür.",
+          "searchTitle": "Eşleşen hesap yok",
+          "searchDescription": "Farklı bir ad veya e-posta adresi deneyin."
+        },
+        "pagination": {
+          "label": "Kullanıcı sayfaları",
+          "previous": "Önceki",
+          "next": "Sonraki",
+          "status": "{{pages}} sayfadan {{page}}. sayfa"
+        },
+        "fields": {
+          "name": "Ad",
+          "email": "E-posta",
+          "role": "Rol",
+          "verification": "E-posta doğrulaması",
+          "status": "Hesap durumu",
+          "createdAt": "Oluşturulma",
+          "updatedAt": "Son güncelleme"
+        },
+        "roles": {
+          "customer": "Müşteri",
+          "administrator": "Yönetici"
+        },
+        "verification": {
+          "verified": "Doğrulandı",
+          "unverified": "Doğrulanmadı"
+        },
+        "status": {
+          "active": "Etkin",
+          "blocked": "Engellendi"
+        },
+        "detail": {
+          "title": "Hesap ayrıntıları",
+          "noSelectionTitle": "Bir hesap seçin",
+          "noSelectionDescription": "Ayrıntıları ve kullanılabilir işlemleri incelemek için listeden bir hesap seçin.",
+          "backToUsers": "Kullanıcılara dön"
+        },
+        "actions": {
+          "title": "Hesap işlemleri",
+          "block": "Hesabı engelle",
+          "unblock": "Hesabın engelini kaldır",
+          "revokeSessions": "Tüm oturumları iptal et",
+          "sendPasswordReset": "Parola sıfırlama gönder",
+          "promote": "Yönetici yap",
+          "demote": "Müşteri yap",
+          "working": "İşleniyor…"
+        },
+        "confirmations": {
+          "cancel": "İptal",
+          "block": {
+            "title": "Bu hesap engellensin mi?",
+            "description": "Hesap oturum açamayacak ve mevcut tüm oturumları sonlandırılacak.",
+            "confirm": "Hesabı engelle"
+          },
+          "unblock": {
+            "title": "Bu hesabın engeli kaldırılsın mı?",
+            "description": "Hesap yeniden oturum açabilecek.",
+            "confirm": "Engeli kaldır"
+          },
+          "revokeSessions": {
+            "title": "Tüm oturumlar iptal edilsin mi?",
+            "description": "Bu hesabın açık olduğu her cihazda yeniden oturum açılması gerekecek.",
+            "confirm": "Oturumları iptal et"
+          },
+          "sendPasswordReset": {
+            "title": "Parola sıfırlama e-postası gönderilsin mi?",
+            "description": "Bu hesaba süreli ve güvenli bir kurulum bağlantısı gönderilecek. Burada parola gösterilmez veya belirlenmez.",
+            "confirm": "E-posta gönder"
+          },
+          "promote": {
+            "title": "Yönetici yapılsın mı?",
+            "description": "Bu hesap müşteri yönetimi erişimi kazanacak. Yeni rol etkinleşmeden önce mevcut oturumlar sonlandırılacak.",
+            "confirm": "Yönetici yap"
+          },
+          "demote": {
+            "title": "Müşteri yapılsın mı?",
+            "description": "Bu hesap yönetici erişimini kaybedecek. Mevcut oturumlar hemen sonlandırılacak.",
+            "confirm": "Müşteri yap"
+          }
+        },
+        "invite": {
+          "open": "Yönetici davet et",
+          "title": "Bir yönetici davet edin",
+          "description": "Hesabı parola olmadan oluşturun ve süreli, güvenli bir kurulum bağlantısı gönderin. Alıcı kendi parolasını seçer.",
+          "name": "Ad",
+          "email": "E-posta",
+          "language": "Davet dili",
+          "submit": "Oluştur ve daveti gönder",
+          "submitting": "Davet oluşturuluyor…"
+        },
+        "results": {
+          "blocked": "Hesap engellendi ve oturumları iptal edildi.",
+          "unblocked": "Hesabın engeli kaldırıldı.",
+          "sessionsRevoked": "Bu hesabın tüm oturumları iptal edildi.",
+          "resetSent": "Parola sıfırlama e-postası gönderildi.",
+          "promoted": "Hesap yönetici yapıldı ve oturumları iptal edildi.",
+          "demoted": "Hesap müşteri yapıldı ve oturumları iptal edildi.",
+          "administratorInvited": "Yönetici hesabı oluşturuldu ve güvenli kurulum e-postası gönderildi.",
+          "administratorCreatedDeliveryFailed": "Yönetici hesabı oluşturuldu ancak kurulum e-postası teslim edilemedi. Hesabı açıp parola sıfırlama e-postasını yeniden gönderin.",
+          "invalidInput": "İstek geçerli değil. Bilgileri kontrol edip tekrar deneyin.",
+          "forbidden": "Artık bu işlemi yapma izniniz yok.",
+          "notFound": "Hesap artık mevcut değil veya yönetilemiyor.",
+          "stale": "Hesap siz açtıktan sonra değişti. Sayfayı yenileyip güncel ayrıntıları inceleyin.",
+          "rateLimited": "Kısa süre önce bir e-posta gönderildi. Tekrar denemeden önce biraz bekleyin.",
+          "emailExists": "Bu e-posta adresiyle bir hesap zaten mevcut.",
+          "deliveryFailed": "E-posta teslim edilemedi. Daha sonra tekrar deneyin."
+        }
       }
     },
     "accessDenied": {

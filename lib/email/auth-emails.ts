@@ -8,6 +8,13 @@ import { requireServerEnvironmentVariable } from "@/lib/server-env";
 
 type AuthEmailPurpose = "verification" | "password_reset";
 
+export class EmailDeliveryError extends Error {
+  constructor(readonly purpose: AuthEmailPurpose) {
+    super("EMAIL_DELIVERY_FAILED");
+    this.name = "EmailDeliveryError";
+  }
+}
+
 const emailTransport = createSmtpEmailTransport();
 const applicationUrl = requireServerEnvironmentVariable("BETTER_AUTH_URL");
 
@@ -63,13 +70,14 @@ async function deliverAuthEmail(
   purpose: AuthEmailPurpose,
   recipient: string,
   url: string,
+  throwOnFailure = false,
 ) {
   try {
     const message = await buildAuthEmail(purpose, url);
     const delivered = await emailTransport.send({ recipient, ...message });
 
     if (delivered) {
-      return;
+      return true;
     }
   } catch {
     // Deliberately handled below without retaining provider or message details.
@@ -80,6 +88,12 @@ async function deliverAuthEmail(
     purpose,
     transport: emailTransport.kind,
   });
+
+  if (throwOnFailure) {
+    throw new EmailDeliveryError(purpose);
+  }
+
+  return false;
 }
 
 export async function sendVerificationEmail(
@@ -93,5 +107,5 @@ export async function sendPasswordResetEmail(
   recipient: string,
   url: string,
 ) {
-  await deliverAuthEmail("password_reset", recipient, url);
+  return deliverAuthEmail("password_reset", recipient, url, true);
 }

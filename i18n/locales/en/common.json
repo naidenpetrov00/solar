@@ -63,11 +63,136 @@
       "title": "Dashboard",
       "description": "A central workspace for the site's administration tools.",
       "navigation": {
-        "overview": "Overview"
+        "overview": "Overview",
+        "users": "Users"
       },
       "overview": {
         "title": "Overview",
         "description": "The administration foundation is ready. Additional tools can be added here as they are needed."
+      },
+      "users": {
+        "title": "Users",
+        "description": "Manage customer access and, as the owner, administrator accounts.",
+        "search": {
+          "regionLabel": "Search users",
+          "label": "Search by name or email",
+          "placeholder": "Name or email",
+          "submit": "Search",
+          "clear": "Clear"
+        },
+        "list": {
+          "count": "{{count}} accounts",
+          "selectUser": "View account"
+        },
+        "empty": {
+          "title": "No manageable accounts",
+          "description": "Accounts you are allowed to manage will appear here.",
+          "searchTitle": "No matching accounts",
+          "searchDescription": "Try a different name or email address."
+        },
+        "pagination": {
+          "label": "Users pagination",
+          "previous": "Previous",
+          "next": "Next",
+          "status": "Page {{page}} of {{pages}}"
+        },
+        "fields": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "verification": "Email verification",
+          "status": "Account status",
+          "createdAt": "Created",
+          "updatedAt": "Last updated"
+        },
+        "roles": {
+          "customer": "Customer",
+          "administrator": "Administrator"
+        },
+        "verification": {
+          "verified": "Verified",
+          "unverified": "Not verified"
+        },
+        "status": {
+          "active": "Active",
+          "blocked": "Blocked"
+        },
+        "detail": {
+          "title": "Account details",
+          "noSelectionTitle": "Select an account",
+          "noSelectionDescription": "Choose an account from the ledger to review its details and available actions.",
+          "backToUsers": "Back to users"
+        },
+        "actions": {
+          "title": "Account actions",
+          "block": "Block account",
+          "unblock": "Unblock account",
+          "revokeSessions": "Revoke all sessions",
+          "sendPasswordReset": "Send password reset",
+          "promote": "Promote to administrator",
+          "demote": "Demote to customer",
+          "working": "Working…"
+        },
+        "confirmations": {
+          "cancel": "Cancel",
+          "block": {
+            "title": "Block this account?",
+            "description": "The account will be unable to sign in and all current sessions will end.",
+            "confirm": "Block account"
+          },
+          "unblock": {
+            "title": "Unblock this account?",
+            "description": "The account will be allowed to sign in again.",
+            "confirm": "Unblock account"
+          },
+          "revokeSessions": {
+            "title": "Revoke all sessions?",
+            "description": "Every signed-in device for this account will need to sign in again.",
+            "confirm": "Revoke sessions"
+          },
+          "sendPasswordReset": {
+            "title": "Send a password-reset email?",
+            "description": "A time-limited setup link will be sent to this account. No password will be shown or set here.",
+            "confirm": "Send email"
+          },
+          "promote": {
+            "title": "Promote to administrator?",
+            "description": "This account will gain customer-management access. Existing sessions will end before the new role can take effect.",
+            "confirm": "Promote account"
+          },
+          "demote": {
+            "title": "Demote to customer?",
+            "description": "This account will lose administrator access. Existing sessions will end immediately.",
+            "confirm": "Demote account"
+          }
+        },
+        "invite": {
+          "open": "Invite administrator",
+          "title": "Invite an administrator",
+          "description": "Create the account without a password and send a secure, time-limited setup link. The recipient chooses their own password.",
+          "name": "Name",
+          "email": "Email",
+          "language": "Invitation language",
+          "submit": "Create and send invitation",
+          "submitting": "Creating invitation…"
+        },
+        "results": {
+          "blocked": "The account is blocked and its sessions were revoked.",
+          "unblocked": "The account is unblocked.",
+          "sessionsRevoked": "All sessions for this account were revoked.",
+          "resetSent": "The password-reset email was sent.",
+          "promoted": "The account was promoted and its sessions were revoked.",
+          "demoted": "The account was demoted and its sessions were revoked.",
+          "administratorInvited": "The administrator account was created and its secure setup email was sent.",
+          "administratorCreatedDeliveryFailed": "The administrator account was created, but the setup email could not be delivered. Open the account and resend the password-reset email.",
+          "invalidInput": "The request was not valid. Review the information and try again.",
+          "forbidden": "You no longer have permission to perform this action.",
+          "notFound": "The account no longer exists or cannot be managed.",
+          "stale": "The account changed after you opened it. Refresh the page and review the latest details.",
+          "rateLimited": "An email was sent recently. Wait a moment before trying again.",
+          "emailExists": "An account with this email already exists.",
+          "deliveryFailed": "The email could not be delivered. Try again later."
+        }
       }
     },
     "accessDenied": {

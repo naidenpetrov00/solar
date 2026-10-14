@@ -4,7 +4,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { admin } from "better-auth/plugins";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import * as schema from "@/db/schema";
@@ -193,6 +193,43 @@ export const auth = betterAuth({
     revokeSessionsOnPasswordReset: true,
     sendResetPassword: async ({ user, url }) => {
       await sendPasswordResetEmail(user.email, url);
+    },
+    onPasswordReset: async ({ user }) => {
+      try {
+        const [administrator] = await db
+          .select({
+            role: schema.user.role,
+            emailVerified: schema.user.emailVerified,
+          })
+          .from(schema.user)
+          .where(eq(schema.user.id, user.id))
+          .limit(1);
+
+        if (
+          administrator?.role !== "administrator" ||
+          administrator.emailVerified
+        ) {
+          return;
+        }
+
+        await db
+          .update(schema.user)
+          .set({ emailVerified: true, updatedAt: new Date() })
+          .where(
+            and(
+              eq(schema.user.id, user.id),
+              eq(schema.user.role, "administrator"),
+              eq(schema.user.emailVerified, false),
+            ),
+          );
+      } catch {
+        // Password setup has already succeeded at this point. Do not throw:
+        // Better Auth must still revoke every existing session. The account
+        // remains unverified and can recover through verification-email resend.
+        console.error({
+          event: "administrator_email_verification_after_reset_failed",
+        });
+      }
     },
   },
   emailVerification: {

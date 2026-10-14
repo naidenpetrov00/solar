@@ -484,7 +484,13 @@ export function Navigation({
                 <Link
                   className="site-account-dashboard flex min-h-11 items-center justify-between gap-3 rounded-md px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
                   href={localizedPath(locale, "dashboard")}
-                  aria-current={activeSlug === "dashboard" ? "page" : undefined}
+                  aria-current={
+                    activeSlug === "dashboard"
+                      ? "page"
+                      : activeSlug.startsWith("dashboard/")
+                        ? "location"
+                        : undefined
+                  }
                   onClick={closeMenus}
                 >
                   <span>{dashboardLabel}</span>

@@ -21,6 +21,7 @@ export const appPermissions = [
   "customer:view",
   "customer:update",
   "customer:block",
+  "customer:password:reset",
   "customer:delete",
   "customer:change-role",
   "customer:sessions:list",
@@ -29,6 +30,7 @@ export const appPermissions = [
   "administrator:view",
   "administrator:update",
   "administrator:block",
+  "administrator:password:reset",
   "administrator:delete",
   "administrator:change-role",
   "administrator:sessions:list",
@@ -41,6 +43,7 @@ export type UserManagementAction =
   | "view"
   | "update"
   | "block"
+  | "password:reset"
   | "delete"
   | "change-role"
   | "sessions:list"
@@ -54,6 +57,7 @@ const permissionsByRole = {
     "customer:view",
     "customer:update",
     "customer:block",
+    "customer:password:reset",
     "customer:delete",
     "customer:sessions:list",
     "customer:sessions:revoke",
@@ -66,6 +70,7 @@ const targetPermission = {
     view: "customer:view",
     update: "customer:update",
     block: "customer:block",
+    "password:reset": "customer:password:reset",
     delete: "customer:delete",
     "change-role": "customer:change-role",
     "sessions:list": "customer:sessions:list",
@@ -75,6 +80,7 @@ const targetPermission = {
     view: "administrator:view",
     update: "administrator:update",
     block: "administrator:block",
+    "password:reset": "administrator:password:reset",
     delete: "administrator:delete",
     "change-role": "administrator:change-role",
     "sessions:list": "administrator:sessions:list",
