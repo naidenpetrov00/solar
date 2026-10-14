@@ -1,5 +1,7 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
+
 import {
   and,
   asc,
@@ -31,6 +33,7 @@ export const USERS_PAGE_SIZE = 25;
 export const USERS_MAX_PAGE = 10_000;
 export const USERS_SEARCH_MAX_LENGTH = 100;
 export const MANAGEMENT_EMAIL_COOLDOWN_MS = 60_000;
+const MANAGEMENT_RESET_RESERVATION_PREFIX = "managed-reset-reservation:";
 
 export type ManagedUserAction =
   | "block"
@@ -383,25 +386,29 @@ export async function sendManagedPasswordReset(input: {
   redirectTo: string;
   requestHeaders: Headers;
 }) {
-  let deliveryFailed = false;
-
-  await db.transaction(async (transaction) => {
+  const reservationId = randomUUID();
+  const reservationIdentifier = `${MANAGEMENT_RESET_RESERVATION_PREFIX}${input.targetId}`;
+  const target = await db.transaction(async (transaction) => {
     const { actor, target } = await lockActorAndTarget(
       transaction,
       input.actorId,
       input.targetId,
     );
     assertCurrentTargetRole(actor.role, target.role, "password:reset");
+    const reservedAt = new Date();
     const [recentRequest] = await transaction
       .select({ id: verification.id })
       .from(verification)
       .where(
         and(
           eq(verification.value, target.id),
-          like(verification.identifier, "reset-password:%"),
+          or(
+            like(verification.identifier, "reset-password:%"),
+            eq(verification.identifier, reservationIdentifier),
+          ),
           gt(
             verification.createdAt,
-            new Date(Date.now() - MANAGEMENT_EMAIL_COOLDOWN_MS),
+            new Date(reservedAt.getTime() - MANAGEMENT_EMAIL_COOLDOWN_MS),
           ),
         ),
       )
@@ -416,31 +423,87 @@ export async function sendManagedPasswordReset(input: {
       .where(
         and(
           eq(verification.value, target.id),
-          like(verification.identifier, "reset-password:%"),
+          or(
+            like(verification.identifier, "reset-password:%"),
+            eq(verification.identifier, reservationIdentifier),
+          ),
         ),
       );
 
+    await transaction.insert(verification).values({
+      id: reservationId,
+      identifier: reservationIdentifier,
+      value: target.id,
+      expiresAt: new Date(reservedAt.getTime() + MANAGEMENT_EMAIL_COOLDOWN_MS),
+      createdAt: reservedAt,
+      updatedAt: reservedAt,
+    });
+
+    return { id: target.id, email: target.email };
+  });
+
+  try {
+    await auth.api.requestPasswordReset({
+      body: { email: target.email, redirectTo: input.redirectTo },
+      headers: input.requestHeaders,
+    });
+  } catch {
     try {
-      await auth.api.requestPasswordReset({
-        body: { email: target.email, redirectTo: input.redirectTo },
-        headers: input.requestHeaders,
+      await cleanupManagedPasswordReset({
+        targetId: target.id,
+        reservationId,
+        reservationIdentifier,
+        removeResetTokens: true,
       });
     } catch {
+      console.error({ event: "managed_password_reset_failure_cleanup_failed" });
+    }
+
+    throw new UserManagementError("DELIVERY_FAILED");
+  }
+
+  try {
+    await cleanupManagedPasswordReset({
+      targetId: target.id,
+      reservationId,
+      reservationIdentifier,
+      removeResetTokens: false,
+    });
+  } catch {
+    // The delivered Better Auth token remains valid and enforces the cooldown.
+    // The reservation expires after the same bounded cooldown window.
+    console.error({ event: "managed_password_reset_reservation_cleanup_failed" });
+  }
+}
+
+async function cleanupManagedPasswordReset(input: {
+  targetId: string;
+  reservationId: string;
+  reservationIdentifier: string;
+  removeResetTokens: boolean;
+}) {
+  await db.transaction(async (transaction) => {
+    if (input.removeResetTokens) {
       await transaction
         .delete(verification)
         .where(
           and(
-            eq(verification.value, target.id),
+            eq(verification.value, input.targetId),
             like(verification.identifier, "reset-password:%"),
           ),
         );
-      deliveryFailed = true;
     }
-  });
 
-  if (deliveryFailed) {
-    throw new UserManagementError("DELIVERY_FAILED");
-  }
+    await transaction
+      .delete(verification)
+      .where(
+        and(
+          eq(verification.id, input.reservationId),
+          eq(verification.value, input.targetId),
+          eq(verification.identifier, input.reservationIdentifier),
+        ),
+      );
+  });
 }
 
 export async function createAdministrator(input: {
