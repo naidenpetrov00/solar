@@ -198,19 +198,38 @@
         "backToSignIn": "Назад към входа"
       },
       "google": {
-        "continueWithGoogle": "Продължете с Google",
+        "continue": "Продължете с Google",
         "unavailable": "Входът с Google не е наличен в момента.",
         "redirecting": "Пренасочваме ви към Google…",
         "failureTitle": "Входът с Google не можа да бъде завършен",
         "failureDescription": "Опитайте отново или използвайте имейл адреса и паролата си.",
+        "emailNotFoundTitle": "Google не предостави имейл адрес",
+        "emailNotFoundDescription": "Изберете друг начин за вход или се уверете, че профилът ви в Google може да сподели имейл адрес.",
+        "emailNotVerifiedTitle": "Потвърдете имейла си, за да продължите с Google",
+        "emailNotVerifiedDescription": "Изпратихме връзка за потвърждение на имейл адреса ви. Отворете я, след което опитайте отново с Google.",
         "accountNotLinkedTitle": "Потвърдете съществуващия си профил, преди да използвате Google",
         "accountNotLinkedDescription": "От съображения за сигурност Google не може да бъде свързан с непотвърден профил с парола. Смяната на паролата не потвърждава имейл адреса ви.",
+        "passwordRecovery": "Забравена парола?",
         "recoverySteps": {
           "resetPassword": "Сменете паролата си",
           "signIn": "Влезте с новата си парола.",
           "verifyEmail": "Завършете или изпратете отново потвърждението на имейла; само смяната на паролата не потвърждава имейл адреса ви.",
           "retry": "Опитайте отново да влезете с Google."
         }
+      },
+      "facebook": {
+        "continue": "Продължете с Facebook",
+        "unavailable": "Входът с Facebook не е наличен в момента.",
+        "redirecting": "Пренасочваме ви към Facebook…",
+        "failureTitle": "Входът с Facebook не можа да бъде завършен",
+        "failureDescription": "Опитайте отново или използвайте имейл адреса и паролата си.",
+        "emailNotFoundTitle": "Facebook не предостави имейл адрес",
+        "emailNotFoundDescription": "Разрешете на Facebook да сподели имейл адреса ви или изберете друг начин за вход.",
+        "emailNotVerifiedTitle": "Потвърдете имейла си, за да продължите с Facebook",
+        "emailNotVerifiedDescription": "Изпратихме връзка за потвърждение на имейл адреса ви. Отворете я, след което опитайте отново с Facebook.",
+        "accountNotLinkedTitle": "Входът с Facebook не можа да бъде завършен",
+        "accountNotLinkedDescription": "За да защитим профила ви, продължете с имейл адреса и паролата си.",
+        "passwordRecovery": "Забравена парола?"
       },
       "fields": {
         "name": "Име",

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { getT } from "@/i18n.server";
+import { isFacebookSignInEnabled } from "@/lib/facebook-auth";
 import { isGoogleSignInEnabled } from "@/lib/google-auth";
 import { AuthShell } from "../_components/auth-shell";
 import { SignInForm } from "../_components/sign-in-form";
@@ -12,6 +13,7 @@ import {
 } from "../_lib/auth-page";
 import {
   localizedAuthPath,
+  localizedSocialErrorPath,
   localizedVerificationCallbackPath,
 } from "../../_lib/routes";
 
@@ -29,6 +31,8 @@ export default async function SignInPage({
 }) {
   const [{ locale }, query] = await Promise.all([params, searchParams]);
   const returnTo = await getSignedOutReturnPath(locale, query.returnTo);
+  const errorCode = getQueryValue(query.error);
+  const errorProvider = getQueryValue(query.provider);
   const { t } = await getT("common", { lng: locale });
 
   return (
@@ -48,11 +52,19 @@ export default async function SignInPage({
         returnTo={returnTo}
         forgotPasswordHref={localizedAuthPath(locale, "forgot-password", returnTo)}
         verificationCallbackURL={localizedVerificationCallbackPath(locale, returnTo)}
-        googleSignIn={{
-          enabled: isGoogleSignInEnabled,
-          callbackURL: returnTo,
-          errorCallbackURL: localizedAuthPath(locale, "sign-in", returnTo),
-          errorCode: getQueryValue(query.error),
+        socialSignIn={{
+          google: {
+            enabled: isGoogleSignInEnabled,
+            callbackURL: returnTo,
+            errorCallbackURL: localizedSocialErrorPath(locale, "sign-in", returnTo, "google"),
+            errorCode: errorProvider === "facebook" ? undefined : errorCode,
+          },
+          facebook: {
+            enabled: isFacebookSignInEnabled,
+            callbackURL: returnTo,
+            errorCallbackURL: localizedSocialErrorPath(locale, "sign-in", returnTo, "facebook"),
+            errorCode: errorProvider === "facebook" ? errorCode : undefined,
+          },
         }}
         labels={{
           email: t("pages.auth.fields.email"),
@@ -71,19 +83,38 @@ export default async function SignInPage({
           unverifiedDescription: t("pages.auth.signIn.unverifiedDescription"),
           tryAnotherEmail: t("pages.auth.signIn.tryAnotherEmail"),
           google: {
-            continueWithGoogle: t("pages.auth.google.continueWithGoogle"),
+            continue: t("pages.auth.google.continue"),
             unavailable: t("pages.auth.google.unavailable"),
             redirecting: t("pages.auth.google.redirecting"),
             failureTitle: t("pages.auth.google.failureTitle"),
             failureDescription: t("pages.auth.google.failureDescription"),
+            emailNotFoundTitle: t("pages.auth.google.emailNotFoundTitle"),
+            emailNotFoundDescription: t("pages.auth.google.emailNotFoundDescription"),
+            emailNotVerifiedTitle: t("pages.auth.google.emailNotVerifiedTitle"),
+            emailNotVerifiedDescription: t("pages.auth.google.emailNotVerifiedDescription"),
             accountNotLinkedTitle: t("pages.auth.google.accountNotLinkedTitle"),
             accountNotLinkedDescription: t("pages.auth.google.accountNotLinkedDescription"),
+            passwordRecovery: t("pages.auth.google.passwordRecovery"),
             recoverySteps: {
               resetPassword: t("pages.auth.google.recoverySteps.resetPassword"),
               signIn: t("pages.auth.google.recoverySteps.signIn"),
               verifyEmail: t("pages.auth.google.recoverySteps.verifyEmail"),
               retry: t("pages.auth.google.recoverySteps.retry"),
             },
+          },
+          facebook: {
+            continue: t("pages.auth.facebook.continue"),
+            unavailable: t("pages.auth.facebook.unavailable"),
+            redirecting: t("pages.auth.facebook.redirecting"),
+            failureTitle: t("pages.auth.facebook.failureTitle"),
+            failureDescription: t("pages.auth.facebook.failureDescription"),
+            emailNotFoundTitle: t("pages.auth.facebook.emailNotFoundTitle"),
+            emailNotFoundDescription: t("pages.auth.facebook.emailNotFoundDescription"),
+            emailNotVerifiedTitle: t("pages.auth.facebook.emailNotVerifiedTitle"),
+            emailNotVerifiedDescription: t("pages.auth.facebook.emailNotVerifiedDescription"),
+            accountNotLinkedTitle: t("pages.auth.facebook.accountNotLinkedTitle"),
+            accountNotLinkedDescription: t("pages.auth.facebook.accountNotLinkedDescription"),
+            passwordRecovery: t("pages.auth.facebook.passwordRecovery"),
           },
           verificationRequest: {
             email: t("pages.auth.fields.email"),

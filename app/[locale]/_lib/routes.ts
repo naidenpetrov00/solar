@@ -20,6 +20,28 @@ export const authRouteSlugs = [
 ] as const;
 
 export type AuthRouteSlug = (typeof authRouteSlugs)[number];
+export type SocialProviderSlug = "google" | "facebook";
+
+const oauthCallbackErrorCodes = new Set([
+  "account_already_linked_to_different_user",
+  "account_not_linked",
+  "email_does_not_match",
+  "email_not_found",
+  "email_not_verified",
+  "invalid_code",
+  "issuer_mismatch",
+  "issuer_missing",
+  "no_callback_url",
+  "no_code",
+  "nonce_binding_missing",
+  "oauth_provider_not_found",
+  "signup_disabled",
+  "unable_to_create_session",
+  "unable_to_create_user",
+  "unable_to_get_user_info",
+  "unable_to_link_account",
+  "unable_to_update_account",
+]);
 
 const authQueryParameters: Record<AuthRouteSlug, readonly string[]> = {
   "sign-in": ["returnTo"],
@@ -55,6 +77,19 @@ export function localizedAuthPath(
   return `${path}?${query.toString()}`;
 }
 
+export function localizedSocialErrorPath(
+  locale: string,
+  slug: Extract<AuthRouteSlug, "sign-in" | "sign-up">,
+  returnTo: string,
+  provider: SocialProviderSlug,
+) {
+  const query = new URLSearchParams({
+    returnTo: safePublicReturnPath(returnTo, locale),
+    provider,
+  });
+  return `${localizedPath(locale, slug)}?${query.toString()}`;
+}
+
 export function isAuthRouteSlug(slug: string): slug is AuthRouteSlug {
   return authRouteSlugs.some((authSlug) => authSlug === slug);
 }
@@ -82,8 +117,26 @@ export function localizedAuthLanguagePath(
     );
   }
 
+  if (slug === "sign-in" || slug === "sign-up") {
+    const provider = searchParams.get("provider");
+    const error = searchParams.get("error");
+
+    if (isSocialProviderSlug(provider) && isOAuthCallbackErrorCode(error)) {
+      query.set("provider", provider);
+      query.set("error", error);
+    }
+  }
+
   const path = localizedPath(targetLocale, slug);
   return query.size === 0 ? path : `${path}?${query.toString()}`;
+}
+
+function isSocialProviderSlug(value: string | null): value is SocialProviderSlug {
+  return value === "google" || value === "facebook";
+}
+
+function isOAuthCallbackErrorCode(value: string | null): value is string {
+  return value !== null && oauthCallbackErrorCodes.has(value);
 }
 
 export function localizedVerificationCallbackPath(

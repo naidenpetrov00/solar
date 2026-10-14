@@ -198,19 +198,38 @@
         "backToSignIn": "Girişe dön"
       },
       "google": {
-        "continueWithGoogle": "Google ile devam et",
+        "continue": "Google ile devam et",
         "unavailable": "Google ile giriş şu anda kullanılamıyor.",
         "redirecting": "Google’a yönlendiriliyorsunuz…",
         "failureTitle": "Google ile giriş tamamlanamadı",
         "failureDescription": "Tekrar deneyin veya e-posta adresinizi ve parolanızı kullanın.",
+        "emailNotFoundTitle": "Google bir e-posta adresi sağlamadı",
+        "emailNotFoundDescription": "Başka bir giriş yöntemi seçin veya Google hesabınızın e-posta adresini paylaşabildiğinden emin olun.",
+        "emailNotVerifiedTitle": "Google ile devam etmek için e-postanızı doğrulayın",
+        "emailNotVerifiedDescription": "E-posta adresinize bir doğrulama bağlantısı gönderdik. Bağlantıyı açtıktan sonra Google ile tekrar giriş yapın.",
         "accountNotLinkedTitle": "Google’ı kullanmadan önce mevcut hesabınızı doğrulayın",
         "accountNotLinkedDescription": "Güvenlik nedeniyle Google, doğrulanmamış parola hesabına bağlanamaz. Parolanızı sıfırlamak e-posta adresinizi doğrulamaz.",
+        "passwordRecovery": "Parolanızı mı unuttunuz?",
         "recoverySteps": {
           "resetPassword": "Parolanızı sıfırlayın",
           "signIn": "Yeni parolanızla giriş yapın.",
           "verifyEmail": "E-posta doğrulamasını tamamlayın veya yeniden gönderin; yalnızca parolayı sıfırlamak e-posta adresinizi doğrulamaz.",
           "retry": "Google ile yeniden giriş yapmayı deneyin."
         }
+      },
+      "facebook": {
+        "continue": "Facebook ile devam et",
+        "unavailable": "Facebook ile giriş şu anda kullanılamıyor.",
+        "redirecting": "Facebook’a yönlendiriliyorsunuz…",
+        "failureTitle": "Facebook ile giriş tamamlanamadı",
+        "failureDescription": "Tekrar deneyin veya e-posta adresinizi ve parolanızı kullanın.",
+        "emailNotFoundTitle": "Facebook bir e-posta adresi sağlamadı",
+        "emailNotFoundDescription": "Facebook’un e-posta adresinizi paylaşmasına izin verin veya başka bir giriş yöntemi seçin.",
+        "emailNotVerifiedTitle": "Facebook ile devam etmek için e-postanızı doğrulayın",
+        "emailNotVerifiedDescription": "E-posta adresinize bir doğrulama bağlantısı gönderdik. Bağlantıyı açtıktan sonra Facebook ile tekrar giriş yapın.",
+        "accountNotLinkedTitle": "Facebook ile giriş tamamlanamadı",
+        "accountNotLinkedDescription": "Hesabınızı korumak için e-posta adresiniz ve parolanızla devam edin.",
+        "passwordRecovery": "Parolanızı mı unuttunuz?"
       },
       "fields": {
         "name": "Ad",

@@ -39,6 +39,8 @@ Configuration variables:
 | `BETTER_AUTH_URL` | Canonical application origin, such as `http://localhost:3000` locally |
 | `GOOGLE_CLIENT_ID` | Optional Google OAuth client ID; enable it together with `GOOGLE_CLIENT_SECRET` |
 | `GOOGLE_CLIENT_SECRET` | Optional Google OAuth client secret; never expose it to browser code |
+| `FACEBOOK_CLIENT_ID` | Optional Facebook app ID; enable it together with `FACEBOOK_CLIENT_SECRET` |
+| `FACEBOOK_CLIENT_SECRET` | Optional Facebook app secret; never expose it to browser code |
 | `MAILPIT_UI_PORT` | Loopback-only host port for the local Mailpit inbox |
 | `MAILPIT_SMTP_PORT` | Loopback-only host port for Mailpit SMTP |
 | `SMTP_HOST` | SMTP server hostname; use `127.0.0.1` when Next.js runs on the host |
@@ -133,6 +135,8 @@ Existing unverified development accounts remain unverified. Their next password 
 
 When both Google OAuth variables are configured, the same localized sign-in and registration pages offer Google sign-in through the existing Better Auth handler. Better Auth's secure implicit-linking defaults remain in place: Google is not a trusted provider, and a matching Google email links only when both the Google claim and the existing local password account are verified. A matching unverified local account is not linked and receives no session; Google never marks that account verified. New Google accounts use the existing default `customer` role, and no role is taken from browser input or the Google profile.
 
+When both Facebook OAuth variables are configured, the same localized pages also offer Facebook sign-in through the existing Better Auth handler. Facebook email addresses are treated as unverified: a new Facebook user must complete the existing email-verification flow before receiving a session. Facebook is not a trusted provider, so it cannot implicitly link to an existing account with a matching email address. Existing users must continue with email and password, using password recovery if needed; retrying Facebook cannot link the accounts. New Facebook users receive the existing `customer` role; existing users retain their stored roles.
+
 Better Auth's installed version enables its built-in limiter by default in production, including stricter limits for sign-in and sign-up routes. A later milestone must still review and configure persistent rate limiting suitable for the final self-hosted or multi-instance deployment.
 
 The customer profile menu and logout experience are available. An admin interface is not included yet.
@@ -181,6 +185,20 @@ To enable Google sign-in, set both server-only `GOOGLE_CLIENT_ID` and `GOOGLE_CL
 - Production redirect URI: `<BETTER_AUTH_URL>/api/auth/callback/google`
 
 Redirect URIs must match exactly. Never expose the client secret to browser code. See [Google OAuth setup](https://developers.google.com/identity/protocols/oauth2/web-server) for the provider configuration flow.
+
+## Facebook Login configuration
+
+To enable Facebook sign-in, set both server-only `FACEBOOK_CLIENT_ID` and `FACEBOOK_CLIENT_SECRET`. In the Meta Developer dashboard:
+
+- Create a Consumer app and add the Facebook Login product.
+- Keep the app in Development mode while testing; add each intended developer, administrator, or tester before they try the flow. Switch to Live mode only when the public configuration is complete.
+- Request only Facebook Login's default `public_profile` and `email` permissions. A person may still decline email sharing or Facebook may not return an address; sign-in then cannot create or access an account.
+- Add the production host to App Domains and configure the Facebook Login **Valid OAuth Redirect URIs** exactly as follows:
+  - Local: `http://localhost:3000/api/auth/callback/facebook`
+  - Production: `<BETTER_AUTH_URL>/api/auth/callback/facebook`
+- Before going live, provide the required public, HTTPS privacy-policy URL and a user-data deletion instruction or callback URL. Ensure their wording accurately describes the data actually processed; this repository does not provide legal wording or a data-deletion feature.
+
+The Facebook App ID and App Secret map to `FACEBOOK_CLIENT_ID` and `FACEBOOK_CLIENT_SECRET` respectively. Redirect URIs must match exactly, and the app secret must remain server-only. See [Better Auth's Facebook provider documentation](https://better-auth.com/docs/1.6/authentication/facebook) and Meta's [privacy-policy requirements](https://developers.meta.com/vr/policy/privacy-policy/) before publishing the app.
 
 ## Available validation commands
 

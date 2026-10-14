@@ -198,19 +198,38 @@
         "backToSignIn": "Повернутися до входу"
       },
       "google": {
-        "continueWithGoogle": "Продовжити з Google",
+        "continue": "Продовжити з Google",
         "unavailable": "Вхід через Google зараз недоступний.",
         "redirecting": "Перенаправляємо до Google…",
         "failureTitle": "Не вдалося завершити вхід через Google",
         "failureDescription": "Спробуйте ще раз або скористайтеся електронною адресою та паролем.",
+        "emailNotFoundTitle": "Google не надав електронної адреси",
+        "emailNotFoundDescription": "Оберіть інший спосіб входу або переконайтеся, що ваш обліковий запис Google може надати електронну адресу.",
+        "emailNotVerifiedTitle": "Підтвердьте електронну адресу, щоб продовжити з Google",
+        "emailNotVerifiedDescription": "Ми надіслали посилання для підтвердження на вашу електронну адресу. Відкрийте його, а потім спробуйте знову ввійти через Google.",
         "accountNotLinkedTitle": "Підтвердьте наявний обліковий запис перед входом через Google",
         "accountNotLinkedDescription": "З міркувань безпеки Google не можна підключити до непідтвердженого облікового запису з паролем. Скидання пароля не підтверджує вашу електронну адресу.",
+        "passwordRecovery": "Забули пароль?",
         "recoverySteps": {
           "resetPassword": "Скиньте пароль",
           "signIn": "Увійдіть із новим паролем.",
           "verifyEmail": "Завершіть підтвердження електронної адреси або надішліть лист повторно; саме скидання пароля не підтверджує адресу.",
           "retry": "Спробуйте ввійти через Google ще раз."
         }
+      },
+      "facebook": {
+        "continue": "Продовжити з Facebook",
+        "unavailable": "Вхід через Facebook зараз недоступний.",
+        "redirecting": "Перенаправляємо до Facebook…",
+        "failureTitle": "Не вдалося завершити вхід через Facebook",
+        "failureDescription": "Спробуйте ще раз або скористайтеся електронною адресою та паролем.",
+        "emailNotFoundTitle": "Facebook не надав електронної адреси",
+        "emailNotFoundDescription": "Дозвольте Facebook надати вашу електронну адресу або оберіть інший спосіб входу.",
+        "emailNotVerifiedTitle": "Підтвердьте електронну адресу, щоб продовжити з Facebook",
+        "emailNotVerifiedDescription": "Ми надіслали посилання для підтвердження на вашу електронну адресу. Відкрийте його, а потім спробуйте знову ввійти через Facebook.",
+        "accountNotLinkedTitle": "Не вдалося завершити вхід через Facebook",
+        "accountNotLinkedDescription": "Щоб захистити ваш обліковий запис, продовжте за допомогою електронної адреси та пароля.",
+        "passwordRecovery": "Забули пароль?"
       },
       "fields": {
         "name": "Ім’я",

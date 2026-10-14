@@ -15,7 +15,11 @@ import {
   VerificationRequestForm,
   type VerificationRequestLabels,
 } from "./verification-request-form";
-import { GoogleSignIn, type GoogleSignInLabels } from "./google-sign-in";
+import {
+  SocialSignIn,
+  type SocialSignInConfig,
+  type SocialSignInLabels,
+} from "./social-sign-in";
 
 type FieldName = "name" | "email" | "password" | "confirmPassword";
 type FieldErrors = Partial<Record<FieldName, string>>;
@@ -41,7 +45,8 @@ export type SignUpFormLabels = {
   checkEmailTitle: string;
   checkEmailDescription: string;
   deliveryHelp: string;
-  google: GoogleSignInLabels;
+  google: SocialSignInLabels;
+  facebook: SocialSignInLabels;
   verificationRequest: VerificationRequestLabels;
 };
 
@@ -49,16 +54,14 @@ export function SignUpForm({
   labels,
   verificationCallbackURL,
   forgotPasswordHref,
-  googleSignIn,
+  socialSignIn,
 }: {
   labels: SignUpFormLabels;
   verificationCallbackURL: string;
   forgotPasswordHref: string;
-  googleSignIn: {
-    enabled: boolean;
-    callbackURL: string;
-    errorCallbackURL: string;
-    errorCode?: string;
+  socialSignIn: {
+    google: SocialSignInConfig;
+    facebook: SocialSignInConfig;
   };
 }) {
   const summaryRef = useRef<HTMLDivElement>(null);
@@ -247,11 +250,20 @@ export function SignUpForm({
       <button className="auth-primary-action" type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
       </button>
-      <GoogleSignIn
-        {...googleSignIn}
-        forgotPasswordHref={forgotPasswordHref}
-        labels={labels.google}
-      />
+      <div className="auth-social">
+        <SocialSignIn
+          {...socialSignIn.google}
+          provider="google"
+          forgotPasswordHref={forgotPasswordHref}
+          labels={labels.google}
+        />
+        <SocialSignIn
+          {...socialSignIn.facebook}
+          provider="facebook"
+          forgotPasswordHref={forgotPasswordHref}
+          labels={labels.facebook}
+        />
+      </div>
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pending ? labels.submitting : ""}
       </p>

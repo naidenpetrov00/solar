@@ -198,19 +198,38 @@
         "backToSignIn": "Back to sign in"
       },
       "google": {
-        "continueWithGoogle": "Continue with Google",
+        "continue": "Continue with Google",
         "unavailable": "Google sign-in is not available right now.",
         "redirecting": "Taking you to Google…",
         "failureTitle": "Google sign-in could not be completed",
         "failureDescription": "Try again, or use your email address and password.",
+        "emailNotFoundTitle": "Google did not provide an email address",
+        "emailNotFoundDescription": "Choose another sign-in method or make sure your Google account can share an email address.",
+        "emailNotVerifiedTitle": "Verify your email to continue with Google",
+        "emailNotVerifiedDescription": "We sent a verification link to your email address. Open it, then try Google sign-in again.",
         "accountNotLinkedTitle": "Verify your existing account before using Google",
         "accountNotLinkedDescription": "For security, Google cannot be connected to an unverified password account. Resetting your password does not verify your email address.",
+        "passwordRecovery": "Forgot your password?",
         "recoverySteps": {
           "resetPassword": "Reset your password",
           "signIn": "Sign in with your new password.",
           "verifyEmail": "Complete or resend email verification; resetting your password alone does not verify your email address.",
           "retry": "Try Google sign-in again."
         }
+      },
+      "facebook": {
+        "continue": "Continue with Facebook",
+        "unavailable": "Facebook sign-in is not available right now.",
+        "redirecting": "Taking you to Facebook…",
+        "failureTitle": "Facebook sign-in could not be completed",
+        "failureDescription": "Try again, or use your email address and password.",
+        "emailNotFoundTitle": "Facebook did not provide an email address",
+        "emailNotFoundDescription": "Allow Facebook to share your email address, or choose another sign-in method.",
+        "emailNotVerifiedTitle": "Verify your email to continue with Facebook",
+        "emailNotVerifiedDescription": "We sent a verification link to your email address. Open it, then try Facebook sign-in again.",
+        "accountNotLinkedTitle": "Facebook sign-in could not be completed",
+        "accountNotLinkedDescription": "To protect your account, continue with your email address and password.",
+        "passwordRecovery": "Forgot your password?"
       },
       "fields": {
         "name": "Name",
