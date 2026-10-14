@@ -10,7 +10,7 @@ import {
 import {
   localizedAuthPath,
   localizedVerificationCallbackPath,
-  safePublicReturnPath,
+  safeAuthReturnPath,
 } from "../../_lib/routes";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -29,7 +29,7 @@ export default async function VerifyEmailPage({
   const { t } = await getT("common", { lng: locale });
   const status = getQueryValue(query.status);
   const error = getQueryValue(query.error);
-  const returnTo = safePublicReturnPath(query.returnTo, locale);
+  const returnTo = safeAuthReturnPath(query.returnTo, locale);
   const signInHref = localizedAuthPath(locale, "sign-in", returnTo);
   const callbackURL = localizedVerificationCallbackPath(locale, returnTo);
 

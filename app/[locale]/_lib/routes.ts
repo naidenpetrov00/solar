@@ -3,6 +3,9 @@ import { findSolarPackage } from "./solar-packages";
 export const supportedLocales = ["bg", "en", "tr", "uk"] as const;
 export type SupportedLocale = (typeof supportedLocales)[number];
 
+export const dashboardRouteSlug = "dashboard";
+export const accessDeniedRouteSlug = "access-denied";
+
 export const routeDefinitions = [
   { slug: "", key: "home" },
   { slug: "shop", key: "shop" },
@@ -84,7 +87,7 @@ export function localizedSocialErrorPath(
   provider: SocialProviderSlug,
 ) {
   const query = new URLSearchParams({
-    returnTo: safePublicReturnPath(returnTo, locale),
+    returnTo: safeAuthReturnPath(returnTo, locale),
     provider,
   });
   return `${localizedPath(locale, slug)}?${query.toString()}`;
@@ -145,7 +148,7 @@ export function localizedVerificationCallbackPath(
 ) {
   const query = new URLSearchParams({
     status: "success",
-    returnTo: safePublicReturnPath(returnTo, locale),
+    returnTo: safeAuthReturnPath(returnTo, locale),
   });
 
   return `${localizedPath(locale, "verify-email")}?${query.toString()}`;
@@ -156,7 +159,7 @@ export function localizedPasswordResetCallbackPath(
   returnTo: string | string[] | undefined,
 ) {
   const query = new URLSearchParams({
-    returnTo: safePublicReturnPath(returnTo, locale),
+    returnTo: safeAuthReturnPath(returnTo, locale),
   });
 
   return `${localizedPath(locale, "reset-password")}?${query.toString()}`;
@@ -166,6 +169,8 @@ export function isLocaleEquivalentSlug(slug: string) {
   return (
     slug === "" ||
     slug === "cart" ||
+    slug === dashboardRouteSlug ||
+    slug === accessDeniedRouteSlug ||
     routeDefinitions.some((route) => route.slug === slug) ||
     authRouteSlugs.some((authSlug) => authSlug === slug)
   );
@@ -176,7 +181,7 @@ function localizedReturnPath(
   targetLocale: string,
   value: string,
 ) {
-  const safePath = safePublicReturnPath(value, sourceLocale);
+  const safePath = safeAuthReturnPath(value, sourceLocale);
   const sourcePrefix = sourceLocale === "bg" ? "" : `/${sourceLocale}`;
   const pathWithoutLocale = sourcePrefix
     ? safePath.slice(sourcePrefix.length) || "/"
@@ -282,4 +287,27 @@ export function safePublicReturnPath(
     isKnownPackageDetail;
 
   return isPublicRoute ? safePath : fallback;
+}
+
+export function safeAuthReturnPath(
+  value: string | string[] | undefined,
+  locale: string,
+) {
+  const fallback = localizedPath(locale);
+  const safePath = safeInternalReturnPath(value, locale);
+
+  if (safePath === fallback) {
+    return fallback;
+  }
+
+  const localePrefix = locale === "bg" ? "" : `/${locale}`;
+  const pathname = safePath.split(/[?#]/u, 1)[0];
+  const pathWithoutLocale = localePrefix
+    ? pathname.slice(localePrefix.length) || "/"
+    : pathname;
+  const slug = pathWithoutLocale.replace(/^\/+|\/+$/gu, "");
+
+  return slug === dashboardRouteSlug
+    ? safePath
+    : safePublicReturnPath(safePath, locale);
 }

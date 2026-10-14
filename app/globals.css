@@ -1811,6 +1811,148 @@ html {
   }
 }
 
+/* The administration surface extends Horizon Gate with a focused operating workspace. */
+.dashboard-shell {
+  --dashboard-surface: #f4f3ee;
+  --dashboard-foreground: #11130f;
+  --dashboard-muted: #5d625a;
+  --dashboard-rule: rgba(17, 19, 15, 0.2);
+  --dashboard-rail: #090b0a;
+  --dashboard-rail-foreground: #ffffff;
+  --dashboard-rail-muted: rgba(255, 255, 255, 0.7);
+  display: grid;
+  min-height: calc(100svh - 4.5rem);
+  background: var(--dashboard-surface);
+  color: var(--dashboard-foreground);
+}
+
+.dashboard-rail {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background: var(--dashboard-rail);
+  color: var(--dashboard-rail-foreground);
+}
+
+.dashboard-rail-title {
+  margin: 0;
+  color: var(--dashboard-rail-muted);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dashboard-rail nav {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.dashboard-rail-link {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--dashboard-rail-foreground);
+  font-size: 0.92rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.dashboard-rail-link:hover,
+.dashboard-rail-link[aria-current="page"] {
+  color: #fcd34d;
+}
+
+.dashboard-rail-link:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 3px;
+}
+
+.dashboard-main {
+  width: min(100%, 72rem);
+  padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 6vw, 5rem);
+}
+
+.dashboard-introduction {
+  display: grid;
+  gap: 1rem;
+  max-width: 48rem;
+}
+
+.dashboard-introduction h1,
+.dashboard-introduction p,
+.dashboard-overview h2,
+.dashboard-overview p {
+  margin: 0;
+}
+
+.dashboard-introduction h1 {
+  max-width: 12ch;
+  font-size: 2.75rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.dashboard-introduction p,
+.dashboard-overview p {
+  max-width: 68ch;
+  color: var(--dashboard-muted);
+  line-height: 1.6;
+}
+
+.dashboard-overview {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: clamp(4rem, 9vw, 7rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-overview h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+:root[data-theme="dark"] .dashboard-shell {
+  --dashboard-surface: #111411;
+  --dashboard-foreground: #f4f3ee;
+  --dashboard-muted: #b8bcb4;
+  --dashboard-rule: rgba(244, 243, 238, 0.22);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .dashboard-shell {
+    --dashboard-surface: #111411;
+    --dashboard-foreground: #f4f3ee;
+    --dashboard-muted: #b8bcb4;
+    --dashboard-rule: rgba(244, 243, 238, 0.22);
+  }
+}
+
+@media (min-width: 60rem) {
+  .dashboard-shell {
+    grid-template-columns: minmax(14rem, 17rem) minmax(0, 1fr);
+  }
+
+  .dashboard-rail {
+    min-height: calc(100svh - 4.5rem);
+    padding: 2rem;
+  }
+
+  .dashboard-main {
+    padding-inline: clamp(3rem, 7vw, 7rem);
+  }
+
+  .dashboard-introduction h1 {
+    font-size: 3.5rem;
+  }
+}
+
 /* Shop experiment B: photovoltaic geometry recedes behind a high-contrast dark hero. */
 .shop-introduction-copy { display: grid; gap: 1.25rem; }
 .shop-page-variant-b { padding: 0; }

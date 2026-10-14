@@ -27,3 +27,22 @@ export async function getPageMetadata(
     },
   };
 }
+
+export async function getPrivatePageMetadata(
+  locale: string,
+  slug: string,
+  pageKey: string,
+): Promise<Metadata> {
+  return {
+    ...(await getPageMetadata(
+      locale,
+      slug,
+      pageKey,
+      `pages.${pageKey}.description`,
+    )),
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}

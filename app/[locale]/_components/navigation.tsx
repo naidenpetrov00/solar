@@ -41,6 +41,9 @@ type NavigationProps = {
   signInLabel: string;
   signUpLabel: string;
   accountLabel: string;
+  dashboardLabel: string;
+  dashboardNavigationLabel: string;
+  canViewDashboard: boolean;
   signOutLabel: string;
   signingOutLabel: string;
   signOutError: string;
@@ -70,6 +73,9 @@ export function Navigation({
   signInLabel,
   signUpLabel,
   accountLabel,
+  dashboardLabel,
+  dashboardNavigationLabel,
+  canViewDashboard,
   signOutLabel,
   signingOutLabel,
   signOutError,
@@ -470,6 +476,24 @@ export function Navigation({
               <p className="m-0 break-words text-sm font-semibold tracking-[-0.015em]">{user.name}</p>
               <p className="site-account-email m-0 mt-1 break-all text-sm">{user.email}</p>
             </div>
+            {canViewDashboard ? (
+              <nav
+                className="site-account-dashboard-navigation border-b py-3"
+                aria-label={dashboardNavigationLabel}
+              >
+                <Link
+                  className="site-account-dashboard flex min-h-11 items-center justify-between gap-3 rounded-md px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+                  href={localizedPath(locale, "dashboard")}
+                  aria-current={activeSlug === "dashboard" ? "page" : undefined}
+                  onClick={closeMenus}
+                >
+                  <span>{dashboardLabel}</span>
+                  <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14M14 7l5 5-5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              </nav>
+            ) : null}
             {logoutError ? <p className="site-account-error" role="alert">{logoutError}</p> : null}
             <button
               type="button"

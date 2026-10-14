@@ -64,6 +64,7 @@
 .site-theme-button,
 .site-auth-link,
 .site-account-trigger,
+.site-account-dashboard,
 .site-account-logout,
 .site-mobile-auth-action {
   outline-color: var(--focus);
@@ -129,7 +130,14 @@
   color: var(--header-foreground);
 }
 .site-account-panel > div { border-color: var(--header-border); }
+.site-account-dashboard-navigation { border-color: var(--header-border); }
 .site-account-email { color: var(--header-muted); }
+.site-account-dashboard {
+  color: var(--header-foreground);
+  text-decoration: none;
+}
+.site-account-dashboard:hover,
+.site-account-dashboard[aria-current="page"] { background: var(--header-hover); }
 .site-account-error { margin: 1rem 0 0; color: #b91c1c; font-size: 0.875rem; line-height: 1.4; }
 .site-account-logout {
   border-color: color-mix(in srgb, var(--header-foreground) 30%, transparent);

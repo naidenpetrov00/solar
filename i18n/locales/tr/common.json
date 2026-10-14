@@ -15,6 +15,7 @@
     "signIn": "Giriş yap",
     "createAccount": "Hesap oluştur",
     "account": "Hesap",
+    "dashboard": "Yönetim paneli",
     "signOut": "Çıkış yap",
     "signingOut": "Çıkış yapılıyor…",
     "signOutError": "Çıkış yapılamadı. Lütfen tekrar deneyin."
@@ -30,7 +31,8 @@
     "themeDark": "Koyu tema",
     "accountMenu": "Hesap menüsü",
     "openAccountMenu": "Hesap menüsünü aç",
-    "closeAccountMenu": "Hesap menüsünü kapat"
+    "closeAccountMenu": "Hesap menüsünü kapat",
+    "dashboardNavigation": "Yönetim paneli navigasyonu"
   },
   "languages": {
     "bg": "Bulgarca",
@@ -57,6 +59,22 @@
     }
   },
   "pages": {
+    "dashboard": {
+      "title": "Yönetim paneli",
+      "description": "Sitenin yönetim araçları için merkezi çalışma alanı.",
+      "navigation": {
+        "overview": "Genel bakış"
+      },
+      "overview": {
+        "title": "Genel bakış",
+        "description": "Yönetim altyapısı hazır. Gereken ek araçlar daha sonra burada yer alabilir."
+      }
+    },
+    "accessDenied": {
+      "title": "Erişim reddedildi",
+      "description": "Bu hesabın yönetim paneline erişim izni yok.",
+      "returnHome": "Ana sayfaya dön"
+    },
     "home": {
       "title": "Evler ve işletmeler için güneş enerjisi sistemleri",
       "description": "Evler ve işletmeler için güneş enerjisi sistemlerini keşfedin.",

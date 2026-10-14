@@ -15,6 +15,7 @@
     "signIn": "Sign in",
     "createAccount": "Create account",
     "account": "Account",
+    "dashboard": "Dashboard",
     "signOut": "Sign out",
     "signingOut": "Signing out…",
     "signOutError": "We couldn't sign you out. Please try again."
@@ -30,7 +31,8 @@
     "themeDark": "Dark theme",
     "accountMenu": "Account menu",
     "openAccountMenu": "Open account menu",
-    "closeAccountMenu": "Close account menu"
+    "closeAccountMenu": "Close account menu",
+    "dashboardNavigation": "Dashboard navigation"
   },
   "languages": {
     "bg": "Bulgarian",
@@ -57,6 +59,22 @@
     }
   },
   "pages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "A central workspace for the site's administration tools.",
+      "navigation": {
+        "overview": "Overview"
+      },
+      "overview": {
+        "title": "Overview",
+        "description": "The administration foundation is ready. Additional tools can be added here as they are needed."
+      }
+    },
+    "accessDenied": {
+      "title": "Access denied",
+      "description": "This account does not have permission to access the administration dashboard.",
+      "returnHome": "Return to the home page"
+    },
     "home": {
       "title": "Solar systems for homes and businesses",
       "description": "Explore solar systems for homes and businesses.",

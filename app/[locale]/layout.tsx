@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import { I18nProvider } from "next-i18next/client";
 import { getResources, getT, generateI18nStaticParams } from "@/i18n.server";
-import { getCurrentUser } from "@/lib/authorization";
+import { getCurrentUser, hasPermission } from "@/lib/authorization";
 import { Navigation } from "./_components/navigation";
 import { routeDefinitions, supportedLocales } from "./_lib/routes";
 import "../globals.css";
@@ -71,6 +71,10 @@ export default async function LocaleLayout({
       t(`languages.${supportedLocale}`),
     ]),
   );
+  const canViewDashboard = hasPermission(
+    currentUser?.role,
+    "dashboard:view",
+  );
 
   return (
     <html
@@ -105,6 +109,9 @@ export default async function LocaleLayout({
             signInLabel={t("navigation.signIn")}
             signUpLabel={t("navigation.createAccount")}
             accountLabel={t("navigation.account")}
+            dashboardLabel={t("navigation.dashboard")}
+            dashboardNavigationLabel={t("accessibility.dashboardNavigation")}
+            canViewDashboard={canViewDashboard}
             signOutLabel={t("navigation.signOut")}
             signingOutLabel={t("navigation.signingOut")}
             signOutError={t("navigation.signOutError")}
