@@ -1,9 +1,9 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
 import { admin } from "better-auth/plugins";
-import { adminAc, userAc } from "better-auth/plugins/admin/access";
 
 import * as schema from "@/db/schema";
+import { authRoles } from "@/lib/auth-role-config";
 
 const schemaCheckDatabase = {} as Parameters<typeof drizzleAdapter>[0];
 
@@ -30,10 +30,7 @@ export const auth = betterAuth({
   },
   plugins: [
     admin({
-      roles: {
-        customer: userAc,
-        admin: adminAc,
-      },
+      roles: authRoles,
       defaultRole: "customer",
       adminRoles: ["admin"],
     }),

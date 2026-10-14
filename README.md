@@ -113,15 +113,29 @@ npm run auth:check
 npm run db:generate
 ```
 
-## First administrator
+## Roles and first owner account
 
-Public registration can create `customer` accounts only. It cannot select or submit the `admin` role. After migrations have been applied, provision the first administrator through Better Auth's CLI:
+The authorization model has three roles:
+
+- `customer` is the default public account and has no administration access.
+- `administrator` can access the future dashboard and manage customer accounts only.
+- `admin` is the single owner account and is the only role that can create or manage administrators.
+
+Public email/password and social registration always create `customer` accounts. Browser-controlled payloads cannot select `administrator` or `admin`. The generic Better Auth Admin endpoints remain owner-only because their operation permissions are not target-aware; future administrator workflows must use the centralized application authorization helpers.
+
+Management endpoints cannot target the owner account or create/assign the `admin` role. Normal owner self-service actions, including logout and ordinary session management, remain available. Management flows also cannot set passwords directly; future user management must use password-reset delivery.
+
+The database permits at most one `admin`. Before applying the role migration, create a verified backup and confirm that no more than one owner account exists. Existing `customer` and `admin` records remain valid and require no backfill.
+
+Rolling this migration back requires first reclassifying every `administrator` as an allowed legacy role, then dropping `user_single_admin_idx` and restoring the previous two-role check. Do not silently demote accounts as part of an automated rollback.
+
+After migrations have been applied, provision the first owner account through Better Auth's CLI only when no `admin` already exists:
 
 ```powershell
 npm run auth:provision-admin -- --email admin@example.com --name "Administrator" --role admin
 ```
 
-Use the real administrator email and name at invocation time. Deliberately omit `--password`: the CLI will prompt without placing the password in source code, `.env`, or shell history. The CLI marks the email as verified by default and warns before creating an administrator when users already exist. Do not bypass that warning with `--force` or `--yes` during normal provisioning.
+Use the real owner email and name at invocation time. Deliberately omit `--password`: the CLI will prompt without placing the password in source code, `.env`, or shell history. The CLI marks the email as verified by default and warns before creating an owner when users already exist. Do not bypass that warning with `--force` or `--yes` during normal provisioning, and do not rerun the command when an owner already exists.
 
 ## Customer authentication status
 
