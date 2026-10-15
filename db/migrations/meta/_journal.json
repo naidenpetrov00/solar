@@ -22,6 +22,13 @@
       "when": 1791966440867,
       "tag": "0002_add_administrator_role",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792053456685,
+      "tag": "0003_useful_giant_man",
+      "breakpoints": true
     }
   ]
 }

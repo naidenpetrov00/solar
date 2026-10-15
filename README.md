@@ -89,6 +89,7 @@ npm run db:migrate
 The schema is split by ownership:
 
 - `db/schema/auth.ts` contains the Better Auth identity, session, account, verification, and Admin plugin fields.
+- `db/schema/catalog.ts` contains the application-owned category, product, specification, pricing, and media-reference foundation.
 - `db/schema/profiles.ts` contains application-owned profile data separately from authentication records.
 - `db/schema/index.ts` exposes the complete Drizzle schema.
 
@@ -154,6 +155,20 @@ When both Facebook OAuth variables are configured, the same localized pages also
 Better Auth's installed version enables its built-in limiter by default in production, including stricter limits for sign-in and sign-up routes. A later milestone must still review and configure persistent rate limiting suitable for the final self-hosted or multi-instance deployment.
 
 The customer profile menu and logout experience are available. An admin interface is not included yet.
+
+## Catalog foundation
+
+The database contains an isolated catalog model, but the public shop and cart still use the existing hard-coded solar packages. Do not seed or copy those temporary packages into the catalog until a separate public-catalog migration is approved.
+
+Catalog categories use one ASCII slug shared by every locale and enforce slug uniqueness among siblings, including root categories. Product slugs are globally unique. A slug may change only before the record's first publication; `published_at` records that first publication permanently and is retained when an item is unpublished, archived, or restored.
+
+Products receive an immutable, database-generated SKU such as `PRD-000001`. Optional brand, GTIN/EAN, and MPN values are stored directly on the product. Brand is non-localized, GTIN/EAN is checksum-validated by the server domain, and MPN is not globally unique.
+
+Prices are stored as EUR integer minor units. Administrator input may be VAT-inclusive or VAT-exclusive, but the fixed catalog VAT rate is 20 percent and the public VAT-inclusive amount is calculated with integer half-up rounding. Direct-purchase products require an exact price and manual `in_stock` or `out_of_stock` availability. Enquiry products have no availability value and may use exact, from, or price-on-request presentation.
+
+Normal catalog management uses draft, published, and archived lifecycle states and exposes no hard-delete command. Foreign keys protect referenced data, while reviewed migrations and deliberate maintenance may delete records in dependency-safe order. Category cycles beyond direct self-parenting are prevented by the transactional catalog management service rather than database triggers.
+
+Both `administrator` and `admin` roles have `catalog:view` and `catalog:manage`; customers have neither. There is no separate publishing role in this milestone.
 
 ## Database backup expectation
 

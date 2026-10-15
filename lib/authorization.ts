@@ -17,6 +17,8 @@ export type AuthorizationErrorCode =
 
 export const appPermissions = [
   "dashboard:view",
+  "catalog:view",
+  "catalog:manage",
   "customer:create",
   "customer:view",
   "customer:update",
@@ -53,6 +55,8 @@ const permissionsByRole = {
   customer: [] as const,
   administrator: [
     "dashboard:view",
+    "catalog:view",
+    "catalog:manage",
     "customer:create",
     "customer:view",
     "customer:update",
