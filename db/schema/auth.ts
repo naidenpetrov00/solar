@@ -6,6 +6,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable(
@@ -27,7 +28,13 @@ export const user = pgTable(
     banExpires: timestamp("ban_expires"),
   },
   (table) => [
-    check("user_role_check", sql`${table.role} IN ('customer', 'admin')`),
+    check(
+      "user_role_check",
+      sql`${table.role} IN ('customer', 'administrator', 'admin')`,
+    ),
+    uniqueIndex("user_single_admin_idx")
+      .on(table.role)
+      .where(sql`${table.role} = 'admin'`),
   ],
 );
 

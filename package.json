@@ -12,7 +12,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "auth:generate": "node --conditions=react-server ./node_modules/auth/dist/index.mjs generate --config ./lib/auth.ts --output ./db/schema/auth.generated.ts --adapter drizzle --dialect postgresql --yes",
-    "auth:check": "node --conditions=react-server ./node_modules/auth/dist/index.mjs check schema --config ./lib/auth.ts",
+    "auth:check": "node ./node_modules/auth/dist/index.mjs check schema --config ./lib/auth-schema-check.ts",
     "auth:secret": "auth secret",
     "auth:provision-admin": "node --conditions=react-server ./node_modules/auth/dist/index.mjs create-admin --config ./lib/auth.ts"
   },
@@ -23,6 +23,7 @@
     "i18next": "^26.4.2",
     "next": "16.3.5",
     "next-i18next": "^16.3.1",
+    "nodemailer": "^10.0.15",
     "postgres": "^3.4.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "auth": "^1.7.7",

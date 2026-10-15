@@ -11,7 +11,14 @@
     "packages": "Paketler",
     "cart": "Sepet",
     "contact": "İletişim",
-    "requestQuote": "Teklif isteyin"
+    "requestQuote": "Teklif isteyin",
+    "signIn": "Giriş yap",
+    "createAccount": "Hesap oluştur",
+    "account": "Hesap",
+    "dashboard": "Yönetim paneli",
+    "signOut": "Çıkış yap",
+    "signingOut": "Çıkış yapılıyor…",
+    "signOutError": "Çıkış yapılamadı. Lütfen tekrar deneyin."
   },
   "accessibility": {
     "skipToContent": "Ana içeriğe geç",
@@ -21,7 +28,11 @@
     "languageNavigation": "Dil seçimi",
     "themeLabel": "Renk teması",
     "themeLight": "Açık tema",
-    "themeDark": "Koyu tema"
+    "themeDark": "Koyu tema",
+    "accountMenu": "Hesap menüsü",
+    "openAccountMenu": "Hesap menüsünü aç",
+    "closeAccountMenu": "Hesap menüsünü kapat",
+    "dashboardNavigation": "Yönetim paneli navigasyonu"
   },
   "languages": {
     "bg": "Bulgarca",
@@ -29,7 +40,166 @@
     "tr": "Türkçe",
     "uk": "Ukraynaca"
   },
+  "emails": {
+    "verification": {
+      "subject": "E-posta adresinizi doğrulayın",
+      "title": "E-posta adresinizi doğrulayın",
+      "introduction": "Solar hesabınız için kullanılan e-posta adresini doğrulayın.",
+      "action": "E-postayı doğrula",
+      "expiry": "Bu bağlantı 1 saat geçerlidir.",
+      "ignore": "Hesap oluşturmadıysanız bu e-postayı yok sayabilirsiniz."
+    },
+    "passwordReset": {
+      "subject": "Solar parolanızı sıfırlayın",
+      "title": "Parolanızı sıfırlayın",
+      "introduction": "Solar hesabınız için yeni bir parola belirlemek üzere aşağıdaki güvenli bağlantıyı kullanın.",
+      "action": "Yeni parola belirle",
+      "expiry": "Bu bağlantı 1 saat geçerlidir.",
+      "ignore": "Parola sıfırlama talebinde bulunmadıysanız bu e-postayı yok sayabilirsiniz."
+    }
+  },
   "pages": {
+    "dashboard": {
+      "title": "Yönetim paneli",
+      "description": "Sitenin yönetim araçları için merkezi çalışma alanı.",
+      "navigation": {
+        "overview": "Genel bakış",
+        "users": "Kullanıcılar"
+      },
+      "overview": {
+        "title": "Genel bakış",
+        "description": "Yönetim altyapısı hazır. Gereken ek araçlar daha sonra burada yer alabilir."
+      },
+      "users": {
+        "title": "Kullanıcılar",
+        "description": "Müşteri erişimini ve sahip olarak yönetici hesaplarını yönetin.",
+        "search": {
+          "regionLabel": "Kullanıcı ara",
+          "label": "Ad veya e-posta ile ara",
+          "placeholder": "Ad veya e-posta",
+          "submit": "Ara",
+          "clear": "Temizle"
+        },
+        "list": {
+          "count": "{{count}} hesap",
+          "selectUser": "Hesabı görüntüle"
+        },
+        "empty": {
+          "title": "Yönetilebilir hesap yok",
+          "description": "Yönetme izniniz olan hesaplar burada görünür.",
+          "searchTitle": "Eşleşen hesap yok",
+          "searchDescription": "Farklı bir ad veya e-posta adresi deneyin."
+        },
+        "pagination": {
+          "label": "Kullanıcı sayfaları",
+          "previous": "Önceki",
+          "next": "Sonraki",
+          "status": "{{pages}} sayfadan {{page}}. sayfa"
+        },
+        "fields": {
+          "name": "Ad",
+          "email": "E-posta",
+          "role": "Rol",
+          "verification": "E-posta doğrulaması",
+          "status": "Hesap durumu",
+          "createdAt": "Oluşturulma",
+          "updatedAt": "Son güncelleme"
+        },
+        "roles": {
+          "customer": "Müşteri",
+          "administrator": "Yönetici"
+        },
+        "verification": {
+          "verified": "Doğrulandı",
+          "unverified": "Doğrulanmadı"
+        },
+        "status": {
+          "active": "Etkin",
+          "blocked": "Engellendi"
+        },
+        "detail": {
+          "title": "Hesap ayrıntıları",
+          "noSelectionTitle": "Bir hesap seçin",
+          "noSelectionDescription": "Ayrıntıları ve kullanılabilir işlemleri incelemek için listeden bir hesap seçin.",
+          "backToUsers": "Kullanıcılara dön"
+        },
+        "actions": {
+          "title": "Hesap işlemleri",
+          "block": "Hesabı engelle",
+          "unblock": "Hesabın engelini kaldır",
+          "revokeSessions": "Tüm oturumları iptal et",
+          "sendPasswordReset": "Parola sıfırlama gönder",
+          "promote": "Yönetici yap",
+          "demote": "Müşteri yap",
+          "working": "İşleniyor…"
+        },
+        "confirmations": {
+          "cancel": "İptal",
+          "block": {
+            "title": "Bu hesap engellensin mi?",
+            "description": "Hesap oturum açamayacak ve mevcut tüm oturumları sonlandırılacak.",
+            "confirm": "Hesabı engelle"
+          },
+          "unblock": {
+            "title": "Bu hesabın engeli kaldırılsın mı?",
+            "description": "Hesap yeniden oturum açabilecek.",
+            "confirm": "Engeli kaldır"
+          },
+          "revokeSessions": {
+            "title": "Tüm oturumlar iptal edilsin mi?",
+            "description": "Bu hesabın açık olduğu her cihazda yeniden oturum açılması gerekecek.",
+            "confirm": "Oturumları iptal et"
+          },
+          "sendPasswordReset": {
+            "title": "Parola sıfırlama e-postası gönderilsin mi?",
+            "description": "Bu hesaba süreli ve güvenli bir kurulum bağlantısı gönderilecek. Burada parola gösterilmez veya belirlenmez.",
+            "confirm": "E-posta gönder"
+          },
+          "promote": {
+            "title": "Yönetici yapılsın mı?",
+            "description": "Bu hesap müşteri yönetimi erişimi kazanacak. Yeni rol etkinleşmeden önce mevcut oturumlar sonlandırılacak.",
+            "confirm": "Yönetici yap"
+          },
+          "demote": {
+            "title": "Müşteri yapılsın mı?",
+            "description": "Bu hesap yönetici erişimini kaybedecek. Mevcut oturumlar hemen sonlandırılacak.",
+            "confirm": "Müşteri yap"
+          }
+        },
+        "invite": {
+          "open": "Yönetici davet et",
+          "title": "Bir yönetici davet edin",
+          "description": "Hesabı parola olmadan oluşturun ve süreli, güvenli bir kurulum bağlantısı gönderin. Alıcı kendi parolasını seçer.",
+          "name": "Ad",
+          "email": "E-posta",
+          "language": "Davet dili",
+          "submit": "Oluştur ve daveti gönder",
+          "submitting": "Davet oluşturuluyor…"
+        },
+        "results": {
+          "blocked": "Hesap engellendi ve oturumları iptal edildi.",
+          "unblocked": "Hesabın engeli kaldırıldı.",
+          "sessionsRevoked": "Bu hesabın tüm oturumları iptal edildi.",
+          "resetSent": "Parola sıfırlama e-postası gönderildi.",
+          "promoted": "Hesap yönetici yapıldı ve oturumları iptal edildi.",
+          "demoted": "Hesap müşteri yapıldı ve oturumları iptal edildi.",
+          "administratorInvited": "Yönetici hesabı oluşturuldu ve güvenli kurulum e-postası gönderildi.",
+          "administratorCreatedDeliveryFailed": "Yönetici hesabı oluşturuldu ancak kurulum e-postası teslim edilemedi. Hesabı açıp parola sıfırlama e-postasını yeniden gönderin.",
+          "invalidInput": "İstek geçerli değil. Bilgileri kontrol edip tekrar deneyin.",
+          "forbidden": "Artık bu işlemi yapma izniniz yok.",
+          "notFound": "Hesap artık mevcut değil veya yönetilemiyor.",
+          "stale": "Hesap siz açtıktan sonra değişti. Sayfayı yenileyip güncel ayrıntıları inceleyin.",
+          "rateLimited": "Kısa süre önce bir e-posta gönderildi. Tekrar denemeden önce biraz bekleyin.",
+          "emailExists": "Bu e-posta adresiyle bir hesap zaten mevcut.",
+          "deliveryFailed": "E-posta teslim edilemedi. Daha sonra tekrar deneyin."
+        }
+      }
+    },
+    "accessDenied": {
+      "title": "Erişim reddedildi",
+      "description": "Bu hesabın yönetim paneline erişim izni yok.",
+      "returnHome": "Ana sayfaya dön"
+    },
     "home": {
       "title": "Evler ve işletmeler için güneş enerjisi sistemleri",
       "description": "Evler ve işletmeler için güneş enerjisi sistemlerini keşfedin.",
@@ -165,6 +335,146 @@
     },
     "contact": {
       "title": "İletişim"
+    },
+    "auth": {
+      "common": {
+        "backToSignIn": "Girişe dön"
+      },
+      "google": {
+        "continue": "Google ile devam et",
+        "unavailable": "Google ile giriş şu anda kullanılamıyor.",
+        "redirecting": "Google’a yönlendiriliyorsunuz…",
+        "failureTitle": "Google ile giriş tamamlanamadı",
+        "failureDescription": "Tekrar deneyin veya e-posta adresinizi ve parolanızı kullanın.",
+        "emailNotFoundTitle": "Google bir e-posta adresi sağlamadı",
+        "emailNotFoundDescription": "Başka bir giriş yöntemi seçin veya Google hesabınızın e-posta adresini paylaşabildiğinden emin olun.",
+        "emailNotVerifiedTitle": "Google ile devam etmek için e-postanızı doğrulayın",
+        "emailNotVerifiedDescription": "E-posta adresinize bir doğrulama bağlantısı gönderdik. Bağlantıyı açtıktan sonra Google ile tekrar giriş yapın.",
+        "accountNotLinkedTitle": "Google’ı kullanmadan önce mevcut hesabınızı doğrulayın",
+        "accountNotLinkedDescription": "Güvenlik nedeniyle Google, doğrulanmamış parola hesabına bağlanamaz. Parolanızı sıfırlamak e-posta adresinizi doğrulamaz.",
+        "passwordRecovery": "Parolanızı mı unuttunuz?",
+        "recoverySteps": {
+          "resetPassword": "Parolanızı sıfırlayın",
+          "signIn": "Yeni parolanızla giriş yapın.",
+          "verifyEmail": "E-posta doğrulamasını tamamlayın veya yeniden gönderin; yalnızca parolayı sıfırlamak e-posta adresinizi doğrulamaz.",
+          "retry": "Google ile yeniden giriş yapmayı deneyin."
+        }
+      },
+      "facebook": {
+        "continue": "Facebook ile devam et",
+        "unavailable": "Facebook ile giriş şu anda kullanılamıyor.",
+        "redirecting": "Facebook’a yönlendiriliyorsunuz…",
+        "failureTitle": "Facebook ile giriş tamamlanamadı",
+        "failureDescription": "Tekrar deneyin veya e-posta adresinizi ve parolanızı kullanın.",
+        "emailNotFoundTitle": "Facebook bir e-posta adresi sağlamadı",
+        "emailNotFoundDescription": "Facebook’un e-posta adresinizi paylaşmasına izin verin veya başka bir giriş yöntemi seçin.",
+        "emailNotVerifiedTitle": "Facebook ile devam etmek için e-postanızı doğrulayın",
+        "emailNotVerifiedDescription": "E-posta adresinize bir doğrulama bağlantısı gönderdik. Bağlantıyı açtıktan sonra Facebook ile tekrar giriş yapın.",
+        "accountNotLinkedTitle": "Facebook ile giriş tamamlanamadı",
+        "accountNotLinkedDescription": "Hesabınızı korumak için e-posta adresiniz ve parolanızla devam edin.",
+        "passwordRecovery": "Parolanızı mı unuttunuz?"
+      },
+      "fields": {
+        "name": "Ad",
+        "email": "E-posta adresi",
+        "password": "Parola",
+        "newPassword": "Yeni parola",
+        "confirmPassword": "Parolayı doğrulayın",
+        "passwordHint": "8 ile 128 karakter arasında kullanın."
+      },
+      "errors": {
+        "validationSummary": "İşaretli bilgileri kontrol edip tekrar deneyin.",
+        "nameRequired": "Adınızı girin.",
+        "nameLength": "Ad 2 ile 100 karakter arasında olmalıdır.",
+        "emailRequired": "E-posta adresinizi girin.",
+        "emailInvalid": "Geçerli bir e-posta adresi girin.",
+        "passwordRequired": "Parolanızı girin.",
+        "passwordLength": "Parola 8 ile 128 karakter arasında olmalıdır.",
+        "passwordMismatch": "Parolalar eşleşmiyor.",
+        "invalidCredentials": "E-posta adresi veya parola yanlış.",
+        "rateLimited": "Çok fazla deneme yapıldı. Biraz bekleyip tekrar deneyin.",
+        "signInFailed": "Giriş yapılamadı. Tekrar deneyin.",
+        "signUpFailed": "Hesap oluşturulamadı. Bilgilerinizi kontrol edin veya daha sonra tekrar deneyin.",
+        "verificationRequestFailed": "Yeni bir doğrulama e-postası istenemedi. Tekrar deneyin.",
+        "recoveryRequestFailed": "Kurtarma isteği alınamadı. Tekrar deneyin.",
+        "resetTokenInvalid": "Bu parola sıfırlama bağlantısı geçersiz veya süresi dolmuş.",
+        "resetFailed": "Parola sıfırlanamadı. Tekrar deneyin."
+      },
+      "signIn": {
+        "title": "Giriş yapın",
+        "description": "E-posta adresiniz ve parolanızla devam edin.",
+        "submit": "Giriş yap",
+        "submitting": "Giriş yapılıyor…",
+        "forgotPassword": "Parolanızı mı unuttunuz?",
+        "unverifiedTitle": "Giriş yapmadan önce e-postanızı doğrulayın",
+        "unverifiedDescription": "Bu hesap için e-posta doğrulaması hâlâ gerekiyor. İlk mesaj ulaşmadıysa yeni bir bağlantı isteyin.",
+        "tryAnotherEmail": "Farklı bir e-posta adresi kullan",
+        "noAccount": "Hesabınız yok mu?",
+        "createAccount": "Hesap oluşturun"
+      },
+      "signUp": {
+        "title": "Hesabınızı oluşturun",
+        "description": "E-posta adresi ve parolayla kaydolun, ardından giriş yapmak için e-postanızı doğrulayın.",
+        "submit": "Hesap oluştur",
+        "submitting": "Hesap oluşturuluyor…",
+        "checkEmailTitle": "E-postanızı kontrol edin",
+        "checkEmailDescription": "Kaydınız alındı. Girişi etkinleştirmek için e-postadaki doğrulama bağlantısını açın.",
+        "deliveryHelp": "Mesaj ulaşmazsa aşağıdaki yeniden gönderme işlemini kullanın. Hesabınızı yeniden oluşturmanız gerekmez.",
+        "hasAccount": "Zaten bir hesabınız var mı?",
+        "signIn": "Giriş yapın"
+      },
+      "verificationRequest": {
+        "submit": "Doğrulama e-postasını yeniden gönder",
+        "submitting": "Yeni e-posta isteniyor…",
+        "accepted": "Bu adresteki hesabın doğrulanması gerekiyorsa yeni bir bağlantı gönderildi."
+      },
+      "forgotPassword": {
+        "title": "Parolamı unuttum",
+        "description": "Güvenli parola sıfırlama bağlantısı istemek için e-posta adresinizi girin.",
+        "submit": "Sıfırlama bağlantısı gönder",
+        "submitting": "Sıfırlama bağlantısı isteniyor…",
+        "successTitle": "E-postanızı kontrol edin",
+        "successDescription": "Bu adres için bir hesap varsa parola sıfırlama bağlantısı gönderdik. Bağlantı 1 saat geçerlidir."
+      },
+      "resetPassword": {
+        "title": "Yeni parola belirleyin",
+        "description": "Parolanın değiştirilebilmesi için geçerli bir sıfırlama bağlantısı gerekir.",
+        "invalidOrExpiredTitle": "Sıfırlama bağlantısı geçersiz veya süresi dolmuş",
+        "invalidOrExpiredDescription": "Bu sıfırlama bağlantısı kullanılamaz. Devam etmek için yeni bir bağlantı isteyin.",
+        "failureTitle": "Parola sıfırlama işlemine devam edilemedi",
+        "failureDescription": "Bu sıfırlama bağlantısı doğrulanamadı. Yeni bir bağlantı isteyip tekrar deneyin.",
+        "requestAnother": "Yeni sıfırlama bağlantısı iste",
+        "submit": "Yeni parolayı kaydet",
+        "submitting": "Parola kaydediliyor…",
+        "successTitle": "Parola güncellendi",
+        "successDescription": "Yeni parolanız kullanıma hazır. Diğer etkin oturumlar kapatıldı."
+      },
+      "verifyEmail": {
+        "title": "E-posta doğrulama",
+        "description": "Hesabınıza giriş yapmadan önce e-postanızı doğrulayın.",
+        "states": {
+          "initial": {
+            "title": "Doğrulama bağlantısı isteyin",
+            "description": "E-posta adresinizi girin; hesabın doğrulanması gerekiyorsa yeni bir bağlantı gönderelim."
+          },
+          "success": {
+            "title": "E-posta doğrulandı",
+            "description": "E-posta adresiniz doğrulandı."
+          },
+          "expired": {
+            "title": "Doğrulama bağlantısının süresi doldu",
+            "description": "Bu doğrulama bağlantısı artık geçerli değil. Aşağıdan yeni bir bağlantı isteyin."
+          },
+          "invalid": {
+            "title": "Geçersiz doğrulama bağlantısı",
+            "description": "Bu doğrulama bağlantısı kullanılamaz. Aşağıdan yeni bir bağlantı isteyin."
+          },
+          "failure": {
+            "title": "E-posta doğrulanamadı",
+            "description": "Doğrulama tamamlanamadı. Yeni bir bağlantı isteyip tekrar deneyin."
+          }
+        }
+      }
     },
     "solarPackages": {
       "title": "Güneş enerjisi paketleri",
