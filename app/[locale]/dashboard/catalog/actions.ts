@@ -15,13 +15,13 @@ import {
   unpublishCatalogCategory,
   updateCatalogCategory,
   type CatalogCategoryPublicationIssue,
+  type CatalogSpecificationEditorInput,
 } from "@/lib/catalog/management";
 import {
   catalogLocales,
   CatalogValidationError,
   isCatalogLocale,
   isUuid,
-  type CatalogSpecificationInput,
 } from "@/lib/catalog/model";
 import {
   AuthorizationError,
@@ -61,6 +61,7 @@ export type CatalogActionResult = {
   status: "idle" | "success" | "error";
   code?: CatalogActionCode;
   targetId?: string;
+  updatedAt?: string;
   values?: Record<string, string>;
   fieldErrors?: Record<string, string>;
   publicationIssues?: CatalogCategoryPublicationIssue[];
@@ -94,6 +95,15 @@ function isValidTimestamp(value: string) {
   return value.length > 0 && Number.isFinite(Date.parse(value));
 }
 
+function hasOnlyKeys(value: object, allowedKeys: readonly string[]) {
+  const allowed = new Set(allowedKeys);
+  return Object.keys(value).every((key) => allowed.has(key));
+}
+
+function isValidSlug(value: string) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) && value.length <= 120;
+}
+
 async function requireCatalogManager() {
   const actor = await requireUser();
 
@@ -114,11 +124,21 @@ function errorResult(
   }
 
   if (error instanceof CatalogManagementError) {
+    const slugLocale =
+      error.code === "SLUG_CONFLICT" &&
+      typeof error.details === "object" &&
+      error.details !== null &&
+      "locale" in error.details &&
+      (error.details.locale === "bg" || error.details.locale === "en")
+        ? error.details.locale
+        : null;
     return {
       status: "error",
       code: error.code,
       values,
-      fieldErrors,
+      fieldErrors: slugLocale
+        ? { ...fieldErrors, [`${slugLocale}Slug`]: "CONFLICT" }
+        : fieldErrors,
       publicationIssues: Array.isArray(error.details)
         ? (error.details as CatalogCategoryPublicationIssue[])
         : undefined,
@@ -142,19 +162,48 @@ export async function createCatalogCategoryAction(
 ): Promise<CatalogActionResult> {
   const values = stringValues(formData);
   const locale = actionLocale(formData);
-  const slug = stringValue(formData, "slug");
-  const name = stringValue(formData, "name");
-  const introduction = stringValue(formData, "introduction");
+  const bgSlug = stringValue(formData, "bgSlug");
+  const enSlug = stringValue(formData, "enSlug");
   const parentId = stringValue(formData, "parentId") || null;
+  const fieldErrors: Record<string, string> = {};
+  const translations = catalogLocales.map((contentLocale) => {
+    const prefix = `content.${contentLocale}`;
+    const name = stringValue(formData, `${prefix}.name`);
+    const introduction = stringValue(formData, `${prefix}.introduction`);
+    const metaDescription = stringValue(formData, `${prefix}.metaDescription`);
+    const productTitleGuidance = stringValue(
+      formData,
+      `${prefix}.productTitleGuidance`,
+    );
+
+    if (!name.trim()) fieldErrors[`${prefix}.name`] = "REQUIRED";
+    if (!introduction.trim()) {
+      fieldErrors[`${prefix}.introduction`] = "REQUIRED";
+    }
+
+    return {
+      locale: contentLocale,
+      name,
+      introduction,
+      metaDescription,
+      productTitleGuidance,
+    };
+  });
+
+  if (!isValidSlug(bgSlug)) fieldErrors.bgSlug = bgSlug ? "INVALID" : "REQUIRED";
+  if (!isValidSlug(enSlug)) fieldErrors.enSlug = enSlug ? "INVALID" : "REQUIRED";
 
   if (
     !locale ||
-    !slug ||
-    !name.trim() ||
-    !introduction.trim() ||
+    Object.keys(fieldErrors).length > 0 ||
     (parentId !== null && !isUuid(parentId))
   ) {
-    return { status: "error", code: "INVALID_INPUT", values };
+    return {
+      status: "error",
+      code: "INVALID_INPUT",
+      values,
+      fieldErrors,
+    };
   }
 
   try {
@@ -162,19 +211,14 @@ export async function createCatalogCategoryAction(
     const created = await createCatalogCategory({
       actorId: actor.id,
       parentId,
-      slug,
-      translations: [
-        {
-          locale: "bg",
-          name,
-          introduction,
-        },
-      ],
+      bgSlug,
+      enSlug,
+      translations,
     });
     revalidateCatalog(locale);
     return { status: "success", code: "CREATED", targetId: created.id };
   } catch (error) {
-    return errorResult(error, values);
+    return errorResult(error, values, fieldErrors);
   }
 }
 
@@ -186,33 +230,40 @@ export async function saveCatalogCategoryGeneralAction(
   const locale = actionLocale(formData);
   const categoryId = stringValue(formData, "categoryId");
   const expectedUpdatedAt = stringValue(formData, "expectedUpdatedAt");
-  const slug = stringValue(formData, "slug");
-  const sortOrder = Number(stringValue(formData, "sortOrder"));
+  const bgSlug = stringValue(formData, "bgSlug");
+  const enSlug = stringValue(formData, "enSlug");
+  const fieldErrors: Record<string, string> = {};
+
+  if (!isValidSlug(bgSlug)) fieldErrors.bgSlug = bgSlug ? "INVALID" : "REQUIRED";
+  if (!isValidSlug(enSlug)) fieldErrors.enSlug = enSlug ? "INVALID" : "REQUIRED";
 
   if (
     !locale ||
     !isUuid(categoryId) ||
     !isValidTimestamp(expectedUpdatedAt) ||
-    !slug ||
-    !Number.isSafeInteger(sortOrder) ||
-    sortOrder < 0
+    Object.keys(fieldErrors).length > 0
   ) {
-    return { status: "error", code: "INVALID_INPUT", values };
+    return { status: "error", code: "INVALID_INPUT", values, fieldErrors };
   }
 
   try {
     const actor = await requireCatalogManager();
-    await updateCatalogCategory({
+    const saved = await updateCatalogCategory({
       actorId: actor.id,
       categoryId,
       expectedUpdatedAt,
-      slug,
-      sortOrder,
+      bgSlug,
+      enSlug,
     });
     revalidateCatalog(locale);
-    return { status: "success", code: "SAVED", targetId: categoryId };
+    return {
+      status: "success",
+      code: "SAVED",
+      targetId: categoryId,
+      updatedAt: saved.updatedAt,
+    };
   } catch (error) {
-    return errorResult(error, values);
+    return errorResult(error, values, fieldErrors);
   }
 }
 
@@ -225,44 +276,27 @@ export async function saveCatalogCategoryTranslationsAction(
   const categoryId = stringValue(formData, "categoryId");
   const expectedUpdatedAt = stringValue(formData, "expectedUpdatedAt");
   const fieldErrors: Record<string, string> = {};
-  const translations = catalogLocales.flatMap((contentLocale) => {
+  const translations = catalogLocales.map((contentLocale) => {
     const prefix = `content.${contentLocale}`;
     const name = stringValue(formData, `${prefix}.name`);
     const introduction = stringValue(formData, `${prefix}.introduction`);
-    const detailedContent = stringValue(formData, `${prefix}.detailedContent`);
-    const seoTitle = stringValue(formData, `${prefix}.seoTitle`);
     const metaDescription = stringValue(formData, `${prefix}.metaDescription`);
     const productTitleGuidance = stringValue(
       formData,
       `${prefix}.productTitleGuidance`,
     );
-    const hasContent = [
-      name,
-      introduction,
-      detailedContent,
-      seoTitle,
-      metaDescription,
-      productTitleGuidance,
-    ].some((value) => value.trim().length > 0);
-
-    if (!hasContent) return [];
-
     if (!name.trim()) fieldErrors[`${prefix}.name`] = "REQUIRED";
     if (!introduction.trim()) {
       fieldErrors[`${prefix}.introduction`] = "REQUIRED";
     }
 
-    return [
-      {
-        locale: contentLocale,
-        name,
-        introduction,
-        detailedContent,
-        seoTitle,
-        metaDescription,
-        productTitleGuidance,
-      },
-    ];
+    return {
+      locale: contentLocale,
+      name,
+      introduction,
+      metaDescription,
+      productTitleGuidance,
+    };
   });
 
   if (
@@ -281,14 +315,19 @@ export async function saveCatalogCategoryTranslationsAction(
 
   try {
     const actor = await requireCatalogManager();
-    await replaceCatalogCategoryTranslations({
+    const saved = await replaceCatalogCategoryTranslations({
       actorId: actor.id,
       categoryId,
       expectedUpdatedAt,
       translations,
     });
     revalidateCatalog(locale);
-    return { status: "success", code: "SAVED", targetId: categoryId };
+    return {
+      status: "success",
+      code: "SAVED",
+      targetId: categoryId,
+      updatedAt: saved.updatedAt,
+    };
   } catch (error) {
     return errorResult(error, values, fieldErrors);
   }
@@ -303,6 +342,7 @@ function parseSpecificationTranslations(value: unknown) {
     if (
       typeof candidate !== "object" ||
       candidate === null ||
+      !hasOnlyKeys(candidate, ["locale", "label"]) ||
       !("locale" in candidate) ||
       !("label" in candidate) ||
       !isCatalogLocale(candidate.locale) ||
@@ -317,7 +357,9 @@ function parseSpecificationTranslations(value: unknown) {
   return translations;
 }
 
-function parseSpecifications(value: string): CatalogSpecificationInput[] | null {
+function parseSpecifications(
+  value: string,
+): CatalogSpecificationEditorInput[] | null {
   let parsed: unknown;
 
   try {
@@ -327,24 +369,32 @@ function parseSpecifications(value: string): CatalogSpecificationInput[] | null 
   }
 
   if (!Array.isArray(parsed)) return null;
-  const specifications: CatalogSpecificationInput[] = [];
+  const specifications: CatalogSpecificationEditorInput[] = [];
 
   for (const candidate of parsed) {
     if (
       typeof candidate !== "object" ||
       candidate === null ||
-      !("key" in candidate) ||
-      typeof candidate.key !== "string" ||
+      !hasOnlyKeys(candidate, [
+        "id",
+        "valueType",
+        "unit",
+        "displayOrder",
+        "translations",
+        "options",
+      ]) ||
+      !("id" in candidate) ||
+      "key" in candidate ||
+      "isRequired" in candidate ||
+      "isFilterable" in candidate ||
+      (candidate.id !== null &&
+        (typeof candidate.id !== "string" || !isUuid(candidate.id))) ||
       !("valueType" in candidate) ||
       !["text", "number", "boolean", "selection"].includes(
         String(candidate.valueType),
       ) ||
       !("unit" in candidate) ||
       (candidate.unit !== null && typeof candidate.unit !== "string") ||
-      !("isRequired" in candidate) ||
-      typeof candidate.isRequired !== "boolean" ||
-      !("isFilterable" in candidate) ||
-      typeof candidate.isFilterable !== "boolean" ||
       !("displayOrder" in candidate) ||
       typeof candidate.displayOrder !== "number" ||
       !Number.isSafeInteger(candidate.displayOrder) ||
@@ -357,14 +407,17 @@ function parseSpecifications(value: string): CatalogSpecificationInput[] | null 
 
     const translations = parseSpecificationTranslations(candidate.translations);
     if (!translations || !Array.isArray(candidate.options)) return null;
-    const options: CatalogSpecificationInput["options"] = [];
+    const options: CatalogSpecificationEditorInput["options"] = [];
 
     for (const option of candidate.options) {
       if (
         typeof option !== "object" ||
         option === null ||
-        !("code" in option) ||
-        typeof option.code !== "string" ||
+        !hasOnlyKeys(option, ["id", "displayOrder", "translations"]) ||
+        !("id" in option) ||
+        "code" in option ||
+        (option.id !== null &&
+          (typeof option.id !== "string" || !isUuid(option.id))) ||
         !("displayOrder" in option) ||
         typeof option.displayOrder !== "number" ||
         !Number.isSafeInteger(option.displayOrder) ||
@@ -379,18 +432,17 @@ function parseSpecifications(value: string): CatalogSpecificationInput[] | null 
       );
       if (!optionTranslations) return null;
       options.push({
-        code: option.code,
+        id: option.id,
         displayOrder: option.displayOrder,
         translations: optionTranslations,
       });
     }
 
     specifications.push({
-      key: candidate.key,
-      valueType: candidate.valueType as CatalogSpecificationInput["valueType"],
+      id: candidate.id,
+      valueType:
+        candidate.valueType as CatalogSpecificationEditorInput["valueType"],
       unit: candidate.unit,
-      isRequired: candidate.isRequired,
-      isFilterable: candidate.isFilterable,
       displayOrder: candidate.displayOrder,
       translations,
       options,
@@ -411,28 +463,77 @@ export async function saveCatalogCategorySpecificationsAction(
   const specifications = parseSpecifications(
     stringValue(formData, "specifications"),
   );
+  const fieldErrors: Record<string, string> = {};
+
+  specifications?.forEach((specification, specificationIndex) => {
+    for (const contentLocale of catalogLocales) {
+      if (
+        !specification.translations.some(
+          (translation) =>
+            translation.locale === contentLocale && translation.label.trim(),
+        )
+      ) {
+        fieldErrors[
+          `specifications.${specificationIndex}.translations.${contentLocale}`
+        ] = "REQUIRED";
+      }
+    }
+
+    if (
+      specification.valueType === "selection" &&
+      specification.options.length === 0
+    ) {
+      fieldErrors[`specifications.${specificationIndex}.options`] = "REQUIRED";
+    }
+
+    specification.options.forEach((option, optionIndex) => {
+      for (const contentLocale of catalogLocales) {
+        if (
+          !option.translations.some(
+            (translation) =>
+              translation.locale === contentLocale && translation.label.trim(),
+          )
+        ) {
+          fieldErrors[
+            `specifications.${specificationIndex}.options.${optionIndex}.translations.${contentLocale}`
+          ] = "REQUIRED";
+        }
+      }
+    });
+  });
 
   if (
     !locale ||
     !isUuid(categoryId) ||
     !isValidTimestamp(expectedUpdatedAt) ||
-    !specifications
+    !specifications ||
+    Object.keys(fieldErrors).length > 0
   ) {
-    return { status: "error", code: "INVALID_INPUT", values };
+    return {
+      status: "error",
+      code: "INVALID_INPUT",
+      values,
+      fieldErrors,
+    };
   }
 
   try {
     const actor = await requireCatalogManager();
-    await replaceCatalogCategorySpecifications({
+    const saved = await replaceCatalogCategorySpecifications({
       actorId: actor.id,
       categoryId,
       expectedUpdatedAt,
       specifications,
     });
     revalidateCatalog(locale);
-    return { status: "success", code: "SAVED", targetId: categoryId };
+    return {
+      status: "success",
+      code: "SAVED",
+      targetId: categoryId,
+      updatedAt: saved.updatedAt,
+    };
   } catch (error) {
-    return errorResult(error, values);
+    return errorResult(error, values, fieldErrors);
   }
 }
 

@@ -22,6 +22,7 @@ import {
 import {
   CATALOG_INTERNAL_NAME_MAX_LENGTH,
   assertUniqueLocales,
+  catalogCategorySlugForLocale,
   catalogLocales,
   hasAllCatalogLocales,
   isCatalogLocale,
@@ -102,6 +103,8 @@ export type CatalogCategoryPublicationIssue =
 export type ManagedCatalogCategoryTreeItem = {
   id: string;
   parentId: string | null;
+  bgSlug: string;
+  enSlug: string;
   slug: string;
   name: string;
   sortOrder: number;
@@ -112,6 +115,8 @@ export type ManagedCatalogCategoryTreeItem = {
 export type ManagedCatalogCategoryDetail = {
   id: string;
   parentId: string | null;
+  bgSlug: string;
+  enSlug: string;
   slug: string;
   sortOrder: number;
   status: "draft" | "published" | "archived";
@@ -152,12 +157,27 @@ export type ManagedCatalogCategoryWorkspace = {
   selected: ManagedCatalogCategoryDetail | null;
 };
 
+export type CatalogSpecificationEditorOptionInput = {
+  id?: string | null;
+  displayOrder: number;
+  translations: Array<{ locale: CatalogLocale; label: string }>;
+};
+
+export type CatalogSpecificationEditorInput = {
+  id?: string | null;
+  valueType: CatalogSpecificationValueType;
+  unit?: string | null;
+  displayOrder: number;
+  translations: Array<{ locale: CatalogLocale; label: string }>;
+  options: CatalogSpecificationEditorOptionInput[];
+};
+
 export type CreateCatalogCategoryInput = {
   actorId: string;
   parentId?: string | null;
-  slug: string;
-  sortOrder?: number;
-  translations?: CatalogCategoryTranslationInput[];
+  bgSlug: string;
+  enSlug: string;
+  translations: CatalogCategoryTranslationInput[];
   specifications?: CatalogSpecificationInput[];
 };
 
@@ -165,8 +185,8 @@ export type UpdateCatalogCategoryInput = {
   actorId: string;
   categoryId: string;
   expectedUpdatedAt: string;
-  slug: string;
-  sortOrder: number;
+  bgSlug: string;
+  enSlug: string;
 };
 
 export type CreateCatalogProductInput = {
@@ -277,10 +297,12 @@ async function nextCategorySortOrder(
 async function assertCategorySlugAvailable(
   transaction: CatalogTransaction,
   parentId: string | null,
+  locale: "bg" | "en",
   slug: string,
   excludedCategoryId?: string,
 ) {
-  const predicates = [categoryParentPredicate(parentId), eq(catalogCategory.slug, slug)];
+  const column = locale === "bg" ? catalogCategory.bgSlug : catalogCategory.enSlug;
+  const predicates = [categoryParentPredicate(parentId), eq(column, slug)];
 
   if (excludedCategoryId) {
     predicates.push(ne(catalogCategory.id, excludedCategoryId));
@@ -294,21 +316,20 @@ async function assertCategorySlugAvailable(
     .for("update");
 
   if (conflict) {
-    throw new CatalogManagementError("SLUG_CONFLICT");
+    throw new CatalogManagementError("SLUG_CONFLICT", { locale });
   }
 }
 
-function isCategorySlugConstraintError(error: unknown) {
-  if (typeof error !== "object" || error === null) return false;
+function categorySlugConstraintLocale(error: unknown): "bg" | "en" | null {
+  if (typeof error !== "object" || error === null) return null;
 
   const code = "code" in error ? error.code : undefined;
   const constraint = "constraint" in error ? error.constraint : undefined;
 
-  return (
-    code === "23505" &&
-    (constraint === "catalog_category_root_slug_idx" ||
-      constraint === "catalog_category_sibling_slug_idx")
-  );
+  if (code !== "23505" || typeof constraint !== "string") return null;
+  if (constraint.includes("catalog_category_root_bg_slug") || constraint.includes("catalog_category_sibling_bg_slug")) return "bg";
+  if (constraint.includes("catalog_category_root_en_slug") || constraint.includes("catalog_category_sibling_en_slug")) return "en";
+  return null;
 }
 
 function normalizeCategoryTranslations(
@@ -401,6 +422,116 @@ function normalizeSpecifications(specifications: CatalogSpecificationInput[]) {
   });
 }
 
+type PersistedNormalizedCatalogSpecification = ReturnType<
+  typeof normalizeSpecifications
+>[number] & {
+  id?: string;
+  options: Array<
+    ReturnType<typeof normalizeSpecifications>[number]["options"][number] & {
+      id?: string;
+    }
+  >;
+};
+
+const bulgarianTransliteration: Record<string, string> = {
+  а: "a",
+  б: "b",
+  в: "v",
+  г: "g",
+  д: "d",
+  е: "e",
+  ж: "zh",
+  з: "z",
+  и: "i",
+  й: "y",
+  к: "k",
+  л: "l",
+  м: "m",
+  н: "n",
+  о: "o",
+  п: "p",
+  р: "r",
+  с: "s",
+  т: "t",
+  у: "u",
+  ф: "f",
+  х: "h",
+  ц: "ts",
+  ч: "ch",
+  ш: "sh",
+  щ: "sht",
+  ъ: "a",
+  ь: "y",
+  ю: "yu",
+  я: "ya",
+};
+
+function generatedStableKeySource(value: string) {
+  const transliterated = Array.from(value.trim().toLocaleLowerCase("bg-BG"))
+    .map((character) => bulgarianTransliteration[character] ?? character)
+    .join("");
+
+  return transliterated
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80)
+    .replace(/-+$/g, "");
+}
+
+function uniqueGeneratedStableKey(
+  label: string,
+  reserved: Set<string>,
+  fallbackPrefix: "specification" | "option",
+) {
+  const source =
+    generatedStableKeySource(label) ||
+    `${fallbackPrefix}-${randomUUID().slice(0, 8)}`;
+  let suffix = 1;
+  let candidate = source;
+
+  while (reserved.has(candidate)) {
+    suffix += 1;
+    const suffixText = `-${suffix}`;
+    candidate = `${source.slice(0, 80 - suffixText.length).replace(/-+$/g, "")}${suffixText}`;
+  }
+
+  reserved.add(candidate);
+  return validateStableKey(candidate);
+}
+
+function bulgarianSpecificationLabel(
+  translations: CatalogSpecificationEditorInput["translations"],
+) {
+  return translations.find(({ locale }) => locale === "bg")?.label.trim() ?? "";
+}
+
+function assertCompleteEditorSpecifications(
+  specifications: CatalogSpecificationEditorInput[],
+) {
+  for (const specification of specifications) {
+    assertUniqueLocales(specification.translations);
+    if (!hasAllCatalogLocales(specification.translations)) {
+      throw new CatalogManagementError("INVALID_INPUT");
+    }
+
+    if (
+      specification.valueType === "selection" &&
+      specification.options.length === 0
+    ) {
+      throw new CatalogManagementError("INVALID_INPUT");
+    }
+
+    for (const option of specification.options) {
+      assertUniqueLocales(option.translations);
+      if (!hasAllCatalogLocales(option.translations)) {
+        throw new CatalogManagementError("INVALID_INPUT");
+      }
+    }
+  }
+}
+
 function normalizeMedia(media: CatalogProductMediaInput[]) {
   const references = new Set<string>();
   const orders = new Set<number>();
@@ -452,10 +583,10 @@ async function insertCategoryTranslations(
 async function insertCategorySpecifications(
   transaction: CatalogTransaction,
   categoryId: string,
-  specifications: ReturnType<typeof normalizeSpecifications>,
+  specifications: PersistedNormalizedCatalogSpecification[],
 ) {
   for (const specification of specifications) {
-    const specificationId = randomUUID();
+    const specificationId = specification.id ?? randomUUID();
     await transaction.insert(catalogSpecification).values({
       id: specificationId,
       categoryId,
@@ -477,7 +608,7 @@ async function insertCategorySpecifications(
     }
 
     for (const option of specification.options) {
-      const optionId = randomUUID();
+      const optionId = option.id ?? randomUUID();
       await transaction.insert(catalogSpecificationOption).values({
         id: optionId,
         specificationId,
@@ -566,8 +697,11 @@ export async function getManagedCatalogCategoryWorkspace(
     return {
       id: category.id,
       parentId: category.parentId,
-      slug: category.slug,
-      name: displayTranslation?.name ?? category.slug,
+      bgSlug: category.bgSlug,
+      enSlug: category.enSlug,
+      slug: catalogCategorySlugForLocale(category, locale),
+      name:
+        displayTranslation?.name ?? catalogCategorySlugForLocale(category, locale),
       sortOrder: category.sortOrder,
       status: catalogCategoryStatus(category.status),
       updatedAt: category.updatedAt.toISOString(),
@@ -634,7 +768,9 @@ export async function getManagedCatalogCategoryWorkspace(
   const selected: ManagedCatalogCategoryDetail = {
     id: aggregate.category.id,
     parentId: aggregate.category.parentId,
-    slug: aggregate.category.slug,
+    bgSlug: aggregate.category.bgSlug,
+    enSlug: aggregate.category.enSlug,
+    slug: catalogCategorySlugForLocale(aggregate.category, locale),
     sortOrder: aggregate.category.sortOrder,
     status: catalogCategoryStatus(aggregate.category.status),
     publishedAt: aggregate.category.publishedAt?.toISOString() ?? null,
@@ -668,8 +804,12 @@ export async function getManagedCatalogCategoryWorkspace(
 
 export async function createCatalogCategory(input: CreateCatalogCategoryInput) {
   if (input.parentId) assertIdentifier(input.parentId);
-  const slug = validateSlug(input.slug);
-  const translations = normalizeCategoryTranslations(input.translations ?? []);
+  const bgSlug = validateSlug(input.bgSlug);
+  const enSlug = validateSlug(input.enSlug);
+  const translations = normalizeCategoryTranslations(input.translations);
+  if (!hasAllCatalogLocales(translations)) {
+    throw new CatalogManagementError("INVALID_INPUT");
+  }
   const specifications = normalizeSpecifications(input.specifications ?? []);
 
   return db.transaction(async (transaction) => {
@@ -678,19 +818,17 @@ export async function createCatalogCategory(input: CreateCatalogCategoryInput) {
       await assertCategoryExists(transaction, input.parentId, true);
     }
 
-    await assertCategorySlugAvailable(
+    await assertCategorySlugAvailable(transaction, input.parentId ?? null, "bg", bgSlug);
+    await assertCategorySlugAvailable(transaction, input.parentId ?? null, "en", enSlug);
+    const sortOrder = await nextCategorySortOrder(
       transaction,
       input.parentId ?? null,
-      slug,
     );
-    const sortOrder =
-      input.sortOrder === undefined
-        ? await nextCategorySortOrder(transaction, input.parentId ?? null)
-        : validateNonNegativeInteger(input.sortOrder);
 
     let created: {
       id: string;
-      slug: string;
+      bgSlug: string;
+      enSlug: string;
       status: string;
       updatedAt: Date;
     };
@@ -700,18 +838,21 @@ export async function createCatalogCategory(input: CreateCatalogCategoryInput) {
         .insert(catalogCategory)
         .values({
           parentId: input.parentId ?? null,
-          slug,
+          bgSlug,
+          enSlug,
           sortOrder,
         })
         .returning({
           id: catalogCategory.id,
-          slug: catalogCategory.slug,
+          bgSlug: catalogCategory.bgSlug,
+          enSlug: catalogCategory.enSlug,
           status: catalogCategory.status,
           updatedAt: catalogCategory.updatedAt,
         });
     } catch (error) {
-      if (isCategorySlugConstraintError(error)) {
-        throw new CatalogManagementError("SLUG_CONFLICT");
+      const locale = categorySlugConstraintLocale(error);
+      if (locale) {
+        throw new CatalogManagementError("SLUG_CONFLICT", { locale });
       }
 
       throw error;
@@ -726,8 +867,8 @@ export async function createCatalogCategory(input: CreateCatalogCategoryInput) {
 
 export async function updateCatalogCategory(input: UpdateCatalogCategoryInput) {
   assertIdentifier(input.categoryId);
-  const slug = validateSlug(input.slug);
-  const sortOrder = validateNonNegativeInteger(input.sortOrder);
+  const bgSlug = validateSlug(input.bgSlug);
+  const enSlug = validateSlug(input.enSlug);
 
   return db.transaction(async (transaction) => {
     await assertCatalogActor(transaction, input.actorId, "catalog:manage");
@@ -736,21 +877,21 @@ export async function updateCatalogCategory(input: UpdateCatalogCategoryInput) {
     if (!category) throw new CatalogManagementError("NOT_FOUND");
     assertFresh(category.updatedAt, input.expectedUpdatedAt);
 
-    if (category.publishedAt && slug !== category.slug) {
+    if (
+      category.publishedAt &&
+      (bgSlug !== category.bgSlug || enSlug !== category.enSlug)
+    ) {
       throw new CatalogManagementError("SLUG_IMMUTABLE");
     }
 
-    await assertCategorySlugAvailable(
-      transaction,
-      category.parentId,
-      slug,
-      category.id,
-    );
+    await assertCategorySlugAvailable(transaction, category.parentId, "bg", bgSlug, category.id);
+    await assertCategorySlugAvailable(transaction, category.parentId, "en", enSlug, category.id);
 
     const updatedAt = new Date();
     let updated: {
       id: string;
-      slug: string;
+      bgSlug: string;
+      enSlug: string;
       status: string;
       updatedAt: Date;
     };
@@ -758,17 +899,19 @@ export async function updateCatalogCategory(input: UpdateCatalogCategoryInput) {
     try {
       [updated] = await transaction
         .update(catalogCategory)
-        .set({ slug, sortOrder, updatedAt })
+        .set({ bgSlug, enSlug, updatedAt })
         .where(eq(catalogCategory.id, category.id))
         .returning({
           id: catalogCategory.id,
-          slug: catalogCategory.slug,
+          bgSlug: catalogCategory.bgSlug,
+          enSlug: catalogCategory.enSlug,
           status: catalogCategory.status,
           updatedAt: catalogCategory.updatedAt,
         });
     } catch (error) {
-      if (isCategorySlugConstraintError(error)) {
-        throw new CatalogManagementError("SLUG_CONFLICT");
+      const locale = categorySlugConstraintLocale(error);
+      if (locale) {
+        throw new CatalogManagementError("SLUG_CONFLICT", { locale });
       }
 
       throw error;
@@ -942,7 +1085,15 @@ export async function moveCatalogCategory(input: {
     await assertCategorySlugAvailable(
       transaction,
       input.parentId,
-      category.slug,
+      "bg",
+      category.bgSlug,
+      category.id,
+    );
+    await assertCategorySlugAvailable(
+      transaction,
+      input.parentId,
+      "en",
+      category.enSlug,
       category.id,
     );
     const sortOrder = await nextCategorySortOrder(
@@ -958,8 +1109,9 @@ export async function moveCatalogCategory(input: {
         .set({ parentId: input.parentId, sortOrder, updatedAt })
         .where(eq(catalogCategory.id, category.id));
     } catch (error) {
-      if (isCategorySlugConstraintError(error)) {
-        throw new CatalogManagementError("SLUG_CONFLICT");
+      const locale = categorySlugConstraintLocale(error);
+      if (locale) {
+        throw new CatalogManagementError("SLUG_CONFLICT", { locale });
       }
 
       throw error;
@@ -998,6 +1150,9 @@ export async function reorderCatalogCategories(input: {
       .for("update");
 
     if (rows.length !== ids.length) throw new CatalogManagementError("NOT_FOUND");
+    if (new Set(rows.map(({ parentId }) => parentId)).size !== 1) {
+      throw new CatalogManagementError("INVALID_INPUT");
+    }
     const rowById = new Map(rows.map((row) => [row.id, row]));
     const updatedAt = new Date();
 
@@ -1026,6 +1181,9 @@ export async function replaceCatalogCategoryTranslations(input: {
 }) {
   assertIdentifier(input.categoryId);
   const translations = normalizeCategoryTranslations(input.translations);
+  if (!hasAllCatalogLocales(translations)) {
+    throw new CatalogManagementError("INVALID_INPUT");
+  }
 
   return db.transaction(async (transaction) => {
     await assertCatalogActor(transaction, input.actorId, "catalog:manage");
@@ -1033,14 +1191,41 @@ export async function replaceCatalogCategoryTranslations(input: {
     if (!category) throw new CatalogManagementError("NOT_FOUND");
     assertFresh(category.updatedAt, input.expectedUpdatedAt);
 
-    if (category.status === "published" && !hasAllCatalogLocales(translations)) {
-      throw new CatalogManagementError("PUBLICATION_INVALID");
-    }
+    const existingTranslations = await transaction
+      .select()
+      .from(catalogCategoryTranslation)
+      .where(eq(catalogCategoryTranslation.categoryId, category.id));
+    const existingByLocale = new Map(
+      existingTranslations.map((translation) => [translation.locale, translation]),
+    );
+    const submittedByLocale = new Map(
+      input.translations.map((translation) => [translation.locale, translation]),
+    );
+    const translationsToPersist = translations.map((translation) => {
+      const existing = existingByLocale.get(translation.locale);
+      const submitted = submittedByLocale.get(translation.locale);
+
+      return {
+        ...translation,
+        detailedContent:
+          submitted?.detailedContent === undefined
+            ? existing?.detailedContent ?? null
+            : translation.detailedContent,
+        seoTitle:
+          submitted?.seoTitle === undefined
+            ? existing?.seoTitle ?? null
+            : translation.seoTitle,
+      };
+    });
 
     await transaction
       .delete(catalogCategoryTranslation)
       .where(eq(catalogCategoryTranslation.categoryId, category.id));
-    await insertCategoryTranslations(transaction, category.id, translations);
+    await insertCategoryTranslations(
+      transaction,
+      category.id,
+      translationsToPersist,
+    );
     const updatedAt = new Date();
     await transaction
       .update(catalogCategory)
@@ -1054,10 +1239,10 @@ export async function replaceCatalogCategorySpecifications(input: {
   actorId: string;
   categoryId: string;
   expectedUpdatedAt: string;
-  specifications: CatalogSpecificationInput[];
+  specifications: CatalogSpecificationEditorInput[];
 }) {
   assertIdentifier(input.categoryId);
-  const specifications = normalizeSpecifications(input.specifications);
+  assertCompleteEditorSpecifications(input.specifications);
 
   return db.transaction(async (transaction) => {
     await assertCatalogActor(transaction, input.actorId, "catalog:manage");
@@ -1066,10 +1251,127 @@ export async function replaceCatalogCategorySpecifications(input: {
     assertFresh(category.updatedAt, input.expectedUpdatedAt);
 
     const existingSpecifications = await transaction
-      .select({ id: catalogSpecification.id })
+      .select({ id: catalogSpecification.id, key: catalogSpecification.key })
       .from(catalogSpecification)
       .where(eq(catalogSpecification.categoryId, category.id));
     const existingIds = existingSpecifications.map(({ id }) => id);
+    const existingOptions = existingIds.length
+      ? await transaction
+          .select({
+            id: catalogSpecificationOption.id,
+            specificationId: catalogSpecificationOption.specificationId,
+            code: catalogSpecificationOption.code,
+          })
+          .from(catalogSpecificationOption)
+          .where(
+            inArray(catalogSpecificationOption.specificationId, existingIds),
+          )
+      : [];
+    const specificationsById = new Map(
+      existingSpecifications.map((specification) => [
+        specification.id,
+        specification,
+      ]),
+    );
+    const optionsById = new Map(
+      existingOptions.map((option) => [option.id, option]),
+    );
+    const submittedSpecificationIds = new Set<string>();
+    const submittedOptionIds = new Set<string>();
+    const reservedSpecificationKeys = new Set(
+      existingSpecifications.map(({ key }) => key),
+    );
+    const resolvedSpecifications = input.specifications.map((specification) => {
+      const existingSpecification = specification.id
+        ? specificationsById.get(specification.id)
+        : undefined;
+
+      if (
+        (specification.id && !existingSpecification) ||
+        (specification.id && submittedSpecificationIds.has(specification.id))
+      ) {
+        throw new CatalogManagementError("INVALID_INPUT");
+      }
+
+      if (specification.id) submittedSpecificationIds.add(specification.id);
+      const bgLabel = bulgarianSpecificationLabel(specification.translations);
+      if (!existingSpecification && !bgLabel) {
+        throw new CatalogManagementError("INVALID_INPUT");
+      }
+
+      const key =
+        existingSpecification?.key ??
+        uniqueGeneratedStableKey(
+          bgLabel,
+          reservedSpecificationKeys,
+          "specification",
+        );
+      const reservedOptionCodes = new Set(
+        existingOptions
+          .filter(
+            ({ specificationId }) =>
+              specificationId === existingSpecification?.id,
+          )
+          .map(({ code }) => code),
+      );
+      const options = specification.options.map((option) => {
+        const existingOption = option.id
+          ? optionsById.get(option.id)
+          : undefined;
+
+        if (
+          (option.id && !existingOption) ||
+          (existingOption &&
+            existingOption.specificationId !== existingSpecification?.id) ||
+          (option.id && submittedOptionIds.has(option.id))
+        ) {
+          throw new CatalogManagementError("INVALID_INPUT");
+        }
+
+        if (option.id) submittedOptionIds.add(option.id);
+        const optionBgLabel = bulgarianSpecificationLabel(option.translations);
+        if (!existingOption && !optionBgLabel) {
+          throw new CatalogManagementError("INVALID_INPUT");
+        }
+
+        return {
+          id: existingOption?.id,
+          code:
+            existingOption?.code ??
+            uniqueGeneratedStableKey(
+              optionBgLabel,
+              reservedOptionCodes,
+              "option",
+            ),
+          displayOrder: option.displayOrder,
+          translations: option.translations,
+        };
+      });
+
+      return {
+        id: existingSpecification?.id,
+        key,
+        valueType: specification.valueType,
+        unit: specification.valueType === "number" ? specification.unit : null,
+        isRequired: false,
+        isFilterable: true,
+        displayOrder: specification.displayOrder,
+        translations: specification.translations,
+        options: specification.valueType === "selection" ? options : [],
+      };
+    });
+    const specifications: PersistedNormalizedCatalogSpecification[] =
+      normalizeSpecifications(resolvedSpecifications).map(
+        (specification, specificationIndex) => ({
+          ...specification,
+          id: resolvedSpecifications[specificationIndex].id,
+          options: specification.options.map((option, optionIndex) => ({
+            ...option,
+            id: resolvedSpecifications[specificationIndex].options[optionIndex]
+              ?.id,
+          })),
+        }),
+      );
     const [dependentValue] = existingIds.length
       ? await transaction
           .select({ productId: catalogProductSpecificationValue.productId })
@@ -1119,13 +1421,7 @@ export async function replaceCatalogCategorySpecifications(input: {
     }
 
     if (existingIds.length > 0) {
-      const options = await transaction
-        .select({ id: catalogSpecificationOption.id })
-        .from(catalogSpecificationOption)
-        .where(
-          inArray(catalogSpecificationOption.specificationId, existingIds),
-        );
-      const optionIds = options.map(({ id }) => id);
+      const optionIds = existingOptions.map(({ id }) => id);
 
       if (optionIds.length > 0) {
         await transaction

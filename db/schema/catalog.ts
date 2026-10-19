@@ -21,7 +21,8 @@ export const catalogCategory = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
     parentId: uuid("parent_id"),
-    slug: text("slug").notNull(),
+    bgSlug: text("bg_slug").notNull(),
+    enSlug: text("en_slug").notNull(),
     sortOrder: integer("sort_order").default(0).notNull(),
     status: text("status").default("draft").notNull(),
     publishedAt: timestamp("published_at"),
@@ -38,11 +39,17 @@ export const catalogCategory = pgTable(
       columns: [table.parentId],
       foreignColumns: [table.id],
     }).onDelete("restrict"),
-    uniqueIndex("catalog_category_root_slug_idx")
-      .on(table.slug)
+    uniqueIndex("catalog_category_root_bg_slug_idx")
+      .on(table.bgSlug)
       .where(sql`${table.parentId} IS NULL`),
-    uniqueIndex("catalog_category_sibling_slug_idx")
-      .on(table.parentId, table.slug)
+    uniqueIndex("catalog_category_sibling_bg_slug_idx")
+      .on(table.parentId, table.bgSlug)
+      .where(sql`${table.parentId} IS NOT NULL`),
+    uniqueIndex("catalog_category_root_en_slug_idx")
+      .on(table.enSlug)
+      .where(sql`${table.parentId} IS NULL`),
+    uniqueIndex("catalog_category_sibling_en_slug_idx")
+      .on(table.parentId, table.enSlug)
       .where(sql`${table.parentId} IS NOT NULL`),
     index("catalog_category_parent_order_idx").on(
       table.parentId,
@@ -55,8 +62,12 @@ export const catalogCategory = pgTable(
       table.sortOrder,
     ),
     check(
-      "catalog_category_slug_check",
-      sql`char_length(${table.slug}) BETWEEN 1 AND 120 AND ${table.slug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'`,
+      "catalog_category_bg_slug_check",
+      sql`char_length(${table.bgSlug}) BETWEEN 1 AND 120 AND ${table.bgSlug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'`,
+    ),
+    check(
+      "catalog_category_en_slug_check",
+      sql`char_length(${table.enSlug}) BETWEEN 1 AND 120 AND ${table.enSlug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'`,
     ),
     check("catalog_category_sort_order_check", sql`${table.sortOrder} >= 0`),
     check(

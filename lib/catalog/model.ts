@@ -135,6 +135,13 @@ export function isCatalogLocale(value: unknown): value is CatalogLocale {
   );
 }
 
+export function catalogCategorySlugForLocale(
+  slugs: { bgSlug: string; enSlug: string },
+  locale: CatalogLocale,
+) {
+  return locale === "bg" ? slugs.bgSlug : slugs.enSlug;
+}
+
 export function isUuid(value: string) {
   return uuidPattern.test(value);
 }

@@ -26,6 +26,7 @@ import {
   user,
 } from "@/db/schema";
 import {
+  catalogCategorySlugForLocale,
   isCatalogLocale,
   publicVatInclusiveMinor,
   type CatalogLocale,
@@ -265,7 +266,8 @@ export async function listPublishedCategorySummaries(
     .select({
       id: catalogCategory.id,
       parentId: catalogCategory.parentId,
-      slug: catalogCategory.slug,
+      bgSlug: catalogCategory.bgSlug,
+      enSlug: catalogCategory.enSlug,
       sortOrder: catalogCategory.sortOrder,
     })
     .from(catalogCategory)
@@ -318,7 +320,7 @@ export async function listPublishedCategorySummaries(
         ? [{
             id: category.id,
             parentId: category.parentId,
-            slug: category.slug,
+            slug: catalogCategorySlugForLocale(category, locale),
             name: translation.name,
             introduction: translation.introduction,
             sortOrder: category.sortOrder,
