@@ -64,6 +64,7 @@
       "description": "Sitenin yönetim araçları için merkezi çalışma alanı.",
       "navigation": {
         "overview": "Genel bakış",
+        "catalog": "Katalog",
         "users": "Kullanıcılar"
       },
       "overview": {
@@ -192,6 +193,51 @@
           "rateLimited": "Kısa süre önce bir e-posta gönderildi. Tekrar denemeden önce biraz bekleyin.",
           "emailExists": "Bu e-posta adresiyle bir hesap zaten mevcut.",
           "deliveryFailed": "E-posta teslim edilemedi. Daha sonra tekrar deneyin."
+        }
+      },
+      "catalog": {
+        "title": "Katalog",
+        "description": "Kategorileri, yerelleştirilmiş içeriği, özellikleri ve yayın durumunu yönetin.",
+        "readOnly": "Salt okunur erişim. Kategorileri inceleyebilirsiniz ancak değiştiremezsiniz.",
+        "status": { "draft": "Taslak", "published": "Yayında", "archived": "Arşivlendi" },
+        "tree": { "title": "Kategori ağacı", "empty": "Henüz kategori yok.", "createRoot": "Kök kategori oluştur", "addChild": "Alt kategori ekle", "openCategory": "Kategoriyi aç", "moveUp": "Yukarı taşı", "moveDown": "Aşağı taşı", "back": "Kategorilere dön" },
+        "editor": { "emptyTitle": "Bir kategori seçin", "emptyDescription": "İncelemek veya düzenlemek için ağaçtan bir kategori seçin.", "sourceLanguage": "Yeni taslakların kaynak dili Bulgarcadır.", "complete": "Tamamlandı", "incomplete": "Eksik" },
+        "sections": { "general": "Genel", "content": "İçerik ve SEO", "specifications": "Özellikler" },
+        "fields": {
+          "slug": { "label": "Slug", "help": "Kararlı URL bölümü. Küçük Latin harfleri, rakamlar ve kısa çizgi kullanın." },
+          "parent": { "label": "Üst kategori", "help": "Bu kategorinin katalog ağacındaki yerini belirler." },
+          "order": { "label": "Sıra", "help": "Aynı üst kategori altındaki görüntüleme sırası. Aynı değerler kullanılabilir." },
+          "name": { "label": "Ad", "help": "Kategori ağacında ve gelecekteki kategori sayfası başlığında gösterilir." },
+          "introduction": { "label": "Giriş", "help": "Kategoriyi tanıtması amaçlanan kısa metin." },
+          "detailedContent": { "label": "Ayrıntılı içerik", "help": "Gelecekteki kategori sayfası için uzun açıklama." },
+          "seoTitle": { "label": "SEO başlığı", "help": "Arama sonucu başlığı için tasarlanmıştır. Yaklaşık 50–60 yararlı karakter hedefleyin; anahtar kelime doldurmayın." },
+          "metaDescription": { "label": "Meta açıklaması", "help": "Arama sonucu özeti için tasarlanmıştır. 140–160 net karakter hedefleyin; sıralama garantisi vermez." },
+          "productTitleGuidance": { "label": "Ürün başlığı rehberi", "help": "Bu kategorideki ürünleri adlandıran yazarlar için dahili rehberdir; herkese açık kategori metni değildir." }
+        },
+        "seoPreview": { "title": "Örnek arama önizlemesi", "note": "Arama motorları farklı metin gösterebilir.", "emptyTitle": "Kategori başlığı", "emptyDescription": "Kategorinin aramada nasıl görünebileceğini önizlemek için net bir özet ekleyin." },
+        "actions": { "save": "Bölümü kaydet", "saving": "Kaydediliyor…", "move": "Kategoriyi taşı", "publish": "Yayınla", "unpublish": "Yayından kaldır", "archive": "Arşivle", "restore": "Taslak olarak geri yükle", "working": "İşleniyor…", "reload": "Güncel sürümü yükle" },
+        "create": { "title": "Kategori oluştur", "description": "Önce Bulgarca bir taslak oluşturun. Kategori seçilen üst kategorinin sonuna eklenir.", "parentLabel": "Üst kategori", "root": "Katalog kökü", "name": "Bulgarca ad", "introduction": "Bulgarca giriş", "slug": "Slug", "cancel": "İptal", "submit": "Taslak oluştur", "submitting": "Oluşturuluyor…" },
+        "move": { "title": "Kategoriyi taşı", "description": "Yeni bir üst kategori seçin. Kategori oraya eklenir; kardeşler yeniden numaralandırılmaz.", "parent": "Yeni üst kategori", "root": "Katalog kökü", "cancel": "İptal", "submit": "Kategoriyi taşı" },
+        "lifecycle": {
+          "publish": { "title": "Bu kategori yayınlansın mı?", "description": "Yayınlama yalnızca kategori ve özellikleri tüm dillerde hazır olduğunda mümkündür.", "confirm": "Yayınla" },
+          "unpublish": { "title": "Bu kategori yayından kaldırılsın mı?", "description": "Kategori taslağa döner. Mevcut bağımlılık kuralları geçerlidir.", "confirm": "Yayından kaldır" },
+          "archive": { "title": "Bu kategori arşivlensin mi?", "description": "Kategori saklanır ancak etkin kullanımdan çıkarılır. Bağımlılık kuralları geçerlidir.", "confirm": "Arşivle" },
+          "restore": { "title": "Bu kategori geri yüklensin mi?", "description": "Kategori taslak olarak geri yüklenir.", "confirm": "Geri yükle" },
+          "cancel": "İptal"
+        },
+        "readiness": { "title": "Yayın hazırlığı", "ready": "Yayınlamaya hazır.", "blocked": "Yayınlamadan önce şunları düzeltin:", "messages": { "PARENT_NOT_PUBLISHED": "Önce üst kategori yayınlanmalıdır.", "MISSING_CATEGORY_TRANSLATION": "{{locale}} için ad ve giriş ekleyin.", "MISSING_SPECIFICATION_TRANSLATION": "{{specification}} özelliğine {{locale}} etiketi ekleyin.", "SELECTION_OPTIONS_REQUIRED": "{{specification}} özelliğine en az bir seçim seçeneği ekleyin.", "MISSING_OPTION_TRANSLATION": "{{specification}} içindeki {{option}} seçeneğine {{locale}} etiketi ekleyin." } },
+        "specifications": {
+          "empty": "Henüz özellik yok.", "add": "Özellik ekle", "remove": "Özelliği kaldır", "moveUp": "Yukarı taşı", "moveDown": "Aşağı taşı",
+          "key": { "label": "Dahili anahtar", "help": "Dahili kullanım için kararlı anahtar. Küçük harf, rakam ve kısa çizgi kullanın." },
+          "type": { "label": "Değer türü", "help": "Gelecekteki ürün değerlerinin nasıl girilip doğrulanacağını belirler." },
+          "unit": { "label": "Standart birim", "help": "kW veya kg gibi isteğe bağlı standart birim." },
+          "required": "Zorunlu", "requiredHelp": "Gelecekteki ürünler bu değeri sağlamalıdır.", "filterable": "Filtrelenebilir", "filterableHelp": "Katalog filtresi olarak kullanılabilir.", "label": "Yerelleştirilmiş etiket", "options": "Seçim seçenekleri", "addOption": "Seçenek ekle", "removeOption": "Seçeneği kaldır", "optionCode": "Kararlı seçenek kodu", "optionLabel": "Yerelleştirilmiş seçenek etiketi", "confirmRemove": "Bu özellik kaldırılsın mı?", "confirmClearOptions": "Türü değiştirmek tüm seçenekleri kaldırır. Devam edilsin mi?",
+          "types": { "text": "Metin", "number": "Sayı", "boolean": "Evet/hayır", "selection": "Seçim" }
+        },
+        "unsaved": { "title": "Kaydedilmemiş değişiklikler", "message": "Bu kategoride kaydedilmemiş değişiklikler var. Devam edip bunları atmak istiyor musunuz?" },
+        "validation": { "required": "Dilde içerik varsa bu alan zorunludur." },
+        "results": {
+          "CREATED": "Taslak kategori oluşturuldu.", "SAVED": "Bölüm kaydedildi.", "MOVED": "Kategori yeni üst kategorinin sonuna taşındı.", "REORDERED": "Kategori sırası güncellendi.", "PUBLISHED": "Kategori yayınlandı.", "UNPUBLISHED": "Kategori yayından kaldırıldı.", "ARCHIVED": "Kategori arşivlendi.", "RESTORED": "Kategori taslak olarak geri yüklendi.", "CYCLE": "Bu taşıma kategori ağacında döngü oluşturur.", "DEPENDENCY_EXISTS": "Değişiklik bağımlı katalog verileri nedeniyle engellendi.", "PUBLISHED_DEPENDENCY_EXISTS": "Önce yayınlanmış alt kategorileri ve ürünleri yayından kaldırın.", "ACTIVE_DEPENDENCY_EXISTS": "Önce bu daldaki arşivlenmemiş tüm alt kategorileri ve ürünleri arşivleyin.", "ARCHIVED_ANCESTOR": "Bu kategoriden önce arşivlenmiş üst kategoriyi geri yükleyin.", "FORBIDDEN": "Artık bu işlemi yapma izniniz yok.", "INVALID_INPUT": "Girilen değerleri gözden geçirip yeniden deneyin.", "NOT_FOUND": "Kategori artık mevcut değil.", "PUBLICATION_INVALID": "Kategori yayınlamaya hazır değil.", "SLUG_CONFLICT": "Aynı seviyedeki başka bir kategori bu slug değerini kullanıyor.", "SLUG_IMMUTABLE": "Slug ilk yayından sonra değiştirilemez.", "STALE": "Kayıt siz açtıktan sonra değişti. Girdiniz korundu; yeniden denemeden önce güncel sürümü yükleyin."
         }
       }
     },

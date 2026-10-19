@@ -64,6 +64,7 @@
       "description": "A central workspace for the site's administration tools.",
       "navigation": {
         "overview": "Overview",
+        "catalog": "Catalog",
         "users": "Users"
       },
       "overview": {
@@ -192,6 +193,54 @@
           "rateLimited": "An email was sent recently. Wait a moment before trying again.",
           "emailExists": "An account with this email already exists.",
           "deliveryFailed": "The email could not be delivered. Try again later."
+        }
+      },
+      "catalog": {
+        "title": "Catalog",
+        "description": "Organize categories, localized content, specifications, and publication status.",
+        "readOnly": "Read-only access. You can inspect catalog categories but cannot change them.",
+        "status": { "draft": "Draft", "published": "Published", "archived": "Archived" },
+        "tree": { "title": "Category tree", "empty": "No categories yet.", "createRoot": "Create root category", "addChild": "Add subcategory", "openCategory": "Open category", "moveUp": "Move up", "moveDown": "Move down", "back": "Back to categories" },
+        "editor": { "emptyTitle": "Select a category", "emptyDescription": "Choose a category from the tree to inspect or edit it.", "sourceLanguage": "Bulgarian is the source language for new drafts.", "complete": "Complete", "incomplete": "Incomplete" },
+        "sections": { "general": "General", "content": "Content & SEO", "specifications": "Specifications" },
+        "fields": {
+          "slug": { "label": "Slug", "help": "Stable URL segment. Use lowercase Latin letters, numbers, and hyphens." },
+          "parent": { "label": "Parent category", "help": "Where this category sits in the catalog tree." },
+          "order": { "label": "Order", "help": "Display order among categories with the same parent. Duplicate values are allowed." },
+          "name": { "label": "Name", "help": "Shown in the category tree and intended as the future category-page heading." },
+          "introduction": { "label": "Introduction", "help": "Short lead intended to introduce the category." },
+          "detailedContent": { "label": "Detailed content", "help": "Longer explanation intended for the future category page." },
+          "seoTitle": { "label": "SEO title", "help": "Intended search-result title. Aim for about 50–60 useful characters; avoid keyword stuffing." },
+          "metaDescription": { "label": "Meta description", "help": "Intended search-result summary. Aim for about 140–160 clear characters; rankings are not guaranteed." },
+          "productTitleGuidance": { "label": "Product-title guidance", "help": "Internal guidance for authors naming products in this category; it is not public category copy." }
+        },
+        "seoPreview": { "title": "Illustrative search preview", "note": "Search engines may display different text.", "emptyTitle": "Category title", "emptyDescription": "Add a clear summary to preview how this category could appear in search." },
+        "actions": { "save": "Save section", "saving": "Saving…", "move": "Move category", "publish": "Publish", "unpublish": "Unpublish", "archive": "Archive", "restore": "Restore as draft", "working": "Working…", "reload": "Reload latest" },
+        "create": { "title": "Create category", "description": "Create a Bulgarian-first draft. The category will be appended under the selected parent.", "parentLabel": "Parent", "root": "Catalog root", "name": "Bulgarian name", "introduction": "Bulgarian introduction", "slug": "Slug", "cancel": "Cancel", "submit": "Create draft", "submitting": "Creating…" },
+        "move": { "title": "Move category", "description": "Choose a new parent. The category will be appended there without renumbering siblings.", "parent": "New parent", "root": "Catalog root", "cancel": "Cancel", "submit": "Move category" },
+        "lifecycle": {
+          "publish": { "title": "Publish this category?", "description": "Publication is allowed only when the category and its specifications are ready in all languages.", "confirm": "Publish" },
+          "unpublish": { "title": "Unpublish this category?", "description": "The category will return to draft. Existing dependency rules still apply.", "confirm": "Unpublish" },
+          "archive": { "title": "Archive this category?", "description": "The category will be retained but removed from active use. Existing dependency rules still apply.", "confirm": "Archive" },
+          "restore": { "title": "Restore this category?", "description": "The category will be restored as a draft.", "confirm": "Restore" },
+          "cancel": "Cancel"
+        },
+        "readiness": {
+          "title": "Publication readiness", "ready": "Ready to publish.", "blocked": "Resolve these items before publishing:",
+          "messages": { "PARENT_NOT_PUBLISHED": "The parent category must be published first.", "MISSING_CATEGORY_TRANSLATION": "Add a name and introduction in {{locale}}.", "MISSING_SPECIFICATION_TRANSLATION": "Specification {{specification}} needs a label in {{locale}}.", "SELECTION_OPTIONS_REQUIRED": "Specification {{specification}} needs at least one selection option.", "MISSING_OPTION_TRANSLATION": "Option {{option}} in {{specification}} needs a label in {{locale}}." }
+        },
+        "specifications": {
+          "empty": "No specifications yet.", "add": "Add specification", "remove": "Remove specification", "moveUp": "Move up", "moveDown": "Move down",
+          "key": { "label": "Internal key", "help": "Stable lowercase key used internally. Use letters, numbers, and hyphens." },
+          "type": { "label": "Value type", "help": "Controls how future product values are entered and validated." },
+          "unit": { "label": "Canonical unit", "help": "Optional standard unit, for example kW or kg." },
+          "required": "Required", "requiredHelp": "Future products must provide this value.", "filterable": "Filterable", "filterableHelp": "May be used as a catalog filter.", "label": "Localized label", "options": "Selection options", "addOption": "Add option", "removeOption": "Remove option", "optionCode": "Stable option code", "optionLabel": "Localized option label", "confirmRemove": "Remove this specification?", "confirmClearOptions": "Changing type will remove all selection options. Continue?",
+          "types": { "text": "Text", "number": "Number", "boolean": "Boolean", "selection": "Selection" }
+        },
+        "unsaved": { "title": "Unsaved changes", "message": "You have unsaved changes in this category. Continue and discard them?" },
+        "validation": { "required": "This field is required when the language contains content." },
+        "results": {
+          "CREATED": "The draft category was created.", "SAVED": "The section was saved.", "MOVED": "The category was moved and appended under its new parent.", "REORDERED": "The category order was updated.", "PUBLISHED": "The category was published.", "UNPUBLISHED": "The category was unpublished.", "ARCHIVED": "The category was archived.", "RESTORED": "The category was restored as a draft.", "CYCLE": "That move would create a cycle in the category tree.", "DEPENDENCY_EXISTS": "This change is blocked by dependent catalog data.", "PUBLISHED_DEPENDENCY_EXISTS": "Unpublish the category's published children and products first.", "ACTIVE_DEPENDENCY_EXISTS": "Archive every non-archived descendant and product in this branch first.", "ARCHIVED_ANCESTOR": "Restore the archived ancestor before restoring this category.", "FORBIDDEN": "You no longer have permission to perform this action.", "INVALID_INPUT": "Review the entered values and try again.", "NOT_FOUND": "The category no longer exists.", "PUBLICATION_INVALID": "The category is not ready to publish.", "SLUG_CONFLICT": "A sibling category already uses this slug.", "SLUG_IMMUTABLE": "The slug cannot change after the category has first been published.", "STALE": "This record changed after you opened it. Your input is preserved; reload the latest version before retrying."
         }
       }
     },

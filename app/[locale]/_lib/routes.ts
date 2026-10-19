@@ -4,6 +4,7 @@ export const supportedLocales = ["bg", "en", "tr", "uk"] as const;
 export type SupportedLocale = (typeof supportedLocales)[number];
 
 export const dashboardRouteSlug = "dashboard";
+export const dashboardCatalogRouteSlug = "dashboard/catalog";
 export const dashboardUsersRouteSlug = "dashboard/users";
 export const accessDeniedRouteSlug = "access-denied";
 
@@ -171,6 +172,7 @@ export function isLocaleEquivalentSlug(slug: string) {
     slug === "" ||
     slug === "cart" ||
     slug === dashboardRouteSlug ||
+    slug === dashboardCatalogRouteSlug ||
     slug === dashboardUsersRouteSlug ||
     slug === accessDeniedRouteSlug ||
     routeDefinitions.some((route) => route.slug === slug) ||
@@ -309,7 +311,9 @@ export function safeAuthReturnPath(
     : pathname;
   const slug = pathWithoutLocale.replace(/^\/+|\/+$/gu, "");
 
-  return slug === dashboardRouteSlug || slug === dashboardUsersRouteSlug
+  return slug === dashboardRouteSlug ||
+    slug === dashboardCatalogRouteSlug ||
+    slug === dashboardUsersRouteSlug
     ? safePath
     : safePublicReturnPath(safePath, locale);
 }

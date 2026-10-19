@@ -2,7 +2,7 @@ import "server-only";
 
 import { randomUUID } from "node:crypto";
 
-import { and, asc, eq, inArray, ne, or } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, ne, or } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
@@ -24,6 +24,7 @@ import {
   assertUniqueLocales,
   catalogLocales,
   hasAllCatalogLocales,
+  isCatalogLocale,
   isUuid,
   normalizeBrand,
   normalizeGtin,
@@ -39,12 +40,14 @@ import {
   validateStableKey,
   type CatalogAvailability,
   type CatalogCategoryTranslationInput,
+  type CatalogLocale,
   type CatalogPriceInput,
   type CatalogProductMediaInput,
   type CatalogProductSpecificationValueInput,
   type CatalogProductTranslationInput,
   type CatalogSalesMode,
   type CatalogSpecificationInput,
+  type CatalogSpecificationValueType,
 } from "@/lib/catalog/model";
 import {
   getCatalogActorRole,
@@ -57,27 +60,103 @@ import {
 import { hasPermission, type AppPermission } from "@/lib/authorization";
 
 export type CatalogManagementErrorCode =
+  | "ACTIVE_DEPENDENCY_EXISTS"
+  | "ARCHIVED_ANCESTOR"
   | "CYCLE"
   | "DEPENDENCY_EXISTS"
   | "FORBIDDEN"
   | "INVALID_INPUT"
   | "NOT_FOUND"
   | "PUBLICATION_INVALID"
+  | "PUBLISHED_DEPENDENCY_EXISTS"
+  | "SLUG_CONFLICT"
   | "SLUG_IMMUTABLE"
   | "STALE";
 
 export class CatalogManagementError extends Error {
-  constructor(readonly code: CatalogManagementErrorCode) {
+  constructor(
+    readonly code: CatalogManagementErrorCode,
+    readonly details?: unknown,
+  ) {
     super(code);
     this.name = "CatalogManagementError";
   }
 }
 
+export type CatalogCategoryPublicationIssue =
+  | { code: "PARENT_NOT_PUBLISHED" }
+  | { code: "MISSING_CATEGORY_TRANSLATION"; locale: CatalogLocale }
+  | {
+      code: "MISSING_SPECIFICATION_TRANSLATION";
+      locale: CatalogLocale;
+      specificationKey: string;
+    }
+  | { code: "SELECTION_OPTIONS_REQUIRED"; specificationKey: string }
+  | {
+      code: "MISSING_OPTION_TRANSLATION";
+      locale: CatalogLocale;
+      specificationKey: string;
+      optionCode: string;
+    };
+
+export type ManagedCatalogCategoryTreeItem = {
+  id: string;
+  parentId: string | null;
+  slug: string;
+  name: string;
+  sortOrder: number;
+  status: "draft" | "published" | "archived";
+  updatedAt: string;
+};
+
+export type ManagedCatalogCategoryDetail = {
+  id: string;
+  parentId: string | null;
+  slug: string;
+  sortOrder: number;
+  status: "draft" | "published" | "archived";
+  publishedAt: string | null;
+  archivedAt: string | null;
+  updatedAt: string;
+  translations: Array<{
+    locale: CatalogLocale;
+    name: string;
+    introduction: string;
+    detailedContent: string | null;
+    seoTitle: string | null;
+    metaDescription: string | null;
+    productTitleGuidance: string | null;
+  }>;
+  specifications: Array<{
+    id: string;
+    key: string;
+    valueType: "text" | "number" | "boolean" | "selection";
+    unit: string | null;
+    isRequired: boolean;
+    isFilterable: boolean;
+    displayOrder: number;
+    translations: Array<{ locale: CatalogLocale; label: string }>;
+    options: Array<{
+      id: string;
+      code: string;
+      displayOrder: number;
+      translations: Array<{ locale: CatalogLocale; label: string }>;
+    }>;
+  }>;
+  publicationIssues: CatalogCategoryPublicationIssue[];
+};
+
+export type ManagedCatalogCategoryWorkspace = {
+  canManage: boolean;
+  categories: ManagedCatalogCategoryTreeItem[];
+  selected: ManagedCatalogCategoryDetail | null;
+};
+
 export type CreateCatalogCategoryInput = {
   actorId: string;
   parentId?: string | null;
   slug: string;
-  sortOrder: number;
+  sortOrder?: number;
   translations?: CatalogCategoryTranslationInput[];
   specifications?: CatalogSpecificationInput[];
 };
@@ -144,6 +223,92 @@ async function assertCatalogActor(
   if (!hasPermission(role, permission)) {
     throw new CatalogManagementError("FORBIDDEN");
   }
+}
+
+function catalogCategoryStatus(value: string) {
+  if (value === "draft" || value === "published" || value === "archived") {
+    return value;
+  }
+
+  throw new CatalogManagementError("INVALID_INPUT");
+}
+
+function catalogSpecificationValueType(
+  value: string,
+): CatalogSpecificationValueType {
+  if (
+    value === "text" ||
+    value === "number" ||
+    value === "boolean" ||
+    value === "selection"
+  ) {
+    return value;
+  }
+
+  throw new CatalogManagementError("INVALID_INPUT");
+}
+
+function categoryParentPredicate(parentId: string | null) {
+  return parentId === null
+    ? isNull(catalogCategory.parentId)
+    : eq(catalogCategory.parentId, parentId);
+}
+
+async function nextCategorySortOrder(
+  transaction: CatalogTransaction,
+  parentId: string | null,
+  excludedCategoryId?: string,
+) {
+  const parentPredicate = categoryParentPredicate(parentId);
+  const predicate = excludedCategoryId
+    ? and(parentPredicate, ne(catalogCategory.id, excludedCategoryId))
+    : parentPredicate;
+  const [lastSibling] = await transaction
+    .select({ sortOrder: catalogCategory.sortOrder })
+    .from(catalogCategory)
+    .where(predicate)
+    .orderBy(desc(catalogCategory.sortOrder), desc(catalogCategory.id))
+    .limit(1)
+    .for("update");
+
+  return (lastSibling?.sortOrder ?? -1) + 1;
+}
+
+async function assertCategorySlugAvailable(
+  transaction: CatalogTransaction,
+  parentId: string | null,
+  slug: string,
+  excludedCategoryId?: string,
+) {
+  const predicates = [categoryParentPredicate(parentId), eq(catalogCategory.slug, slug)];
+
+  if (excludedCategoryId) {
+    predicates.push(ne(catalogCategory.id, excludedCategoryId));
+  }
+
+  const [conflict] = await transaction
+    .select({ id: catalogCategory.id })
+    .from(catalogCategory)
+    .where(and(...predicates))
+    .limit(1)
+    .for("update");
+
+  if (conflict) {
+    throw new CatalogManagementError("SLUG_CONFLICT");
+  }
+}
+
+function isCategorySlugConstraintError(error: unknown) {
+  if (typeof error !== "object" || error === null) return false;
+
+  const code = "code" in error ? error.code : undefined;
+  const constraint = "constraint" in error ? error.constraint : undefined;
+
+  return (
+    code === "23505" &&
+    (constraint === "catalog_category_root_slug_idx" ||
+      constraint === "catalog_category_sibling_slug_idx")
+  );
 }
 
 function normalizeCategoryTranslations(
@@ -351,10 +516,159 @@ async function assertCategoryExists(
   return category;
 }
 
+export async function getManagedCatalogCategoryWorkspace(
+  actorId: string,
+  requestedLocale: string,
+  requestedCategoryId?: string,
+): Promise<ManagedCatalogCategoryWorkspace> {
+  const role = await getCatalogActorRole(db, actorId);
+
+  if (!hasPermission(role, "catalog:view")) {
+    throw new CatalogManagementError("FORBIDDEN");
+  }
+
+  const locale = isCatalogLocale(requestedLocale) ? requestedLocale : "bg";
+  const [categoryRows, translationRows] = await Promise.all([
+    db
+      .select()
+      .from(catalogCategory)
+      .orderBy(
+        asc(catalogCategory.parentId),
+        asc(catalogCategory.sortOrder),
+        asc(catalogCategory.id),
+      ),
+    db
+      .select()
+      .from(catalogCategoryTranslation)
+      .orderBy(
+        asc(catalogCategoryTranslation.categoryId),
+        asc(catalogCategoryTranslation.locale),
+      ),
+  ]);
+  const translationsByCategory = new Map<
+    string,
+    typeof translationRows
+  >();
+
+  for (const translation of translationRows) {
+    const translations = translationsByCategory.get(translation.categoryId) ?? [];
+    translations.push(translation);
+    translationsByCategory.set(translation.categoryId, translations);
+  }
+
+  const categories = categoryRows.map((category) => {
+    const translations = translationsByCategory.get(category.id) ?? [];
+    const displayTranslation =
+      translations.find((translation) => translation.locale === locale) ??
+      translations.find((translation) => translation.locale === "bg") ??
+      translations[0];
+
+    return {
+      id: category.id,
+      parentId: category.parentId,
+      slug: category.slug,
+      name: displayTranslation?.name ?? category.slug,
+      sortOrder: category.sortOrder,
+      status: catalogCategoryStatus(category.status),
+      updatedAt: category.updatedAt.toISOString(),
+    } satisfies ManagedCatalogCategoryTreeItem;
+  });
+  const selectedId =
+    (requestedCategoryId &&
+      categories.some(({ id }) => id === requestedCategoryId) &&
+      requestedCategoryId) ||
+    null;
+
+  if (!selectedId) {
+    return {
+      canManage: hasPermission(role, "catalog:manage"),
+      categories,
+      selected: null,
+    };
+  }
+
+  const aggregate = await getCategoryPublicationAggregate(db, selectedId);
+
+  if (!aggregate) {
+    throw new CatalogManagementError("NOT_FOUND");
+  }
+
+  const specifications = aggregate.specifications
+    .toSorted(
+      (left, right) =>
+        left.displayOrder - right.displayOrder || left.id.localeCompare(right.id),
+    )
+    .map((specification) => ({
+      id: specification.id,
+      key: specification.key,
+      valueType: catalogSpecificationValueType(specification.valueType),
+      unit: specification.unit,
+      isRequired: specification.isRequired,
+      isFilterable: specification.isFilterable,
+      displayOrder: specification.displayOrder,
+      translations: aggregate.specificationTranslations.flatMap((translation) =>
+        translation.specificationId === specification.id &&
+        isCatalogLocale(translation.locale)
+          ? [{ locale: translation.locale, label: translation.label }]
+          : [],
+      ),
+      options: aggregate.options
+        .filter(({ specificationId }) => specificationId === specification.id)
+        .toSorted(
+          (left, right) =>
+            left.displayOrder - right.displayOrder ||
+            left.id.localeCompare(right.id),
+        )
+        .map((option) => ({
+          id: option.id,
+          code: option.code,
+          displayOrder: option.displayOrder,
+          translations: aggregate.optionTranslations.flatMap((translation) =>
+            translation.optionId === option.id &&
+            isCatalogLocale(translation.locale)
+              ? [{ locale: translation.locale, label: translation.label }]
+              : [],
+          ),
+        })),
+    }));
+  const selected: ManagedCatalogCategoryDetail = {
+    id: aggregate.category.id,
+    parentId: aggregate.category.parentId,
+    slug: aggregate.category.slug,
+    sortOrder: aggregate.category.sortOrder,
+    status: catalogCategoryStatus(aggregate.category.status),
+    publishedAt: aggregate.category.publishedAt?.toISOString() ?? null,
+    archivedAt: aggregate.category.archivedAt?.toISOString() ?? null,
+    updatedAt: aggregate.category.updatedAt.toISOString(),
+    translations: aggregate.translations.flatMap((translation) =>
+      isCatalogLocale(translation.locale)
+        ? [
+            {
+              locale: translation.locale,
+              name: translation.name,
+              introduction: translation.introduction,
+              detailedContent: translation.detailedContent,
+              seoTitle: translation.seoTitle,
+              metaDescription: translation.metaDescription,
+              productTitleGuidance: translation.productTitleGuidance,
+            },
+          ]
+        : [],
+    ),
+    specifications,
+    publicationIssues: getCatalogCategoryPublicationIssues(aggregate),
+  };
+
+  return {
+    canManage: hasPermission(role, "catalog:manage"),
+    categories,
+    selected,
+  };
+}
+
 export async function createCatalogCategory(input: CreateCatalogCategoryInput) {
   if (input.parentId) assertIdentifier(input.parentId);
   const slug = validateSlug(input.slug);
-  const sortOrder = validateNonNegativeInteger(input.sortOrder);
   const translations = normalizeCategoryTranslations(input.translations ?? []);
   const specifications = normalizeSpecifications(input.specifications ?? []);
 
@@ -364,19 +678,44 @@ export async function createCatalogCategory(input: CreateCatalogCategoryInput) {
       await assertCategoryExists(transaction, input.parentId, true);
     }
 
-    const [created] = await transaction
-      .insert(catalogCategory)
-      .values({
-        parentId: input.parentId ?? null,
-        slug,
-        sortOrder,
-      })
-      .returning({
-        id: catalogCategory.id,
-        slug: catalogCategory.slug,
-        status: catalogCategory.status,
-        updatedAt: catalogCategory.updatedAt,
-      });
+    await assertCategorySlugAvailable(
+      transaction,
+      input.parentId ?? null,
+      slug,
+    );
+    const sortOrder =
+      input.sortOrder === undefined
+        ? await nextCategorySortOrder(transaction, input.parentId ?? null)
+        : validateNonNegativeInteger(input.sortOrder);
+
+    let created: {
+      id: string;
+      slug: string;
+      status: string;
+      updatedAt: Date;
+    };
+
+    try {
+      [created] = await transaction
+        .insert(catalogCategory)
+        .values({
+          parentId: input.parentId ?? null,
+          slug,
+          sortOrder,
+        })
+        .returning({
+          id: catalogCategory.id,
+          slug: catalogCategory.slug,
+          status: catalogCategory.status,
+          updatedAt: catalogCategory.updatedAt,
+        });
+    } catch (error) {
+      if (isCategorySlugConstraintError(error)) {
+        throw new CatalogManagementError("SLUG_CONFLICT");
+      }
+
+      throw error;
+    }
 
     await insertCategoryTranslations(transaction, created.id, translations);
     await insertCategorySpecifications(transaction, created.id, specifications);
@@ -401,17 +740,39 @@ export async function updateCatalogCategory(input: UpdateCatalogCategoryInput) {
       throw new CatalogManagementError("SLUG_IMMUTABLE");
     }
 
+    await assertCategorySlugAvailable(
+      transaction,
+      category.parentId,
+      slug,
+      category.id,
+    );
+
     const updatedAt = new Date();
-    const [updated] = await transaction
-      .update(catalogCategory)
-      .set({ slug, sortOrder, updatedAt })
-      .where(eq(catalogCategory.id, category.id))
-      .returning({
-        id: catalogCategory.id,
-        slug: catalogCategory.slug,
-        status: catalogCategory.status,
-        updatedAt: catalogCategory.updatedAt,
-      });
+    let updated: {
+      id: string;
+      slug: string;
+      status: string;
+      updatedAt: Date;
+    };
+
+    try {
+      [updated] = await transaction
+        .update(catalogCategory)
+        .set({ slug, sortOrder, updatedAt })
+        .where(eq(catalogCategory.id, category.id))
+        .returning({
+          id: catalogCategory.id,
+          slug: catalogCategory.slug,
+          status: catalogCategory.status,
+          updatedAt: catalogCategory.updatedAt,
+        });
+    } catch (error) {
+      if (isCategorySlugConstraintError(error)) {
+        throw new CatalogManagementError("SLUG_CONFLICT");
+      }
+
+      throw error;
+    }
     return { ...updated, updatedAt: updated.updatedAt.toISOString() };
   });
 }
@@ -578,11 +939,31 @@ export async function moveCatalogCategory(input: {
       }
     }
 
+    await assertCategorySlugAvailable(
+      transaction,
+      input.parentId,
+      category.slug,
+      category.id,
+    );
+    const sortOrder = await nextCategorySortOrder(
+      transaction,
+      input.parentId,
+      category.id,
+    );
+
     const updatedAt = new Date();
-    await transaction
-      .update(catalogCategory)
-      .set({ parentId: input.parentId, updatedAt })
-      .where(eq(catalogCategory.id, category.id));
+    try {
+      await transaction
+        .update(catalogCategory)
+        .set({ parentId: input.parentId, sortOrder, updatedAt })
+        .where(eq(catalogCategory.id, category.id));
+    } catch (error) {
+      if (isCategorySlugConstraintError(error)) {
+        throw new CatalogManagementError("SLUG_CONFLICT");
+      }
+
+      throw error;
+    }
     return { id: category.id, updatedAt: updatedAt.toISOString() };
   });
 }
@@ -780,17 +1161,21 @@ export async function replaceCatalogCategorySpecifications(input: {
   });
 }
 
-function assertCategoryPublishable(
+export function getCatalogCategoryPublicationIssues(
   aggregate: NonNullable<
     Awaited<ReturnType<typeof getCategoryPublicationAggregate>>
   >,
 ) {
+  const issues: CatalogCategoryPublicationIssue[] = [];
+
   if (aggregate.parent && aggregate.parent.status !== "published") {
-    throw new CatalogManagementError("PUBLICATION_INVALID");
+    issues.push({ code: "PARENT_NOT_PUBLISHED" });
   }
 
-  if (!hasAllCatalogLocales(aggregate.translations)) {
-    throw new CatalogManagementError("PUBLICATION_INVALID");
+  for (const locale of catalogLocales) {
+    if (!aggregate.translations.some((translation) => translation.locale === locale)) {
+      issues.push({ code: "MISSING_CATEGORY_TRANSLATION", locale });
+    }
   }
 
   for (const specification of aggregate.specifications) {
@@ -798,8 +1183,14 @@ function assertCategoryPublishable(
       ({ specificationId }) => specificationId === specification.id,
     );
 
-    if (!hasAllCatalogLocales(translations)) {
-      throw new CatalogManagementError("PUBLICATION_INVALID");
+    for (const locale of catalogLocales) {
+      if (!translations.some((translation) => translation.locale === locale)) {
+        issues.push({
+          code: "MISSING_SPECIFICATION_TRANSLATION",
+          locale,
+          specificationKey: specification.key,
+        });
+      }
     }
 
     if (specification.valueType === "selection") {
@@ -807,20 +1198,44 @@ function assertCategoryPublishable(
         ({ specificationId }) => specificationId === specification.id,
       );
 
-      if (
-        options.length === 0 ||
-        options.some(
-          (option) =>
-            !hasAllCatalogLocales(
-              aggregate.optionTranslations.filter(
-                ({ optionId }) => optionId === option.id,
-              ),
-            ),
-        )
-      ) {
-        throw new CatalogManagementError("PUBLICATION_INVALID");
+      if (options.length === 0) {
+        issues.push({
+          code: "SELECTION_OPTIONS_REQUIRED",
+          specificationKey: specification.key,
+        });
+      }
+
+      for (const option of options) {
+        const translations = aggregate.optionTranslations.filter(
+          ({ optionId }) => optionId === option.id,
+        );
+
+        for (const locale of catalogLocales) {
+          if (!translations.some((translation) => translation.locale === locale)) {
+            issues.push({
+              code: "MISSING_OPTION_TRANSLATION",
+              locale,
+              specificationKey: specification.key,
+              optionCode: option.code,
+            });
+          }
+        }
       }
     }
+  }
+
+  return issues;
+}
+
+function assertCategoryPublishable(
+  aggregate: NonNullable<
+    Awaited<ReturnType<typeof getCategoryPublicationAggregate>>
+  >,
+) {
+  const issues = getCatalogCategoryPublicationIssues(aggregate);
+
+  if (issues.length > 0) {
+    throw new CatalogManagementError("PUBLICATION_INVALID", issues);
   }
 }
 
@@ -899,7 +1314,7 @@ async function transitionCatalogCategory(input: {
         .limit(1);
 
       if (publishedChild || publishedProduct) {
-        throw new CatalogManagementError("DEPENDENCY_EXISTS");
+        throw new CatalogManagementError("PUBLISHED_DEPENDENCY_EXISTS");
       }
 
       await transaction
@@ -908,7 +1323,7 @@ async function transitionCatalogCategory(input: {
         .where(eq(catalogCategory.id, category.id));
     } else if (input.intent === "restore") {
       if (category.status !== "archived") {
-        throw new CatalogManagementError("INVALID_INPUT");
+        throw new CatalogManagementError("ARCHIVED_ANCESTOR");
       }
 
       const ancestors = await lockAndValidateCategoryPath(
@@ -955,7 +1370,7 @@ async function transitionCatalogCategory(input: {
           (row) => descendants.has(row.id) && row.status !== "archived",
         )
       ) {
-        throw new CatalogManagementError("DEPENDENCY_EXISTS");
+        throw new CatalogManagementError("ACTIVE_DEPENDENCY_EXISTS");
       }
 
       const affectedCategoryIds = [category.id, ...descendants];
@@ -981,7 +1396,7 @@ async function transitionCatalogCategory(input: {
         .limit(1);
 
       if (dependentProduct) {
-        throw new CatalogManagementError("DEPENDENCY_EXISTS");
+        throw new CatalogManagementError("ACTIVE_DEPENDENCY_EXISTS");
       }
 
       await transaction
