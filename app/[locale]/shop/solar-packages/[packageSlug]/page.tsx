@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
+import { ButtonLink } from "@/components/button";
 import { getT } from "@/i18n.server";
 import { PackageDetailScrollReset } from "../../../_components/package-detail-scroll-reset";
 import { AddToCartButton } from "../../../_components/add-to-cart-button";
@@ -88,10 +89,10 @@ export default async function SolarPackagePage({ params }: PackagePageProps) {
                 <strong>{formatBgnPrice(locale, solarPackage.priceBgn)}</strong>
               </p>
               <div className="solar-package-detail-actions">
-                <Link className="solar-package-detail-cta" href={localizedPath(locale, "contact")}>
+                <ButtonLink className="solar-package-detail-cta" href={localizedPath(locale, "contact")}>
                   {t("pages.home.residential.quote")}
                   <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                </Link>
+                </ButtonLink>
                 <AddToCartButton
                   id={solarPackage.id}
                   name={t(key("name"))}

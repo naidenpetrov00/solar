@@ -8,15 +8,18 @@ import {
   useRef,
   useState,
   useTransition,
+  type ComponentProps,
   type ReactNode,
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/button";
 
 import type {
   CatalogCategoryPublicationIssue,
   ManagedCatalogCategoryDetail,
   ManagedCatalogCategoryTreeItem,
+  ManagedCatalogProductWorkspace,
 } from "@/lib/catalog/management";
 import {
   catalogLocales,
@@ -33,7 +36,13 @@ import {
   type CatalogActionCode,
   type CatalogActionResult,
 } from "../actions";
+import { DashboardSelect } from "../../_components/dashboard-select";
 import { LocalizedEditorSwitch } from "../../_components/localized-editor-switch";
+import {
+  ProductWorkspace,
+  type ProductEditorSection,
+  type ProductLabels,
+} from "./product-workspace";
 
 type EditorSection = "general" | "content" | "specifications";
 type LifecycleIntent = "publish" | "unpublish" | "archive" | "restore";
@@ -167,6 +176,7 @@ export type CatalogLabels = {
     selectionOption: string;
   };
   results: Record<CatalogActionCode, string>;
+  product: ProductLabels;
 };
 
 type CatalogWorkspaceProps = {
@@ -177,6 +187,9 @@ type CatalogWorkspaceProps = {
   canManage: boolean;
   labels: CatalogLabels;
   openSelectedOnMobile: boolean;
+  view: "category" | "products";
+  requestedProduct: string | null;
+  productWorkspace: ManagedCatalogProductWorkspace | null;
 };
 
 type SpecificationDraft = {
@@ -209,6 +222,10 @@ type NewCategorySeed = {
 };
 
 const initialCatalogActionResult: CatalogActionResult = { status: "idle" };
+
+const DashboardButton = ({ variant, ...props }: ComponentProps<typeof Button>) => (
+  <Button {...props} variant={variant ?? (props.type === "submit" ? "primary" : "secondary")} />
+);
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function slugErrorLabel(code: string | undefined, labels: CatalogLabels) {
@@ -321,9 +338,9 @@ function ResultMessage({
     >
       <p>{labels.results[result.code]}</p>
       {result.code === "STALE" && onReload ? (
-        <button type="button" onClick={onReload}>
+        <DashboardButton type="button" onClick={onReload}>
           {labels.actions.reload}
-        </button>
+        </DashboardButton>
       ) : null}
     </div>
   );
@@ -1049,7 +1066,7 @@ function SpecificationEditor({
                     className="dashboard-catalog-specification"
                   >
                     <div className="dashboard-catalog-specification-header">
-                      <button
+                      <DashboardButton
                         type="button"
                         className="dashboard-catalog-specification-toggle"
                         aria-expanded={isExpanded}
@@ -1070,26 +1087,26 @@ function SpecificationEditor({
                               : ""}
                           </small>
                         </span>
-                      </button>
+                      </DashboardButton>
                       {!disabled ? (
                         <div className="dashboard-catalog-item-controls">
-                          <button
+                          <DashboardButton
                             type="button"
                             disabled={index === 0}
                             aria-label={labels.specifications.moveUp}
                             onClick={() => move(index, -1)}
                           >
                             {arrowIcon("up")}
-                          </button>
-                          <button
+                          </DashboardButton>
+                          <DashboardButton
                             type="button"
                             disabled={index === specifications.length - 1}
                             aria-label={labels.specifications.moveDown}
                             onClick={() => move(index, 1)}
                           >
                             {arrowIcon("down")}
-                          </button>
-                          <button
+                          </DashboardButton>
+                          <DashboardButton
                             type="button"
                             onClick={() => {
                               if (
@@ -1108,7 +1125,7 @@ function SpecificationEditor({
                             }}
                           >
                             {labels.specifications.remove}
-                          </button>
+                          </DashboardButton>
                         </div>
                       ) : null}
                     </div>
@@ -1123,7 +1140,7 @@ function SpecificationEditor({
                               id={`specification-type-${specification.clientId}`}
                               copy={labels.specifications.type}
                             >
-                              <select
+                              <DashboardSelect
                                 id={`specification-type-${specification.clientId}`}
                                 value={specification.valueType}
                                 onChange={(event) => {
@@ -1158,7 +1175,7 @@ function SpecificationEditor({
                                     {label}
                                   </option>
                                 ))}
-                              </select>
+                              </DashboardSelect>
                             </Field>
                             <Field
                               id={nameId}
@@ -1227,7 +1244,7 @@ function SpecificationEditor({
                                   <h4>{labels.specifications.options}</h4>
                                   <p>{labels.specifications.optionsHelp}</p>
                                 </div>
-                                <button
+                                <DashboardButton
                                   id={`specification-add-option-${specification.clientId}`}
                                   type="button"
                                   onClick={() => {
@@ -1257,7 +1274,7 @@ function SpecificationEditor({
                                   }}
                                 >
                                   {labels.specifications.addOption}
-                                </button>
+                                </DashboardButton>
                               </div>
                               {optionsError ? (
                                 <p
@@ -1341,7 +1358,7 @@ function SpecificationEditor({
                                           aria-invalid={optionError ? true : undefined}
                                         />
                                       </Field>
-                                      <button
+                                      <DashboardButton
                                         type="button"
                                         onClick={() =>
                                           updateSpecification(
@@ -1358,7 +1375,7 @@ function SpecificationEditor({
                                         }
                                       >
                                         {labels.specifications.removeOption}
-                                      </button>
+                                      </DashboardButton>
                                     </div>
                                   );
                                 },
@@ -1375,7 +1392,7 @@ function SpecificationEditor({
           )}
           {!disabled ? (
             <div className="dashboard-catalog-form-actions">
-              <button
+              <DashboardButton
                 type="button"
                 onClick={() => {
                   setDismissedServerErrors(true);
@@ -1398,10 +1415,10 @@ function SpecificationEditor({
                 }}
               >
                 {labels.specifications.add}
-              </button>
-              <button type="submit" disabled={pending}>
+              </DashboardButton>
+              <DashboardButton type="submit" disabled={pending}>
                 {pending ? labels.actions.saving : labels.actions.save}
-              </button>
+              </DashboardButton>
             </div>
           ) : null}
           <ResultMessage result={result} labels={labels} onReload={onReload} />
@@ -1513,9 +1530,9 @@ function NewCategoryEditor({
           <h2>{labels.create.editorTitle}</h2>
           <p>{labels.create.editorDescription}</p>
         </div>
-        <button type="button" data-danger="true" onClick={onDiscard}>
+        <DashboardButton type="button" tone="danger" onClick={onDiscard}>
           {labels.create.discard}
-        </button>
+        </DashboardButton>
       </header>
 
       <form
@@ -1658,12 +1675,12 @@ function NewCategoryEditor({
         </section>
 
         <div className="dashboard-catalog-form-actions">
-          <button type="button" disabled={pending} onClick={onDiscard}>
+          <DashboardButton type="button" disabled={pending} onClick={onDiscard}>
             {labels.create.discard}
-          </button>
-          <button type="submit" disabled={pending}>
+          </DashboardButton>
+          <DashboardButton type="submit" disabled={pending}>
             {pending ? labels.create.submitting : labels.create.submit}
-          </button>
+          </DashboardButton>
         </div>
         <ResultMessage result={result} labels={labels} />
       </form>
@@ -1831,27 +1848,27 @@ function CategoryEditor({
         {canManage ? (
           <div className="dashboard-catalog-lifecycle-actions">
             {detail.status === "draft" ? (
-              <button type="button" onClick={() => onLifecycle("publish")}>
+              <DashboardButton type="button" onClick={() => onLifecycle("publish")}>
                 {labels.actions.publish}
-              </button>
+              </DashboardButton>
             ) : null}
             {detail.status === "published" ? (
-              <button type="button" onClick={() => onLifecycle("unpublish")}>
+              <DashboardButton type="button" onClick={() => onLifecycle("unpublish")}>
                 {labels.actions.unpublish}
-              </button>
+              </DashboardButton>
             ) : null}
             {detail.status !== "archived" ? (
-              <button
+              <DashboardButton
                 type="button"
-                data-danger="true"
+                tone="danger"
                 onClick={() => onLifecycle("archive")}
               >
                 {labels.actions.archive}
-              </button>
+              </DashboardButton>
             ) : (
-              <button type="button" onClick={() => onLifecycle("restore")}>
+              <DashboardButton type="button" onClick={() => onLifecycle("restore")}>
                 {labels.actions.restore}
-              </button>
+              </DashboardButton>
             )}
           </div>
         ) : null}
@@ -1960,12 +1977,12 @@ function CategoryEditor({
           </fieldset>
           {canManage ? (
             <div className="dashboard-catalog-form-actions">
-              <button type="button" onClick={onMove}>
+              <DashboardButton type="button" onClick={onMove}>
                 {labels.actions.move}
-              </button>
-              <button type="submit" disabled={generalPending}>
+              </DashboardButton>
+              <DashboardButton type="submit" disabled={generalPending}>
                 {generalPending ? labels.actions.saving : labels.actions.save}
-              </button>
+              </DashboardButton>
             </div>
           ) : null}
           <ResultMessage
@@ -2059,9 +2076,9 @@ function CategoryEditor({
           {canManage ? (
             <div className="dashboard-catalog-form-actions">
               <span />
-              <button type="submit" disabled={contentPending}>
+              <DashboardButton type="submit" disabled={contentPending}>
                 {contentPending ? labels.actions.saving : labels.actions.save}
-              </button>
+              </DashboardButton>
             </div>
           ) : null}
           <ResultMessage
@@ -2100,6 +2117,7 @@ function CategoryBranch({
   onCreate,
   onReorder,
   onOpen,
+  view,
 }: {
   parentId: string | null;
   categories: ManagedCatalogCategoryTreeItem[];
@@ -2110,6 +2128,7 @@ function CategoryBranch({
   onCreate: (parentId: string, parentName: string) => void;
   onReorder: (categoryId: string, direction: -1 | 1) => void;
   onOpen: () => void;
+  view: "category" | "products";
 }) {
   const siblings = categories.filter(
     (category) => category.parentId === parentId,
@@ -2126,7 +2145,7 @@ function CategoryBranch({
             data-selected={selectedId === category.id ? "true" : undefined}
           >
             <Link
-              href={`${catalogPath}?category=${category.id}`}
+              href={`${catalogPath}?category=${category.id}&view=${view}`}
               aria-current={selectedId === category.id ? "page" : undefined}
               onClick={onOpen}
             >
@@ -2136,29 +2155,29 @@ function CategoryBranch({
             </Link>
             {canManage ? (
               <div className="dashboard-catalog-tree-actions">
-                <button
+                <DashboardButton
                   type="button"
                   disabled={index === 0}
                   aria-label={`${labels.tree.moveUp}: ${category.name}`}
                   onClick={() => onReorder(category.id, -1)}
                 >
                   {arrowIcon("up")}
-                </button>
-                <button
+                </DashboardButton>
+                <DashboardButton
                   type="button"
                   disabled={index === siblings.length - 1}
                   aria-label={`${labels.tree.moveDown}: ${category.name}`}
                   onClick={() => onReorder(category.id, 1)}
                 >
                   {arrowIcon("down")}
-                </button>
+                </DashboardButton>
                 {category.status !== "archived" ? (
-                  <button
+                  <DashboardButton
                     type="button"
                     onClick={() => onCreate(category.id, category.name)}
                   >
                     {labels.tree.addChild}
-                  </button>
+                  </DashboardButton>
                 ) : null}
               </div>
             ) : null}
@@ -2173,6 +2192,7 @@ function CategoryBranch({
             onCreate={onCreate}
             onReorder={onReorder}
             onOpen={onOpen}
+            view={view}
           />
         </li>
       ))}
@@ -2188,11 +2208,17 @@ export function CatalogWorkspace({
   canManage,
   labels,
   openSelectedOnMobile,
+  view,
+  requestedProduct,
+  productWorkspace,
 }: CatalogWorkspaceProps) {
   const router = useRouter();
   const [dirtySections, setDirtySections] = useState<Set<EditorSection>>(
     () => new Set(),
   );
+  const [productDirtySections, setProductDirtySections] = useState<
+    Set<ProductEditorSection>
+  >(() => new Set());
   const [mobileEditorOpen, setMobileEditorOpen] = useState(
     Boolean(selected) && openSelectedOnMobile,
   );
@@ -2218,7 +2244,8 @@ export function CatalogWorkspace({
   const skipNextPopRef = useRef(false);
   const focusedElementRef = useRef<HTMLElement | null>(null);
   const previousFocusedElementRef = useRef<HTMLElement | null>(null);
-  const hasUnsavedChanges = dirtySections.size > 0;
+  const hasUnsavedChanges =
+    dirtySections.size > 0 || productDirtySections.size > 0;
   const currentLocale: CatalogLocale = isCatalogLocale(locale) ? locale : "bg";
 
   const markDirty = useCallback((section: EditorSection) => {
@@ -2235,10 +2262,22 @@ export function CatalogWorkspace({
       return next;
     });
   }, []);
+  const markProductDirty = useCallback((section: ProductEditorSection) => {
+    setProductDirtySections((current) => {
+      if (current.has(section)) return current;
+      const next = new Set(current);
+      next.add(section);
+      return next;
+    });
+  }, []);
+  const clearAllProductDirty = useCallback(() => {
+    setProductDirtySections(new Set());
+  }, []);
   const confirmDiscard = useCallback(() => {
     if (!hasUnsavedChanges) return true;
     if (!window.confirm(labels.unsaved.message)) return false;
     setDirtySections(new Set());
+    setProductDirtySections(new Set());
     setEditorRevision((current) => current + 1);
     return true;
   }, [hasUnsavedChanges, labels.unsaved.message]);
@@ -2283,6 +2322,7 @@ export function CatalogWorkspace({
         return;
       if (window.confirm(labels.unsaved.message)) {
         setDirtySections(new Set());
+        setProductDirtySections(new Set());
         return;
       }
 
@@ -2306,6 +2346,7 @@ export function CatalogWorkspace({
 
       if (window.confirm(labels.unsaved.message)) {
         setDirtySections(new Set());
+        setProductDirtySections(new Set());
         return;
       }
 
@@ -2453,12 +2494,12 @@ export function CatalogWorkspace({
           <div className="dashboard-catalog-tree-heading">
             <h2 id="catalog-tree-title">{labels.tree.title}</h2>
             {canManage ? (
-              <button
+              <DashboardButton
                 type="button"
                 onClick={() => openCreate(null, labels.create.root)}
               >
                 {labels.tree.createRoot}
-              </button>
+              </DashboardButton>
             ) : null}
           </div>
           {categories.length === 0 ? (
@@ -2475,12 +2516,13 @@ export function CatalogWorkspace({
                 onCreate={(parentId, name) => openCreate(parentId, name)}
                 onReorder={reorder}
                 onOpen={() => setMobileEditorOpen(true)}
+                view={view}
               />
             </nav>
           )}
         </aside>
         <section className="dashboard-catalog-detail">
-          <button
+          <DashboardButton
             type="button"
             className="dashboard-catalog-mobile-back"
             onClick={() => {
@@ -2491,7 +2533,26 @@ export function CatalogWorkspace({
           >
             {arrowIcon("back")}
             {labels.tree.back}
-          </button>
+          </DashboardButton>
+          {selected && !newCategory ? (
+            <nav
+              className="dashboard-catalog-view-switch"
+              aria-label={labels.product.views.ariaLabel}
+            >
+              <Link
+                href={`${catalogPath}?category=${selected.id}&view=category`}
+                aria-current={view === "category" ? "page" : undefined}
+              >
+                {labels.product.views.category}
+              </Link>
+              <Link
+                href={`${catalogPath}?category=${selected.id}&view=products`}
+                aria-current={view === "products" ? "page" : undefined}
+              >
+                {labels.product.views.products}
+              </Link>
+            </nav>
+          ) : null}
           {newCategory ? (
             <NewCategoryEditor
               key={`${newCategory.parentId ?? "root"}:${editorRevision}`}
@@ -2509,8 +2570,27 @@ export function CatalogWorkspace({
                 setNewCategory(null);
                 setDirtySections(new Set());
                 setMobileEditorOpen(true);
-                router.push(`${catalogPath}?category=${categoryId}`);
+                router.push(`${catalogPath}?category=${categoryId}&view=category`);
               }}
+            />
+          ) : selected && view === "products" && productWorkspace ? (
+            <ProductWorkspace
+              locale={locale}
+              catalogPath={catalogPath}
+              categoryId={selected.id}
+              categories={categories}
+              categoryConfigurations={productWorkspace.categoryConfigurations}
+              products={productWorkspace.products}
+              selectedProduct={productWorkspace.selected}
+              requestedProduct={requestedProduct}
+              canManage={canManage}
+              labels={labels.product}
+              languages={labels.languages}
+              statusLabels={labels.status}
+              dirtySections={productDirtySections}
+              onDirty={markProductDirty}
+              clearAllDirty={clearAllProductDirty}
+              confirmDiscard={confirmDiscard}
             />
           ) : selected ? (
             <CategoryEditor
@@ -2624,7 +2704,7 @@ export function CatalogWorkspace({
             />
           </label>
           <div className="dashboard-catalog-dialog-actions">
-            <button
+            <DashboardButton
               type="button"
               onClick={() => {
                 if (!confirmDiscard()) return;
@@ -2632,8 +2712,8 @@ export function CatalogWorkspace({
               }}
             >
               {labels.create.cancel}
-            </button>
-            <button type="submit">{labels.create.continue}</button>
+            </DashboardButton>
+            <DashboardButton type="submit">{labels.create.continue}</DashboardButton>
           </div>
         </form>
       </dialog>
@@ -2666,7 +2746,7 @@ export function CatalogWorkspace({
             <p id="catalog-move-description">{labels.move.description}</p>
             <label>
               <span>{labels.move.parent}</span>
-              <select
+              <DashboardSelect
                 name="parentId"
                 value={moveParentId}
                 onChange={(event) => setMoveParentId(event.target.value)}
@@ -2677,7 +2757,7 @@ export function CatalogWorkspace({
                     {category.name}
                   </option>
                 ))}
-              </select>
+              </DashboardSelect>
             </label>
             {manageResult.status === "error" ? (
               <ResultMessage
@@ -2687,16 +2767,16 @@ export function CatalogWorkspace({
               />
             ) : null}
             <div className="dashboard-catalog-dialog-actions">
-              <button
+              <DashboardButton
                 type="button"
                 disabled={managePending}
                 onClick={() => moveDialogRef.current?.close()}
               >
                 {labels.move.cancel}
-              </button>
-              <button type="submit" disabled={managePending}>
+              </DashboardButton>
+              <DashboardButton type="submit" disabled={managePending}>
                 {managePending ? labels.actions.working : labels.move.submit}
-              </button>
+              </DashboardButton>
             </div>
           </form>
         </dialog>
@@ -2739,18 +2819,18 @@ export function CatalogWorkspace({
               />
             ) : null}
             <div className="dashboard-catalog-dialog-actions">
-              <button
+              <DashboardButton
                 type="button"
                 disabled={managePending}
                 onClick={() => lifecycleDialogRef.current?.close()}
               >
                 {labels.lifecycle.cancel}
-              </button>
-              <button type="submit" disabled={managePending}>
+              </DashboardButton>
+              <DashboardButton type="submit" disabled={managePending}>
                 {managePending
                   ? labels.actions.working
                   : labels.lifecycle[lifecycleIntent].confirm}
-              </button>
+              </DashboardButton>
             </div>
           </form>
         </dialog>

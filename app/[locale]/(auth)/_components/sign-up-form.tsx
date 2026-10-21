@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Button } from "@/components/button";
 
 import { authClient } from "@/lib/auth-client";
 import {
@@ -247,9 +248,9 @@ export function SignUpForm({
         {fieldErrors.confirmPassword ? <p id="sign-up-password-confirmation-error" className="auth-field-error">{fieldErrors.confirmPassword}</p> : null}
       </div>
 
-      <button className="auth-primary-action" type="submit" disabled={pending}>
+      <Button type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
-      </button>
+      </Button>
       <div className="auth-social">
         <SocialSignIn
           {...socialSignIn.google}

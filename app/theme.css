@@ -11,6 +11,14 @@
   --accent-hover: #fde68a;
   --accent-foreground: #18181b;
   --focus: #18181b;
+  --button-primary-background: var(--accent);
+  --button-primary-hover-background: var(--accent-hover);
+  --button-primary-foreground: var(--accent-foreground);
+  --button-secondary-border: color-mix(in srgb, var(--page-foreground) 30%, transparent);
+  --button-secondary-hover-background: color-mix(in srgb, var(--page-foreground) 8%, transparent);
+  --button-secondary-foreground: var(--page-foreground);
+  --button-informational-foreground: var(--page-foreground);
+  --button-focus: var(--accent);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -48,6 +56,69 @@
 .site-page {
   background: var(--page-background);
   color: var(--page-foreground);
+}
+
+.ui-button {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: fit-content;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.65rem 0.85rem;
+  background: transparent;
+  color: var(--button-secondary-foreground);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.ui-button--primary {
+  border-color: var(--button-primary-background);
+  background: var(--button-primary-background);
+  color: var(--button-primary-foreground);
+}
+
+.ui-button--primary:hover:not(:disabled) {
+  border-color: var(--button-primary-hover-background);
+  background: var(--button-primary-hover-background);
+}
+
+.ui-button--secondary { border-color: var(--button-secondary-border); }
+.ui-button--secondary:hover:not(:disabled) {
+  border-color: var(--button-secondary-foreground);
+  background: var(--button-secondary-hover-background);
+}
+
+.ui-button--informational {
+  min-width: 0;
+  padding-inline: 0;
+  color: var(--button-informational-foreground);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+
+.ui-button--informational:hover:not(:disabled) { transform: translateX(0.15rem); }
+.ui-button--compact { min-height: 2.25rem; padding: 0.45rem 0.65rem; font-size: 0.82rem; }
+.ui-button--icon { width: 2.75rem; padding: 0; }
+.ui-button--full { width: 100%; }
+.ui-button--danger { color: #9f1239; }
+.ui-button--danger.ui-button--secondary { border-color: color-mix(in srgb, #9f1239 55%, transparent); }
+.ui-button--danger.ui-button--secondary:hover:not(:disabled) { background: color-mix(in srgb, #9f1239 9%, transparent); }
+.ui-button:focus-visible { outline: 3px solid var(--button-focus); outline-offset: 3px; }
+.ui-button:disabled { cursor: not-allowed; opacity: 0.55; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-button { transition: none; }
 }
 
 .site-header {

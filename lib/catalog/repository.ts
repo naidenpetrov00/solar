@@ -7,6 +7,7 @@ import {
   inArray,
   isNull,
   or,
+  sql,
 } from "drizzle-orm";
 
 import { db } from "@/db";
@@ -185,7 +186,14 @@ export async function getProductPublicationAggregate(
   const [translations, additionalCategories, specificationValues, media] =
     await Promise.all([
       executor
-        .select()
+        .select({
+          productId: catalogProductTranslation.productId,
+          locale: catalogProductTranslation.locale,
+          title: catalogProductTranslation.title,
+          shortDescription: catalogProductTranslation.shortDescription,
+          fullDescription: catalogProductTranslation.fullDescription,
+          metaDescription: catalogProductTranslation.metaDescription,
+        })
         .from(catalogProductTranslation)
         .where(eq(catalogProductTranslation.productId, productId)),
       executor
@@ -350,8 +358,6 @@ export type PublishedProductDetail = {
   title: string;
   shortDescription: string;
   fullDescription: string;
-  marketingLabel: string | null;
-  seoTitle: string | null;
   metaDescription: string | null;
   salesMode: string;
   availability: string | null;
@@ -371,11 +377,19 @@ export async function getPublishedProductBySlug(
     return null;
   }
 
+  const localizedSlug =
+    locale === "bg"
+      ? catalogProduct.bgSlug
+      : locale === "tr"
+        ? sql<string>`coalesce(${catalogProduct.trSlug}, ${catalogProduct.enSlug})`
+        : locale === "uk"
+          ? sql<string>`coalesce(${catalogProduct.ukSlug}, ${catalogProduct.enSlug})`
+          : catalogProduct.enSlug;
   const [row] = await db
     .select({
       id: catalogProduct.id,
       sku: catalogProduct.sku,
-      slug: catalogProduct.slug,
+      slug: localizedSlug,
       brand: catalogProduct.brand,
       salesMode: catalogProduct.salesMode,
       availability: catalogProduct.availability,
@@ -386,8 +400,6 @@ export async function getPublishedProductBySlug(
       title: catalogProductTranslation.title,
       shortDescription: catalogProductTranslation.shortDescription,
       fullDescription: catalogProductTranslation.fullDescription,
-      marketingLabel: catalogProductTranslation.marketingLabel,
-      seoTitle: catalogProductTranslation.seoTitle,
       metaDescription: catalogProductTranslation.metaDescription,
     })
     .from(catalogProduct)
@@ -404,7 +416,7 @@ export async function getPublishedProductBySlug(
     )
     .where(
       and(
-        eq(catalogProduct.slug, slug),
+        eq(localizedSlug, slug),
         eq(catalogProduct.status, "published"),
         eq(catalogCategory.status, "published"),
       ),
@@ -439,8 +451,6 @@ export async function getPublishedProductBySlug(
     title: row.title,
     shortDescription: row.shortDescription,
     fullDescription: row.fullDescription,
-    marketingLabel: row.marketingLabel,
-    seoTitle: row.seoTitle,
     metaDescription: row.metaDescription,
     salesMode: row.salesMode,
     availability: row.availability,

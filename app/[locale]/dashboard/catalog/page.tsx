@@ -6,7 +6,9 @@ import { getCurrentUser, hasPermission } from "@/lib/authorization";
 import {
   CatalogManagementError,
   getManagedCatalogCategoryWorkspace,
+  getManagedCatalogProductWorkspace,
 } from "@/lib/catalog/management";
+import { isUuid } from "@/lib/catalog/model";
 import { getPrivatePageMetadata } from "../../_lib/metadata";
 import {
   accessDeniedRouteSlug,
@@ -23,6 +25,8 @@ import {
 
 type CatalogSearchParams = {
   category?: string | string[];
+  view?: string | string[];
+  product?: string | string[];
 };
 
 export async function generateMetadata({
@@ -66,6 +70,15 @@ export default async function CatalogPage({
   const selectedCategoryId = Array.isArray(query.category)
     ? query.category[0]
     : query.category;
+  const requestedView = Array.isArray(query.view) ? query.view[0] : query.view;
+  const view = requestedView === "products" ? "products" : "category";
+  const productParameter = Array.isArray(query.product)
+    ? query.product[0]
+    : query.product;
+  const requestedProduct =
+    productParameter === "new" || (productParameter && isUuid(productParameter))
+      ? productParameter
+      : null;
   const translationPromise = getT("common", { lng: locale });
   let workspace;
 
@@ -84,6 +97,36 @@ export default async function CatalogPage({
     }
 
     throw error;
+  }
+
+  let productWorkspace = null;
+  if (view === "products" && workspace.selected) {
+    try {
+      productWorkspace = await getManagedCatalogProductWorkspace(
+        currentUser.id,
+        locale,
+        workspace.selected.id,
+        requestedProduct && requestedProduct !== "new"
+          ? requestedProduct
+          : undefined,
+      );
+    } catch (error) {
+      if (
+        error instanceof CatalogManagementError &&
+        error.code === "NOT_FOUND"
+      ) {
+        redirect(
+          `${catalogPath}?category=${workspace.selected.id}&view=products`,
+        );
+      }
+      if (
+        error instanceof CatalogManagementError &&
+        error.code === "FORBIDDEN"
+      ) {
+        redirect(localizedPath(locale, accessDeniedRouteSlug));
+      }
+      throw error;
+    }
   }
 
   const { t } = await translationPromise;
@@ -114,6 +157,9 @@ export default async function CatalogPage({
         canManage={workspace.canManage}
         labels={labels}
         openSelectedOnMobile={Boolean(selectedCategoryId)}
+        view={view}
+        requestedProduct={requestedProduct}
+        productWorkspace={productWorkspace}
       />
     </main>
   );

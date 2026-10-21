@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/button";
 
 import { authClient } from "@/lib/auth-client";
 
@@ -167,8 +168,9 @@ export function SocialSignIn({
         </div>
       ) : null}
 
-      <button
-        className="auth-secondary-action auth-social-action"
+      <Button
+        className="auth-social-action"
+        variant="secondary"
         type="button"
         disabled={!enabled || pending}
         aria-describedby={!enabled ? descriptionId : undefined}
@@ -176,7 +178,7 @@ export function SocialSignIn({
       >
         <ProviderMark provider={provider} />
         {pending ? labels.redirecting : labels.continue}
-      </button>
+      </Button>
       {!enabled ? <p id={descriptionId} className="auth-inline-status">{labels.unavailable}</p> : null}
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pending ? labels.redirecting : ""}

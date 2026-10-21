@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "@/components/button";
 import { useCart } from "./cart-store";
 
 type Props = {
@@ -23,15 +24,16 @@ export function AddToCartButton({ id, name, addLabel, addedLabel, accessibleLabe
 
   return (
     <>
-      <button
+      <Button
         type="button"
         className="shop-add-button"
+        variant="secondary"
         aria-label={accessibleLabel}
         disabled={!ready}
         onClick={() => { addItem(id); setAdded(true); }}
       >
         {added ? addedLabel : addLabel}
-      </button>
+      </Button>
       <span className="sr-only" role="status" aria-live="polite">
         {added ? `${name}: ${addedLabel}` : ""}
       </span>

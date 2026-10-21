@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type FormEvent } from "react";
+import { Button } from "@/components/button";
 
 import { authClient } from "@/lib/auth-client";
 import { validateEmail } from "@/lib/auth-validation";
@@ -133,9 +134,9 @@ export function VerificationRequestForm({
         </div>
       )}
 
-      <button className="auth-secondary-action" type="submit" disabled={pending}>
+      <Button variant="secondary" type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
-      </button>
+      </Button>
       <p className="auth-inline-status" role="status" aria-live="polite" aria-atomic="true">
         {status ?? (pending ? labels.submitting : "")}
       </p>

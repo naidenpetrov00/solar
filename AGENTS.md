@@ -32,6 +32,7 @@ Internationalization requirements are defined in [`.agents/i18n.md`](.agents/i18
 * Do not hard-code secrets or environment-specific values.
 * Preserve existing architecture unless there is a clear reason to change it.
 * Build reusable infrastructure only when there is an actual repeated need.
+* Use the shared `Button` / `ButtonLink` components for every button and button-like CTA. Choose `primary`, `secondary`, or `informational` by action priority; use the `danger` tone only for destructive actions.
 
 ## Product Direction
 

@@ -6,6 +6,7 @@ import {
   foreignKey,
   index,
   integer,
+  jsonb,
   numeric,
   pgTable,
   primaryKey,
@@ -288,9 +289,11 @@ export const catalogProduct = pgTable(
       .generatedAlwaysAs(
         sql`'PRD-' || lpad("sku_number"::text, greatest(6, length("sku_number"::text)), '0')`,
       ),
-    internalName: text("internal_name").notNull(),
     brand: text("brand"),
-    slug: text("slug").notNull(),
+    bgSlug: text("bg_slug").notNull(),
+    enSlug: text("en_slug").notNull(),
+    trSlug: text("tr_slug"),
+    ukSlug: text("uk_slug"),
     salesMode: text("sales_mode").notNull(),
     primaryCategoryId: uuid("primary_category_id")
       .notNull()
@@ -299,6 +302,13 @@ export const catalogProduct = pgTable(
     availability: text("availability"),
     gtin: text("gtin"),
     mpn: text("mpn"),
+    specificationConfiguration: jsonb("specification_configuration")
+      .$type<{
+        excludedSpecificationIds: string[];
+        customSpecifications: unknown[];
+      }>()
+      .default({ excludedSpecificationIds: [], customSpecifications: [] })
+      .notNull(),
     currency: text("currency").default("EUR").notNull(),
     vatRateBasisPoints: integer("vat_rate_basis_points").default(2000).notNull(),
     pricePresentation: text("price_presentation").notNull(),
@@ -318,7 +328,14 @@ export const catalogProduct = pgTable(
       table.primaryCategoryId,
     ),
     uniqueIndex("catalog_product_sku_idx").on(table.sku),
-    uniqueIndex("catalog_product_slug_idx").on(table.slug),
+    uniqueIndex("catalog_product_bg_slug_idx").on(table.bgSlug),
+    uniqueIndex("catalog_product_en_slug_idx").on(table.enSlug),
+    uniqueIndex("catalog_product_tr_effective_slug_idx").on(
+      sql`coalesce(${table.trSlug}, ${table.enSlug})`,
+    ),
+    uniqueIndex("catalog_product_uk_effective_slug_idx").on(
+      sql`coalesce(${table.ukSlug}, ${table.enSlug})`,
+    ),
     uniqueIndex("catalog_product_gtin_idx")
       .on(table.gtin)
       .where(sql`${table.gtin} IS NOT NULL`),
@@ -332,16 +349,24 @@ export const catalogProduct = pgTable(
       table.id,
     ),
     check(
-      "catalog_product_internal_name_check",
-      sql`char_length(btrim(${table.internalName})) BETWEEN 1 AND 200`,
-    ),
-    check(
       "catalog_product_brand_check",
       sql`${table.brand} IS NULL OR (${table.brand} = btrim(${table.brand}) AND char_length(${table.brand}) BETWEEN 1 AND 120)`,
     ),
     check(
-      "catalog_product_slug_check",
-      sql`char_length(${table.slug}) BETWEEN 1 AND 120 AND ${table.slug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'`,
+      "catalog_product_bg_slug_check",
+      sql`char_length(${table.bgSlug}) BETWEEN 1 AND 120 AND ${table.bgSlug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'`,
+    ),
+    check(
+      "catalog_product_en_slug_check",
+      sql`char_length(${table.enSlug}) BETWEEN 1 AND 120 AND ${table.enSlug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'`,
+    ),
+    check(
+      "catalog_product_tr_slug_check",
+      sql`${table.trSlug} IS NULL OR (char_length(${table.trSlug}) BETWEEN 1 AND 120 AND ${table.trSlug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')`,
+    ),
+    check(
+      "catalog_product_uk_slug_check",
+      sql`${table.ukSlug} IS NULL OR (char_length(${table.ukSlug}) BETWEEN 1 AND 120 AND ${table.ukSlug} ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')`,
     ),
     check(
       "catalog_product_sales_mode_check",
@@ -424,15 +449,15 @@ export const catalogProductTranslation = pgTable(
     ),
     check(
       "catalog_product_translation_title_check",
-      sql`char_length(btrim(${table.title})) BETWEEN 1 AND 200`,
+      sql`char_length(btrim(${table.title})) <= 200`,
     ),
     check(
       "catalog_product_translation_short_description_check",
-      sql`char_length(btrim(${table.shortDescription})) BETWEEN 1 AND 2000`,
+      sql`char_length(btrim(${table.shortDescription})) <= 2000`,
     ),
     check(
       "catalog_product_translation_full_description_check",
-      sql`char_length(btrim(${table.fullDescription})) BETWEEN 1 AND 50000`,
+      sql`char_length(btrim(${table.fullDescription})) <= 50000`,
     ),
   ],
 );

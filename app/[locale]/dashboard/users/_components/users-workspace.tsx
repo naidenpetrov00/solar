@@ -9,6 +9,7 @@ import {
   type RefObject,
 } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/button";
 
 import type { SupportedLocale } from "../../../_lib/routes";
 import type { ManagedUser, ManagedUserAction } from "@/lib/user-management";
@@ -17,6 +18,7 @@ import {
   manageUserAction,
   type UserActionResult,
 } from "../actions";
+import { DashboardSelect } from "../../_components/dashboard-select";
 
 const initialUserActionResult: UserActionResult = { status: "idle" };
 
@@ -179,7 +181,7 @@ export function UsersWorkspace({
       <div className="dashboard-users-heading-row">
         <h2>{labels.selectUser}</h2>
         {canInvite ? (
-          <button
+          <Button
             type="button"
             className="dashboard-users-primary-action"
             onClick={(event) => {
@@ -189,7 +191,7 @@ export function UsersWorkspace({
             }}
           >
             {labels.invite.open}
-          </button>
+          </Button>
         ) : null}
       </div>
 
@@ -227,9 +229,10 @@ export function UsersWorkspace({
                     </span>
                   </td>
                   <td>
-                    <button
+                    <Button
                       type="button"
                       className="dashboard-users-select"
+                      variant="informational"
                       aria-pressed={selectedId === candidate.id}
                       onClick={(event) => selectUser(candidate, event.currentTarget)}
                     >
@@ -237,7 +240,7 @@ export function UsersWorkspace({
                       <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20">
                         <path d="M4 10h11M11 6l4 4-4 4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
                       </svg>
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -247,8 +250,9 @@ export function UsersWorkspace({
           <ul className="dashboard-users-mobile-list">
             {users.map((candidate) => (
               <li key={candidate.id}>
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
                   aria-pressed={selectedId === candidate.id}
                   onClick={(event) => selectUser(candidate, event.currentTarget)}
                 >
@@ -260,7 +264,7 @@ export function UsersWorkspace({
                     {labels.roles[candidate.role]}
                     <small>{candidate.blocked ? labels.accountStates.blocked : labels.accountStates.active}</small>
                   </span>
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -269,9 +273,10 @@ export function UsersWorkspace({
         <aside className="dashboard-user-detail" aria-live="polite">
           {selected ? (
             <>
-              <button
+              <Button
                 type="button"
                 className="dashboard-user-detail-back"
+                variant="informational"
                 onClick={() => {
                   setSelectedId(null);
                   restoreInvokerFocus();
@@ -281,7 +286,7 @@ export function UsersWorkspace({
                   <path d="M16 10H5m4-4-4 4 4 4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
                 </svg>
                 {labels.backToUsers}
-              </button>
+              </Button>
               <header>
                 <h2 ref={detailHeadingRef} tabIndex={-1}>{selected.name}</h2>
                 <p>{selected.email}</p>
@@ -297,14 +302,15 @@ export function UsersWorkspace({
                 <h3 id="dashboard-user-actions-title">{labels.actionsTitle}</h3>
                 <div>
                   {selected.actions.map((action) => (
-                    <button
+                    <Button
                       key={action}
                       type="button"
-                      data-danger={action === "block" || action === "demote" ? "true" : undefined}
+                      variant="secondary"
+                      tone={action === "block" || action === "demote" ? "danger" : "default"}
                       onClick={(event) => openConfirmation(action, selected, event)}
                     >
                       {labels.actions[action]}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </section>
@@ -351,19 +357,20 @@ export function UsersWorkspace({
               focusRef={managementErrorRef}
             />
             <div className="dashboard-users-dialog-actions">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 autoFocus
                 disabled={managementPending}
                 onClick={() => confirmationDialogRef.current?.close()}
               >
                 {labels.cancel}
-              </button>
-              <button type="submit" disabled={managementPending}>
+              </Button>
+              <Button type="submit" disabled={managementPending}>
                 {managementPending
                   ? labels.working
                   : labels.confirmations[confirmation.action].confirm}
-              </button>
+              </Button>
             </div>
           </form>
         ) : null}
@@ -400,24 +407,25 @@ export function UsersWorkspace({
             </div>
             <div className="dashboard-users-field">
               <label htmlFor="administrator-language">{labels.invite.language}</label>
-              <select id="administrator-language" name="inviteLocale" defaultValue={locale}>
+              <DashboardSelect id="administrator-language" name="inviteLocale" defaultValue={locale}>
                 {(Object.keys(labels.localeNames) as SupportedLocale[]).map((candidate) => (
                   <option key={candidate} value={candidate}>{labels.localeNames[candidate]}</option>
                 ))}
-              </select>
+              </DashboardSelect>
             </div>
             <div className="dashboard-users-dialog-actions">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 autoFocus
                 disabled={invitePending}
                 onClick={() => inviteDialogRef.current?.close()}
               >
                 {labels.cancel}
-              </button>
-              <button type="submit" disabled={invitePending}>
+              </Button>
+              <Button type="submit" disabled={invitePending}>
                 {invitePending ? labels.invite.submitting : labels.invite.submit}
-              </button>
+              </Button>
             </div>
           </form>
         </dialog>

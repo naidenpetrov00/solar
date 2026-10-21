@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Button, ButtonLink } from "@/components/button";
 import { authClient } from "@/lib/auth-client";
 import {
   isAuthRouteSlug,
@@ -295,9 +296,11 @@ export function Navigation({
 
         <div className="flex items-center gap-2 xl:hidden">
           {user ? (
-            <button
+            <Button
               type="button"
-              className="site-account-trigger inline-flex size-11 items-center justify-center rounded-md border focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="site-account-trigger size-11"
+              size="icon"
+              variant="secondary"
               aria-controls="account-menu"
               aria-expanded={profileOpen}
               aria-label={profileOpen ? closeAccountMenuLabel : openAccountMenuLabel}
@@ -307,7 +310,7 @@ export function Navigation({
                 <circle cx="12" cy="8" r="3.25" stroke="currentColor" strokeWidth="1.7" />
                 <path d="M5 20c.9-3.2 3.3-5 7-5s6.1 1.8 7 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
               </svg>
-            </button>
+            </Button>
           ) : null}
           <Link
             className="site-cart-link relative inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -323,9 +326,11 @@ export function Navigation({
             </svg>
             {ready && count > 0 && <span className="site-cart-count" aria-hidden="true">{count}</span>}
           </Link>
-          <button
+          <Button
             type="button"
-            className="site-menu-button inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="site-menu-button"
+            size="icon"
+            variant="secondary"
             aria-controls="primary-navigation"
             aria-expanded={menuOpen}
             aria-label={menuOpen ? closeMenuLabel : menuLabel}
@@ -339,7 +344,7 @@ export function Navigation({
               <span className="block h-0.5 w-5 bg-current" />
               <span className="block h-0.5 w-5 bg-current" />
             </span>
-          </button>
+          </Button>
         </div>
 
         <nav aria-label={navigationLabel} className="hidden xl:block">
@@ -401,9 +406,10 @@ export function Navigation({
               ))}
             </ul>
           </nav>
-          <button
+          <Button
             type="button"
-            className="site-theme-button inline-flex min-h-11 items-center rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="site-theme-button"
+            variant="secondary"
             onClick={cycleTheme}
             aria-label={`${themeLabel}: ${currentThemeLabel}`}
             title={`${themeLabel}: ${currentThemeLabel}`}
@@ -416,7 +422,7 @@ export function Navigation({
               </span>
             </span>
             <span className="sr-only">{currentThemeLabel}</span>
-          </button>
+          </Button>
           <Link
             className="site-cart-link relative inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
             href={localizedPath(locale, "cart")}
@@ -432,9 +438,10 @@ export function Navigation({
             {ready && count > 0 && <span className="site-cart-count" aria-hidden="true">{count}</span>}
           </Link>
           {user ? (
-            <button
+            <Button
               type="button"
-              className="site-account-trigger inline-flex min-h-11 items-center gap-2 rounded-md border px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="site-account-trigger"
+              variant="secondary"
               aria-controls="account-menu"
               aria-expanded={profileOpen}
               aria-label={profileOpen ? closeAccountMenuLabel : openAccountMenuLabel}
@@ -445,24 +452,24 @@ export function Navigation({
                 <path d="M5 20c.9-3.2 3.3-5 7-5s6.1 1.8 7 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
               </svg>
               <span>{accountLabel}</span>
-            </button>
+            </Button>
           ) : (
             <div className="flex items-center gap-2">
-              <Link className="site-auth-link inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2" href={signInHref}>
+              <ButtonLink className="site-auth-link" variant="informational" href={signInHref}>
                 {signInLabel}
-              </Link>
-              <Link className="site-auth-link site-auth-link-outlined inline-flex min-h-11 items-center rounded-md border px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2" href={signUpHref}>
+              </ButtonLink>
+              <ButtonLink className="site-auth-link site-auth-link-outlined" variant="secondary" href={signUpHref}>
                 {signUpLabel}
-              </Link>
+              </ButtonLink>
             </div>
           )}
-          <Link
-            className="site-cta inline-flex min-h-11 items-center rounded-md px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+          <ButtonLink
+            className="site-cta"
             href={localizedPath(locale, "contact")}
             onClick={closeMenus}
           >
             {ctaLabel}
-          </Link>
+          </ButtonLink>
         </div>
         {user && profileOpen ? (
           <div
@@ -501,14 +508,16 @@ export function Navigation({
               </nav>
             ) : null}
             {logoutError ? <p className="site-account-error" role="alert">{logoutError}</p> : null}
-            <button
+            <Button
               type="button"
-              className="site-account-logout mt-4 inline-flex min-h-11 w-full items-center justify-center border px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="site-account-logout mt-4"
+              fullWidth
+              variant="secondary"
               onClick={handleSignOut}
               disabled={logoutPending}
             >
               {logoutPending ? signingOutLabel : signOutLabel}
-            </button>
+            </Button>
             <p className="sr-only" aria-live="polite" aria-atomic="true">
               {logoutPending ? signingOutLabel : ""}
             </p>
@@ -536,26 +545,30 @@ export function Navigation({
             ))}
             {!user ? (
               <li className="grid grid-cols-2 gap-2 pt-3">
-                <Link
-                  className="site-mobile-auth-action flex min-h-11 items-center justify-center rounded-md px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+                <ButtonLink
+                  className="site-mobile-auth-action"
+                  variant="informational"
                   href={signInHref}
                   onClick={closeMenus}
                 >
                   {signInLabel}
-                </Link>
-                <Link
-                  className="site-mobile-auth-action site-mobile-auth-action-outlined flex min-h-11 items-center justify-center rounded-md border px-3 text-center text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+                </ButtonLink>
+                <ButtonLink
+                  className="site-mobile-auth-action site-mobile-auth-action-outlined"
+                  variant="secondary"
                   href={signUpHref}
                   onClick={closeMenus}
                 >
                   {signUpLabel}
-                </Link>
+                </ButtonLink>
               </li>
             ) : null}
             <li className="pt-3">
-              <button
+              <Button
                 type="button"
-                className="site-theme-button flex min-h-11 w-full items-center justify-center gap-2 rounded-md border text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="site-theme-button"
+                fullWidth
+                variant="secondary"
                 onClick={cycleTheme}
                 aria-label={`${themeLabel}: ${currentThemeLabel}`}
                 data-theme-mode={themeMode}
@@ -567,16 +580,17 @@ export function Navigation({
                   </span>
                 </span>
                 {currentThemeLabel}
-              </button>
+              </Button>
             </li>
             <li className="pt-3">
-              <Link
-                className="site-cta flex min-h-12 items-center justify-center rounded-md px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              <ButtonLink
+                className="site-cta"
+                fullWidth
                 href={localizedPath(locale, "contact")}
                 onClick={closeMenus}
               >
                 {ctaLabel}
-              </Link>
+              </ButtonLink>
             </li>
             <li className="site-divider mt-3 border-t pt-4">
               <nav aria-label={languageLabel}>

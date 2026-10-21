@@ -29,11 +29,18 @@ export const CATALOG_VAT_RATE_BASIS_POINTS = 2000;
 export const CATALOG_BRAND_MAX_LENGTH = 120;
 export const CATALOG_SLUG_MAX_LENGTH = 120;
 export const CATALOG_MPN_MAX_LENGTH = 100;
-export const CATALOG_INTERNAL_NAME_MAX_LENGTH = 200;
 export const CATALOG_MEDIA_REFERENCE_MAX_LENGTH = 2048;
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
+
+const slugTransliteration: Record<string, string> = {
+  а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ж: "zh",
+  з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n",
+  о: "o", п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f",
+  х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sht", ъ: "a", ь: "",
+  ю: "yu", я: "ya", є: "ye", і: "i", ї: "yi", ґ: "g",
+};
 
 export type CatalogValidationErrorCode =
   | "INVALID_AVAILABILITY"
@@ -92,8 +99,6 @@ export type CatalogProductTranslationInput = {
   title: string;
   shortDescription: string;
   fullDescription: string;
-  marketingLabel?: string | null;
-  seoTitle?: string | null;
   metaDescription?: string | null;
 };
 
@@ -116,6 +121,31 @@ export type CatalogProductSpecificationValueInput =
   | { specificationId: string; type: "number"; value: string }
   | { specificationId: string; type: "boolean"; value: boolean }
   | { specificationId: string; type: "selection"; optionId: string };
+
+export type CatalogProductCustomSpecificationValueInput =
+  | { type: "text"; value: string }
+  | { type: "number"; value: string }
+  | { type: "boolean"; value: boolean }
+  | { type: "selection"; optionId: string };
+
+export type CatalogProductCustomSpecificationInput = {
+  id: string;
+  valueType: CatalogSpecificationValueType;
+  unit?: string | null;
+  displayOrder: number;
+  translations: CatalogSpecificationTranslationInput[];
+  options: Array<{
+    id: string;
+    displayOrder: number;
+    translations: CatalogSpecificationTranslationInput[];
+  }>;
+  value: CatalogProductCustomSpecificationValueInput | null;
+};
+
+export type CatalogProductSpecificationConfigurationInput = {
+  excludedSpecificationIds: string[];
+  customSpecifications: CatalogProductCustomSpecificationInput[];
+};
 
 export type CatalogProductMediaInput = {
   reference: string;
@@ -140,6 +170,21 @@ export function catalogCategorySlugForLocale(
   locale: CatalogLocale,
 ) {
   return locale === "bg" ? slugs.bgSlug : slugs.enSlug;
+}
+
+export function catalogProductSlugForLocale(
+  slugs: {
+    bgSlug: string;
+    enSlug: string;
+    trSlug: string | null;
+    ukSlug: string | null;
+  },
+  locale: CatalogLocale,
+) {
+  if (locale === "bg") return slugs.bgSlug;
+  if (locale === "tr") return slugs.trSlug ?? slugs.enSlug;
+  if (locale === "uk") return slugs.ukSlug ?? slugs.enSlug;
+  return slugs.enSlug;
 }
 
 export function isUuid(value: string) {
@@ -208,6 +253,21 @@ export function validateSlug(value: string) {
   }
 
   return value;
+}
+
+export function catalogSlugFromName(value: string) {
+  const transliterated = Array.from(value.toLocaleLowerCase("bg"), (character) =>
+    slugTransliteration[character] ?? character,
+  ).join("");
+  const slug = transliterated
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/gu, "")
+    .replace(/[^a-z0-9]+/gu, "-")
+    .replace(/^-+|-+$/gu, "")
+    .slice(0, CATALOG_SLUG_MAX_LENGTH)
+    .replace(/-+$/gu, "");
+
+  return validateSlug(slug);
 }
 
 export function validateStableKey(value: string) {
@@ -282,6 +342,16 @@ export function publicVatInclusiveMinor(price: CatalogPricedInput) {
   return price.entryBasis === "vat_inclusive"
     ? price.inputMinor
     : (price.inputMinor * BigInt(120) + BigInt(50)) / BigInt(100);
+}
+
+export function priceCounterpartMinor(price: CatalogPricedInput) {
+  if (price.inputMinor <= BigInt(0)) {
+    throw new CatalogValidationError("INVALID_PRICE");
+  }
+
+  return price.entryBasis === "vat_inclusive"
+    ? (price.inputMinor * BigInt(100) + BigInt(60)) / BigInt(120)
+    : publicVatInclusiveMinor(price);
 }
 
 export function validateCommerceInput(input: {

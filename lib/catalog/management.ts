@@ -2,7 +2,17 @@ import "server-only";
 
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, inArray, isNull, ne, or } from "drizzle-orm";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  inArray,
+  isNull,
+  ne,
+  notInArray,
+  or,
+} from "drizzle-orm";
 
 import { db } from "@/db";
 import {
@@ -20,7 +30,6 @@ import {
   catalogSpecificationTranslation,
 } from "@/db/schema";
 import {
-  CATALOG_INTERNAL_NAME_MAX_LENGTH,
   assertUniqueLocales,
   catalogCategorySlugForLocale,
   catalogLocales,
@@ -28,10 +37,8 @@ import {
   isCatalogLocale,
   isUuid,
   normalizeBrand,
-  normalizeGtin,
   normalizeLongText,
   normalizeMediaReference,
-  normalizeMpn,
   normalizeOptionalText,
   normalizeRequiredText,
   validateCommerceInput,
@@ -44,6 +51,7 @@ import {
   type CatalogLocale,
   type CatalogPriceInput,
   type CatalogProductMediaInput,
+  type CatalogProductSpecificationConfigurationInput,
   type CatalogProductSpecificationValueInput,
   type CatalogProductTranslationInput,
   type CatalogSalesMode,
@@ -98,6 +106,40 @@ export type CatalogCategoryPublicationIssue =
       locale: CatalogLocale;
       specificationKey: string;
       optionCode: string;
+    };
+
+export type CatalogProductPublicationIssue =
+  | {
+      code: "MISSING_PRODUCT_TRANSLATION_FIELD";
+      locale: CatalogLocale;
+      field: "title" | "shortDescription" | "fullDescription";
+    }
+  | { code: "CATEGORY_NOT_PUBLISHED"; categoryId: string }
+  | {
+      code: "MISSING_REQUIRED_SPECIFICATION";
+      specificationId: string;
+    }
+  | { code: "INVALID_SPECIFICATION_VALUE"; specificationId: string }
+  | {
+      code: "MISSING_CUSTOM_SPECIFICATION_LABEL";
+      specificationId: string;
+      locale: CatalogLocale;
+    }
+  | {
+      code: "MISSING_CUSTOM_OPTION_LABEL";
+      specificationId: string;
+      optionId: string;
+      locale: CatalogLocale;
+    }
+  | { code: "MODEL_REQUIRED" }
+  | { code: "INVALID_COMMERCE" }
+  | { code: "PRIMARY_IMAGE_REQUIRED" }
+  | { code: "SOCIAL_IMAGE_LIMIT" }
+  | {
+      code: "MISSING_MEDIA_ALT";
+      mediaId: string;
+      mediaReference: string;
+      locale: CatalogLocale;
     };
 
 export type ManagedCatalogCategoryTreeItem = {
@@ -157,6 +199,52 @@ export type ManagedCatalogCategoryWorkspace = {
   selected: ManagedCatalogCategoryDetail | null;
 };
 
+export type ManagedCatalogProductSummary = {
+  id: string;
+  title: string;
+  sku: string;
+  status: "draft" | "published" | "archived";
+  salesMode: CatalogSalesMode;
+  availability: CatalogAvailability | null;
+  updatedAt: string;
+};
+
+export type ManagedCatalogProductDetail = ManagedCatalogProductSummary & {
+  brand: string | null;
+  bgSlug: string;
+  enSlug: string;
+  trSlug: string | null;
+  ukSlug: string | null;
+  primaryCategoryId: string;
+  additionalCategoryIds: string[];
+  mpn: string | null;
+  pricePresentation: "exact" | "from" | "on_request";
+  priceEntryBasis: "vat_inclusive" | "vat_exclusive" | null;
+  priceInputMinor: string | null;
+  publishedAt: string | null;
+  archivedAt: string | null;
+  translations: CatalogProductTranslationInput[];
+  titleGuidance: Array<{
+    locale: CatalogLocale;
+    value: string | null;
+  }>;
+  specifications: ManagedCatalogCategoryDetail["specifications"];
+  specificationValues: CatalogProductSpecificationValueInput[];
+  specificationConfiguration: CatalogProductSpecificationConfigurationInput;
+  media: Array<CatalogProductMediaInput & { id: string }>;
+  publicationIssues: CatalogProductPublicationIssue[];
+};
+
+export type ManagedCatalogProductWorkspace = {
+  products: ManagedCatalogProductSummary[];
+  selected: ManagedCatalogProductDetail | null;
+  categoryConfigurations: Array<{
+    categoryId: string;
+    specifications: ManagedCatalogCategoryDetail["specifications"];
+    titleGuidance: ManagedCatalogProductDetail["titleGuidance"];
+  }>;
+};
+
 export type CatalogSpecificationEditorOptionInput = {
   id?: string | null;
   displayOrder: number;
@@ -191,18 +279,20 @@ export type UpdateCatalogCategoryInput = {
 
 export type CreateCatalogProductInput = {
   actorId: string;
-  internalName: string;
   brand?: string | null;
-  slug: string;
+  bgSlug: string;
+  enSlug: string;
+  trSlug: string | null;
+  ukSlug: string | null;
   salesMode: CatalogSalesMode;
   primaryCategoryId: string;
   additionalCategoryIds?: string[];
   availability: CatalogAvailability | null;
-  gtin?: string | null;
-  mpn?: string | null;
+  mpn: string;
   price: CatalogPriceInput;
   translations?: CatalogProductTranslationInput[];
   specificationValues?: CatalogProductSpecificationValueInput[];
+  specificationConfiguration?: CatalogProductSpecificationConfigurationInput;
   media?: CatalogProductMediaInput[];
 };
 
@@ -210,15 +300,22 @@ export type UpdateCatalogProductInput = {
   actorId: string;
   productId: string;
   expectedUpdatedAt: string;
-  internalName: string;
   brand?: string | null;
-  slug: string;
+  bgSlug: string;
+  enSlug: string;
+  trSlug: string | null;
+  ukSlug: string | null;
   salesMode: CatalogSalesMode;
   primaryCategoryId: string;
   availability: CatalogAvailability | null;
-  gtin?: string | null;
-  mpn?: string | null;
+  mpn: string;
   price: CatalogPriceInput;
+  additionalCategoryIds?: string[];
+  discardSpecificationValues?: boolean;
+  translations: CatalogProductTranslationInput[];
+  specificationValues: CatalogProductSpecificationValueInput[];
+  specificationConfiguration: CatalogProductSpecificationConfigurationInput;
+  media: CatalogProductMediaInput[];
 };
 
 function assertIdentifier(value: string) {
@@ -245,8 +342,26 @@ async function assertCatalogActor(
   }
 }
 
-function catalogCategoryStatus(value: string) {
+function catalogCategoryStatus(
+  value: string,
+): "draft" | "published" | "archived" {
   if (value === "draft" || value === "published" || value === "archived") {
+    return value;
+  }
+
+  throw new CatalogManagementError("INVALID_INPUT");
+}
+
+function catalogSalesMode(value: string): CatalogSalesMode {
+  if (value !== "direct_purchase" && value !== "enquiry") {
+    throw new CatalogManagementError("INVALID_INPUT");
+  }
+
+  return value;
+}
+
+function catalogAvailability(value: string | null): CatalogAvailability | null {
+  if (value === null || value === "in_stock" || value === "out_of_stock") {
     return value;
   }
 
@@ -356,14 +471,123 @@ function normalizeProductTranslations(
   assertUniqueLocales(translations);
   return translations.map((translation) => ({
     locale: translation.locale,
-    title: normalizeRequiredText(translation.title, 200),
-    shortDescription: normalizeRequiredText(translation.shortDescription, 2000),
-    fullDescription:
-      normalizeLongText(translation.fullDescription, 50_000, true) ?? "",
-    marketingLabel: normalizeOptionalText(translation.marketingLabel, 120),
-    seoTitle: normalizeOptionalText(translation.seoTitle, 200),
+    title: normalizeOptionalText(translation.title, 200) ?? "",
+    shortDescription:
+      normalizeOptionalText(translation.shortDescription, 2000) ?? "",
+    fullDescription: normalizeLongText(translation.fullDescription, 50_000) ?? "",
     metaDescription: normalizeOptionalText(translation.metaDescription, 500),
   }));
+}
+
+function normalizeOptionalProductSlug(value: string | null | undefined) {
+  return value ? validateSlug(value) : null;
+}
+
+function normalizeProductSpecificationConfiguration(
+  configuration: CatalogProductSpecificationConfigurationInput,
+) {
+  const excludedSpecificationIds = [
+    ...new Set(configuration.excludedSpecificationIds),
+  ];
+  if (
+    excludedSpecificationIds.length !==
+    configuration.excludedSpecificationIds.length
+  ) {
+    throw new CatalogManagementError("INVALID_INPUT");
+  }
+  excludedSpecificationIds.forEach(assertIdentifier);
+
+  const customIds = new Set<string>();
+  const customOptionIds = new Set<string>();
+  const customSpecifications = configuration.customSpecifications.map(
+    (specification, displayOrder) => {
+      assertIdentifier(specification.id);
+      if (customIds.has(specification.id)) {
+        throw new CatalogManagementError("INVALID_INPUT");
+      }
+      customIds.add(specification.id);
+      assertUniqueLocales(specification.translations);
+      if (!hasAllCatalogLocales(specification.translations)) {
+        throw new CatalogManagementError("INVALID_INPUT");
+      }
+
+      const options = specification.options.map((option, optionOrder) => {
+        assertIdentifier(option.id);
+        if (customOptionIds.has(option.id)) {
+          throw new CatalogManagementError("INVALID_INPUT");
+        }
+        customOptionIds.add(option.id);
+        assertUniqueLocales(option.translations);
+        if (!hasAllCatalogLocales(option.translations)) {
+          throw new CatalogManagementError("INVALID_INPUT");
+        }
+        return {
+          id: option.id,
+          displayOrder: optionOrder,
+          translations: option.translations.map((translation) => ({
+            locale: translation.locale,
+            label: normalizeOptionalText(translation.label, 200) ?? "",
+          })),
+        };
+      });
+
+      if (specification.valueType !== "selection" && options.length > 0) {
+        throw new CatalogManagementError("INVALID_INPUT");
+      }
+
+      let value = specification.value;
+      if (value && value.type !== specification.valueType) {
+        throw new CatalogManagementError("INVALID_INPUT");
+      }
+      if (value?.type === "text") {
+        value = { type: "text", value: normalizeRequiredText(value.value, 5000) };
+      } else if (value?.type === "number") {
+        value = { type: "number", value: validateDecimal(value.value) };
+      } else if (value?.type === "selection") {
+        if (!options.some(({ id }) => id === value.optionId)) {
+          throw new CatalogManagementError("INVALID_INPUT");
+        }
+      }
+
+      return {
+        id: specification.id,
+        valueType: specification.valueType,
+        unit: normalizeOptionalText(specification.unit, 40),
+        displayOrder,
+        translations: specification.translations.map((translation) => ({
+          locale: translation.locale,
+          label: normalizeOptionalText(translation.label, 200) ?? "",
+        })),
+        options,
+        value,
+      };
+    },
+  );
+
+  return { excludedSpecificationIds, customSpecifications };
+}
+
+async function assertProductSpecificationConfiguration(
+  transaction: CatalogTransaction,
+  primaryCategoryId: string,
+  configuration: ReturnType<typeof normalizeProductSpecificationConfiguration>,
+) {
+  if (configuration.excludedSpecificationIds.length === 0) return;
+  const rows = await transaction
+    .select({ id: catalogSpecification.id })
+    .from(catalogSpecification)
+    .where(
+      and(
+        eq(catalogSpecification.categoryId, primaryCategoryId),
+        inArray(
+          catalogSpecification.id,
+          configuration.excludedSpecificationIds,
+        ),
+      ),
+    );
+  if (rows.length !== configuration.excludedSpecificationIds.length) {
+    throw new CatalogManagementError("INVALID_INPUT");
+  }
 }
 
 function normalizeSpecifications(specifications: CatalogSpecificationInput[]) {
@@ -799,6 +1023,314 @@ export async function getManagedCatalogCategoryWorkspace(
     canManage: hasPermission(role, "catalog:manage"),
     categories,
     selected,
+  };
+}
+
+export async function getManagedCatalogProductWorkspace(
+  actorId: string,
+  requestedLocale: string,
+  categoryId: string,
+  requestedProductId?: string,
+): Promise<ManagedCatalogProductWorkspace> {
+  assertIdentifier(categoryId);
+  const role = await getCatalogActorRole(db, actorId);
+
+  if (!hasPermission(role, "catalog:view")) {
+    throw new CatalogManagementError("FORBIDDEN");
+  }
+
+  const locale = isCatalogLocale(requestedLocale) ? requestedLocale : "bg";
+  const [
+    categoryRows,
+    categoryTranslationRows,
+    categorySpecificationRows,
+    primaryRows,
+    additionalRows,
+  ] = await Promise.all([
+    db
+      .select({ id: catalogCategory.id })
+      .from(catalogCategory),
+    db
+      .select({
+        categoryId: catalogCategoryTranslation.categoryId,
+        locale: catalogCategoryTranslation.locale,
+        productTitleGuidance:
+          catalogCategoryTranslation.productTitleGuidance,
+      })
+      .from(catalogCategoryTranslation),
+    db.select().from(catalogSpecification),
+    db
+      .select({ id: catalogProduct.id })
+      .from(catalogProduct)
+      .where(eq(catalogProduct.primaryCategoryId, categoryId)),
+    db
+      .select({ id: catalogProductAdditionalCategory.productId })
+      .from(catalogProductAdditionalCategory)
+      .where(eq(catalogProductAdditionalCategory.categoryId, categoryId)),
+  ]);
+
+  if (!categoryRows.some(({ id }) => id === categoryId)) {
+    throw new CatalogManagementError("NOT_FOUND");
+  }
+
+  const specificationIds = categorySpecificationRows.map(({ id }) => id);
+  const [specificationTranslationRows, specificationOptionRows] =
+    specificationIds.length > 0
+      ? await Promise.all([
+          db
+            .select()
+            .from(catalogSpecificationTranslation)
+            .where(
+              inArray(
+                catalogSpecificationTranslation.specificationId,
+                specificationIds,
+              ),
+            ),
+          db
+            .select()
+            .from(catalogSpecificationOption)
+            .where(
+              inArray(
+                catalogSpecificationOption.specificationId,
+                specificationIds,
+              ),
+            ),
+        ])
+      : [[], []];
+  const optionIds = specificationOptionRows.map(({ id }) => id);
+  const optionTranslationRows = optionIds.length > 0
+    ? await db
+        .select()
+        .from(catalogSpecificationOptionTranslation)
+        .where(inArray(catalogSpecificationOptionTranslation.optionId, optionIds))
+    : [];
+  const categoryConfigurations = categoryRows.map(({ id: configuredCategoryId }) => ({
+    categoryId: configuredCategoryId,
+    titleGuidance: categoryTranslationRows.flatMap((translation) =>
+      translation.categoryId === configuredCategoryId &&
+      isCatalogLocale(translation.locale)
+        ? [{
+            locale: translation.locale,
+            value: translation.productTitleGuidance,
+          }]
+        : [],
+    ),
+    specifications: categorySpecificationRows
+      .filter(({ categoryId: specificationCategoryId }) =>
+        specificationCategoryId === configuredCategoryId,
+      )
+      .toSorted(
+        (left, right) =>
+          left.displayOrder - right.displayOrder || left.id.localeCompare(right.id),
+      )
+      .map((specification) => ({
+        id: specification.id,
+        key: specification.key,
+        valueType: catalogSpecificationValueType(specification.valueType),
+        unit: specification.unit,
+        isRequired: specification.isRequired,
+        isFilterable: specification.isFilterable,
+        displayOrder: specification.displayOrder,
+        translations: specificationTranslationRows.flatMap((translation) =>
+          translation.specificationId === specification.id &&
+          isCatalogLocale(translation.locale)
+            ? [{ locale: translation.locale, label: translation.label }]
+            : [],
+        ),
+        options: specificationOptionRows
+          .filter(({ specificationId }) => specificationId === specification.id)
+          .toSorted(
+            (left, right) =>
+              left.displayOrder - right.displayOrder ||
+              left.id.localeCompare(right.id),
+          )
+          .map((option) => ({
+            id: option.id,
+            code: option.code,
+            displayOrder: option.displayOrder,
+            translations: optionTranslationRows.flatMap((translation) =>
+              translation.optionId === option.id &&
+              isCatalogLocale(translation.locale)
+                ? [{ locale: translation.locale, label: translation.label }]
+                : [],
+            ),
+          })),
+      })),
+  }));
+  const productIds = [
+    ...new Set([
+      ...primaryRows.map(({ id }) => id),
+      ...additionalRows.map(({ id }) => id),
+    ]),
+  ];
+  const [productRows, titleRows] = productIds.length
+    ? await Promise.all([
+        db
+          .select()
+          .from(catalogProduct)
+          .where(inArray(catalogProduct.id, productIds)),
+        db
+          .select({
+            productId: catalogProductTranslation.productId,
+            locale: catalogProductTranslation.locale,
+            title: catalogProductTranslation.title,
+          })
+          .from(catalogProductTranslation)
+          .where(
+            and(
+              inArray(catalogProductTranslation.productId, productIds),
+              or(
+                eq(catalogProductTranslation.locale, locale),
+                eq(catalogProductTranslation.locale, "bg"),
+              ),
+            ),
+          ),
+      ])
+    : [[], []];
+  const titleByProduct = new Map<string, string>();
+  for (const productId of productIds) {
+    const localized = titleRows.find(
+      (translation) =>
+        translation.productId === productId &&
+        translation.locale === locale &&
+        translation.title.trim(),
+    );
+    const bulgarian = titleRows.find(
+      (translation) =>
+        translation.productId === productId &&
+        translation.locale === "bg" &&
+        translation.title.trim(),
+    );
+    titleByProduct.set(productId, localized?.title ?? bulgarian?.title ?? "");
+  }
+  const products = productRows
+    .map((product) => ({
+      id: product.id,
+      title: titleByProduct.get(product.id) ?? "",
+      sku: product.sku,
+      status: catalogCategoryStatus(product.status),
+      salesMode: catalogSalesMode(product.salesMode),
+      availability: catalogAvailability(product.availability),
+      updatedAt: product.updatedAt.toISOString(),
+    }))
+    .toSorted(
+      (left, right) =>
+        left.title.localeCompare(right.title, locale) ||
+        left.id.localeCompare(right.id),
+    );
+
+  if (!requestedProductId) {
+    return {
+      products,
+      selected: null,
+      categoryConfigurations,
+    };
+  }
+  assertIdentifier(requestedProductId);
+
+  const aggregate = await getProductPublicationAggregate(db, requestedProductId);
+  if (!aggregate) throw new CatalogManagementError("NOT_FOUND");
+  const productCategoryConfiguration = categoryConfigurations.find(
+    ({ categoryId: configuredCategoryId }) =>
+      configuredCategoryId === aggregate.product.primaryCategoryId,
+  );
+  if (!productCategoryConfiguration) {
+    throw new CatalogManagementError("NOT_FOUND");
+  }
+  const selectedLocalizedTitle = aggregate.translations.find(
+    (translation) => translation.locale === locale && translation.title.trim(),
+  )?.title;
+  const selectedBulgarianTitle = aggregate.translations.find(
+    (translation) => translation.locale === "bg" && translation.title.trim(),
+  )?.title;
+  const summary = products.find(({ id }) => id === requestedProductId) ?? {
+    id: aggregate.product.id,
+    title: selectedLocalizedTitle ?? selectedBulgarianTitle ?? "",
+    sku: aggregate.product.sku,
+    status: catalogCategoryStatus(aggregate.product.status),
+    salesMode: catalogSalesMode(aggregate.product.salesMode),
+    availability: catalogAvailability(aggregate.product.availability),
+    updatedAt: aggregate.product.updatedAt.toISOString(),
+  };
+
+  const specifications = productCategoryConfiguration.specifications;
+  const specificationValues: CatalogProductSpecificationValueInput[] = [];
+  for (const value of aggregate.specificationValues) {
+    const specification = specifications.find(({ id }) => id === value.specificationId);
+    if (!specification) continue;
+    if (specification.valueType === "text" && value.textValue !== null) {
+      specificationValues.push({ specificationId: value.specificationId, type: "text", value: value.textValue });
+    } else if (specification.valueType === "number" && value.numberValue !== null) {
+      specificationValues.push({ specificationId: value.specificationId, type: "number", value: value.numberValue });
+    } else if (specification.valueType === "boolean" && value.booleanValue !== null) {
+      specificationValues.push({ specificationId: value.specificationId, type: "boolean", value: value.booleanValue });
+    } else if (specification.valueType === "selection" && value.selectionOptionId) {
+      specificationValues.push({ specificationId: value.specificationId, type: "selection", optionId: value.selectionOptionId });
+    }
+  }
+  const media = aggregate.media
+    .toSorted(
+      (left, right) =>
+        left.displayOrder - right.displayOrder || left.id.localeCompare(right.id),
+    )
+    .map((item) => ({
+      id: item.id,
+      reference: item.reference,
+      displayOrder: item.displayOrder,
+      isPrimary: item.isPrimary,
+      isSocialImage: item.isSocialImage,
+      translations: aggregate.mediaTranslations.flatMap((translation) =>
+        translation.productMediaId === item.id && isCatalogLocale(translation.locale)
+          ? [{ locale: translation.locale, altText: translation.altText }]
+          : [],
+      ),
+    }));
+
+  return {
+    products,
+    selected: {
+      ...summary,
+      brand: aggregate.product.brand,
+      bgSlug: aggregate.product.bgSlug,
+      enSlug: aggregate.product.enSlug,
+      trSlug: aggregate.product.trSlug,
+      ukSlug: aggregate.product.ukSlug,
+      primaryCategoryId: aggregate.product.primaryCategoryId,
+      additionalCategoryIds: aggregate.additionalCategories.map(
+        ({ categoryId: additionalCategoryId }) => additionalCategoryId,
+      ),
+      mpn: aggregate.product.mpn,
+      pricePresentation: aggregate.product.pricePresentation as
+        | "exact"
+        | "from"
+        | "on_request",
+      priceEntryBasis: aggregate.product.priceEntryBasis as
+        | "vat_inclusive"
+        | "vat_exclusive"
+        | null,
+      priceInputMinor: aggregate.product.priceInputMinor?.toString() ?? null,
+      publishedAt: aggregate.product.publishedAt?.toISOString() ?? null,
+      archivedAt: aggregate.product.archivedAt?.toISOString() ?? null,
+      translations: aggregate.translations.flatMap((translation) =>
+        isCatalogLocale(translation.locale)
+          ? [{
+              locale: translation.locale,
+              title: translation.title,
+              shortDescription: translation.shortDescription,
+              fullDescription: translation.fullDescription,
+              metaDescription: translation.metaDescription,
+            }]
+          : [],
+      ),
+      titleGuidance: productCategoryConfiguration.titleGuidance,
+      specifications,
+      specificationValues,
+      specificationConfiguration:
+        aggregate.product.specificationConfiguration as CatalogProductSpecificationConfigurationInput,
+      media,
+      publicationIssues: getCatalogProductPublicationIssues(aggregate),
+    },
+    categoryConfigurations,
   };
 }
 
@@ -1775,15 +2307,47 @@ async function getProductAdditionalCategoryIds(
   return rows.map(({ categoryId }) => categoryId);
 }
 
-async function insertProductTranslations(
+async function replaceProductTranslations(
   transaction: CatalogTransaction,
   productId: string,
   translations: ReturnType<typeof normalizeProductTranslations>,
 ) {
-  if (translations.length === 0) return;
-  await transaction.insert(catalogProductTranslation).values(
-    translations.map((translation) => ({ productId, ...translation })),
-  );
+  const locales = translations.map(({ locale }) => locale);
+
+  if (locales.length === 0) {
+    await transaction
+      .delete(catalogProductTranslation)
+      .where(eq(catalogProductTranslation.productId, productId));
+    return;
+  }
+
+  await transaction
+    .delete(catalogProductTranslation)
+    .where(
+      and(
+        eq(catalogProductTranslation.productId, productId),
+        notInArray(catalogProductTranslation.locale, locales),
+      ),
+    );
+
+  for (const translation of translations) {
+    await transaction
+      .insert(catalogProductTranslation)
+      .values({ productId, ...translation })
+      .onConflictDoUpdate({
+        target: [
+          catalogProductTranslation.productId,
+          catalogProductTranslation.locale,
+        ],
+        set: {
+          title: translation.title,
+          shortDescription: translation.shortDescription,
+          fullDescription: translation.fullDescription,
+          metaDescription: translation.metaDescription,
+          updatedAt: new Date(),
+        },
+      });
+  }
 }
 
 async function insertProductValues(
@@ -1897,17 +2461,24 @@ async function insertProductMedia(
 
 export async function createCatalogProduct(input: CreateCatalogProductInput) {
   assertIdentifier(input.primaryCategoryId);
-  const internalName = normalizeRequiredText(
-    input.internalName,
-    CATALOG_INTERNAL_NAME_MAX_LENGTH,
-  );
   const brand = normalizeBrand(input.brand);
-  const slug = validateSlug(input.slug);
-  const gtin = normalizeGtin(input.gtin);
-  const mpn = normalizeMpn(input.mpn);
+  const bgSlug = validateSlug(input.bgSlug);
+  const enSlug = validateSlug(input.enSlug);
+  const trSlug = normalizeOptionalProductSlug(input.trSlug);
+  const ukSlug = normalizeOptionalProductSlug(input.ukSlug);
+  const mpn = normalizeRequiredText(input.mpn, 100);
   validateCommerceInput(input);
   const translations = normalizeProductTranslations(input.translations ?? []);
+  if (!translations.find(({ locale }) => locale === "bg")?.title) {
+    throw new CatalogManagementError("INVALID_INPUT");
+  }
   const media = normalizeMedia(input.media ?? []);
+  const specificationConfiguration = normalizeProductSpecificationConfiguration(
+    input.specificationConfiguration ?? {
+      excludedSpecificationIds: [],
+      customSpecifications: [],
+    },
+  );
   const additionalCategoryIds = input.additionalCategoryIds ?? [];
 
   return db.transaction(async (transaction) => {
@@ -1919,18 +2490,34 @@ export async function createCatalogProduct(input: CreateCatalogProductInput) {
       false,
       true,
     );
+    await assertProductSpecificationConfiguration(
+      transaction,
+      input.primaryCategoryId,
+      specificationConfiguration,
+    );
+    if (
+      (input.specificationValues ?? []).some(({ specificationId }) =>
+        specificationConfiguration.excludedSpecificationIds.includes(
+          specificationId,
+        ),
+      )
+    ) {
+      throw new CatalogManagementError("INVALID_INPUT");
+    }
 
     const [created] = await transaction
       .insert(catalogProduct)
       .values({
-        internalName,
         brand,
-        slug,
+        bgSlug,
+        enSlug,
+        trSlug,
+        ukSlug,
         salesMode: input.salesMode,
         primaryCategoryId: input.primaryCategoryId,
         availability: input.availability,
-        gtin,
         mpn,
+        specificationConfiguration,
         pricePresentation: input.price.presentation,
         priceEntryBasis: input.price.entryBasis,
         priceInputMinor: input.price.inputMinor,
@@ -1938,7 +2525,10 @@ export async function createCatalogProduct(input: CreateCatalogProductInput) {
       .returning({
         id: catalogProduct.id,
         sku: catalogProduct.sku,
-        slug: catalogProduct.slug,
+        bgSlug: catalogProduct.bgSlug,
+        enSlug: catalogProduct.enSlug,
+        trSlug: catalogProduct.trSlug,
+        ukSlug: catalogProduct.ukSlug,
         status: catalogProduct.status,
         updatedAt: catalogProduct.updatedAt,
       });
@@ -1952,7 +2542,7 @@ export async function createCatalogProduct(input: CreateCatalogProductInput) {
       );
     }
 
-    await insertProductTranslations(transaction, created.id, translations);
+    await replaceProductTranslations(transaction, created.id, translations);
     await insertProductValues(
       transaction,
       created.id,
@@ -1967,15 +2557,21 @@ export async function createCatalogProduct(input: CreateCatalogProductInput) {
 export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
   assertIdentifier(input.productId);
   assertIdentifier(input.primaryCategoryId);
-  const internalName = normalizeRequiredText(
-    input.internalName,
-    CATALOG_INTERNAL_NAME_MAX_LENGTH,
-  );
   const brand = normalizeBrand(input.brand);
-  const slug = validateSlug(input.slug);
-  const gtin = normalizeGtin(input.gtin);
-  const mpn = normalizeMpn(input.mpn);
+  const bgSlug = validateSlug(input.bgSlug);
+  const enSlug = validateSlug(input.enSlug);
+  const trSlug = normalizeOptionalProductSlug(input.trSlug);
+  const ukSlug = normalizeOptionalProductSlug(input.ukSlug);
+  const mpn = normalizeRequiredText(input.mpn, 100);
   validateCommerceInput(input);
+  const translations = normalizeProductTranslations(input.translations);
+  if (!translations.find(({ locale }) => locale === "bg")?.title) {
+    throw new CatalogManagementError("INVALID_INPUT");
+  }
+  const media = normalizeMedia(input.media);
+  const specificationConfiguration = normalizeProductSpecificationConfiguration(
+    input.specificationConfiguration,
+  );
 
   return db.transaction(async (transaction) => {
     await assertCatalogActor(transaction, input.actorId, "catalog:manage");
@@ -1983,7 +2579,13 @@ export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
     if (!product) throw new CatalogManagementError("NOT_FOUND");
     assertFresh(product.updatedAt, input.expectedUpdatedAt);
 
-    if (product.publishedAt && slug !== product.slug) {
+    if (
+      product.publishedAt &&
+      (bgSlug !== product.bgSlug ||
+        enSlug !== product.enSlug ||
+        trSlug !== product.trSlug ||
+        ukSlug !== product.ukSlug)
+    ) {
       throw new CatalogManagementError("SLUG_IMMUTABLE");
     }
 
@@ -1993,13 +2595,24 @@ export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
         .from(catalogProductSpecificationValue)
         .where(eq(catalogProductSpecificationValue.productId, product.id))
         .limit(1);
-      if (dependentValue) throw new CatalogManagementError("DEPENDENCY_EXISTS");
+      const currentConfiguration =
+        product.specificationConfiguration as CatalogProductSpecificationConfigurationInput;
+      if (
+        (dependentValue ||
+          currentConfiguration.excludedSpecificationIds.length > 0 ||
+          currentConfiguration.customSpecifications.length > 0) &&
+        !input.discardSpecificationValues
+      ) {
+        throw new CatalogManagementError("DEPENDENCY_EXISTS");
+      }
     }
 
-    const additionalCategoryIds = await getProductAdditionalCategoryIds(
+    const currentAdditionalCategoryIds = await getProductAdditionalCategoryIds(
       transaction,
       product.id,
     );
+    const additionalCategoryIds =
+      input.additionalCategoryIds ?? currentAdditionalCategoryIds;
     const lockCategories = product.status === "published";
     await assertProductCategories(
       transaction,
@@ -2007,20 +2620,41 @@ export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
       additionalCategoryIds,
       lockCategories,
       lockCategories,
-      lockCategories ? [product.primaryCategoryId] : [],
+      lockCategories
+        ? [product.primaryCategoryId, ...currentAdditionalCategoryIds]
+        : [],
     );
+    await assertProductSpecificationConfiguration(
+      transaction,
+      input.primaryCategoryId,
+      specificationConfiguration,
+    );
+    if (
+      input.specificationValues.some(({ specificationId }) =>
+        specificationConfiguration.excludedSpecificationIds.includes(
+          specificationId,
+        ),
+      )
+    ) {
+      throw new CatalogManagementError("INVALID_INPUT");
+    }
+    await transaction
+      .delete(catalogProductSpecificationValue)
+      .where(eq(catalogProductSpecificationValue.productId, product.id));
     const updatedAt = new Date();
     const [updated] = await transaction
       .update(catalogProduct)
       .set({
-        internalName,
         brand,
-        slug,
+        bgSlug,
+        enSlug,
+        trSlug,
+        ukSlug,
         salesMode: input.salesMode,
         primaryCategoryId: input.primaryCategoryId,
         availability: input.availability,
-        gtin,
         mpn,
+        specificationConfiguration,
         pricePresentation: input.price.presentation,
         priceEntryBasis: input.price.entryBasis,
         priceInputMinor: input.price.inputMinor,
@@ -2033,6 +2667,29 @@ export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
         status: catalogProduct.status,
         updatedAt: catalogProduct.updatedAt,
       });
+
+    await transaction
+      .delete(catalogProductAdditionalCategory)
+      .where(eq(catalogProductAdditionalCategory.productId, product.id));
+    if (additionalCategoryIds.length > 0) {
+      await transaction.insert(catalogProductAdditionalCategory).values(
+        additionalCategoryIds.map((categoryId) => ({
+          productId: product.id,
+          categoryId,
+        })),
+      );
+    }
+    await insertProductValues(
+      transaction,
+      product.id,
+      input.primaryCategoryId,
+      input.specificationValues,
+    );
+    await replaceProductTranslations(transaction, product.id, translations);
+    await transaction
+      .delete(catalogProductMedia)
+      .where(eq(catalogProductMedia.productId, product.id));
+    await insertProductMedia(transaction, product.id, media);
 
     if (product.status === "published") {
       const aggregate = await getProductPublicationAggregate(
@@ -2066,10 +2723,7 @@ export async function replaceCatalogProductTranslations(input: {
       throw new CatalogManagementError("PUBLICATION_INVALID");
     }
 
-    await transaction
-      .delete(catalogProductTranslation)
-      .where(eq(catalogProductTranslation.productId, product.id));
-    await insertProductTranslations(transaction, product.id, translations);
+    await replaceProductTranslations(transaction, product.id, translations);
     return touchProduct(transaction, product.id);
   });
 }
@@ -2195,36 +2849,73 @@ async function touchProduct(
   return { id: productId, updatedAt: updatedAt.toISOString() };
 }
 
-function assertProductPublishable(
+export function getCatalogProductPublicationIssues(
   aggregate: NonNullable<
     Awaited<ReturnType<typeof getProductPublicationAggregate>>
   >,
 ) {
+  const issues: CatalogProductPublicationIssue[] = [];
   const product = aggregate.product;
-  validateSlug(product.slug);
-  normalizeBrand(product.brand);
-  normalizeGtin(product.gtin);
-  normalizeMpn(product.mpn);
-  validateCommerceInput({
-    salesMode: product.salesMode as CatalogSalesMode,
-    availability: product.availability as CatalogAvailability | null,
-    price:
-      product.pricePresentation === "on_request"
-        ? { presentation: "on_request", entryBasis: null, inputMinor: null }
-        : {
-            presentation: product.pricePresentation as "exact" | "from",
-            entryBasis: product.priceEntryBasis as "vat_inclusive" | "vat_exclusive",
-            inputMinor: product.priceInputMinor ?? BigInt(0),
-          },
-  });
+  try {
+    validateSlug(product.bgSlug);
+    validateSlug(product.enSlug);
+    if (product.trSlug) validateSlug(product.trSlug);
+    if (product.ukSlug) validateSlug(product.ukSlug);
+    normalizeBrand(product.brand);
+    validateCommerceInput({
+      salesMode: catalogSalesMode(product.salesMode),
+      availability: catalogAvailability(product.availability),
+      price:
+        product.pricePresentation === "on_request"
+          ? { presentation: "on_request", entryBasis: null, inputMinor: null }
+          : {
+              presentation: product.pricePresentation as "exact" | "from",
+              entryBasis: product.priceEntryBasis as
+                | "vat_inclusive"
+                | "vat_exclusive",
+              inputMinor: product.priceInputMinor ?? BigInt(0),
+            },
+    });
+  } catch {
+    issues.push({ code: "INVALID_COMMERCE" });
+  }
+  try {
+    normalizeRequiredText(product.mpn ?? "", 100);
+  } catch {
+    issues.push({ code: "MODEL_REQUIRED" });
+  }
 
-  if (
-    aggregate.categories.length !==
-      1 + aggregate.additionalCategories.length ||
-    aggregate.categories.some(({ status }) => status !== "published") ||
-    !hasAllCatalogLocales(aggregate.translations)
-  ) {
-    throw new CatalogManagementError("PUBLICATION_INVALID");
+  const expectedCategoryIds = [
+    product.primaryCategoryId,
+    ...aggregate.additionalCategories.map(({ categoryId }) => categoryId),
+  ];
+  for (const categoryId of expectedCategoryIds) {
+    if (
+      !aggregate.categories.some(
+        (category) => category.id === categoryId && category.status === "published",
+      )
+    ) {
+      issues.push({ code: "CATEGORY_NOT_PUBLISHED", categoryId });
+    }
+  }
+
+  for (const locale of catalogLocales) {
+    const translation = aggregate.translations.find(
+      (candidate) => candidate.locale === locale,
+    );
+    for (const field of [
+      "title",
+      "shortDescription",
+      "fullDescription",
+    ] as const) {
+      if (!translation?.[field]?.trim()) {
+        issues.push({
+          code: "MISSING_PRODUCT_TRANSLATION_FIELD",
+          locale,
+          field,
+        });
+      }
+    }
   }
 
   const valueBySpecification = new Map(
@@ -2237,11 +2928,20 @@ function assertProductPublishable(
     aggregate.selectedOptions.map((option) => [option.id, option]),
   );
 
+  const specificationConfiguration =
+    product.specificationConfiguration as CatalogProductSpecificationConfigurationInput;
+  const excludedIds = new Set(
+    specificationConfiguration.excludedSpecificationIds,
+  );
   for (const specification of aggregate.specifications) {
+    if (excludedIds.has(specification.id)) continue;
     const value = valueBySpecification.get(specification.id);
 
     if (specification.isRequired && !value) {
-      throw new CatalogManagementError("PUBLICATION_INVALID");
+      issues.push({
+        code: "MISSING_REQUIRED_SPECIFICATION",
+        specificationId: specification.id,
+      });
     }
 
     if (!value) continue;
@@ -2255,23 +2955,93 @@ function assertProductPublishable(
         selectedOptionById.get(value.selectionOptionId)?.specificationId ===
           specification.id);
 
-    if (!valid) throw new CatalogManagementError("PUBLICATION_INVALID");
+    if (!valid) {
+      issues.push({
+        code: "INVALID_SPECIFICATION_VALUE",
+        specificationId: specification.id,
+      });
+    }
   }
 
-  if (
-    aggregate.media.length === 0 ||
-    aggregate.media.filter(({ isPrimary }) => isPrimary).length !== 1 ||
-    aggregate.media.filter(({ isSocialImage }) => isSocialImage).length > 1 ||
-    aggregate.media.some(
-      (media) =>
-        !hasAllCatalogLocales(
-          aggregate.mediaTranslations.filter(
-            ({ productMediaId }) => productMediaId === media.id,
-          ),
-        ),
-    )
-  ) {
-    throw new CatalogManagementError("PUBLICATION_INVALID");
+  for (const specification of specificationConfiguration.customSpecifications) {
+    for (const locale of catalogLocales) {
+      if (
+        !specification.translations.find(
+          (translation) =>
+            translation.locale === locale && translation.label.trim(),
+        )
+      ) {
+        issues.push({
+          code: "MISSING_CUSTOM_SPECIFICATION_LABEL",
+          specificationId: specification.id,
+          locale,
+        });
+      }
+    }
+    if (specification.valueType === "selection") {
+      for (const option of specification.options) {
+        for (const locale of catalogLocales) {
+          if (
+            !option.translations.find(
+              (translation) =>
+                translation.locale === locale && translation.label.trim(),
+            )
+          ) {
+            issues.push({
+              code: "MISSING_CUSTOM_OPTION_LABEL",
+              specificationId: specification.id,
+              optionId: option.id,
+              locale,
+            });
+          }
+        }
+      }
+    }
+    if (!specification.value) {
+      issues.push({
+        code: "MISSING_REQUIRED_SPECIFICATION",
+        specificationId: specification.id,
+      });
+    }
+  }
+
+  if (aggregate.media.filter(({ isPrimary }) => isPrimary).length !== 1) {
+    issues.push({ code: "PRIMARY_IMAGE_REQUIRED" });
+  }
+  if (aggregate.media.filter(({ isSocialImage }) => isSocialImage).length > 1) {
+    issues.push({ code: "SOCIAL_IMAGE_LIMIT" });
+  }
+  for (const media of aggregate.media) {
+    for (const locale of catalogLocales) {
+      if (
+        !aggregate.mediaTranslations.some(
+          (translation) =>
+            translation.productMediaId === media.id &&
+            translation.locale === locale &&
+            translation.altText.trim(),
+        )
+      ) {
+        issues.push({
+          code: "MISSING_MEDIA_ALT",
+          mediaId: media.id,
+          mediaReference: media.reference,
+          locale,
+        });
+      }
+    }
+  }
+
+  return issues;
+}
+
+function assertProductPublishable(
+  aggregate: NonNullable<
+    Awaited<ReturnType<typeof getProductPublicationAggregate>>
+  >,
+) {
+  const issues = getCatalogProductPublicationIssues(aggregate);
+  if (issues.length > 0) {
+    throw new CatalogManagementError("PUBLICATION_INVALID", issues);
   }
 }
 

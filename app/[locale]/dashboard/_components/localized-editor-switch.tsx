@@ -1,6 +1,7 @@
 "use client";
 
 import { type KeyboardEvent } from "react";
+import { Button } from "@/components/button";
 
 import {
   catalogLocales,
@@ -63,10 +64,12 @@ export function LocalizedEditorSwitch({
         const selected = activeLocale === locale;
 
         return (
-          <button
+          <Button
             key={locale}
             id={`${idPrefix}-language-${locale}`}
             type="button"
+            size="compact"
+            variant="secondary"
             role={variant === "tabs" ? "tab" : undefined}
             aria-selected={variant === "tabs" ? selected : undefined}
             aria-pressed={variant === "selector" ? selected : undefined}
@@ -82,7 +85,7 @@ export function LocalizedEditorSwitch({
             <small className="dashboard-catalog-localized-status">
               {complete ? completeLabel : incompleteLabel}
             </small>
-          </button>
+          </Button>
         );
       })}
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Button, ButtonLink } from "@/components/button";
 
 import { authClient } from "@/lib/auth-client";
 import {
@@ -126,7 +126,7 @@ export function ResetPasswordForm({
           <h2 ref={statusHeadingRef} tabIndex={-1}>{labels.successTitle}</h2>
           <p>{labels.successDescription}</p>
         </div>
-        <Link className="auth-primary-action" href={signInHref}>{labels.signIn}</Link>
+        <ButtonLink href={signInHref}>{labels.signIn}</ButtonLink>
       </div>
     );
   }
@@ -177,9 +177,9 @@ export function ResetPasswordForm({
         {fieldErrors.confirmPassword ? <p id="reset-password-confirmation-error" className="auth-field-error">{fieldErrors.confirmPassword}</p> : null}
       </div>
 
-      <button className="auth-primary-action" type="submit" disabled={pending}>
+      <Button type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
-      </button>
+      </Button>
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pending ? labels.submitting : ""}
       </p>

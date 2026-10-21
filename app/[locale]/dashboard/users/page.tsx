@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Button, ButtonLink } from "@/components/button";
 
 import { getT } from "@/i18n.server";
 import { getCurrentUser, hasPermission } from "@/lib/authorization";
@@ -215,9 +215,9 @@ export default async function UsersPage({
               maxLength={100}
               placeholder={t("pages.dashboard.users.search.placeholder")}
             />
-            <button type="submit">{t("pages.dashboard.users.search.submit")}</button>
+            <Button type="submit">{t("pages.dashboard.users.search.submit")}</Button>
             {result.query ? (
-              <Link href={usersPath}>{t("pages.dashboard.users.search.clear")}</Link>
+              <ButtonLink variant="informational" href={usersPath}>{t("pages.dashboard.users.search.clear")}</ButtonLink>
             ) : null}
           </div>
         </form>
@@ -239,7 +239,7 @@ export default async function UsersPage({
               : t("pages.dashboard.users.empty.description")}
           </p>
           {result.query ? (
-            <Link href={usersPath}>{t("pages.dashboard.users.search.clear")}</Link>
+            <ButtonLink variant="informational" href={usersPath}>{t("pages.dashboard.users.search.clear")}</ButtonLink>
           ) : null}
         </section>
       ) : (
@@ -254,9 +254,9 @@ export default async function UsersPage({
       {result.pageCount > 1 ? (
         <nav className="dashboard-users-pagination" aria-label={t("pages.dashboard.users.pagination.label")}>
           {result.page > 1 ? (
-            <Link href={pageHref(locale, result.query, result.page - 1)}>
+            <ButtonLink variant="secondary" href={pageHref(locale, result.query, result.page - 1)}>
               {t("pages.dashboard.users.pagination.previous")}
-            </Link>
+            </ButtonLink>
           ) : <span />}
           <span>
             {t("pages.dashboard.users.pagination.status", {
@@ -265,9 +265,9 @@ export default async function UsersPage({
             })}
           </span>
           {result.page < result.pageCount ? (
-            <Link href={pageHref(locale, result.query, result.page + 1)}>
+            <ButtonLink variant="secondary" href={pageHref(locale, result.query, result.page + 1)}>
               {t("pages.dashboard.users.pagination.next")}
-            </Link>
+            </ButtonLink>
           ) : <span />}
         </nav>
       ) : null}

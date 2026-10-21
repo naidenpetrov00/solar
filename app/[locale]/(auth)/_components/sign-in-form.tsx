@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Button } from "@/components/button";
 
 import { authClient } from "@/lib/auth-client";
 import { validateEmail } from "@/lib/auth-validation";
@@ -155,13 +156,13 @@ export function SignInForm({
             initialEmail={unverifiedEmail}
             labels={labels.verificationRequest}
           />
-          <button
-            className="auth-text-action"
+          <Button
+            variant="informational"
             type="button"
             onClick={() => setUnverifiedEmail(null)}
           >
             {labels.tryAnotherEmail}
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -220,9 +221,9 @@ export function SignInForm({
         {labels.forgotPassword}
       </Link>
 
-      <button className="auth-primary-action" type="submit" disabled={pending}>
+      <Button type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
-      </button>
+      </Button>
       <div className="auth-social">
         <SocialSignIn
           {...socialSignIn.google}

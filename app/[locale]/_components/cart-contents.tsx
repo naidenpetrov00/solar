@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Button, ButtonLink } from "@/components/button";
 import { formatBgnPrice } from "../_lib/shop-catalog";
 import { maxCartQuantity, useCart } from "./cart-store";
 
@@ -52,7 +53,7 @@ export function CartContents({ locale, products, shopHref, labels }: {
         <div className="cart-empty">
           <h2>{labels.empty}</h2>
           <p>{labels.emptyDescription}</p>
-          <Link className="cart-shop-link" href={shopHref} id="cart-empty-shop-link">{labels.continueShopping}</Link>
+          <ButtonLink href={shopHref} id="cart-empty-shop-link">{labels.continueShopping}</ButtonLink>
         </div>
       ) : (
         <>
@@ -69,23 +70,28 @@ export function CartContents({ locale, products, shopHref, labels }: {
                   <div className="cart-item-controls">
                     <span>{labels.quantity}</span>
                     <div className="cart-quantity-control">
-                      <button
+                      <Button
                         type="button"
+                        size="icon"
+                        variant="secondary"
                         aria-label={`${labels.decreaseQuantity}: ${product.name}`}
                         disabled={item.quantity <= 1}
                         onClick={() => { setQuantity(item.id, item.quantity - 1); setAnnouncement(`${product.name}: ${labels.quantityChanged} (${item.quantity - 1})`); }}
-                      ><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /></svg></button>
+                      ><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /></svg></Button>
                       <output aria-label={`${labels.quantity}: ${product.name}`}>{item.quantity}</output>
-                      <button
+                      <Button
                         type="button"
+                        size="icon"
+                        variant="secondary"
                         aria-label={`${labels.increaseQuantity}: ${product.name}`}
                         disabled={item.quantity >= maxCartQuantity}
                         onClick={() => { setQuantity(item.id, item.quantity + 1); setAnnouncement(`${product.name}: ${labels.quantityChanged} (${item.quantity + 1})`); }}
-                      ><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14" /></svg></button>
+                      ><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14" /></svg></Button>
                     </div>
-                    <button
+                    <Button
                       type="button"
-                      className="cart-remove"
+                      variant="informational"
+                      tone="danger"
                       aria-label={`${labels.removeItem}: ${product.name}`}
                       onClick={() => {
                         const nextItem = items[index + 1] ?? items[index - 1];
@@ -95,7 +101,7 @@ export function CartContents({ locale, products, shopHref, labels }: {
                           document.getElementById(nextItem ? `cart-product-${nextItem.id}` : "cart-empty-shop-link")?.focus();
                         });
                       }}
-                    >{labels.removeItem}</button>
+                    >{labels.removeItem}</Button>
                   </div>
                   <p className="cart-line-total"><span>{labels.lineTotal}</span><strong>{formatBgnPrice(locale, product.priceBgn * item.quantity)}</strong></p>
                 </li>
@@ -106,7 +112,7 @@ export function CartContents({ locale, products, shopHref, labels }: {
             <p><span>{labels.itemCount}</span><strong>{count}</strong></p>
             <p className="cart-grand-total"><span>{labels.total}</span><strong>{formatBgnPrice(locale, total)}</strong></p>
             <p className="cart-price-note">{labels.priceNote}</p>
-            <Link className="cart-shop-link" href={shopHref}>{labels.continueShopping}</Link>
+            <ButtonLink href={shopHref}>{labels.continueShopping}</ButtonLink>
           </div>
         </>
       )}
