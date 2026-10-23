@@ -1,14 +1,6 @@
 import "server-only";
 
-import {
-  and,
-  asc,
-  eq,
-  inArray,
-  isNull,
-  or,
-  sql,
-} from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
@@ -26,13 +18,6 @@ import {
   catalogSpecificationTranslation,
   user,
 } from "@/db/schema";
-import {
-  catalogCategorySlugForLocale,
-  isCatalogLocale,
-  publicVatInclusiveMinor,
-  type CatalogLocale,
-  type CatalogPriceEntryBasis,
-} from "@/lib/catalog/model";
 
 export type CatalogTransaction = Parameters<
   Parameters<typeof db.transaction>[0]
@@ -192,6 +177,8 @@ export async function getProductPublicationAggregate(
           title: catalogProductTranslation.title,
           shortDescription: catalogProductTranslation.shortDescription,
           fullDescription: catalogProductTranslation.fullDescription,
+          marketingLabel: catalogProductTranslation.marketingLabel,
+          seoTitle: catalogProductTranslation.seoTitle,
           metaDescription: catalogProductTranslation.metaDescription,
         })
         .from(catalogProductTranslation)
@@ -251,209 +238,5 @@ export async function getProductPublicationAggregate(
     selectedOptions,
     media,
     mediaTranslations,
-  };
-}
-
-export type PublishedCategorySummary = {
-  id: string;
-  parentId: string | null;
-  slug: string;
-  name: string;
-  introduction: string;
-};
-
-export async function listPublishedCategorySummaries(
-  locale: CatalogLocale,
-  parentId: string | null,
-): Promise<PublishedCategorySummary[]> {
-  if (!isCatalogLocale(locale)) {
-    return [];
-  }
-
-  const categories = await db
-    .select({
-      id: catalogCategory.id,
-      parentId: catalogCategory.parentId,
-      bgSlug: catalogCategory.bgSlug,
-      enSlug: catalogCategory.enSlug,
-      sortOrder: catalogCategory.sortOrder,
-    })
-    .from(catalogCategory)
-    .where(
-      and(
-        eq(catalogCategory.status, "published"),
-        parentId === null
-          ? isNull(catalogCategory.parentId)
-          : eq(catalogCategory.parentId, parentId),
-      ),
-    )
-    .orderBy(asc(catalogCategory.sortOrder), asc(catalogCategory.id));
-
-  if (categories.length === 0) {
-    return [];
-  }
-
-  const translations = await db
-    .select()
-    .from(catalogCategoryTranslation)
-    .where(
-      and(
-        inArray(
-          catalogCategoryTranslation.categoryId,
-          categories.map(({ id }) => id),
-        ),
-        or(
-          eq(catalogCategoryTranslation.locale, locale),
-          eq(catalogCategoryTranslation.locale, "bg"),
-        ),
-      ),
-    );
-  const translationByCategory = new Map<
-    string,
-    Partial<Record<CatalogLocale, (typeof translations)[number]>>
-  >();
-
-  for (const translation of translations) {
-    const existing = translationByCategory.get(translation.categoryId) ?? {};
-    existing[translation.locale as CatalogLocale] = translation;
-    translationByCategory.set(translation.categoryId, existing);
-  }
-
-  return categories
-    .flatMap((category) => {
-      const available = translationByCategory.get(category.id);
-      const translation = available?.[locale] ?? available?.bg;
-
-      return translation
-        ? [{
-            id: category.id,
-            parentId: category.parentId,
-            slug: catalogCategorySlugForLocale(category, locale),
-            name: translation.name,
-            introduction: translation.introduction,
-            sortOrder: category.sortOrder,
-          }]
-        : [];
-    })
-    .sort(
-      (left, right) =>
-        left.sortOrder - right.sortOrder ||
-        left.name.localeCompare(right.name, locale) ||
-        left.id.localeCompare(right.id),
-    )
-    .map((category) => ({
-      id: category.id,
-      parentId: category.parentId,
-      slug: category.slug,
-      name: category.name,
-      introduction: category.introduction,
-    }));
-}
-
-export type PublishedProductDetail = {
-  id: string;
-  sku: string;
-  slug: string;
-  brand: string | null;
-  title: string;
-  shortDescription: string;
-  fullDescription: string;
-  metaDescription: string | null;
-  salesMode: string;
-  availability: string | null;
-  price: null | {
-    presentation: string;
-    currency: "EUR";
-    inputMinor: string;
-    publicVatInclusiveMinor: string;
-  };
-};
-
-export async function getPublishedProductBySlug(
-  slug: string,
-  locale: CatalogLocale,
-): Promise<PublishedProductDetail | null> {
-  if (!isCatalogLocale(locale)) {
-    return null;
-  }
-
-  const localizedSlug =
-    locale === "bg"
-      ? catalogProduct.bgSlug
-      : locale === "tr"
-        ? sql<string>`coalesce(${catalogProduct.trSlug}, ${catalogProduct.enSlug})`
-        : locale === "uk"
-          ? sql<string>`coalesce(${catalogProduct.ukSlug}, ${catalogProduct.enSlug})`
-          : catalogProduct.enSlug;
-  const [row] = await db
-    .select({
-      id: catalogProduct.id,
-      sku: catalogProduct.sku,
-      slug: localizedSlug,
-      brand: catalogProduct.brand,
-      salesMode: catalogProduct.salesMode,
-      availability: catalogProduct.availability,
-      currency: catalogProduct.currency,
-      pricePresentation: catalogProduct.pricePresentation,
-      priceEntryBasis: catalogProduct.priceEntryBasis,
-      priceInputMinor: catalogProduct.priceInputMinor,
-      title: catalogProductTranslation.title,
-      shortDescription: catalogProductTranslation.shortDescription,
-      fullDescription: catalogProductTranslation.fullDescription,
-      metaDescription: catalogProductTranslation.metaDescription,
-    })
-    .from(catalogProduct)
-    .innerJoin(
-      catalogCategory,
-      eq(catalogCategory.id, catalogProduct.primaryCategoryId),
-    )
-    .innerJoin(
-      catalogProductTranslation,
-      and(
-        eq(catalogProductTranslation.productId, catalogProduct.id),
-        eq(catalogProductTranslation.locale, locale),
-      ),
-    )
-    .where(
-      and(
-        eq(localizedSlug, slug),
-        eq(catalogProduct.status, "published"),
-        eq(catalogCategory.status, "published"),
-      ),
-    )
-    .limit(1);
-
-  if (!row) {
-    return null;
-  }
-
-  const price =
-    row.pricePresentation === "on_request" ||
-    row.priceInputMinor === null ||
-    row.priceEntryBasis === null
-      ? null
-      : {
-          presentation: row.pricePresentation,
-          currency: "EUR" as const,
-          inputMinor: row.priceInputMinor.toString(),
-          publicVatInclusiveMinor: publicVatInclusiveMinor({
-            presentation: row.pricePresentation as "exact" | "from",
-            entryBasis: row.priceEntryBasis as CatalogPriceEntryBasis,
-            inputMinor: row.priceInputMinor,
-          }).toString(),
-        };
-
-  return {
-    id: row.id,
-    sku: row.sku,
-    slug: row.slug,
-    brand: row.brand,
-    title: row.title,
-    shortDescription: row.shortDescription,
-    fullDescription: row.fullDescription,
-    metaDescription: row.metaDescription,
-    salesMode: row.salesMode,
-    availability: row.availability,
-    price,
   };
 }

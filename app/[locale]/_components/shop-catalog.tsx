@@ -1,104 +1,229 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
+import { ButtonLink } from "@/components/button";
 import { getT } from "@/i18n.server";
-import { AddToCartButton } from "./add-to-cart-button";
-import { formatBgnPrice, shopCategories } from "../_lib/shop-catalog";
+import type {
+  PublicCatalogCategory,
+  PublicCatalogProductSummary,
+} from "@/lib/catalog/public";
+import { formatCurrencyMinor } from "../_lib/catalog-format";
 import { localizedPath } from "../_lib/routes";
+import { AddToCartButton } from "./add-to-cart-button";
+import { CatalogMedia } from "./catalog-media";
 
-type Props = { locale: string; categorySlug?: string };
+function Arrow() {
+  return (
+    <svg aria-hidden="true" fill="none" viewBox="0 0 24 24">
+      <path d="M5 12h13M13 6l6 6-6 6" />
+    </svg>
+  );
+}
 
-export async function ShopCatalog({ locale, categorySlug }: Props) {
+async function ProductList({
+  locale,
+  products,
+}: {
+  locale: string;
+  products: PublicCatalogProductSummary[];
+}) {
   const { t } = await getT("common", { lng: locale });
-  const activeCategory = shopCategories.find((category) => category.slug === categorySlug);
-  const visibleCategories = activeCategory ? [activeCategory] : shopCategories;
+
+  if (products.length === 0) {
+    return <p className="catalog-empty-state">{t("pages.shop.emptyProducts")}</p>;
+  }
 
   return (
-    <main id="main-content" className={activeCategory ? "shop-page" : "shop-page shop-page-variant-b"}>
-      <header className="shop-introduction">
-        <div className="shop-introduction-copy">
-          <h1>{t(activeCategory?.titleKey ?? "pages.shop.title")}</h1>
-          <p>{t(activeCategory?.descriptionKey ?? "pages.shop.description")}</p>
-        </div>
-        {!activeCategory && (
-          <div className="shop-hero-media">
-            {/* Temporary licensed image already used on the welcome page. Replace with verified project photography when available. */}
-            <Image
-              src="/images/welcome-solar-hero.jpg"
-              alt={t("pages.shop.heroImageAlt")}
-              fill
-              preload
-              sizes="100vw"
-            />
-          </div>
-        )}
-      </header>
-      <div className="shop-layout">
-        <nav aria-label={t("pages.shop.categoryNavigation")} className="shop-categories">
-          <h2>{t("pages.shop.categories")}</h2>
-          <ul>
-            {shopCategories.map((category) => (
-              <li key={category.slug}>
-                <Link
-                  href={localizedPath(locale, `shop/${category.slug}`)}
-                  aria-current={categorySlug === category.slug ? "page" : undefined}
+    <div className="catalog-product-list">
+      {products.map((product) => {
+        const href = localizedPath(locale, `products/${product.slug}`);
+        const price = product.price
+          ? formatCurrencyMinor(
+              locale,
+              product.price.publicVatInclusiveMinor,
+              product.price.currency,
+            )
+          : t("pages.shop.priceOnRequest");
+        return (
+          <article className="catalog-product-row" key={product.id}>
+            <Link className="catalog-product-row-link" href={href}>
+              <div className="catalog-product-row-media">
+                {product.primaryMedia ? (
+                  <CatalogMedia
+                    reference={product.primaryMedia.reference}
+                    altText={product.primaryMedia.altText}
+                    sizes="(max-width: 48rem) 100vw, 22rem"
+                  />
+                ) : null}
+              </div>
+              <div className="catalog-product-row-copy">
+                {product.marketingLabel ? (
+                  <p className="catalog-marketing-label">{product.marketingLabel}</p>
+                ) : null}
+                <h3>{product.title}</h3>
+                <p>{product.shortDescription}</p>
+                <span className="catalog-inline-link">
+                  {t("pages.shop.viewProduct")}
+                  <Arrow />
+                </span>
+              </div>
+            </Link>
+            <div className="catalog-product-row-commerce">
+              <p>
+                {product.price?.presentation === "from" ? (
+                  <span>{t("pages.shop.priceFrom")}</span>
+                ) : null}
+                <strong>{price}</strong>
+                {product.price ? <small>{t("pages.shop.vatIncluded")}</small> : null}
+              </p>
+              {product.salesMode === "direct_purchase" &&
+              product.availability === "in_stock" &&
+              product.price ? (
+                <AddToCartButton
+                  id={product.id}
+                  name={product.title}
+                  addLabel={t("pages.shop.addToCart")}
+                  addedLabel={t("pages.shop.addedToCart")}
+                  accessibleLabel={t("pages.shop.addNamedToCart", {
+                    name: product.title,
+                  })}
+                />
+              ) : product.salesMode === "direct_purchase" &&
+                product.availability !== "in_stock" ? (
+                <span className="catalog-availability">
+                  {t("pages.shop.outOfStock")}
+                </span>
+              ) : (
+                <ButtonLink
+                  variant="secondary"
+                  href={localizedPath(locale, "contact")}
                 >
-                  {t(category.titleKey)}
-                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="shop-results">
-          {visibleCategories.map((category) => (
-            <section aria-labelledby={`shop-category-${category.slug}`} key={category.slug}>
-              <div className="shop-results-heading">
-                <h2 id={`shop-category-${category.slug}`}>{t(category.titleKey)}</h2>
-                <p>{t("pages.home.residential.packagePriceNote")}</p>
-              </div>
-              <div className="residential-package-grid shop-product-grid">
-                {category.products.map((product) => {
-                  const name = t(product.nameKey);
-                  return (
-                    <article className="residential-package-card shop-product-card" key={product.id}>
-                      <Link
-                        className="residential-package-card-link"
-                        href={localizedPath(locale, product.href)}
-                        scroll
-                        transitionTypes={["package-detail"]}
-                      >
-                        <div aria-hidden="true" className="residential-package-visual" />
-                        <div className="residential-package-card-content">
-                          <p className="residential-package-type">{t(product.energyTypeKey)}</p>
-                          <h3>{name}</h3>
-                          <p className="residential-package-profile">{t(product.profileKey)}</p>
-                          <span className="residential-package-card-action">
-                            {t("pages.home.residential.viewPackage")}
-                            <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                          </span>
-                        </div>
-                      </Link>
-                      <div className="shop-product-purchase">
-                        <p className="residential-package-price">
-                          <span>{t("pages.home.residential.packagePrice")}</span>
-                          <strong>{formatBgnPrice(locale, product.priceBgn)}</strong>
-                        </p>
-                        <AddToCartButton
-                          id={product.id}
-                          name={name}
-                          addLabel={t("pages.shop.addToCart")}
-                          addedLabel={t("pages.shop.addedToCart")}
-                          accessibleLabel={t("pages.shop.addNamedToCart", { name })}
-                        />
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+                  {t("pages.shop.enquire")}
+                </ButtonLink>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function CategoryLinks({
+  categories,
+  locale,
+  heading,
+  id,
+}: {
+  categories: PublicCatalogCategory[];
+  locale: string;
+  heading: string;
+  id: string;
+}) {
+  if (categories.length === 0) return null;
+
+  return (
+    <section className="catalog-category-index" aria-labelledby={id}>
+      <h2 id={id}>{heading}</h2>
+      <div>
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            href={localizedPath(locale, `shop/${category.path}`)}
+          >
+            <span>{category.name}</span>
+            <p>{category.introduction}</p>
+            <Arrow />
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export async function CatalogLanding({
+  locale,
+  categories,
+}: {
+  locale: string;
+  categories: PublicCatalogCategory[];
+}) {
+  const { t } = await getT("common", { lng: locale });
+
+  return (
+    <main id="main-content" className="shop-page catalog-landing">
+      <header className="shop-introduction catalog-hero">
+        <div className="shop-introduction-copy">
+          <h1>{t("pages.shop.title")}</h1>
+          <p>{t("pages.shop.description")}</p>
         </div>
+        <div className="shop-hero-media">
+          <Image
+            src="/images/welcome-solar-hero.jpg"
+            alt={t("pages.shop.heroImageAlt")}
+            fill
+            preload
+            sizes="100vw"
+          />
+        </div>
+      </header>
+      <div className="catalog-shell">
+        <CategoryLinks
+          categories={categories}
+          locale={locale}
+          heading={t("pages.shop.categories")}
+          id="catalog-root-categories-title"
+        />
+        {categories.length === 0 ? (
+          <p className="catalog-empty-state">{t("pages.shop.emptyCatalog")}</p>
+        ) : null}
       </div>
     </main>
+  );
+}
+
+export async function CatalogCategoryView({
+  locale,
+  category,
+  siblings,
+  children,
+  products,
+}: {
+  locale: string;
+  category: PublicCatalogCategory;
+  siblings: PublicCatalogCategory[];
+  children: PublicCatalogCategory[];
+  products: PublicCatalogProductSummary[];
+}) {
+  const { t } = await getT("common", { lng: locale });
+
+  return (
+    <div className="catalog-category-content">
+      <header className="catalog-category-heading">
+        <h1>{category.name}</h1>
+        <p>{category.introduction}</p>
+      </header>
+      {category.detailedContent ? (
+        <div className="catalog-category-description">
+          {category.detailedContent}
+        </div>
+      ) : null}
+      <CategoryLinks
+        categories={siblings}
+        locale={locale}
+        heading={t("pages.shop.siblingCategories")}
+        id="catalog-sibling-categories-title"
+      />
+      <CategoryLinks
+        categories={children}
+        locale={locale}
+        heading={t("pages.shop.subcategories")}
+        id="catalog-subcategories-title"
+      />
+      <section className="catalog-category-products" aria-labelledby="catalog-products-title">
+        <h2 id="catalog-products-title">{t("pages.shop.products")}</h2>
+        <ProductList locale={locale} products={products} />
+      </section>
+    </div>
   );
 }

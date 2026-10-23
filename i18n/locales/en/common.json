@@ -8,7 +8,7 @@
     "home": "Home",
     "shop": "Shop",
     "projects": "Projects",
-    "packages": "Packages",
+
     "cart": "Cart",
     "contact": "Contact",
     "requestQuote": "Request a quote",
@@ -261,6 +261,8 @@
             "title": { "label": "Product title", "help": "The public product name in this language." },
             "shortDescription": { "label": "Short description", "help": "A concise summary for product listings." },
             "fullDescription": { "label": "Full description", "help": "The complete product description in this language." },
+            "marketingLabel": {"label":"Marketing label","help":"Optional short label displayed with the product."},
+            "seoTitle": {"label":"SEO title","help":"Optional search title. The product title is used when this is empty."},
             "metaDescription": { "label": "Meta description", "help": "May appear below the title and address in search results." },
             "mediaReference": { "label": "Media reference", "help": "Use an existing site path or HTTPS URL." },
             "altText": { "label": "Alternative text", "help": "Describe this image in the selected language." }
@@ -312,124 +314,62 @@
         "businessTitle": "Business"
       },
       "residential": {
-        "introduction": "Explore four clear starting points for a home solar system. Choose how to describe your energy use, then compare what each package includes.",
-        "input": {
-          "legend": "How would you like to describe your energy use?",
-          "bill": "Monthly electricity bill",
-          "consumption": "Monthly electricity use",
-          "billPlaceholder": "For example, 180 BGN",
-          "consumptionPlaceholder": "For example, 450 kWh",
-          "note": "Your value will support future recommendations. It does not change the packages yet."
-        },
-        "packagesHeading": "Choose a starting point",
-        "packagePrice": "Temporary price",
-        "packagePriceNote": "Temporary value for this local version. Confirm the price when requesting a quote.",
-        "quote": "Request a quote",
-        "packages": {
-          "essentials": {
-            "name": "Solar Essentials",
-            "profile": "For an apartment or lower-use home.",
-            "energyType": "Solar only",
-            "features": [
-              "Solar panels",
-              "Grid-connected inverter"
-            ],
-            "description": "A starting configuration for the home that brings together the core parts of a solar system. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Inverter — to be confirmed",
-              "Battery — not included"
-            ]
-          },
-          "smart": {
-            "name": "Solar Smart",
-            "profile": "For a typical family home.",
-            "energyType": "Solar only",
-            "features": [
-              "Solar panels",
-              "Larger solar array",
-              "Grid-connected inverter"
-            ],
-            "description": "A starting configuration with a larger solar array for a typical family home. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Inverter — to be confirmed",
-              "Battery — not included"
-            ]
-          },
-          "storage": {
-            "name": "Solar Storage",
-            "profile": "For households considering energy storage.",
-            "energyType": "With battery",
-            "features": [
-              "Solar panels",
-              "Hybrid inverter",
-              "Battery"
-            ],
-            "description": "A starting configuration for households considering energy storage. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Hybrid inverter — to be confirmed",
-              "Battery capacity — to be confirmed"
-            ]
-          },
-          "complete": {
-            "name": "Solar Complete",
-            "profile": "For homes with higher electricity use.",
-            "energyType": "With battery",
-            "features": [
-              "Larger solar array",
-              "Hybrid inverter",
-              "Battery"
-            ],
-            "description": "A starting configuration for homes with higher electricity use and energy storage needs. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Hybrid inverter — to be confirmed",
-              "Battery capacity — to be confirmed"
-            ]
-          }
-        },
-        "viewPackage": "View package",
-        "detailHeading": "Package details",
-        "backToPackages": "Back to packages",
-        "breadcrumbLabel": "Package navigation"
+        "introduction": "Browse the published categories and products to find a suitable starting point for your home.",
+        "catalogCta": "Explore the catalog"
       }
     },
     "shop": {
       "heroImageAlt": "Aerial view of rows of photovoltaic panels",
-      "title": "Shop",
-      "description": "Browse solar packages and choose a starting point for your home.",
+      "title": "Catalog",
+      "description": "Browse published product categories and find a suitable solution for your project.",
       "categories": "Categories",
-      "categoryNavigation": "Product categories",
+      "subcategories": "Subcategories",
+      "siblingCategories": "Other categories",
+      "products": "Products",
+      "emptyCatalog": "There are no published categories at the moment.",
+      "emptyProducts": "There are no published products in this category yet.",
+      "viewProduct": "View product",
+      "priceOnRequest": "Price on request",
+      "priceFrom": "From",
+      "vatIncluded": "Price includes VAT",
       "addToCart": "Add to cart",
-      "addedToCart": "Added to cart",
-      "addNamedToCart": "Add {{name}} to cart"
-    },
-    "projects": {
-      "title": "Projects"
-    },
-    "packages": {
-      "title": "Packages"
+      "addedToCart": "Added",
+      "addNamedToCart": "Add {{name}} to cart",
+      "inStock": "In stock",
+      "outOfStock": "Out of stock",
+      "enquire": "Send an enquiry",
+      "breadcrumbLabel": "Catalog navigation",
+      "yes": "Yes",
+      "no": "No",
+      "brand": "Brand",
+      "model": "Model",
+      "specifications": "Specifications",
+      "gallery": "Gallery",
+      "noImage": "No image available",
+      "relatedCategories": "More relevant categories"
     },
     "cart": {
       "title": "Cart",
-      "description": "Review your selected solar packages and temporary total.",
+      "description": "Review your selected products and total.",
       "loading": "Loading cart…",
       "empty": "Your cart is empty",
-      "emptyDescription": "Browse solar packages to add a starting point.",
-      "continueShopping": "Back to Shop",
-      "itemCount": "Total items",
+      "emptyDescription": "Add an available product from the catalog to see it here.",
+      "continueShopping": "Continue to the catalog",
+      "itemCount": "Items",
       "quantity": "Quantity",
-      "unitPrice": "Temporary unit price",
-      "lineTotal": "Line total",
-      "total": "Temporary total",
+      "unitPrice": "Unit price",
+      "lineTotal": "Item total",
+      "total": "Total",
       "increaseQuantity": "Increase quantity",
       "decreaseQuantity": "Decrease quantity",
       "removeItem": "Remove",
-      "quantityChanged": "quantity updated",
-      "itemRemoved": "removed from cart",
-      "storageUnavailable": "Cart changes cannot be saved in this browser."
+      "quantityChanged": "Quantity changed",
+      "itemRemoved": "Item removed",
+      "unavailableRemoved": "Unavailable products were removed from your cart.",
+      "hydrationFailed": "The cart cannot be refreshed right now. Please try again.",
+      "retry": "Retry",
+      "storageUnavailable": "Cart changes will not be saved in this browser.",
+      "priceNote": "Displayed prices include VAT."
     },
     "contact": {
       "title": "Contact"
@@ -573,10 +513,6 @@
           }
         }
       }
-    },
-    "solarPackages": {
-      "title": "Solar packages",
-      "description": "Explore starting points for a home solar system."
     }
   }
 }

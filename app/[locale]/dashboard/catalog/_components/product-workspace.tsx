@@ -102,6 +102,8 @@ export type ProductLabels = {
     title: FieldCopy;
     shortDescription: FieldCopy;
     fullDescription: FieldCopy;
+    marketingLabel: FieldCopy;
+    seoTitle: FieldCopy;
     metaDescription: FieldCopy;
     mediaReference: FieldCopy;
     altText: FieldCopy;
@@ -224,6 +226,8 @@ type ProductTranslationDraft = {
   title: string;
   shortDescription: string;
   fullDescription: string;
+  marketingLabel: string;
+  seoTitle: string;
   metaDescription: string;
 };
 
@@ -267,6 +271,8 @@ function emptyTranslations() {
         title: "",
         shortDescription: "",
         fullDescription: "",
+        marketingLabel: "",
+        seoTitle: "",
         metaDescription: "",
       },
     ]),
@@ -280,6 +286,8 @@ function translationsFromDetail(detail: ManagedCatalogProductDetail | null) {
       title: translation.title,
       shortDescription: translation.shortDescription,
       fullDescription: translation.fullDescription,
+      marketingLabel: translation.marketingLabel ?? "",
+      seoTitle: translation.seoTitle ?? "",
       metaDescription: translation.metaDescription ?? "",
     };
   }
@@ -431,8 +439,6 @@ function categoryPublicPath(
 }
 
 function productPublicPath(
-  categories: ManagedCatalogCategoryTreeItem[],
-  primaryCategoryId: string,
   locale: CatalogLocale,
   bgSlug: string,
   enSlug: string,
@@ -440,12 +446,11 @@ function productPublicPath(
   ukSlug: string | null,
 ) {
   const localePrefix = locale === "bg" ? "" : `/${locale}`;
-  const categoryPath = categoryPublicPath(categories, primaryCategoryId, locale);
   const productSlug = catalogProductSlugForLocale(
     { bgSlug, enSlug, trSlug, ukSlug },
     locale,
   );
-  return `${localePrefix}/shop/${[categoryPath, productSlug].filter(Boolean).join("/")}`;
+  return `${localePrefix}/products/${productSlug}`;
 }
 
 function categoryDisclosureIcon(expanded: boolean) {
@@ -1083,6 +1088,7 @@ function ProductEditor(props: Props & { detail: ManagedCatalogProductDetail | nu
 
     return {
       title: content.title.trim() || labels.preview.emptyTitle,
+      marketingLabel: content.marketingLabel.trim() || null,
       brand: brand.trim() || null,
       model: mpn.trim() || null,
       shortDescription: content.shortDescription.trim(),
@@ -1247,8 +1253,6 @@ function ProductEditor(props: Props & { detail: ManagedCatalogProductDetail | nu
               suggestedSlug !== localizedSlug &&
               (!creating || !requiredSlug);
             const previewPath = productPublicPath(
-              categories,
-              primaryCategoryId,
               contentLocale,
               bgSlug,
               enSlug,
@@ -1276,9 +1280,10 @@ function ProductEditor(props: Props & { detail: ManagedCatalogProductDetail | nu
                     <code className="dashboard-catalog-url-preview">{origin}{previewPath}</code>
                     {canOfferSlugUpdate ? <DashboardButton type="button" className="dashboard-catalog-slug-update" onClick={() => updateProductSlug(contentLocale, suggestedSlug, false)}>{labels.content.updateSlug}</DashboardButton> : null}
                   </Field>
+                  <Field id={`product-content-${contentLocale}-marketing-label`} copy={labels.fields.marketingLabel}><input id={`product-content-${contentLocale}-marketing-label`} name={`${prefix}.marketingLabel`} value={values.marketingLabel} onChange={(event) => updateTranslation(contentLocale, "marketingLabel", event.target.value)} maxLength={200} aria-describedby={`product-content-${contentLocale}-marketing-label-help`} /></Field>
                   <Field id={`product-content-${contentLocale}-short`} copy={labels.fields.shortDescription}><textarea id={`product-content-${contentLocale}-short`} name={`${prefix}.shortDescription`} value={values.shortDescription} onChange={(event) => updateTranslation(contentLocale, "shortDescription", event.target.value)} rows={3} maxLength={2000} aria-describedby={`product-content-${contentLocale}-short-help`} /></Field>
                   <Field id={`product-content-${contentLocale}-full`} copy={labels.fields.fullDescription}><textarea id={`product-content-${contentLocale}-full`} name={`${prefix}.fullDescription`} value={values.fullDescription} onChange={(event) => updateTranslation(contentLocale, "fullDescription", event.target.value)} rows={8} maxLength={50000} aria-describedby={`product-content-${contentLocale}-full-help`} /></Field>
-                  <div className="dashboard-catalog-seo-fields"><h3>{labels.content.seoGroup}</h3><Field id={`product-content-${contentLocale}-meta`} copy={labels.fields.metaDescription}><textarea id={`product-content-${contentLocale}-meta`} name={`${prefix}.metaDescription`} value={values.metaDescription} onChange={(event) => updateTranslation(contentLocale, "metaDescription", event.target.value)} rows={3} maxLength={500} aria-describedby={`product-content-${contentLocale}-meta-help`} /></Field><div className="dashboard-catalog-search-preview"><span>{labels.content.previewTitle}</span><strong>{values.title || labels.content.emptyProductTitle}</strong><small>{origin}{previewPath}</small><p>{values.metaDescription || values.shortDescription || labels.content.emptyMetaDescription}</p><em>{labels.content.previewNote}</em></div></div>
+                  <div className="dashboard-catalog-seo-fields"><h3>{labels.content.seoGroup}</h3><Field id={`product-content-${contentLocale}-seo-title`} copy={labels.fields.seoTitle}><input id={`product-content-${contentLocale}-seo-title`} name={`${prefix}.seoTitle`} value={values.seoTitle} onChange={(event) => updateTranslation(contentLocale, "seoTitle", event.target.value)} maxLength={200} aria-describedby={`product-content-${contentLocale}-seo-title-help`} /></Field><Field id={`product-content-${contentLocale}-meta`} copy={labels.fields.metaDescription}><textarea id={`product-content-${contentLocale}-meta`} name={`${prefix}.metaDescription`} value={values.metaDescription} onChange={(event) => updateTranslation(contentLocale, "metaDescription", event.target.value)} rows={3} maxLength={500} aria-describedby={`product-content-${contentLocale}-meta-help`} /></Field><div className="dashboard-catalog-search-preview"><span>{labels.content.previewTitle}</span><strong>{values.seoTitle || values.title || labels.content.emptyProductTitle}</strong><small>{origin}{previewPath}</small><p>{values.metaDescription || values.shortDescription || labels.content.emptyMetaDescription}</p><em>{labels.content.previewNote}</em></div></div>
                 </fieldset>
               </div>
             );

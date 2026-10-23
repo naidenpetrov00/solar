@@ -13,7 +13,6 @@ import {
   localizedPath,
   safePublicReturnPath,
 } from "../_lib/routes";
-import { findSolarPackage } from "../_lib/solar-packages";
 import { useCart } from "./cart-store";
 
 type NavigationRoute = {
@@ -116,13 +115,13 @@ export function Navigation({
   const returnTo = safePublicReturnPath(currentPath, locale);
   const signInHref = localizedAuthPath(locale, "sign-in", returnTo);
   const signUpHref = localizedAuthPath(locale, "sign-up", returnTo);
-  const equivalentSlug = isLocaleEquivalentSlug(activeSlug) ||
-    activeSlug === "shop/solar-packages" ||
-    (activeSlug.startsWith("shop/solar-packages/") && findSolarPackage(activeSlug.split("/")[2]))
-    ? activeSlug
-    : "";
+  const equivalentSlug = isLocaleEquivalentSlug(activeSlug) ? activeSlug : "";
+  const isCatalogEntity =
+    activeSlug.startsWith("shop/") || activeSlug.startsWith("products/");
   const localizedRoute = (targetLocale: string) =>
-    isAuthRouteSlug(equivalentSlug)
+    isCatalogEntity
+      ? `/api/catalog/locale-route?${new URLSearchParams({ target: targetLocale, path: pathname }).toString()}`
+      : isAuthRouteSlug(equivalentSlug)
       ? localizedAuthLanguagePath(
           locale,
           targetLocale,
@@ -130,7 +129,10 @@ export function Navigation({
           searchParams,
         )
       : localizedPath(targetLocale, equivalentSlug);
-  const isActive = (slug: string) => activeSlug === slug || (slug === "shop" && activeSlug.startsWith("shop/"));
+  const isActive = (slug: string) =>
+    activeSlug === slug ||
+    (slug === "shop" &&
+      (activeSlug.startsWith("shop/") || activeSlug.startsWith("products/")));
   const activeNavSlug = interiorRoutes.find((route) => isActive(route.slug))?.slug ?? null;
 
   const closeMenus = () => {

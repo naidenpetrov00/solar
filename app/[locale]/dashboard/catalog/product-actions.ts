@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { revalidatePublicCatalog } from "@/lib/catalog/revalidation";
 import {
   archiveCatalogProduct,
   CatalogManagementError,
@@ -146,6 +147,8 @@ function parseTranslations(formData: FormData) {
       title: stringValue(formData, `${prefix}.title`),
       shortDescription: stringValue(formData, `${prefix}.shortDescription`),
       fullDescription: stringValue(formData, `${prefix}.fullDescription`),
+      marketingLabel: stringValue(formData, `${prefix}.marketingLabel`) || null,
+      seoTitle: stringValue(formData, `${prefix}.seoTitle`) || null,
       metaDescription: stringValue(formData, `${prefix}.metaDescription`) || null,
     };
   });
@@ -324,6 +327,7 @@ async function requireCatalogManager() {
 
 function revalidateCatalog(locale: SupportedLocale) {
   revalidatePath(localizedPath(locale, dashboardCatalogRouteSlug));
+  revalidatePublicCatalog();
 }
 
 export async function saveCatalogProductAction(_previous: ProductActionResult, formData: FormData): Promise<ProductActionResult> {

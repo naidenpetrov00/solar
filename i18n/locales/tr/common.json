@@ -8,7 +8,7 @@
     "home": "Ana sayfa",
     "shop": "Mağaza",
     "projects": "Projeler",
-    "packages": "Paketler",
+
     "cart": "Sepet",
     "contact": "İletişim",
     "requestQuote": "Teklif isteyin",
@@ -258,6 +258,8 @@
             "title": { "label": "Ürün başlığı", "help": "Bu dildeki herkese açık ürün adı." },
             "shortDescription": { "label": "Kısa açıklama", "help": "Ürün listeleri için kısa bir özet." },
             "fullDescription": { "label": "Tam açıklama", "help": "Bu dildeki eksiksiz ürün açıklaması." },
+            "marketingLabel": {"label":"Pazarlama etiketi","help":"Ürünle birlikte gösterilen isteğe bağlı kısa etiket."},
+            "seoTitle": {"label":"SEO başlığı","help":"İsteğe bağlı arama başlığı. Boş bırakıldığında ürün başlığı kullanılır."},
             "metaDescription": { "label": "Meta açıklaması", "help": "Arama sonuçlarında başlık ve adresin altında görünebilir." },
             "mediaReference": { "label": "Medya referansı", "help": "Mevcut bir site yolu veya HTTPS adresi kullanın." },
             "altText": { "label": "Alternatif metin", "help": "Görseli seçili dilde açıklayın." }
@@ -309,124 +311,62 @@
         "businessTitle": "İşletmeler için"
       },
       "residential": {
-        "introduction": "Ev güneş enerjisi sistemi için dört net başlangıç seçeneğini inceleyin. Enerji kullanımınızı nasıl anlatacağınızı seçin, ardından her paketin içeriğini karşılaştırın.",
-        "input": {
-          "legend": "Enerji kullanımınızı nasıl belirtmek istersiniz?",
-          "bill": "Aylık elektrik faturası",
-          "consumption": "Aylık elektrik tüketimi",
-          "billPlaceholder": "Örneğin 180 BGN",
-          "consumptionPlaceholder": "Örneğin 450 kWh",
-          "note": "Girdiğiniz değer gelecekteki öneriler için kullanılacaktır. Henüz paketleri değiştirmez."
-        },
-        "packagesHeading": "Bir başlangıç noktası seçin",
-        "packagePrice": "Geçici fiyat",
-        "packagePriceNote": "Bu yerel sürüm için geçici değerdir. Teklif isterken fiyatı doğrulayın.",
-        "quote": "Teklif isteyin",
-        "packages": {
-          "essentials": {
-            "name": "Solar Essentials",
-            "profile": "Daireler veya daha düşük tüketimli evler için.",
-            "energyType": "Yalnızca güneş enerjisi",
-            "features": [
-              "Güneş panelleri",
-              "Şebeke bağlantılı inverter"
-            ],
-            "description": "Bir güneş enerjisi sisteminin temel parçalarını bir araya getiren ev için başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
-            "specifications": [
-              "Güneş paneli adedi — netleştirilecek",
-              "İnverter — netleştirilecek",
-              "Batarya — dahil değildir"
-            ]
-          },
-          "smart": {
-            "name": "Solar Smart",
-            "profile": "Tipik aile evleri için.",
-            "energyType": "Yalnızca güneş enerjisi",
-            "features": [
-              "Güneş panelleri",
-              "Daha büyük güneş paneli dizisi",
-              "Şebeke bağlantılı inverter"
-            ],
-            "description": "Tipik aile evleri için daha büyük güneş paneli dizisine sahip başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
-            "specifications": [
-              "Güneş paneli adedi — netleştirilecek",
-              "İnverter — netleştirilecek",
-              "Batarya — dahil değildir"
-            ]
-          },
-          "storage": {
-            "name": "Solar Storage",
-            "profile": "Enerji depolamayı düşünen haneler için.",
-            "energyType": "Bataryalı",
-            "features": [
-              "Güneş panelleri",
-              "Hibrit inverter",
-              "Batarya"
-            ],
-            "description": "Enerji depolamayı değerlendiren haneler için başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
-            "specifications": [
-              "Güneş paneli adedi — netleştirilecek",
-              "Hibrit inverter — netleştirilecek",
-              "Batarya kapasitesi — netleştirilecek"
-            ]
-          },
-          "complete": {
-            "name": "Solar Complete",
-            "profile": "Daha yüksek elektrik tüketimi olan evler için.",
-            "energyType": "Bataryalı",
-            "features": [
-              "Daha büyük güneş paneli dizisi",
-              "Hibrit inverter",
-              "Batarya"
-            ],
-            "description": "Yüksek elektrik tüketimi ve enerji depolama ihtiyacı olan evler için başlangıç yapılandırması. Nihai miktarlar ve ekipman görüşme sonrasında netleştirilir.",
-            "specifications": [
-              "Güneş paneli adedi — netleştirilecek",
-              "Hibrit inverter — netleştirilecek",
-              "Batarya kapasitesi — netleştirilecek"
-            ]
-          }
-        },
-        "viewPackage": "Paketi inceleyin",
-        "detailHeading": "Paket ayrıntıları",
-        "backToPackages": "Paketlere dön",
-        "breadcrumbLabel": "Paket gezintisi"
+        "introduction": "Eviniz için uygun bir başlangıç noktası bulmak üzere yayımlanmış kategorileri ve ürünleri inceleyin.",
+        "catalogCta": "Kataloğu inceleyin"
       }
     },
     "shop": {
       "heroImageAlt": "Havadan görülen fotovoltaik panel sıraları",
-      "title": "Mağaza",
-      "description": "Güneş enerjisi paketlerini inceleyin ve eviniz için bir başlangıç noktası seçin.",
+      "title": "Katalog",
+      "description": "Yayımlanmış ürün kategorilerini inceleyin ve projeniz için uygun bir çözüm bulun.",
       "categories": "Kategoriler",
-      "categoryNavigation": "Ürün kategorileri",
+      "subcategories": "Alt kategoriler",
+      "siblingCategories": "Diğer kategoriler",
+      "products": "Ürünler",
+      "emptyCatalog": "Şu anda yayımlanmış kategori yok.",
+      "emptyProducts": "Bu kategoride henüz yayımlanmış ürün yok.",
+      "viewProduct": "Ürünü görüntüle",
+      "priceOnRequest": "Teklif üzerine",
+      "priceFrom": "Başlangıç",
+      "vatIncluded": "Fiyata KDV dahildir",
       "addToCart": "Sepete ekle",
-      "addedToCart": "Sepete eklendi",
-      "addNamedToCart": "{{name}} paketini sepete ekle"
-    },
-    "projects": {
-      "title": "Projeler"
-    },
-    "packages": {
-      "title": "Paketler"
+      "addedToCart": "Eklendi",
+      "addNamedToCart": "{{name}} ürününü sepete ekle",
+      "inStock": "Stokta",
+      "outOfStock": "Stokta yok",
+      "enquire": "Talep gönderin",
+      "breadcrumbLabel": "Katalog gezintisi",
+      "yes": "Evet",
+      "no": "Hayır",
+      "brand": "Marka",
+      "model": "Model",
+      "specifications": "Özellikler",
+      "gallery": "Galeri",
+      "noImage": "Görsel mevcut değil",
+      "relatedCategories": "Diğer ilgili kategoriler"
     },
     "cart": {
       "title": "Sepet",
-      "description": "Seçtiğiniz güneş enerjisi paketlerini ve geçici toplamı inceleyin.",
+      "description": "Seçtiğiniz ürünleri ve toplam tutarı inceleyin.",
       "loading": "Sepet yükleniyor…",
       "empty": "Sepetiniz boş",
-      "emptyDescription": "Bir başlangıç noktası eklemek için güneş enerjisi paketlerini inceleyin.",
-      "continueShopping": "Mağazaya dön",
-      "itemCount": "Toplam ürün",
+      "emptyDescription": "Burada görmek için katalogdan stokta olan bir ürün ekleyin.",
+      "continueShopping": "Kataloğa devam edin",
+      "itemCount": "Ürün sayısı",
       "quantity": "Adet",
-      "unitPrice": "Geçici birim fiyat",
-      "lineTotal": "Ara toplam",
-      "total": "Geçici toplam",
+      "unitPrice": "Birim fiyat",
+      "lineTotal": "Ürün toplamı",
+      "total": "Toplam",
       "increaseQuantity": "Adedi artır",
       "decreaseQuantity": "Adedi azalt",
       "removeItem": "Kaldır",
-      "quantityChanged": "adet güncellendi",
-      "itemRemoved": "sepetten kaldırıldı",
-      "storageUnavailable": "Sepetteki değişiklikler bu tarayıcıda kaydedilemiyor."
+      "quantityChanged": "Adet değiştirildi",
+      "itemRemoved": "Ürün kaldırıldı",
+      "unavailableRemoved": "Mevcut olmayan ürünler sepetinizden kaldırıldı.",
+      "hydrationFailed": "Sepet şu anda yenilenemiyor. Lütfen tekrar deneyin.",
+      "retry": "Tekrar deneyin",
+      "storageUnavailable": "Sepet değişiklikleri bu tarayıcıda kaydedilmeyecek.",
+      "priceNote": "Gösterilen fiyatlara KDV dahildir."
     },
     "contact": {
       "title": "İletişim"
@@ -570,10 +510,6 @@
           }
         }
       }
-    },
-    "solarPackages": {
-      "title": "Güneş enerjisi paketleri",
-      "description": "Ev güneş enerjisi sistemi için başlangıç seçeneklerini inceleyin."
     }
   }
 }

@@ -1,7 +1,16 @@
-import { findSolarPackage } from "./solar-packages";
-
 export const supportedLocales = ["bg", "en", "tr", "uk"] as const;
 export type SupportedLocale = (typeof supportedLocales)[number];
+
+const openGraphLocaleBySiteLocale: Record<SupportedLocale, string> = {
+  bg: "bg_BG",
+  en: "en_GB",
+  tr: "tr_TR",
+  uk: "uk_UA",
+};
+
+export function openGraphLocale(locale: string) {
+  return openGraphLocaleBySiteLocale[locale as SupportedLocale] ?? "bg_BG";
+}
 
 export const dashboardRouteSlug = "dashboard";
 export const dashboardCatalogRouteSlug = "dashboard/catalog";
@@ -12,7 +21,6 @@ export const routeDefinitions = [
   { slug: "", key: "home" },
   { slug: "shop", key: "shop" },
   { slug: "projects", key: "projects" },
-  { slug: "packages", key: "packages" },
   { slug: "contact", key: "contact" },
 ] as const;
 
@@ -62,9 +70,12 @@ export function localizedPath(locale: string, slug = "") {
 }
 
 export function localizedAlternates(slug = "") {
-  return Object.fromEntries(
-    supportedLocales.map((locale) => [locale, localizedPath(locale, slug)]),
-  );
+  return {
+    ...Object.fromEntries(
+      supportedLocales.map((locale) => [locale, localizedPath(locale, slug)]),
+    ),
+    "x-default": localizedPath("bg", slug),
+  };
 }
 
 export function localizedAuthPath(
@@ -279,16 +290,12 @@ export function safePublicReturnPath(
     ? pathname.slice(localePrefix.length) || "/"
     : pathname;
   const slug = pathWithoutLocale.replace(/^\/+|\/+$/gu, "");
-  const isKnownPackageDetail =
-    slug.startsWith("shop/solar-packages/") &&
-    slug.split("/").length === 3 &&
-    Boolean(findSolarPackage(slug.split("/")[2]));
   const isPublicRoute =
     slug === "" ||
     slug === "cart" ||
     routeDefinitions.some((route) => route.slug === slug) ||
-    slug === "shop/solar-packages" ||
-    isKnownPackageDetail;
+    slug.startsWith("shop/") ||
+    slug.startsWith("products/");
 
   return isPublicRoute ? safePath : fallback;
 }

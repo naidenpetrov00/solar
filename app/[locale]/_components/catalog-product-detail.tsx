@@ -1,11 +1,17 @@
+import type { ReactNode } from "react";
+
+import { CatalogMedia } from "./catalog-media";
+
 export type CatalogProductDetailView = {
   title: string;
+  marketingLabel?: string | null;
   brand: string | null;
   model: string | null;
   shortDescription: string;
   fullDescription: string;
   price: string | null;
   availability: string | null;
+  vatInformation?: string | null;
   primaryMedia: { reference: string; altText: string } | null;
   gallery: Array<{ reference: string; altText: string }>;
   specifications: Array<{ label: string; value: string }>;
@@ -22,14 +28,15 @@ export type CatalogProductDetailLabels = {
 type Props = {
   product: CatalogProductDetailView;
   labels: CatalogProductDetailLabels;
+  actions?: ReactNode;
 };
 
 /**
  * Pure product presentation shared by the administrator preview and the
- * future public catalog route. It deliberately has no editor or data-fetching
+ * public catalog route. It deliberately has no editor or data-fetching
  * dependencies, so either surface supplies its own view model.
  */
-export function CatalogProductDetail({ product, labels }: Props) {
+export function CatalogProductDetail({ product, labels, actions }: Props) {
   const gallery = product.gallery.filter(
     (item) => item.reference !== product.primaryMedia?.reference,
   );
@@ -38,10 +45,12 @@ export function CatalogProductDetail({ product, labels }: Props) {
     <article className="catalog-product-detail">
       <div className="catalog-product-detail-media">
         {product.primaryMedia ? (
-          <img
-            src={product.primaryMedia.reference}
-            alt={product.primaryMedia.altText}
+          <CatalogMedia
+            reference={product.primaryMedia.reference}
+            altText={product.primaryMedia.altText}
             className="catalog-product-detail-primary-image"
+            preload
+            sizes="(max-width: 48rem) 100vw, 55vw"
           />
         ) : (
           <div className="catalog-product-detail-empty-media" role="img" aria-label={labels.noImage} />
@@ -50,6 +59,9 @@ export function CatalogProductDetail({ product, labels }: Props) {
 
       <div className="catalog-product-detail-copy">
         <header>
+          {product.marketingLabel ? (
+            <p className="catalog-marketing-label">{product.marketingLabel}</p>
+          ) : null}
           <h1>{product.title}</h1>
           {product.shortDescription ? <p className="catalog-product-detail-summary">{product.shortDescription}</p> : null}
         </header>
@@ -57,11 +69,13 @@ export function CatalogProductDetail({ product, labels }: Props) {
         {product.price || product.availability ? (
           <div className="catalog-product-detail-commerce">
             {product.price ? <strong>{product.price}</strong> : null}
-          {product.availability ? (
-            <span className="catalog-product-detail-availability">
-              {product.availability}
-            </span>
-          ) : null}
+            {product.vatInformation ? <small>{product.vatInformation}</small> : null}
+            {product.availability ? (
+              <span className="catalog-product-detail-availability">
+                {product.availability}
+              </span>
+            ) : null}
+            {actions ? <div className="catalog-product-detail-actions">{actions}</div> : null}
           </div>
         ) : null}
 
@@ -94,7 +108,13 @@ export function CatalogProductDetail({ product, labels }: Props) {
           <h2 id="catalog-product-detail-gallery">{labels.gallery}</h2>
           <div>
             {gallery.map((item, index) => (
-              <img key={`${item.reference}-${index}`} src={item.reference} alt={item.altText} loading="lazy" />
+              <div className="catalog-product-detail-gallery-item" key={`${item.reference}-${index}`}>
+                <CatalogMedia
+                  reference={item.reference}
+                  altText={item.altText}
+                  sizes="(max-width: 48rem) 100vw, 30vw"
+                />
+              </div>
             ))}
           </div>
         </section>

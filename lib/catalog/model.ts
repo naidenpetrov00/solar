@@ -99,6 +99,8 @@ export type CatalogProductTranslationInput = {
   title: string;
   shortDescription: string;
   fullDescription: string;
+  marketingLabel?: string | null;
+  seoTitle?: string | null;
   metaDescription?: string | null;
 };
 

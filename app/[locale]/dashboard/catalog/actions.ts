@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { revalidatePublicCatalog } from "@/lib/catalog/revalidation";
 import {
   archiveCatalogCategory,
   CatalogManagementError,
@@ -154,6 +155,7 @@ function errorResult(
 
 function revalidateCatalog(locale: SupportedLocale) {
   revalidatePath(localizedPath(locale, dashboardCatalogRouteSlug));
+  revalidatePublicCatalog();
 }
 
 export async function createCatalogCategoryAction(

@@ -475,6 +475,8 @@ function normalizeProductTranslations(
     shortDescription:
       normalizeOptionalText(translation.shortDescription, 2000) ?? "",
     fullDescription: normalizeLongText(translation.fullDescription, 50_000) ?? "",
+    marketingLabel: normalizeOptionalText(translation.marketingLabel, 200),
+    seoTitle: normalizeOptionalText(translation.seoTitle, 200),
     metaDescription: normalizeOptionalText(translation.metaDescription, 500),
   }));
 }
@@ -1318,6 +1320,8 @@ export async function getManagedCatalogProductWorkspace(
               title: translation.title,
               shortDescription: translation.shortDescription,
               fullDescription: translation.fullDescription,
+              marketingLabel: translation.marketingLabel,
+              seoTitle: translation.seoTitle,
               metaDescription: translation.metaDescription,
             }]
           : [],
@@ -2343,6 +2347,8 @@ async function replaceProductTranslations(
           title: translation.title,
           shortDescription: translation.shortDescription,
           fullDescription: translation.fullDescription,
+          marketingLabel: translation.marketingLabel,
+          seoTitle: translation.seoTitle,
           metaDescription: translation.metaDescription,
           updatedAt: new Date(),
         },

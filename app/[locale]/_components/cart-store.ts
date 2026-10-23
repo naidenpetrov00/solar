@@ -1,7 +1,6 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { findShopProductById } from "../_lib/shop-catalog";
 
 type CartItem = { id: string; quantity: number };
 type CartSnapshot = {
@@ -10,7 +9,8 @@ type CartSnapshot = {
   storageUnavailable: boolean;
 };
 
-const storageKey = "solar-cart:v1";
+const storageKey = "solar-cart:v2";
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
 export const maxCartQuantity = 999;
 const serverSnapshot: CartSnapshot = { items: [], ready: false, storageUnavailable: false };
 let snapshot = serverSnapshot;
@@ -22,11 +22,11 @@ function parseCart(raw: string | null): CartItem[] {
 
   try {
     const value: unknown = JSON.parse(raw);
-    if (!value || typeof value !== "object" || !("version" in value) || value.version !== 1 || !("items" in value) || !Array.isArray(value.items)) return [];
+    if (!value || typeof value !== "object" || !("version" in value) || value.version !== 2 || !("items" in value) || !Array.isArray(value.items)) return [];
 
     const quantities = new Map<string, number>();
     for (const item of value.items) {
-      if (!item || typeof item !== "object" || typeof item.id !== "string" || !findShopProductById(item.id) || !Number.isSafeInteger(item.quantity) || item.quantity < 1) continue;
+      if (!item || typeof item !== "object" || typeof item.id !== "string" || !uuidPattern.test(item.id) || !Number.isSafeInteger(item.quantity) || item.quantity < 1) continue;
       quantities.set(item.id, Math.min(maxCartQuantity, (quantities.get(item.id) ?? 0) + item.quantity));
     }
     return Array.from(quantities, ([id, quantity]) => ({ id, quantity }));
@@ -70,7 +70,7 @@ function updateItems(change: (items: CartItem[]) => CartItem[]) {
 
   if (!storageUnavailable) {
     try {
-      window.localStorage.setItem(storageKey, JSON.stringify({ version: 1, items }));
+      window.localStorage.setItem(storageKey, JSON.stringify({ version: 2, items }));
     } catch {
       storageUnavailable = true;
     }
@@ -80,7 +80,7 @@ function updateItems(change: (items: CartItem[]) => CartItem[]) {
 }
 
 function addItem(id: string) {
-  if (!findShopProductById(id)) return;
+  if (!uuidPattern.test(id)) return;
   updateItems((items) => {
     const found = items.find((item) => item.id === id);
     return found
@@ -98,6 +98,10 @@ function removeItem(id: string) {
   updateItems((items) => items.filter((item) => item.id !== id));
 }
 
+function retainItems(ids: Set<string>) {
+  updateItems((items) => items.filter((item) => ids.has(item.id)));
+}
+
 export function useCart() {
   const { items, ready, storageUnavailable } = useSyncExternalStore(subscribe, () => snapshot, () => serverSnapshot);
   return {
@@ -108,5 +112,6 @@ export function useCart() {
     addItem,
     setQuantity,
     removeItem,
+    retainItems,
   };
 }

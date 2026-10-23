@@ -391,8 +391,7 @@ html {
   gap: 1.25rem;
 }
 
-.residential-introduction h2,
-.residential-packages h3 {
+.residential-introduction h2 {
   margin: 0;
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -412,245 +411,9 @@ html {
   line-height: 1.55;
 }
 
-.residential-configurator {
-  display: grid;
-  gap: clamp(4.5rem, 9vw, 8rem);
-  margin-top: clamp(3.5rem, 8vw, 7rem);
-}
-
-.residential-input-choice {
-  display: grid;
-  max-width: 46rem;
-  gap: 1.25rem;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.residential-input-choice legend {
-  max-width: 22ch;
-  padding: 0;
-  font-size: clamp(1.35rem, 2.8vw, 2rem);
-  font-weight: 560;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
-}
-
-.residential-input-options {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-block: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-}
-
-.residential-input-option {
-  position: relative;
-  display: flex;
-  min-height: 3.5rem;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.85rem 0.75rem;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 560;
-}
-
-.residential-input-option + .residential-input-option {
-  border-left: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-}
-
-.residential-input-option input {
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
-  accent-color: var(--residential-detail);
-}
-
-.residential-input-option:has(input:focus-visible) {
-  outline: 3px solid #fcd34d;
-  outline-offset: -3px;
-}
-
-.residential-value-input {
-  display: grid;
-  gap: 0.55rem;
-  font-size: 0.9rem;
-  font-weight: 560;
-}
-
-.residential-value-input input {
-  width: 100%;
-  min-height: 3.5rem;
-  border: 1px solid color-mix(in srgb, currentColor 34%, transparent);
-  border-radius: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 1.1rem;
-  outline: 0;
-  padding: 0.75rem 0.9rem;
-  transition: border-color 180ms ease, background-color 180ms ease;
-}
-
-.residential-value-input input::placeholder {
-  color: color-mix(in srgb, currentColor 60%, transparent);
-  opacity: 1;
-}
-
-.residential-value-input input:focus {
-  border-color: var(--residential-detail);
-  background: color-mix(in srgb, #fcd34d 12%, transparent);
-  box-shadow: inset 0 0 0 1px var(--residential-detail);
-}
-
-.residential-input-note,
-.residential-package-price-note {
-  max-width: 60ch;
-  margin: 0;
-  color: color-mix(in srgb, currentColor 70%, transparent);
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
-.residential-packages {
-  display: grid;
-  gap: 1.75rem;
-}
-
-.residential-packages h3 {
-  max-width: 10ch;
-  font-size: clamp(2.1rem, 5vw, 4rem);
-  line-height: 0.98;
-}
-
-.residential-package-list {
-  display: grid;
-  border-top: 1px solid color-mix(in srgb, currentColor 28%, transparent);
-}
-
-.residential-package {
-  display: grid;
-  gap: 2rem;
-  padding: clamp(1.75rem, 4vw, 3rem) 0;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 28%, transparent);
-}
-
-.residential-package-main {
-  display: grid;
-  align-content: start;
-  gap: 0.75rem;
-}
-
-.residential-package-type,
-.residential-package-profile,
-.residential-package-price {
-  margin: 0;
-}
-
-.residential-package-type {
-  color: var(--residential-detail);
-  font-size: 0.8rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.residential-package h4 {
-  margin: 0;
-  font-size: clamp(1.65rem, 3vw, 2.25rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
-
-.residential-package-profile {
-  max-width: 42ch;
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-.residential-package ul {
-  display: grid;
-  gap: 0.45rem;
-  margin: 0.5rem 0 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.9rem;
-}
-
-.residential-package li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-}
-
-.residential-package li::before {
-  width: 0.38rem;
-  height: 0.38rem;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--residential-detail);
-  content: "";
-}
-
-.residential-package-action {
-  display: grid;
-  align-content: start;
-  gap: 0.75rem;
-}
-
-.residential-package-price {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.residential-package-price span {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.residential-package-price strong {
-  font-size: 1.75rem;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
-
-.residential-package-cta {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+.residential-introduction .ui-button {
   width: fit-content;
   margin-top: 0.5rem;
-  padding: 0.65rem 0.8rem;
-  background: #fcd34d;
-  color: #11130f;
-  font-size: 0.9rem;
-  font-weight: 650;
-  text-decoration: none;
-  transition: background-color 180ms ease, transform 180ms ease;
-}
-
-.residential-package-cta:hover {
-  background: #fde68a;
-  transform: translateX(0.2rem);
-}
-
-.residential-package-cta:focus-visible {
-  outline: 3px solid currentColor;
-  outline-offset: 3px;
-}
-
-.residential-package-cta svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.7;
 }
 
 @media (min-width: 48rem) {
@@ -658,35 +421,16 @@ html {
     grid-template-columns: minmax(0, 0.8fr) minmax(16rem, 0.7fr);
     max-width: none;
     align-items: end;
-    gap: clamp(3rem, 8vw, 9rem);
+    column-gap: clamp(3rem, 8vw, 9rem);
+    row-gap: 1.25rem;
   }
 
-  .residential-package {
-    grid-template-columns: minmax(0, 1.25fr) minmax(12rem, 0.5fr);
-    gap: clamp(2rem, 6vw, 7rem);
+  .residential-introduction h2 {
+    grid-row: 1 / span 2;
   }
 
-  .residential-package-action {
-    padding-left: clamp(2rem, 4vw, 4rem);
-    border-left: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-  }
-}
-
-@media (max-width: 30rem) {
-  .residential-input-options {
-    grid-template-columns: 1fr;
-  }
-
-  .residential-input-option + .residential-input-option {
-    border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-    border-left: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .residential-value-input input,
-  .residential-package-cta {
-    transition: none;
+  .residential-introduction .ui-button {
+    grid-column: 2;
   }
 }
 
@@ -704,447 +448,27 @@ html {
   --residential-detail: #fcd34d;
 }
 
-.residential-packages-heading {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.residential-packages-heading p {
-  max-width: 56ch;
-  margin: 0;
-  color: color-mix(in srgb, currentColor 70%, transparent);
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
-.residential-package-grid {
-  --product-card-rule: color-mix(in srgb, currentColor 26%, transparent);
-  --product-card-surface: color-mix(in srgb, var(--page-background) 96%, currentColor);
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.75rem, 1.5vw, 1.25rem);
-}
-
-.residential-package-card {
-  min-width: 0;
-  border: 1px solid var(--product-card-rule);
-  background: var(--product-card-surface);
-}
-
-.residential-package-card-link {
-  display: grid;
-  color: inherit;
-  text-decoration: none;
-}
-
-.residential-package-visual,
-.solar-package-detail-visual {
-  min-height: 13rem;
-  background: #11130f;
-}
-
-.residential-package-card .residential-package-visual {
-  border-bottom: 1px solid var(--product-card-rule);
-}
-
-.residential-package-card-content {
-  display: grid;
-  align-content: start;
-  gap: 0.8rem;
-  padding: clamp(1.25rem, 3vw, 1.75rem);
-}
-
-.residential-package-card h4 {
-  margin: 0;
-  font-size: clamp(1.65rem, 3vw, 2.25rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
-
-.residential-package-specifications,
-.solar-package-detail-specifications,
-.solar-package-description ul {
-  display: grid;
-  gap: 0.45rem;
-  margin: 0.35rem 0 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
-
-.residential-package-specifications li,
-.solar-package-detail-specifications li,
-.solar-package-description li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-}
-
-.residential-package-specifications li::before,
-.solar-package-detail-specifications li::before,
-.solar-package-description li::before {
-  width: 0.38rem;
-  height: 0.38rem;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--residential-detail);
-  content: "";
-}
-
-.residential-package-card-action,
-.solar-package-detail-cta {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  width: fit-content;
-  margin-top: 0.55rem;
-  padding: 0.65rem 0.8rem;
-  background: #fcd34d;
-  color: #11130f;
-  font-size: 0.9rem;
-  font-weight: 650;
-  transition: background-color 180ms ease, transform 180ms ease;
-}
-
-.residential-package-card-action svg,
-.solar-package-detail-cta svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.7;
-}
-
-.residential-package-card-link:hover .residential-package-card-action {
-  background: #fde68a;
-  transform: translateX(0.2rem);
-}
-
-.residential-package-card-link:focus-visible {
-  outline: 3px solid #fcd34d;
-  outline-offset: -3px;
-}
-
-.solar-package-page {
-  --solar-package-page-inset: clamp(1.5rem, 4vw, 3rem);
-  --solar-package-breadcrumb-space: clamp(3.5rem, 7vw, 6rem);
-  background: var(--page-background);
-  color: var(--page-foreground);
-  padding: 0 clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 9vw, 8rem);
-}
-
-.solar-package,
-.solar-package-detail,
-.solar-package-description {
-  width: min(100%, 80rem);
-  margin-inline: auto;
-}
-
-.solar-package-detail {
-  display: grid;
-  min-block-size: calc(100svh - 4.5rem - var(--solar-package-breadcrumb-space) - var(--solar-package-page-inset));
-  border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-  grid-template-rows: clamp(9rem, 30svh, 14rem) minmax(0, 1fr);
-}
-
-.solar-package-detail-visual {
-  min-height: 0;
-}
-
-.solar-package-detail-summary {
-  display: grid;
-  align-content: center;
-  gap: clamp(0.55rem, 1.4vh, 0.8rem);
-  padding: clamp(0.75rem, 2.5vh, 1.25rem) 0;
-}
-
-.solar-package-detail-type {
-  margin: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.solar-package-detail h1 {
-  max-width: 13ch;
-  margin: 0;
-  font-size: clamp(2.5rem, 7vw, 6rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 0.93;
-  text-wrap: balance;
-}
-
-.solar-package-detail-profile,
-.solar-package-description p {
-  max-width: 60ch;
-  margin: 0;
-  font-size: clamp(1rem, 1.5vw, 1.15rem);
-  line-height: 1.55;
-}
-
-.solar-package-detail-price {
-  display: grid;
-  gap: 0.25rem;
-  margin: 0.25rem 0 0;
-}
-
-.solar-package-detail-price span {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.solar-package-detail-price strong {
-  font-size: 2rem;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
-
-.solar-package-detail-cta {
-  color: #11130f;
-  text-decoration: none;
-}
-
-.solar-package-detail-actions {
-  display: grid;
-  gap: 0.55rem;
-  margin-top: 0.25rem;
-}
-
-.solar-package-detail-actions .solar-package-detail-cta,
-.solar-package-detail-actions .shop-add-button {
-  width: 100%;
-}
-
-.solar-package-detail-cta:hover {
-  background: #fde68a;
-  transform: translateX(0.2rem);
-}
-
-.solar-package-detail-cta:focus-visible {
-  outline: 3px solid currentColor;
-  outline-offset: 3px;
-}
-
-.solar-package-detail-secondary {
-  display: grid;
-  gap: 0.8rem;
-  padding-top: clamp(1.5rem, 3vw, 2.5rem);
-}
-
-.solar-package-description {
-  display: grid;
-  gap: 1.25rem;
-  padding-top: clamp(4.5rem, 10vw, 9rem);
-}
-
-.solar-package-description h2 {
-  max-width: 11ch;
-  margin: 0;
-  font-size: clamp(2.2rem, 5vw, 4rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 0.98;
-}
-
-@media (min-width: 48rem) {
-  .residential-package-grid {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  }
-
-  .residential-package-card-content {
-    min-height: 24rem;
-  }
-
-  .solar-package-detail {
-    grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
-    grid-template-rows: minmax(0, 1fr);
-  }
-
-  .solar-package-detail-summary {
-    padding-inline: clamp(2rem, 5vw, 5rem);
-    border-left: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-  }
-
-  .solar-package-detail-actions {
-    grid-template-columns: repeat(2, minmax(0, max-content));
-  }
-
-  .solar-package-detail-actions .solar-package-detail-cta,
-  .solar-package-detail-actions .shop-add-button {
-    width: fit-content;
-  }
-}
-
-@media (max-height: 48rem) and (min-width: 48rem) {
-  .solar-package-detail h1 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-  }
-
-  .solar-package-detail-summary {
-    gap: 0.55rem;
-    padding-block: 0.75rem;
-  }
-}
-
-::view-transition-old(.package-detail-out) {
-  animation: 180ms ease-in both package-detail-out;
-}
-
-::view-transition-new(.package-detail-in) {
-  animation: 360ms cubic-bezier(0.16, 1, 0.3, 1) both package-detail-in;
-}
-
-@keyframes package-detail-out {
-  to {
-    filter: blur(3px);
-    opacity: 0;
-    transform: translateY(-1rem);
-  }
-}
-
-@keyframes package-detail-in {
-  from {
-    filter: blur(4px);
-    opacity: 0;
-    transform: translateY(1.5rem);
-  }
-  to {
-    filter: blur(0);
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .residential-package-card-action,
-  .solar-package-detail-cta {
-    transition: none;
-  }
-
-  ::view-transition-old(.package-detail-out),
-  ::view-transition-new(.package-detail-in) {
-    animation: none;
-  }
-}
-
-.solar-package-back {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  gap: 0.65rem;
-  width: fit-content;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-  color: inherit;
-  font-size: 0.9rem;
-  font-weight: 650;
-  text-decoration: none;
-  text-underline-offset: 0.25em;
-  transition: color 180ms ease, transform 180ms ease;
-}
-
-.solar-package-back:hover {
-  color: var(--residential-detail);
-  transform: translateX(-0.2rem);
-}
-
-.solar-package-back:focus-visible {
-  outline: 3px solid var(--residential-detail);
-  outline-offset: 4px;
-}
-
-.solar-package-back svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.7;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .solar-package-back {
-    transition: none;
-  }
-}
-
-.solar-package-breadcrumb {
-  width: min(100%, 80rem);
-  display: grid;
-  min-block-size: var(--solar-package-breadcrumb-space);
-  align-content: center;
-  margin: 0 auto;
-}
-
-.solar-package-breadcrumb ol {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.55rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.875rem;
-}
-
-.solar-package-breadcrumb li + li::before {
-  margin-right: 0.55rem;
-  color: color-mix(in srgb, currentColor 48%, transparent);
-  content: "/";
-}
-
-.solar-package-breadcrumb a {
-  color: inherit;
-  font-weight: 650;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.25em;
-}
-
-.solar-package-breadcrumb a:hover {
-  color: var(--residential-detail);
-}
-
-.solar-package-breadcrumb a:focus-visible {
-  outline: 3px solid var(--residential-detail);
-  outline-offset: 4px;
-}
-
 .shop-page,
 .cart-page {
   background: var(--page-background);
   color: var(--page-foreground);
-  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
 }
 
 .shop-page {
-  --residential-detail: #7a5700;
-  padding-inline: clamp(1rem, 3vw, 3rem);
+  --catalog-accent: #7a5700;
+  min-height: 70vh;
 }
 
 :root[data-theme="dark"] .shop-page {
-  --residential-detail: #fcd34d;
+  --catalog-accent: #fcd34d;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .shop-page { --residential-detail: #fcd34d; }
+  :root:not([data-theme]) .shop-page { --catalog-accent: #fcd34d; }
 }
 
-.shop-introduction,
-.shop-layout {
-  width: min(100%, 100rem);
-  margin-inline: auto;
+.cart-page {
+  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
 }
 
 .cart-page-inner {
@@ -1152,14 +476,12 @@ html {
   margin-inline: auto;
 }
 
-.shop-introduction,
 .cart-introduction {
   display: grid;
   gap: 1.25rem;
   margin-bottom: clamp(3rem, 6vw, 5rem);
 }
 
-.shop-introduction h1,
 .cart-introduction h1 {
   max-width: 12ch;
   margin: 0;
@@ -1170,7 +492,6 @@ html {
   text-wrap: balance;
 }
 
-.shop-introduction p,
 .cart-introduction p {
   max-width: 60ch;
   margin: 0;
@@ -1178,110 +499,336 @@ html {
   line-height: 1.55;
 }
 
-.shop-layout {
+.catalog-hero {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  gap: clamp(2.5rem, 5vw, 5rem);
+  min-height: clamp(28rem, 52vw, 46rem);
+  align-items: end;
+  overflow: hidden;
+  background: #090b0a;
+  color: #fff;
 }
 
-.shop-categories {
-  align-self: start;
-  border-top: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+.catalog-hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(5, 8, 7, 0.94), rgba(5, 8, 7, 0.62) 62%, rgba(5, 8, 7, 0.35));
+  content: "";
 }
 
-.shop-categories h2 {
+.shop-introduction-copy {
+  width: min(100%, 96rem);
+  margin-inline: auto;
+  padding: clamp(4rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
+}
+
+.catalog-hero h1 {
+  max-width: 10ch;
   margin: 0;
-  padding: 1.2rem 0;
-  font-size: 0.8rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.86;
+  text-wrap: balance;
+}
+
+.catalog-hero p {
+  max-width: 48ch;
+  margin: 1.5rem 0 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+}
+
+.shop-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.shop-hero-media img {
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.72) saturate(0.82);
+}
+
+.catalog-shell {
+  width: min(100%, 96rem);
+  margin-inline: auto;
+  padding: clamp(3.5rem, 7vw, 7rem) clamp(1.25rem, 6vw, 6rem);
+}
+
+.catalog-category-index {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.28fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.catalog-category-index h2,
+.catalog-category-products > h2,
+.catalog-related-categories h2 {
+  margin: 0;
+  padding-top: 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
-.shop-categories ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+.catalog-category-index > div {
+  display: grid;
 }
 
-.shop-categories a {
-  display: flex;
-  min-height: 3.25rem;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+.catalog-category-index a {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr) auto;
+  gap: clamp(1rem, 3vw, 3rem);
+  align-items: baseline;
+  padding: clamp(1.35rem, 3vw, 2.25rem) 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
   color: inherit;
-  font-weight: 600;
   text-decoration: none;
-  transition: padding 180ms ease, color 180ms ease;
 }
 
-.shop-categories a:hover,
-.shop-categories a[aria-current="page"] {
-  color: var(--residential-detail);
-  padding-inline-start: 0.5rem;
+.catalog-category-index a:first-child {
+  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 }
 
-.shop-categories a:focus-visible,
-.shop-product-card a:focus-visible,
-.cart-page a:focus-visible,
-.cart-page button:focus-visible,
-.shop-add-button:focus-visible {
-  outline: 3px solid var(--residential-detail, currentColor);
-  outline-offset: 3px;
+.catalog-category-index a span {
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  font-weight: 650;
+  letter-spacing: -0.03em;
 }
 
-.shop-categories svg {
+.catalog-category-index a p {
+  max-width: 58ch;
+  margin: 0;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  line-height: 1.55;
+}
+
+.catalog-category-index svg,
+.catalog-inline-link svg {
   width: 1.1rem;
   height: 1.1rem;
-  flex: 0 0 auto;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.7;
+  transition: transform 180ms ease;
 }
 
-.shop-results-heading {
-  display: grid;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
+.catalog-category-index a:hover svg,
+.catalog-product-row-link:hover .catalog-inline-link svg {
+  transform: translateX(0.3rem);
 }
 
-.shop-results-heading h2 {
+.catalog-category-index a:focus-visible,
+.catalog-product-row-link:focus-visible,
+.catalog-breadcrumbs a:focus-visible,
+.catalog-related-categories a:focus-visible,
+.cart-page a:focus-visible,
+.cart-page button:focus-visible,
+.shop-add-button:focus-visible {
+  outline: 3px solid var(--catalog-accent, var(--residential-detail, currentColor));
+  outline-offset: 4px;
+}
+
+.catalog-empty-state {
+  max-width: 55ch;
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  padding: 2rem 0;
+  border-top: 1px solid currentColor;
+  line-height: 1.55;
+}
+
+.catalog-breadcrumbs {
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  overflow-x: auto;
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  font-size: 0.82rem;
+}
+
+.catalog-breadcrumbs ol {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.catalog-breadcrumbs li + li::before {
+  margin-inline: 0.65rem;
+  content: "/";
+}
+
+.catalog-breadcrumbs a {
+  color: inherit;
+  text-underline-offset: 0.25em;
+}
+
+.catalog-category-content {
+  display: grid;
+  gap: clamp(3.5rem, 8vw, 8rem);
+}
+
+.catalog-category-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.55fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  align-items: end;
+}
+
+.catalog-category-heading h1 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.catalog-category-heading p,
+.catalog-category-description {
+  max-width: 64ch;
+  margin: 0;
+  line-height: 1.65;
+}
+
+.catalog-category-description {
+  padding-inline-start: clamp(1rem, 4vw, 4rem);
+  border-inline-start: 0.2rem solid var(--catalog-accent);
+  white-space: pre-line;
+}
+
+.catalog-category-products {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.28fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.catalog-product-list {
+  display: grid;
+}
+
+.catalog-product-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.25fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.catalog-product-row-link {
+  display: grid;
+  grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 3rem);
+  color: inherit;
+  text-decoration: none;
+}
+
+.catalog-product-row-media,
+.catalog-product-detail-media,
+.catalog-product-detail-gallery-item {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--page-foreground) 7%, var(--page-background));
+}
+
+.catalog-product-row-media {
+  aspect-ratio: 4 / 3;
+}
+
+.catalog-product-row-media img,
+.catalog-product-detail-media img,
+.catalog-product-detail-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.catalog-product-row-copy {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.catalog-product-row-copy h3 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1;
+  text-wrap: balance;
 }
 
-.shop-results-heading p,
-.solar-package-price-note,
-.cart-price-note {
-  max-width: 58ch;
+.catalog-product-row-copy > p:not(.catalog-marketing-label) {
+  max-width: 55ch;
   margin: 0;
-  color: color-mix(in srgb, currentColor 75%, transparent);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  line-height: 1.55;
 }
 
-.shop-results section + section { margin-top: clamp(4rem, 8vw, 7rem); }
-.shop-product-card { display: grid; align-content: space-between; border-right: 0; }
-.shop-product-card .residential-package-card-content { min-height: 0; padding-bottom: 1.25rem; }
-.shop-product-card > .residential-package-card-link { border-bottom: 1px solid var(--product-card-rule); }
-.shop-product-card h3 {
+.catalog-marketing-label {
+  width: fit-content;
   margin: 0;
-  font-size: clamp(1.65rem, 3vw, 2.25rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
-.shop-product-purchase {
+.catalog-inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.5rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.catalog-product-row-commerce {
   display: grid;
+  align-content: start;
+  justify-items: start;
   gap: 1.25rem;
-  padding: 1.25rem;
+}
+
+.catalog-product-row-commerce > p {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+}
+
+.catalog-product-row-commerce strong {
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+}
+
+.catalog-product-row-commerce span,
+.catalog-product-row-commerce small,
+.catalog-product-detail-commerce small {
+  color: color-mix(in srgb, currentColor 68%, transparent);
+}
+
+.catalog-availability {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 .shop-add-button {
@@ -1294,18 +841,119 @@ html {
   padding: 0.65rem 0.8rem;
   background: transparent;
   color: inherit;
+  font: inherit;
   font-size: 0.9rem;
   font-weight: 650;
   cursor: pointer;
   transition: background-color 180ms ease, color 180ms ease;
 }
 
-.shop-add-button:hover:not(:disabled) { background: var(--page-foreground); color: var(--page-background); }
+.shop-add-button:hover:not(:disabled) {
+  background: var(--page-foreground);
+  color: var(--page-background);
+}
+
 .shop-add-button:disabled { opacity: 0.55; cursor: wait; }
-.solar-package-detail-summary > .shop-add-button { margin-top: 0; }
+
+.catalog-related-categories {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.28fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  margin-top: clamp(4rem, 8vw, 8rem);
+  border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.catalog-related-categories ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 1.25rem 0 0;
+  list-style: none;
+}
+
+.catalog-related-categories a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (max-width: 63.999rem) {
+  .catalog-category-index,
+  .catalog-category-products,
+  .catalog-related-categories {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .catalog-product-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .catalog-hero {
+    min-height: 28rem;
+  }
+
+  .catalog-hero::after {
+    background: rgba(5, 8, 7, 0.74);
+  }
+
+  .shop-hero-media img {
+    object-position: 58% center;
+  }
+
+  .catalog-shell {
+    padding-inline: 1.25rem;
+  }
+
+  .catalog-category-index a,
+  .catalog-category-heading,
+  .catalog-product-row-link {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .catalog-category-index a {
+    gap: 0.65rem;
+  }
+
+  .catalog-category-index a svg {
+    position: absolute;
+    top: 1.6rem;
+    right: 0;
+  }
+
+  .catalog-category-index a span {
+    padding-inline-end: 2rem;
+  }
+
+  .catalog-product-row-media {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-category-index svg,
+  .catalog-inline-link svg,
+  .shop-add-button {
+    transition: none;
+  }
+
+  .catalog-category-index a:hover svg,
+  .catalog-product-row-link:hover .catalog-inline-link svg {
+    transform: none;
+  }
+}
 
 .cart-content { display: grid; gap: 2.5rem; }
 .cart-storage-note { margin: 0; padding: 1rem; border: 1px solid currentColor; }
+.cart-hydration-failure { display: grid; justify-items: start; gap: 1rem; padding: 1rem; border: 1px solid currentColor; }
+.cart-hydration-failure p { margin: 0; }
 .cart-state { margin: 0; }
 .cart-empty { display: grid; justify-items: start; gap: 1rem; padding-block: 2rem; border-top: 1px solid currentColor; }
 .cart-empty h2 { margin: 0; font-size: clamp(1.75rem, 4vw, 3rem); letter-spacing: -0.035em; }
@@ -1336,18 +984,8 @@ html {
 .cart-shop-link:hover { background: #fde68a; }
 
 @media (min-width: 48rem) {
-  .shop-product-purchase { padding: 1.5rem 1.75rem 1.75rem; }
   .cart-item { grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.5fr) minmax(8rem, 0.4fr); align-items: start; }
   .cart-line-total { justify-items: end; text-align: right; }
-}
-
-@media (min-width: 64rem) {
-  .shop-layout { grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1.55fr); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .shop-categories a,
-  .shop-add-button { transition: none; }
 }
 
 /* Authentication routes extend the Horizon Gate system into a focused task surface. */
@@ -2572,58 +2210,6 @@ html {
   }
 }
 
-/* Shop experiment B: photovoltaic geometry recedes behind a high-contrast dark hero. */
-.shop-introduction-copy { display: grid; gap: 1.25rem; }
-.shop-page-variant-b { padding: 0; }
-.shop-page-variant-b .shop-introduction {
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  width: 100%;
-  max-width: none;
-  min-height: clamp(26rem, 42vw, 38rem);
-  align-items: center;
-  overflow: hidden;
-  gap: 0;
-  margin: 0;
-  background: #090b0a;
-  color: #ffffff;
-}
-.shop-page-variant-b .shop-introduction::after {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(90deg, rgba(5, 8, 7, 0.94) 0%, rgba(5, 8, 7, 0.76) 48%, rgba(5, 8, 7, 0.48) 100%);
-  content: "";
-}
-.shop-page-variant-b .shop-introduction-copy {
-  display: grid;
-  align-content: center;
-  gap: 1.5rem;
-  width: min(100%, 80rem);
-  margin-inline: auto;
-  padding: clamp(3rem, 6vw, 6rem) clamp(1.25rem, 6vw, 6rem);
-}
-.shop-page-variant-b .shop-introduction p { max-width: 46ch; color: rgba(255, 255, 255, 0.88); }
-.shop-page-variant-b .shop-hero-media { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
-.shop-page-variant-b .shop-hero-media img {
-  object-fit: cover;
-  object-position: center;
-  filter: blur(5px) brightness(0.72) saturate(0.82);
-  transform: scale(1.04);
-}
-.shop-page-variant-b .shop-layout {
-  padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 9vw, 8rem);
-}
-@media (max-width: 47.999rem) {
-  .shop-page-variant-b .shop-introduction { min-height: 25rem; }
-  .shop-page-variant-b .shop-introduction-copy { padding-block: 4rem; }
-  .shop-page-variant-b .shop-introduction::after {
-    background: linear-gradient(90deg, rgba(5, 8, 7, 0.92), rgba(5, 8, 7, 0.66));
-  }
-  .shop-page-variant-b .shop-hero-media img { object-position: 58% center; }
-}
-
 /* Catalog management extends the dashboard's ruled, high-contrast operating surface. */
 .dashboard-catalog-main {
   width: min(100%, 104rem);
@@ -3346,7 +2932,7 @@ html {
   width: 100%;
   height: 100%;
   min-height: inherit;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--page-foreground) 10%, transparent), transparent 60%);
+  background: color-mix(in srgb, var(--page-foreground) 10%, var(--page-background));
 }
 
 .catalog-product-detail-copy {
@@ -3392,10 +2978,18 @@ html {
   line-height: 1.6;
 }
 
+.catalog-product-detail-description {
+  white-space: pre-line;
+}
+
 .catalog-product-detail-commerce {
   gap: 0.25rem;
   padding-block: 1rem;
   border-block: 1px solid color-mix(in srgb, var(--page-foreground) 20%, transparent);
+}
+
+.catalog-product-detail-actions {
+  margin-top: 0.75rem;
 }
 
 .catalog-product-detail-commerce strong {
@@ -3456,7 +3050,7 @@ html {
   gap: 0.75rem;
 }
 
-.catalog-product-detail-gallery img {
+.catalog-product-detail-gallery-item {
   aspect-ratio: 4 / 3;
 }
 

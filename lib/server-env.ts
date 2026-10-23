@@ -4,6 +4,7 @@ type ServerEnvironmentVariable =
   | "DATABASE_URL"
   | "BETTER_AUTH_SECRET"
   | "BETTER_AUTH_URL"
+  | "PUBLIC_SITE_URL"
   | "SMTP_HOST"
   | "SMTP_PORT"
   | "SMTP_SECURE"
@@ -19,6 +20,30 @@ export function requireServerEnvironmentVariable(
   }
 
   return value;
+}
+
+export function getPublicSiteUrl(): URL {
+  const value = requireServerEnvironmentVariable("PUBLIC_SITE_URL");
+  let url: URL;
+
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error("PUBLIC_SITE_URL must be an absolute HTTP(S) URL.");
+  }
+
+  if (
+    (url.protocol !== "http:" && url.protocol !== "https:") ||
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash ||
+    (url.pathname !== "/" && url.pathname !== "")
+  ) {
+    throw new Error("PUBLIC_SITE_URL must be an HTTP(S) origin without credentials, a path, a query, or a hash.");
+  }
+
+  return new URL(url.origin);
 }
 
 export type SmtpEnvironment = {

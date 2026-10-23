@@ -35,8 +35,9 @@ Configuration variables:
 | `POSTGRES_PASSWORD` | Local container database password |
 | `POSTGRES_PORT` | Host port bound to PostgreSQL |
 | `DATABASE_URL` | PostgreSQL connection string used by the application and Drizzle |
+| `PUBLIC_SITE_URL` | Canonical public website origin used by metadata, sitemap, and structured data |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
-| `BETTER_AUTH_URL` | Canonical application origin, such as `http://localhost:3000` locally |
+| `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
 | `GOOGLE_CLIENT_ID` | Optional Google OAuth client ID; enable it together with `GOOGLE_CLIENT_SECRET` |
 | `GOOGLE_CLIENT_SECRET` | Optional Google OAuth client secret; never expose it to browser code |
 | `FACEBOOK_CLIENT_ID` | Optional Facebook app ID; enable it together with `FACEBOOK_CLIENT_SECRET` |

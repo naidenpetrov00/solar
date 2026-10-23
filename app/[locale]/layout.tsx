@@ -4,8 +4,13 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { I18nProvider } from "next-i18next/client";
 import { getResources, getT, generateI18nStaticParams } from "@/i18n.server";
 import { getCurrentUser, hasPermission } from "@/lib/authorization";
+import { getPublicSiteUrl } from "@/lib/server-env";
 import { Navigation } from "./_components/navigation";
-import { routeDefinitions, supportedLocales } from "./_lib/routes";
+import {
+  openGraphLocale,
+  routeDefinitions,
+  supportedLocales,
+} from "./_lib/routes";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -26,6 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { t, lng } = await getT("common");
 
   return {
+    metadataBase: getPublicSiteUrl(),
     title: t("metadata.title"),
     description: t("metadata.description"),
     alternates: {
@@ -34,12 +40,13 @@ export async function generateMetadata(): Promise<Metadata> {
         en: "/en",
         tr: "/tr",
         uk: "/uk",
+        "x-default": "/",
       },
     },
     openGraph: {
       title: t("metadata.title"),
       description: t("metadata.description"),
-      locale: lng,
+      locale: openGraphLocale(lng),
       type: "website",
     },
   };
