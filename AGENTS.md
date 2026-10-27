@@ -24,6 +24,7 @@ Do not read every supporting guide by default. Read only the guide whose trigger
 * SEO, metadata, structured data, sitemap, or service/local-intent pages: `.agents/seo.md`.
 * Drizzle, PostgreSQL, catalog, schema, database, or migration work: `.agents/database.md`.
 * Better Auth or email-delivery work: the relevant `README.md` section and existing modules.
+* Cross-feature changes, repository-wide refactors, or unclear module ownership: `.agents/architecture.md`. Do not read it for focused changes with an evident owner.
 
 ## Task discipline
 

@@ -20,3 +20,10 @@ Read this file only for implementation work involving Next.js, React, TypeScript
 * Extract only when a boundary isolates change, improves testing, expresses the domain, or removes actual repetition. Avoid speculative abstractions, generic utility dumping grounds, and pass-through wrappers.
 * Preserve Server Components by default and keep Client Component entry points narrow. A refactor must not move server-only dependencies into the client graph.
 * Generated files, dependency artifacts, migration snapshots, lockfiles, vendored code, and machine-owned data are exempt from the handwritten-source target. If a cohesive handwritten file remains substantially above 150 effective lines, document its responsibility and the concrete reason for keeping it intact.
+
+## File discovery
+
+* Begin with the requested route, component, action, or domain symbol and follow direct imports only as needed.
+* Search for symbols before opening complete files. Prefer path-scoped searches and diffs instead of broad repository output.
+* Do not load every translation, stylesheet, schema module, migration, or sibling feature when a representative or directly affected file is sufficient.
+* Stop exploring after establishing the owning boundary and affected callers. Read `.agents/architecture.md` only for cross-feature work or when ownership remains unclear.
