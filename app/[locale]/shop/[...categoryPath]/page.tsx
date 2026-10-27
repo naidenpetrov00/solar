@@ -3,13 +3,13 @@ import { notFound, permanentRedirect } from "next/navigation";
 
 import { getT } from "@/i18n.server";
 import {
-  catalogLocale,
   listPublicCategoryBreadcrumbs,
   listPublicChildCategories,
-  listPublicProductsForCategory,
   resolvePublicCategory,
-  resolvePublicProduct,
-} from "@/lib/catalog/public";
+} from "@/lib/catalog/public-categories";
+import { listPublicProductsForCategory } from "@/lib/catalog/public-product-list";
+import { resolvePublicProduct } from "@/lib/catalog/public-products";
+import { catalogLocale } from "@/lib/catalog/public-routes";
 import { getPublicSiteUrl } from "@/lib/server-env";
 import { CatalogBreadcrumbs } from "../../_components/catalog-breadcrumbs";
 import { CatalogCategoryView } from "../../_components/shop-catalog";
@@ -50,7 +50,10 @@ async function resolvePage(params: Props["params"]) {
     );
   }
   const requestedPath = categoryPath.join("/");
-  const resolution = await resolvePublicCategory(requestedPath, validatedLocale);
+  const resolution = await resolvePublicCategory(
+    requestedPath,
+    validatedLocale,
+  );
   return resolution ? { locale, validatedLocale, resolution } : null;
 }
 
@@ -143,9 +146,10 @@ export default async function CategoryPage({ params }: Props) {
           locale={page.locale}
           category={category}
           siblings={siblings.filter((sibling) => sibling.id !== category.id)}
-          children={children}
           products={products}
-        />
+        >
+          {children}
+        </CatalogCategoryView>
       </div>
       <StructuredData value={breadcrumbSchema} />
     </main>

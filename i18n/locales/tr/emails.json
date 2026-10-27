@@ -1,0 +1,20 @@
+{
+  "emails": {
+    "verification": {
+      "subject": "E-posta adresinizi doğrulayın",
+      "title": "E-posta adresinizi doğrulayın",
+      "introduction": "Solar hesabınız için kullanılan e-posta adresini doğrulayın.",
+      "action": "E-postayı doğrula",
+      "expiry": "Bu bağlantı 1 saat geçerlidir.",
+      "ignore": "Hesap oluşturmadıysanız bu e-postayı yok sayabilirsiniz."
+    },
+    "passwordReset": {
+      "subject": "Solar parolanızı sıfırlayın",
+      "title": "Parolanızı sıfırlayın",
+      "introduction": "Solar hesabınız için yeni bir parola belirlemek üzere aşağıdaki güvenli bağlantıyı kullanın.",
+      "action": "Yeni parola belirle",
+      "expiry": "Bu bağlantı 1 saat geçerlidir.",
+      "ignore": "Parola sıfırlama talebinde bulunmadıysanız bu e-postayı yok sayabilirsiniz."
+    }
+  }
+}

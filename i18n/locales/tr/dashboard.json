@@ -1,0 +1,17 @@
+{
+  "pages": {
+    "dashboard": {
+      "title": "Yönetim paneli",
+      "description": "Sitenin yönetim araçları için merkezi çalışma alanı.",
+      "navigation": {
+        "overview": "Genel bakış",
+        "catalog": "Katalog",
+        "users": "Kullanıcılar"
+      },
+      "overview": {
+        "title": "Genel bakış",
+        "description": "Yönetim altyapısı hazır. Gereken ek araçlar daha sonra burada yer alabilir."
+      }
+    }
+  }
+}

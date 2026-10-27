@@ -1,0 +1,55 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "product": {
+          "readiness": {
+            "title": "Готовност за публикуване",
+            "ready": "Готов за публикуване.",
+            "blocked": "Отстранете тези пречки преди публикуване:",
+            "fields": {
+              "title": "заглавие",
+              "shortDescription": "кратко описание",
+              "fullDescription": "пълно описание"
+            },
+            "messages": {
+              "MISSING_PRODUCT_TRANSLATION_FIELD": "Добавете {{field}} на {{locale}}.",
+              "CATEGORY_NOT_PUBLISHED": "Публикувайте свързаната категория {{category}}.",
+              "MISSING_REQUIRED_SPECIFICATION": "Добавете стойност за {{specification}}.",
+              "INVALID_SPECIFICATION_VALUE": "Коригирайте стойността за {{specification}}.",
+              "MISSING_CUSTOM_SPECIFICATION_LABEL": "Добавете име на {{locale}} за {{specification}}.",
+              "MISSING_CUSTOM_OPTION_LABEL": "Преведете всички опции на {{locale}} за {{specification}}.",
+              "MODEL_REQUIRED": "Добавете модел (MPN).",
+              "INVALID_COMMERCE": "Попълнете валидна комбинация от начин на продажба, цена, ДДС и наличност.",
+              "PRIMARY_IMAGE_REQUIRED": "Изберете точно едно основно изображение.",
+              "SOCIAL_IMAGE_LIMIT": "Изберете най-много едно изображение за споделяне.",
+              "MISSING_MEDIA_ALT": "Добавете алтернативен текст на {{locale}} за медия {{media}}."
+            }
+          },
+          "results": {
+            "CREATED": "Продуктът е създаден.",
+            "SAVED": "Продуктът е запазен.",
+            "MOVED": "Елементът е преместен.",
+            "REORDERED": "Редът е обновен.",
+            "PUBLISHED": "Продуктът е публикуван.",
+            "UNPUBLISHED": "Продуктът е свален от публикация.",
+            "ARCHIVED": "Продуктът е архивиран.",
+            "RESTORED": "Продуктът е възстановен като чернова.",
+            "CYCLE": "Промяната не е разрешена.",
+            "DEPENDENCY_EXISTS": "Потвърдете промяната на основната категория, за да премахнете несъвместимите спецификации.",
+            "PUBLISHED_DEPENDENCY_EXISTS": "Публикувана зависимост блокира промяната.",
+            "ACTIVE_DEPENDENCY_EXISTS": "Активна зависимост блокира промяната.",
+            "ARCHIVED_ANCESTOR": "Първо възстановете необходимата категория.",
+            "FORBIDDEN": "Вече нямате право да извършите това действие.",
+            "INVALID_INPUT": "Прегледайте въведените стойности и опитайте отново.",
+            "NOT_FOUND": "Продуктът вече не съществува.",
+            "PUBLICATION_INVALID": "Продуктът не е готов за публикуване.",
+            "SLUG_CONFLICT": "Друг продукт вече използва този URL идентификатор.",
+            "SLUG_IMMUTABLE": "URL идентификаторът не може да се променя след първото публикуване.",
+            "STALE": "Продуктът е променен, след като сте го отворили. Заредете актуалната версия."
+          }
+        }
+      }
+    }
+  }
+}

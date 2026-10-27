@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { isUuid } from "@/lib/catalog/model";
-import { catalogLocale, listPublicCartProducts } from "@/lib/catalog/public";
+import { listPublicCartProducts } from "@/lib/catalog/public-products";
+import { catalogLocale } from "@/lib/catalog/public-routes";
 
 const maximumItems = 50;
 

@@ -1,0 +1,143 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "product": {
+          "views": {
+            "category": "Kategori ayrıntıları",
+            "products": "Ürünler",
+            "ariaLabel": "Seçili kategori görünümü"
+          },
+          "list": {
+            "title": "Ürünler",
+            "description": "Bu kategoriye birincil veya ek kategori olarak atanmış ürünler.",
+            "add": "Ürün ekle",
+            "empty": "Bu kategoride ürün yok.",
+            "emptyTitle": "Bu kategoride ürün yok",
+            "emptyDescription": "Burada bir ürün oluşturun veya mevcut bir ürünü bu kategoriye atayın.",
+            "open": "Ürünü aç",
+            "localizedTitle": "Yerelleştirilmiş başlık",
+            "untitled": "Başlıksız ürün"
+          },
+          "editor": {
+            "newTitle": "Yeni ürün",
+            "newDescription": "Ürünü tamamlayın ve tek işlemle kaydedin. Yayımlanana kadar taslak olarak kalır.",
+            "editDescription": "Ürünün tamamını tek yerde düzenleyip kaydedin.",
+            "back": "Ürünlere dön",
+            "readOnly": "Salt okunur erişim. Ürünü inceleyebilirsiniz ancak değiştiremezsiniz.",
+            "skuPending": "Ürün kaydedildiğinde oluşturulur",
+            "complete": "Tamamlandı",
+            "incomplete": "Eksik",
+            "unsaved": "Bu üründe kaydedilmemiş değişiklikler var. Devam edip bunları atmak istiyor musunuz?"
+          },
+          "preview": {
+            "open": "Önizleme",
+            "back": "Düzenlemeye dön",
+            "title": "Ürün önizlemesi",
+            "emptyTitle": "Ürün başlığı",
+            "brand": "Marka",
+            "model": "Model",
+            "availability": "Stok durumu",
+            "specifications": "Özellikler",
+            "gallery": "Galeri",
+            "noImage": "Henüz birincil görsel seçilmedi"
+          },
+          "sections": {
+            "general": "Ürün ve satış bilgileri",
+            "content": "Yerelleştirilmiş içerik ve SEO",
+            "specifications": "Özellikler",
+            "media": "Medya referansları"
+          },
+          "categories": {
+            "title": "Kategoriler",
+            "help": "Dalları açın; bir birincil kategori ve isteğe bağlı ek kategoriler seçin.",
+            "primaryHelp": "Ana konumu, URL yolunu, başlık yönergesini ve devralınan özellikleri belirler.",
+            "additionalHelp": "Özellikleri değiştirmeden ürünü diğer uygun konumlarda gösterir.",
+            "setPrimary": "Birincil yap",
+            "addAdditional": "Ek kategori olarak ekle",
+            "removeAdditional": "Ek kategoriden kaldır",
+            "primary": "Birincil",
+            "additional": "Ek",
+            "expand": "{{category}} kategorisini aç",
+            "collapse": "{{category}} kategorisini kapat"
+          },
+          "sales": {
+            "directPurchase": "Doğrudan satın alma",
+            "enquiry": "Teklif talebi",
+            "exact": "Kesin fiyat",
+            "from": "Başlangıç fiyatı",
+            "onRequest": "Teklif üzerine",
+            "vatInclusive": "KDV dahil",
+            "vatExclusive": "KDV hariç",
+            "counterpartInclusive": "KDV dahil tutar",
+            "counterpartExclusive": "KDV hariç tutar",
+            "inStock": "Stokta",
+            "outOfStock": "Stokta yok"
+          },
+          "content": {
+            "titleGuidance": "Birincil kategori yönergesi",
+            "titleStructure": "Önerilen yapı: Marka + model + ürün türü + önemli özellik. Son başlık yöneticinin kontrolündedir.",
+            "updateSlug": "Adresi başlıktan güncelle",
+            "seoGroup": "Arama görünümü",
+            "previewTitle": "Örnek arama önizlemesi",
+            "previewNote": "Arama motorları farklı metin gösterebilir.",
+            "emptyProductTitle": "Ürün başlığı",
+            "emptyMetaDescription": "Ürünün aramada nasıl görünebileceğini önizlemek için kısa bir açıklama ekleyin."
+          },
+          "media": {
+            "empty": "Henüz medya referansı yok.",
+            "add": "Medya referansı ekle",
+            "remove": "Kaldır",
+            "moveUp": "Yukarı taşı",
+            "moveDown": "Aşağı taşı",
+            "primary": "Birincil görsel",
+            "social": "Sosyal paylaşım görseli",
+            "languageLabel": "Alternatif metin dili"
+          },
+          "actions": {
+            "create": "Ürünü kaydet",
+            "creating": "Kaydediliyor…",
+            "save": "Ürünü kaydet",
+            "saving": "Kaydediliyor…",
+            "publish": "Yayımla",
+            "unpublish": "Yayından kaldır",
+            "archive": "Arşivle",
+            "restore": "Taslak olarak geri yükle",
+            "working": "İşleniyor…",
+            "cancel": "İptal",
+            "reload": "Güncel veriyi yükle"
+          },
+          "lifecycle": {
+            "publish": {
+              "title": "Bu ürün yayımlansın mı?",
+              "description": "Yayımlama yalnızca tüm hazırlık gereksinimleri tamamlandığında mümkündür.",
+              "confirm": "Yayımla"
+            },
+            "unpublish": {
+              "title": "Bu ürün yayından kaldırılsın mı?",
+              "description": "Ürün taslağa dönecek.",
+              "confirm": "Yayından kaldır"
+            },
+            "archive": {
+              "title": "Bu ürün arşivlensin mi?",
+              "description": "Ürün korunacak ancak etkin kullanımdan çıkarılacak.",
+              "confirm": "Arşivle"
+            },
+            "restore": {
+              "title": "Bu ürün geri yüklensin mi?",
+              "description": "Ürün taslak olarak geri yüklenecek.",
+              "confirm": "Geri yükle"
+            }
+          },
+          "validation": {
+            "required": "Bu alan zorunludur.",
+            "invalid": "Bu değeri gözden geçirin.",
+            "slug": "Yalnızca küçük Latin harfleri, rakamlar ve kelimeler arasında tek kısa çizgi kullanın.",
+            "conflict": "Başka bir ürün, İngilizce varsayılan adres de dahil olmak üzere bu dil adresini zaten kullanıyor."
+          },
+          "primaryCategoryChange": "Birincil kategoriyi değiştirmek mevcut özellik değerlerini silecek. Devam edilsin mi?"
+        }
+      }
+    }
+  }
+}

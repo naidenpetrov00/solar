@@ -1,0 +1,97 @@
+.dashboard-catalog-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-options-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-catalog-options-heading > div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dashboard-catalog-options-heading h4 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.dashboard-catalog-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-inline-start: 0.2rem solid #15803d;
+  background: color-mix(in srgb, #15803d 9%, transparent);
+}
+
+.dashboard-catalog-result[data-tone="error"] {
+  border-inline-start-color: #b91c1c;
+  background: color-mix(in srgb, #b91c1c 9%, transparent);
+}
+
+.dashboard-catalog-result p {
+  line-height: 1.45;
+}
+
+.dashboard-catalog-form-actions {
+  margin-top: 1.5rem;
+}
+
+.dashboard-catalog-tree button,
+.dashboard-catalog-editor button,
+.dashboard-catalog-dialog button,
+.dashboard-catalog-mobile-back {
+  min-height: 2.75rem;
+  padding-inline: 0.8rem;
+  border: 1px solid var(--dashboard-foreground);
+  border-radius: 0;
+  background: transparent;
+  color: var(--dashboard-foreground);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dashboard-catalog-form-actions button[type="submit"],
+.dashboard-catalog-dialog button[type="submit"] {
+  background: var(--dashboard-foreground);
+  color: var(--dashboard-surface);
+}
+
+.dashboard-catalog-tree button:hover,
+.dashboard-catalog-editor button:hover,
+.dashboard-catalog-dialog button:hover {
+  border-color: #f59e0b;
+}
+
+.dashboard-catalog-form-actions button[type="submit"]:hover,
+.dashboard-catalog-dialog button[type="submit"]:hover {
+  background: #fcd34d;
+  color: #11130f;
+}
+
+.dashboard-catalog-tree button:disabled,
+.dashboard-catalog-editor button:disabled,
+.dashboard-catalog-dialog button:disabled,
+.dashboard-catalog-localized-switch button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.dashboard-catalog-lifecycle-actions {
+  flex-wrap: wrap;
+  justify-content: end;
+  padding: 0;
+}

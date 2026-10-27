@@ -1,0 +1,113 @@
+.shop-page,
+.cart-page {
+  background: var(--page-background);
+  color: var(--page-foreground);
+}
+
+.shop-page {
+  --catalog-accent: #7a5700;
+  min-height: 70vh;
+}
+
+:root[data-theme="dark"] .shop-page {
+  --catalog-accent: #fcd34d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .shop-page {
+    --catalog-accent: #fcd34d;
+  }
+}
+
+.cart-page {
+  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
+}
+
+.cart-page-inner {
+  width: min(100%, 80rem);
+  margin-inline: auto;
+}
+
+.cart-introduction {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.cart-introduction h1 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.93;
+  text-wrap: balance;
+}
+
+.cart-introduction p {
+  max-width: 60ch;
+  margin: 0;
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.catalog-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: clamp(28rem, 52vw, 46rem);
+  align-items: end;
+  overflow: hidden;
+  background: #090b0a;
+  color: #fff;
+}
+
+.catalog-hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 8, 7, 0.94),
+    rgba(5, 8, 7, 0.62) 62%,
+    rgba(5, 8, 7, 0.35)
+  );
+  content: "";
+}
+
+.shop-introduction-copy {
+  width: min(100%, 96rem);
+  margin-inline: auto;
+  padding: clamp(4rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
+}
+
+.catalog-hero h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.86;
+  text-wrap: balance;
+}
+
+.catalog-hero p {
+  max-width: 48ch;
+  margin: 1.5rem 0 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+}
+
+.shop-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.shop-hero-media img {
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.72) saturate(0.82);
+}

@@ -1,0 +1,101 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "fields": {
+          "bgSlug": {
+            "label": "Bulgarca URL adresi",
+            "help": "Bulgarca sayfanın adres bölümüdür. Bulgarca kelimeleri küçük Latin harfleri, rakamlar ve kısa çizgilerle yazın.",
+            "example": "Örnek: solarni-paneli → /solarni-paneli"
+          },
+          "enSlug": {
+            "label": "İngilizce URL adresi",
+            "help": "İngilizce adres bölümüdür. Türkçe ve Ukraynaca adresler de bu değeri kullanır. Küçük Latin harfleri, rakamlar ve kısa çizgiler kullanın.",
+            "example": "Örnek: solar-panels → /en/solar-panels, /tr/solar-panels ve /uk/solar-panels"
+          },
+          "parent": {
+            "label": "Üst kategori",
+            "help": "Bu kategorinin katalog ağacındaki yerini belirler."
+          },
+          "name": {
+            "label": "Ad",
+            "help": "Ağaçta, gelecekteki sayfanın başlığında ve varsayılan olarak arama sonucu başlığında gösterilir. Açık ve doğal yazın; anahtar kelime yığmadan yaklaşık 50–60 karakter yararlı bir arama rehberidir."
+          },
+          "introduction": {
+            "label": "Giriş",
+            "help": "Kategoriyi sayfanın kendisinde açıklar ve ziyaretçilere gösterilir. Meta açıklaması ise arama sonuçları için hazırlanmış, ayrı ve daha ilgi çekici bir metindir."
+          },
+          "metaDescription": {
+            "label": "Meta açıklaması",
+            "help": "Kategoriyi özetleyen kısa metindir. Google veya Bing'de SEO başlığı ve sayfa adresinin altında gösterilebilir. 140–160 net karakter hedefleyin; arama motoru farklı metin gösterebilir.",
+            "example": "“Güneş panelleri” kategorisi için örnek: “Evler ve işletmeler için güneş panellerini inceleyin; güç, verimlilik ve projenizin ihtiyaçlarına göre uygun modeli nasıl seçeceğinizi öğrenin.”"
+          },
+          "productTitleGuidance": {
+            "label": "Ürün başlığı rehberi",
+            "help": "Bu kategorideki ürünleri adlandıran yazarlar için dahili rehberdir; herkese açık kategori metni değildir.",
+            "example": "Örnek: “Başlığı şu sırayla yazın: marka ve model, güç, ürün türü—örneğin [Marka] [Model] 440 W monokristal güneş paneli. ‘En iyi’ gibi tanıtım ifadeleri kullanmayın.”"
+          }
+        },
+        "specifications": {
+          "empty": "Henüz özellik yok.",
+          "emptyDescription": "Bu kategorideki ürünler için daha sonra doldurulabilecek bir özellik ekleyin.",
+          "add": "Özellik ekle",
+          "remove": "Kaldır",
+          "moveUp": "Yukarı taşı",
+          "moveDown": "Aşağı taşı",
+          "item": "Özellik",
+          "expand": "Genişlet",
+          "collapse": "Daralt",
+          "languageLabel": "Özellik dili",
+          "languageHelp": "Seçilen dil aşağıdaki tüm özellik ve seçenek adlarını yönetir. Kaydetmeden önce dört dilin tamamı zorunludur.",
+          "preview": {
+            "title": "Özellikler",
+            "illustrative": "Örnek ürün değerleri — kaydedilmez",
+            "description": "Bu bölüm gerçek bir ürün ilanında böyle görünür. Adlar ve seçenekler mevcut düzenlemelerinizden anında güncellenir.",
+            "emptyUnit": "W",
+            "labels": {
+              "text": "Çerçeve malzemesi",
+              "number": "Nominal güç",
+              "boolean": "Çift yüzlü panel",
+              "selection": "Hücre tipi"
+            },
+            "values": {
+              "text": "Siyah alüminyum çerçeve",
+              "number": "450",
+              "boolean": "Evet",
+              "selection": "Monokristal"
+            }
+          },
+          "name": {
+            "label": "Ad",
+            "help": "Ürün özelliklerinde değerin yanında gösterilecek ad."
+          },
+          "type": {
+            "label": "Tür",
+            "help": "Değerin metin, sayı, evet/hayır veya hazır seçeneklerden biri olacağını seçin."
+          },
+          "unit": {
+            "label": "Birim",
+            "help": "Sayısal değer için isteğe bağlı birim; örneğin W, kW veya kg."
+          },
+          "options": "Seçenekler",
+          "optionsHelp": "Ürün oluşturulurken yöneticinin seçebileceği hazır değerleri ekleyin.",
+          "addOption": "Seçenek ekle",
+          "removeOption": "Seçeneği kaldır",
+          "optionName": {
+            "label": "Seçenek adı",
+            "help": "Yöneticinin seçtiği ve ziyaretçinin özelliklerde gördüğü değer."
+          },
+          "confirmRemove": "Bu özellik kaldırılsın mı?",
+          "confirmClearOptions": "Türü değiştirmek tüm seçenekleri kaldırır. Devam edilsin mi?",
+          "types": {
+            "text": "Metin",
+            "number": "Sayı",
+            "boolean": "Evet/hayır",
+            "selection": "Seçim"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "product": {
+          "readiness": {
+            "title": "Publication readiness",
+            "ready": "Ready to publish.",
+            "blocked": "Resolve these items before publishing:",
+            "fields": {
+              "title": "title",
+              "shortDescription": "short description",
+              "fullDescription": "full description"
+            },
+            "messages": {
+              "MISSING_PRODUCT_TRANSLATION_FIELD": "Add the {{field}} in {{locale}}.",
+              "CATEGORY_NOT_PUBLISHED": "Publish the assigned category {{category}}.",
+              "MISSING_REQUIRED_SPECIFICATION": "Add a value for {{specification}}.",
+              "INVALID_SPECIFICATION_VALUE": "Correct the value for {{specification}}.",
+              "MISSING_CUSTOM_SPECIFICATION_LABEL": "Add a {{locale}} name for {{specification}}.",
+              "MISSING_CUSTOM_OPTION_LABEL": "Translate every option into {{locale}} for {{specification}}.",
+              "MODEL_REQUIRED": "Add the model (MPN).",
+              "INVALID_COMMERCE": "Complete a valid sales mode, price, VAT basis, and availability combination.",
+              "PRIMARY_IMAGE_REQUIRED": "Select exactly one primary image.",
+              "SOCIAL_IMAGE_LIMIT": "Select at most one social-sharing image.",
+              "MISSING_MEDIA_ALT": "Add {{locale}} alternative text for media item {{media}}."
+            }
+          },
+          "results": {
+            "CREATED": "The product was created.",
+            "SAVED": "The product was saved.",
+            "MOVED": "The item was moved.",
+            "REORDERED": "The order was updated.",
+            "PUBLISHED": "The product was published.",
+            "UNPUBLISHED": "The product was unpublished.",
+            "ARCHIVED": "The product was archived.",
+            "RESTORED": "The product was restored as a draft.",
+            "CYCLE": "This change is not allowed.",
+            "DEPENDENCY_EXISTS": "Confirm the primary-category change to discard incompatible specification values.",
+            "PUBLISHED_DEPENDENCY_EXISTS": "A published dependency blocks this change.",
+            "ACTIVE_DEPENDENCY_EXISTS": "An active dependency blocks this change.",
+            "ARCHIVED_ANCESTOR": "Restore the required category first.",
+            "FORBIDDEN": "You no longer have permission to perform this action.",
+            "INVALID_INPUT": "Review the entered values and try again.",
+            "NOT_FOUND": "The product no longer exists.",
+            "PUBLICATION_INVALID": "The product is not ready to publish.",
+            "SLUG_CONFLICT": "Another product already uses this slug.",
+            "SLUG_IMMUTABLE": "The slug cannot change after the product has first been published.",
+            "STALE": "This product changed after you opened it. Reload the latest version before retrying."
+          }
+        }
+      }
+    }
+  }
+}

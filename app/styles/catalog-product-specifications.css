@@ -1,0 +1,41 @@
+.dashboard-catalog-product-specifications,
+.dashboard-catalog-media-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-catalog-product-specification,
+.dashboard-catalog-media-item {
+  display: grid;
+  min-width: 0;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-product-specification-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dashboard-catalog-product-specification-heading h3 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.dashboard-catalog-custom-specification {
+  display: grid;
+  gap: 1rem;
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-custom-options > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: end;
+}

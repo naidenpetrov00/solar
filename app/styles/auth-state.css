@@ -1,0 +1,104 @@
+.auth-footer {
+  width: min(100%, 32rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--auth-rule);
+}
+
+.auth-footer p {
+  margin: 0;
+  color: var(--auth-muted);
+  line-height: 1.55;
+}
+
+.auth-footer a {
+  color: var(--auth-foreground);
+  font-weight: 650;
+  text-underline-offset: 0.22em;
+}
+
+.auth-state {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+}
+
+.auth-state-mark {
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-top: 0.4rem;
+  background: var(--auth-muted);
+}
+
+.auth-state[data-tone="success"] .auth-state-mark {
+  background: var(--auth-success);
+}
+
+.auth-state[data-tone="error"] .auth-state-mark {
+  background: var(--auth-error);
+}
+
+.auth-state h2,
+.auth-state p {
+  margin: 0;
+}
+
+.auth-state h2 {
+  font-size: clamp(1.55rem, 4vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.auth-state h2:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 4px;
+}
+
+.auth-state p {
+  margin-top: 0.75rem;
+  color: var(--auth-muted);
+  line-height: 1.6;
+}
+
+.auth-state .auth-primary-action,
+.auth-state .auth-secondary-action,
+.auth-state > .ui-button {
+  grid-column: 2;
+  margin-top: 0.5rem;
+}
+
+.auth-state-content {
+  display: grid;
+  grid-column: 2;
+  gap: 1rem;
+  min-width: 0;
+  margin-top: 0.5rem;
+}
+
+.auth-state-content .auth-compact-form {
+  width: 100%;
+}
+
+@media (min-width: 56rem) {
+  .auth-layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(28rem, 0.95fr);
+  }
+
+  .auth-introduction {
+    min-height: calc(100svh - 4.5rem);
+    padding-inline: clamp(2rem, 5vw, 5rem);
+  }
+
+  .auth-workspace {
+    min-height: calc(100svh - 4.5rem);
+    border-left: 1px solid var(--auth-rule);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-field input,
+  .auth-primary-action,
+  .auth-secondary-action,
+  .auth-text-action {
+    transition: none;
+  }
+}

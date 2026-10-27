@@ -1,0 +1,55 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "product": {
+          "readiness": {
+            "title": "Готовність до публікації",
+            "ready": "Готовий до публікації.",
+            "blocked": "Усуньте ці перешкоди перед публікацією:",
+            "fields": {
+              "title": "назву",
+              "shortDescription": "короткий опис",
+              "fullDescription": "повний опис"
+            },
+            "messages": {
+              "MISSING_PRODUCT_TRANSLATION_FIELD": "Додайте {{field}} мовою {{locale}}.",
+              "CATEGORY_NOT_PUBLISHED": "Опублікуйте призначену категорію {{category}}.",
+              "MISSING_REQUIRED_SPECIFICATION": "Додайте значення для {{specification}}.",
+              "INVALID_SPECIFICATION_VALUE": "Виправте значення для {{specification}}.",
+              "MISSING_CUSTOM_SPECIFICATION_LABEL": "Додайте назву мовою {{locale}} для {{specification}}.",
+              "MISSING_CUSTOM_OPTION_LABEL": "Перекладіть усі варіанти мовою {{locale}} для {{specification}}.",
+              "MODEL_REQUIRED": "Додайте модель (MPN).",
+              "INVALID_COMMERCE": "Заповніть дійсну комбінацію режиму продажу, ціни, основи ПДВ і наявності.",
+              "PRIMARY_IMAGE_REQUIRED": "Виберіть рівно одне основне зображення.",
+              "SOCIAL_IMAGE_LIMIT": "Виберіть не більше одного зображення для соцмереж.",
+              "MISSING_MEDIA_ALT": "Додайте альтернативний текст мовою {{locale}} для медіа {{media}}."
+            }
+          },
+          "results": {
+            "CREATED": "Товар створено.",
+            "SAVED": "Товар збережено.",
+            "MOVED": "Елемент переміщено.",
+            "REORDERED": "Порядок оновлено.",
+            "PUBLISHED": "Товар опубліковано.",
+            "UNPUBLISHED": "Товар знято з публікації.",
+            "ARCHIVED": "Товар архівовано.",
+            "RESTORED": "Товар відновлено як чернетку.",
+            "CYCLE": "Цю зміну заборонено.",
+            "DEPENDENCY_EXISTS": "Підтвердьте зміну основної категорії, щоб видалити несумісні значення характеристик.",
+            "PUBLISHED_DEPENDENCY_EXISTS": "Опублікована залежність блокує цю зміну.",
+            "ACTIVE_DEPENDENCY_EXISTS": "Активна залежність блокує цю зміну.",
+            "ARCHIVED_ANCESTOR": "Спочатку відновіть потрібну категорію.",
+            "FORBIDDEN": "У вас більше немає дозволу на цю дію.",
+            "INVALID_INPUT": "Перевірте введені значення й повторіть спробу.",
+            "NOT_FOUND": "Товар більше не існує.",
+            "PUBLICATION_INVALID": "Товар не готовий до публікації.",
+            "SLUG_CONFLICT": "Інший товар уже використовує цю адресу.",
+            "SLUG_IMMUTABLE": "Адресу не можна змінювати після першої публікації товару.",
+            "STALE": "Товар змінився після того, як ви його відкрили. Завантажте актуальну версію."
+          }
+        }
+      }
+    }
+  }
+}

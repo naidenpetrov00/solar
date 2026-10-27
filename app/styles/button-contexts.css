@@ -1,0 +1,51 @@
+/* Shared action primitives: context supplies surface tokens, variants own hierarchy. */
+.auth-page .ui-button {
+  --button-secondary-border: var(--auth-rule);
+  --button-secondary-hover-background: var(--auth-surface);
+  --button-secondary-foreground: var(--auth-foreground);
+  --button-informational-foreground: var(--auth-foreground);
+  --button-focus: #fcd34d;
+}
+
+.shop-page .ui-button,
+.cart-page .ui-button {
+  --button-secondary-border: currentColor;
+  --button-secondary-hover-background: var(--page-foreground);
+  --button-secondary-foreground: inherit;
+  --button-informational-foreground: inherit;
+  --button-focus: var(--residential-detail, #fcd34d);
+}
+
+.shop-page .ui-button--secondary:hover:not(:disabled),
+.cart-page .ui-button--secondary:hover:not(:disabled) {
+  color: var(--page-background);
+}
+
+.dashboard-shell .ui-button {
+  --button-primary-background: var(--dashboard-foreground);
+  --button-primary-hover-background: #fcd34d;
+  --button-primary-foreground: var(--dashboard-surface);
+  --button-secondary-border: var(--dashboard-foreground);
+  --button-secondary-hover-background: color-mix(
+    in srgb,
+    var(--dashboard-foreground) 6%,
+    transparent
+  );
+  --button-secondary-foreground: var(--dashboard-foreground);
+  --button-informational-foreground: var(--dashboard-foreground);
+  --button-focus: #fcd34d;
+  border-radius: 0;
+}
+
+.dashboard-shell .ui-button--primary:hover:not(:disabled) {
+  color: #11130f;
+}
+
+.dashboard-shell .ui-button--informational {
+  border-color: transparent;
+  background: transparent;
+}
+
+.dashboard-shell .ui-button--danger {
+  color: #9f1239;
+}

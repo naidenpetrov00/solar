@@ -34,11 +34,11 @@ async function buildAuthEmail(
   const callbackRoute =
     purpose === "verification" ? "verify-email" : "reset-password";
   const locale = resolveAuthEmailLocale(url, callbackRoute, applicationUrl);
-  const { t } = await getT("common", { lng: locale });
+  const { t } = await getT(["common", "emails"], { lng: locale });
   const key =
     purpose === "verification"
-      ? "emails.verification"
-      : "emails.passwordReset";
+      ? "emails:emails.verification"
+      : "emails:emails.passwordReset";
   const subject = t(`${key}.subject`);
   const title = t(`${key}.title`);
   const introduction = t(`${key}.introduction`);
@@ -49,9 +49,15 @@ async function buildAuthEmail(
 
   return {
     subject,
-    text: [title, "", introduction, `${action}: ${url}`, "", expiry, ignore].join(
-      "\n",
-    ),
+    text: [
+      title,
+      "",
+      introduction,
+      `${action}: ${url}`,
+      "",
+      expiry,
+      ignore,
+    ].join("\n"),
     html: [
       '<div style="margin:0;background:#f4f3ee;padding:32px 20px;color:#11130f;font-family:Arial,Helvetica,sans-serif">',
       '<div style="margin:0 auto;max-width:560px;background:#ffffff;padding:32px">',
@@ -96,16 +102,10 @@ async function deliverAuthEmail(
   return false;
 }
 
-export async function sendVerificationEmail(
-  recipient: string,
-  url: string,
-) {
+export async function sendVerificationEmail(recipient: string, url: string) {
   await deliverAuthEmail("verification", recipient, url);
 }
 
-export async function sendPasswordResetEmail(
-  recipient: string,
-  url: string,
-) {
+export async function sendPasswordResetEmail(recipient: string, url: string) {
   return deliverAuthEmail("password_reset", recipient, url, true);
 }

@@ -1,15 +1,24 @@
 import { notFound } from "next/navigation";
 
-import { catalogLocale, listPublicRootCategories } from "@/lib/catalog/public";
+import { listPublicRootCategories } from "@/lib/catalog/public-categories";
+import { catalogLocale } from "@/lib/catalog/public-routes";
 import { CatalogLanding } from "../_components/shop-catalog";
 import { getPageMetadata } from "../_lib/metadata";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
   return getPageMetadata(locale, "shop", "shop", "pages.shop.description");
 }
 
-export default async function ShopPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function ShopPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
   const validatedLocale = catalogLocale(locale);
   if (!validatedLocale) notFound();

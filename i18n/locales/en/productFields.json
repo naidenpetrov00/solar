@@ -1,0 +1,143 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "product": {
+          "fields": {
+            "sku": {
+              "label": "SKU",
+              "help": "Generated automatically and independent of category names."
+            },
+            "primaryCategory": {
+              "label": "Primary category",
+              "help": "Defines the product specifications and title guidance."
+            },
+            "additionalCategories": {
+              "label": "Additional categories",
+              "help": "Optional extra locations where the product should appear."
+            },
+            "brand": {
+              "label": "Brand",
+              "help": "Optional manufacturer or brand name."
+            },
+            "bgSlug": {
+              "label": "Bulgarian product address",
+              "help": "The final segment of the Bulgarian address. The full example below includes the real domain and selected primary-category path. It can be edited until first publication."
+            },
+            "enSlug": {
+              "label": "English product address",
+              "help": "The final segment of the English address. The full example below includes /en, the real category path, and the product address. It can be edited until first publication."
+            },
+            "trSlug": {
+              "label": "Turkish product address",
+              "help": "Optional Turkish address. Leave it empty to use the English product address for the Turkish version."
+            },
+            "ukSlug": {
+              "label": "Ukrainian product address",
+              "help": "Optional Ukrainian address. Leave it empty to use the English product address for the Ukrainian version."
+            },
+            "mpn": {
+              "label": "Model (MPN)",
+              "help": "The required official model or product code assigned by the manufacturer."
+            },
+            "salesMode": {
+              "label": "Sales mode",
+              "help": "Choose direct purchase or enquiry-only handling."
+            },
+            "pricePresentation": {
+              "label": "Price presentation",
+              "help": "Choose an exact price, a starting price, or price on request."
+            },
+            "price": {
+              "label": "Entered price in EUR",
+              "help": "Enter the amount using up to two decimal places."
+            },
+            "priceEntryBasis": {
+              "label": "VAT basis",
+              "help": "Choose whether the entered amount includes 20% VAT."
+            },
+            "availability": {
+              "label": "Availability",
+              "help": "Choose availability manually; quantities are not tracked."
+            },
+            "title": {
+              "label": "Product title",
+              "help": "The public product name in this language."
+            },
+            "shortDescription": {
+              "label": "Short description",
+              "help": "A concise summary for product listings."
+            },
+            "fullDescription": {
+              "label": "Full description",
+              "help": "The complete product description in this language."
+            },
+            "marketingLabel": {
+              "label": "Marketing label",
+              "help": "Optional short label displayed with the product."
+            },
+            "seoTitle": {
+              "label": "SEO title",
+              "help": "Optional search title. The product title is used when this is empty."
+            },
+            "metaDescription": {
+              "label": "Meta description",
+              "help": "May appear below the title and address in search results."
+            },
+            "mediaReference": {
+              "label": "Media reference",
+              "help": "Use an existing site path or HTTPS URL."
+            },
+            "altText": {
+              "label": "Alternative text",
+              "help": "Describe this image in the selected language."
+            }
+          },
+          "specifications": {
+            "empty": "This product has no active specifications.",
+            "required": "Required for publication",
+            "yes": "Yes",
+            "no": "No",
+            "choose": "Choose a value",
+            "removeInherited": "Remove for this product",
+            "restoreInherited": "Restore",
+            "removed": "Specifications removed only from this product",
+            "addCustom": "Add product specification",
+            "customTitle": "Product specification",
+            "customHelp": "This specification applies only to this product.",
+            "customName": {
+              "label": "Specification name",
+              "help": "Enter the name in the selected language."
+            },
+            "customType": {
+              "label": "Type",
+              "help": "Controls how the value is entered."
+            },
+            "customUnit": {
+              "label": "Unit",
+              "help": "Optional unit, such as W or kg."
+            },
+            "customValue": {
+              "label": "Value",
+              "help": "The value for this product."
+            },
+            "customOption": {
+              "label": "Option",
+              "help": "The option name in the selected language."
+            },
+            "addOption": "Add option",
+            "removeOption": "Remove option",
+            "removeCustom": "Remove specification",
+            "categoryChangePending": "The new inherited specifications will load after the primary-category change is saved.",
+            "types": {
+              "text": "Text",
+              "number": "Number",
+              "boolean": "Yes / no",
+              "selection": "Option selection"
+            }
+          }
+        }
+      }
+    }
+  }
+}

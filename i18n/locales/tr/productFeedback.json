@@ -1,0 +1,55 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "product": {
+          "readiness": {
+            "title": "Yayımlama hazırlığı",
+            "ready": "Yayımlamaya hazır.",
+            "blocked": "Yayımlamadan önce şu sorunları çözün:",
+            "fields": {
+              "title": "başlık",
+              "shortDescription": "kısa açıklama",
+              "fullDescription": "tam açıklama"
+            },
+            "messages": {
+              "MISSING_PRODUCT_TRANSLATION_FIELD": "{{locale}} dilinde {{field}} ekleyin.",
+              "CATEGORY_NOT_PUBLISHED": "Atanmış {{category}} kategorisini yayımlayın.",
+              "MISSING_REQUIRED_SPECIFICATION": "{{specification}} için bir değer ekleyin.",
+              "INVALID_SPECIFICATION_VALUE": "{{specification}} değerini düzeltin.",
+              "MISSING_CUSTOM_SPECIFICATION_LABEL": "{{specification}} için {{locale}} adını ekleyin.",
+              "MISSING_CUSTOM_OPTION_LABEL": "{{specification}} seçeneklerinin tümünü {{locale}} diline çevirin.",
+              "MODEL_REQUIRED": "Modeli (MPN) ekleyin.",
+              "INVALID_COMMERCE": "Geçerli satış modu, fiyat, KDV temeli ve stok durumu kombinasyonunu tamamlayın.",
+              "PRIMARY_IMAGE_REQUIRED": "Tam olarak bir birincil görsel seçin.",
+              "SOCIAL_IMAGE_LIMIT": "En fazla bir sosyal paylaşım görseli seçin.",
+              "MISSING_MEDIA_ALT": "{{media}} numaralı medya için {{locale}} alternatif metni ekleyin."
+            }
+          },
+          "results": {
+            "CREATED": "Ürün oluşturuldu.",
+            "SAVED": "Ürün kaydedildi.",
+            "MOVED": "Öğe taşındı.",
+            "REORDERED": "Sıra güncellendi.",
+            "PUBLISHED": "Ürün yayımlandı.",
+            "UNPUBLISHED": "Ürün yayından kaldırıldı.",
+            "ARCHIVED": "Ürün arşivlendi.",
+            "RESTORED": "Ürün taslak olarak geri yüklendi.",
+            "CYCLE": "Bu değişikliğe izin verilmiyor.",
+            "DEPENDENCY_EXISTS": "Uyumsuz özellik değerlerini silmek için birincil kategori değişikliğini onaylayın.",
+            "PUBLISHED_DEPENDENCY_EXISTS": "Yayımlanmış bir bağımlılık bu değişikliği engelliyor.",
+            "ACTIVE_DEPENDENCY_EXISTS": "Etkin bir bağımlılık bu değişikliği engelliyor.",
+            "ARCHIVED_ANCESTOR": "Önce gerekli kategoriyi geri yükleyin.",
+            "FORBIDDEN": "Bu işlemi yapma izniniz artık yok.",
+            "INVALID_INPUT": "Girilen değerleri gözden geçirip yeniden deneyin.",
+            "NOT_FOUND": "Ürün artık mevcut değil.",
+            "PUBLICATION_INVALID": "Ürün yayımlanmaya hazır değil.",
+            "SLUG_CONFLICT": "Başka bir ürün bu adresi kullanıyor.",
+            "SLUG_IMMUTABLE": "Ürün ilk kez yayımlandıktan sonra adres değiştirilemez.",
+            "STALE": "Ürün siz açtıktan sonra değişti. Yeniden denemeden önce güncel sürümü yükleyin."
+          }
+        }
+      }
+    }
+  }
+}

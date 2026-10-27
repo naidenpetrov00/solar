@@ -1,0 +1,119 @@
+.auth-form,
+.auth-compact-form,
+.auth-state {
+  display: grid;
+  width: min(100%, 32rem);
+  gap: 1.5rem;
+}
+
+.auth-compact-form {
+  display: grid;
+  width: min(100%, 32rem);
+  gap: 1rem;
+}
+
+.auth-field {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.auth-field label {
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.auth-field input {
+  min-height: 3.25rem;
+  width: 100%;
+  border: 1px solid var(--auth-rule);
+  border-radius: 6px;
+  padding: 0.75rem 0.85rem;
+  background: var(--auth-surface);
+  color: var(--auth-foreground);
+  caret-color: #b07a00;
+  font: inherit;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.auth-field input:hover {
+  border-color: color-mix(in srgb, var(--auth-foreground) 52%, transparent);
+}
+
+.auth-field input:focus-visible {
+  border-color: var(--auth-foreground);
+  outline: 3px solid #fcd34d;
+  outline-offset: 2px;
+}
+
+.auth-field input[aria-invalid="true"] {
+  border-color: var(--auth-error);
+}
+
+.auth-field-hint,
+.auth-field-error,
+.auth-flow-notice {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.auth-field-hint,
+.auth-flow-notice {
+  color: var(--auth-muted);
+}
+
+.auth-field-error {
+  color: var(--auth-error);
+  font-weight: 560;
+}
+
+.auth-flow-notice {
+  width: min(100%, 32rem);
+  border-block: 1px solid var(--auth-rule);
+  padding-block: 1rem;
+}
+
+.auth-error-summary {
+  display: grid;
+  gap: 0.6rem;
+  border: 1px solid var(--auth-error);
+  padding: 1rem;
+  color: var(--auth-error);
+}
+
+.auth-error-summary:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 3px;
+}
+
+.auth-error-summary p {
+  margin: 0;
+  font-weight: 650;
+}
+
+.auth-error-summary ul {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+
+.auth-primary-action,
+.auth-secondary-action {
+  display: inline-flex;
+  min-height: 2.75rem;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 680;
+  text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}

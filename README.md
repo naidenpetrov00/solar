@@ -90,7 +90,7 @@ npm run db:migrate
 The schema is split by ownership:
 
 - `db/schema/auth.ts` contains the Better Auth identity, session, account, verification, and Admin plugin fields.
-- `db/schema/catalog.ts` contains the application-owned category, product, specification, pricing, and media-reference foundation.
+- `db/schema/catalog-*.ts` separates category, specification, product, and media tables from their relations.
 - `db/schema/profiles.ts` contains application-owned profile data separately from authentication records.
 - `db/schema/index.ts` exposes the complete Drizzle schema.
 

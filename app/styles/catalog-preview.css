@@ -1,0 +1,118 @@
+.dashboard-catalog-specification-language {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-specification-language > div:first-child {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dashboard-catalog-specification-language p,
+.dashboard-catalog-options-heading p,
+.dashboard-catalog-specifications-empty p {
+  margin: 0;
+  color: var(--dashboard-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.dashboard-catalog-specification-workspace {
+  display: grid;
+  min-width: 0;
+  gap: 1.5rem;
+}
+
+.dashboard-catalog-specification-editor-column {
+  min-width: 0;
+}
+
+.dashboard-catalog-specification {
+  min-width: 0;
+  border: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-product-preview {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  order: -1;
+  align-self: start;
+  gap: 0.9rem;
+  padding: 1.1rem;
+  border: 1px solid color-mix(in srgb, #f59e0b 58%, var(--dashboard-rule));
+  background: color-mix(in srgb, #f59e0b 7%, transparent);
+}
+
+.dashboard-catalog-product-preview-heading {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-catalog-product-preview-heading > div {
+  display: grid;
+  flex: 1 1 16rem;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.dashboard-catalog-product-preview-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.dashboard-catalog-product-preview-heading p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--dashboard-muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.dashboard-catalog-product-preview-heading > small {
+  flex: 0 1 auto;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 1px dashed color-mix(in srgb, #f59e0b 58%, var(--dashboard-rule));
+  color: color-mix(in srgb, #92400e 82%, var(--dashboard-foreground));
+  font-size: 0.72rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-catalog-product-preview-list {
+  display: grid;
+  margin: 0;
+  border-top: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-product-preview-list > div {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 1.2fr);
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-product-preview-list dt,
+.dashboard-catalog-product-preview-list dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-catalog-product-preview-list dt {
+  font-weight: 700;
+}
+
+.dashboard-catalog-product-preview-list dd {
+  font-weight: 700;
+}

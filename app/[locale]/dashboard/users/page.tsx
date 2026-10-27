@@ -3,22 +3,23 @@ import { redirect } from "next/navigation";
 import { Button, ButtonLink } from "@/components/button";
 
 import { getT } from "@/i18n.server";
-import { getCurrentUser, hasPermission } from "@/lib/authorization";
+import { getCurrentUser } from "@/lib/authorization";
+import { hasPermission } from "@/lib/permission-policy";
+import { listManagedUsers } from "@/lib/user-management-list";
 import {
-  listManagedUsers,
   UserManagementError,
   type ManagedUsersPage,
-} from "@/lib/user-management";
+} from "@/lib/user-management-model";
 import { getPrivatePageMetadata } from "../../_lib/metadata";
 import {
   accessDeniedRouteSlug,
   dashboardUsersRouteSlug,
-  localizedAuthPath,
   localizedPath,
-  safeAuthReturnPath,
-  supportedLocales,
 } from "../../_lib/routes";
-import { UsersWorkspace, type UsersWorkspaceLabels } from "./_components/users-workspace";
+import { localizedAuthPath } from "../../_lib/auth-routes";
+import { safeAuthReturnPath } from "../../_lib/return-paths";
+import { UsersWorkspace } from "./_components/users-workspace";
+import { getUsersWorkspaceLabels } from "./users-labels";
 
 type UsersSearchParams = {
   q?: string | string[];
@@ -56,7 +57,10 @@ export default async function UsersPage({
   params: Promise<{ locale: string }>;
   searchParams: Promise<UsersSearchParams>;
 }) {
-  const [{ locale }, queryParameters] = await Promise.all([params, searchParams]);
+  const [{ locale }, queryParameters] = await Promise.all([
+    params,
+    searchParams,
+  ]);
   const usersPath = safeAuthReturnPath(
     localizedPath(locale, dashboardUsersRouteSlug),
     locale,
@@ -74,7 +78,9 @@ export default async function UsersPage({
     redirect(localizedPath(locale, accessDeniedRouteSlug));
   }
 
-  const translationPromise = getT("common", { lng: locale });
+  const translationPromise = getT(["common", "dashboard", "users"], {
+    lng: locale,
+  });
   let result: ManagedUsersPage;
 
   try {
@@ -92,119 +98,24 @@ export default async function UsersPage({
   }
 
   const { t } = await translationPromise;
-  const labels: UsersWorkspaceLabels = {
-    selectUser: t("pages.dashboard.users.list.selectUser"),
-    noSelectionTitle: t("pages.dashboard.users.detail.noSelectionTitle"),
-    noSelectionDescription: t("pages.dashboard.users.detail.noSelectionDescription"),
-    backToUsers: t("pages.dashboard.users.detail.backToUsers"),
-    details: t("pages.dashboard.users.detail.title"),
-    name: t("pages.dashboard.users.fields.name"),
-    email: t("pages.dashboard.users.fields.email"),
-    role: t("pages.dashboard.users.fields.role"),
-    verification: t("pages.dashboard.users.fields.verification"),
-    status: t("pages.dashboard.users.fields.status"),
-    createdAt: t("pages.dashboard.users.fields.createdAt"),
-    updatedAt: t("pages.dashboard.users.fields.updatedAt"),
-    roles: {
-      customer: t("pages.dashboard.users.roles.customer"),
-      administrator: t("pages.dashboard.users.roles.administrator"),
-    },
-    verificationStates: {
-      verified: t("pages.dashboard.users.verification.verified"),
-      unverified: t("pages.dashboard.users.verification.unverified"),
-    },
-    accountStates: {
-      active: t("pages.dashboard.users.status.active"),
-      blocked: t("pages.dashboard.users.status.blocked"),
-    },
-    actionsTitle: t("pages.dashboard.users.actions.title"),
-    actions: {
-      block: t("pages.dashboard.users.actions.block"),
-      unblock: t("pages.dashboard.users.actions.unblock"),
-      "revoke-sessions": t("pages.dashboard.users.actions.revokeSessions"),
-      "send-password-reset": t("pages.dashboard.users.actions.sendPasswordReset"),
-      promote: t("pages.dashboard.users.actions.promote"),
-      demote: t("pages.dashboard.users.actions.demote"),
-    },
-    confirmations: {
-      block: {
-        title: t("pages.dashboard.users.confirmations.block.title"),
-        description: t("pages.dashboard.users.confirmations.block.description"),
-        confirm: t("pages.dashboard.users.confirmations.block.confirm"),
-      },
-      unblock: {
-        title: t("pages.dashboard.users.confirmations.unblock.title"),
-        description: t("pages.dashboard.users.confirmations.unblock.description"),
-        confirm: t("pages.dashboard.users.confirmations.unblock.confirm"),
-      },
-      "revoke-sessions": {
-        title: t("pages.dashboard.users.confirmations.revokeSessions.title"),
-        description: t("pages.dashboard.users.confirmations.revokeSessions.description"),
-        confirm: t("pages.dashboard.users.confirmations.revokeSessions.confirm"),
-      },
-      "send-password-reset": {
-        title: t("pages.dashboard.users.confirmations.sendPasswordReset.title"),
-        description: t("pages.dashboard.users.confirmations.sendPasswordReset.description"),
-        confirm: t("pages.dashboard.users.confirmations.sendPasswordReset.confirm"),
-      },
-      promote: {
-        title: t("pages.dashboard.users.confirmations.promote.title"),
-        description: t("pages.dashboard.users.confirmations.promote.description"),
-        confirm: t("pages.dashboard.users.confirmations.promote.confirm"),
-      },
-      demote: {
-        title: t("pages.dashboard.users.confirmations.demote.title"),
-        description: t("pages.dashboard.users.confirmations.demote.description"),
-        confirm: t("pages.dashboard.users.confirmations.demote.confirm"),
-      },
-    },
-    cancel: t("pages.dashboard.users.confirmations.cancel"),
-    working: t("pages.dashboard.users.actions.working"),
-    invite: {
-      open: t("pages.dashboard.users.invite.open"),
-      title: t("pages.dashboard.users.invite.title"),
-      description: t("pages.dashboard.users.invite.description"),
-      name: t("pages.dashboard.users.invite.name"),
-      email: t("pages.dashboard.users.invite.email"),
-      language: t("pages.dashboard.users.invite.language"),
-      submit: t("pages.dashboard.users.invite.submit"),
-      submitting: t("pages.dashboard.users.invite.submitting"),
-    },
-    localeNames: Object.fromEntries(
-      supportedLocales.map((candidate) => [candidate, t(`languages.${candidate}`)]),
-    ),
-    results: {
-      BLOCKED: t("pages.dashboard.users.results.blocked"),
-      UNBLOCKED: t("pages.dashboard.users.results.unblocked"),
-      SESSIONS_REVOKED: t("pages.dashboard.users.results.sessionsRevoked"),
-      RESET_SENT: t("pages.dashboard.users.results.resetSent"),
-      PROMOTED: t("pages.dashboard.users.results.promoted"),
-      DEMOTED: t("pages.dashboard.users.results.demoted"),
-      ADMINISTRATOR_INVITED: t("pages.dashboard.users.results.administratorInvited"),
-      ADMINISTRATOR_CREATED_DELIVERY_FAILED: t("pages.dashboard.users.results.administratorCreatedDeliveryFailed"),
-      INVALID_INPUT: t("pages.dashboard.users.results.invalidInput"),
-      FORBIDDEN: t("pages.dashboard.users.results.forbidden"),
-      NOT_FOUND: t("pages.dashboard.users.results.notFound"),
-      STALE: t("pages.dashboard.users.results.stale"),
-      RATE_LIMITED: t("pages.dashboard.users.results.rateLimited"),
-      EMAIL_EXISTS: t("pages.dashboard.users.results.emailExists"),
-      DELIVERY_FAILED: t("pages.dashboard.users.results.deliveryFailed"),
-    },
-  };
+  const labels = getUsersWorkspaceLabels(t);
 
   return (
     <main id="main-content" className="dashboard-main dashboard-users-main">
       <header className="dashboard-introduction dashboard-users-introduction">
         <div>
-          <h1>{t("pages.dashboard.users.title")}</h1>
-          <p>{t("pages.dashboard.users.description")}</p>
+          <h1>{t("users:pages.dashboard.users.title")}</h1>
+          <p>{t("users:pages.dashboard.users.description")}</p>
         </div>
       </header>
 
-      <section className="dashboard-users-toolbar" aria-label={t("pages.dashboard.users.search.regionLabel")}>
+      <section
+        className="dashboard-users-toolbar"
+        aria-label={t("users:pages.dashboard.users.search.regionLabel")}
+      >
         <form className="dashboard-users-search" method="get">
           <label htmlFor="dashboard-user-search">
-            {t("pages.dashboard.users.search.label")}
+            {t("users:pages.dashboard.users.search.label")}
           </label>
           <div>
             <input
@@ -213,33 +124,42 @@ export default async function UsersPage({
               type="search"
               defaultValue={result.query}
               maxLength={100}
-              placeholder={t("pages.dashboard.users.search.placeholder")}
+              placeholder={t("users:pages.dashboard.users.search.placeholder")}
             />
-            <Button type="submit">{t("pages.dashboard.users.search.submit")}</Button>
+            <Button type="submit">
+              {t("users:pages.dashboard.users.search.submit")}
+            </Button>
             {result.query ? (
-              <ButtonLink variant="informational" href={usersPath}>{t("pages.dashboard.users.search.clear")}</ButtonLink>
+              <ButtonLink variant="informational" href={usersPath}>
+                {t("users:pages.dashboard.users.search.clear")}
+              </ButtonLink>
             ) : null}
           </div>
         </form>
         <p className="dashboard-users-count">
-          {t("pages.dashboard.users.list.count", { count: result.total })}
+          {t("users:pages.dashboard.users.list.count", { count: result.total })}
         </p>
       </section>
 
       {result.users.length === 0 ? (
-        <section className="dashboard-users-empty" aria-labelledby="users-empty-title">
+        <section
+          className="dashboard-users-empty"
+          aria-labelledby="users-empty-title"
+        >
           <h2 id="users-empty-title">
             {result.query
-              ? t("pages.dashboard.users.empty.searchTitle")
-              : t("pages.dashboard.users.empty.title")}
+              ? t("users:pages.dashboard.users.empty.searchTitle")
+              : t("users:pages.dashboard.users.empty.title")}
           </h2>
           <p>
             {result.query
-              ? t("pages.dashboard.users.empty.searchDescription")
-              : t("pages.dashboard.users.empty.description")}
+              ? t("users:pages.dashboard.users.empty.searchDescription")
+              : t("users:pages.dashboard.users.empty.description")}
           </p>
           {result.query ? (
-            <ButtonLink variant="informational" href={usersPath}>{t("pages.dashboard.users.search.clear")}</ButtonLink>
+            <ButtonLink variant="informational" href={usersPath}>
+              {t("users:pages.dashboard.users.search.clear")}
+            </ButtonLink>
           ) : null}
         </section>
       ) : (
@@ -252,23 +172,36 @@ export default async function UsersPage({
       )}
 
       {result.pageCount > 1 ? (
-        <nav className="dashboard-users-pagination" aria-label={t("pages.dashboard.users.pagination.label")}>
+        <nav
+          className="dashboard-users-pagination"
+          aria-label={t("users:pages.dashboard.users.pagination.label")}
+        >
           {result.page > 1 ? (
-            <ButtonLink variant="secondary" href={pageHref(locale, result.query, result.page - 1)}>
-              {t("pages.dashboard.users.pagination.previous")}
+            <ButtonLink
+              variant="secondary"
+              href={pageHref(locale, result.query, result.page - 1)}
+            >
+              {t("users:pages.dashboard.users.pagination.previous")}
             </ButtonLink>
-          ) : <span />}
+          ) : (
+            <span />
+          )}
           <span>
-            {t("pages.dashboard.users.pagination.status", {
+            {t("users:pages.dashboard.users.pagination.status", {
               page: result.page,
               pages: result.pageCount,
             })}
           </span>
           {result.page < result.pageCount ? (
-            <ButtonLink variant="secondary" href={pageHref(locale, result.query, result.page + 1)}>
-              {t("pages.dashboard.users.pagination.next")}
+            <ButtonLink
+              variant="secondary"
+              href={pageHref(locale, result.query, result.page + 1)}
+            >
+              {t("users:pages.dashboard.users.pagination.next")}
             </ButtonLink>
-          ) : <span />}
+          ) : (
+            <span />
+          )}
         </nav>
       ) : null}
     </main>

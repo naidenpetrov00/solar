@@ -2,26 +2,23 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { getT } from "@/i18n.server";
-import { getCurrentUser, hasPermission } from "@/lib/authorization";
-import {
-  CatalogManagementError,
-  getManagedCatalogCategoryWorkspace,
-  getManagedCatalogProductWorkspace,
-} from "@/lib/catalog/management";
+import { getCurrentUser } from "@/lib/authorization";
+import { hasPermission } from "@/lib/permission-policy";
+import { getManagedCatalogCategoryWorkspace } from "@/lib/catalog/management-category-workspace";
+import { getManagedCatalogProductWorkspace } from "@/lib/catalog/management-product-workspace";
+import { CatalogManagementError } from "@/lib/catalog/management-errors";
 import { isUuid } from "@/lib/catalog/model";
 import { getPrivatePageMetadata } from "../../_lib/metadata";
 import {
   accessDeniedRouteSlug,
   dashboardCatalogRouteSlug,
-  localizedAuthPath,
   localizedPath,
-  safeAuthReturnPath,
   supportedLocales,
 } from "../../_lib/routes";
-import {
-  CatalogWorkspace,
-  type CatalogLabels,
-} from "./_components/catalog-workspace";
+import { localizedAuthPath } from "../../_lib/auth-routes";
+import { safeAuthReturnPath } from "../../_lib/return-paths";
+import { CatalogWorkspace } from "./_components/catalog-workspace";
+import type { CatalogLabels } from "./_components/catalog-labels";
 
 type CatalogSearchParams = {
   category?: string | string[];
@@ -79,7 +76,17 @@ export default async function CatalogPage({
     productParameter === "new" || (productParameter && isUuid(productParameter))
       ? productParameter
       : null;
-  const translationPromise = getT("common", { lng: locale });
+  const translationPromise = getT(
+    [
+      "common",
+      "catalog",
+      "catalogFields",
+      "productEditor",
+      "productFields",
+      "productFeedback",
+    ],
+    { lng: locale },
+  );
   let workspace;
 
   try {
@@ -89,10 +96,7 @@ export default async function CatalogPage({
       selectedCategoryId,
     );
   } catch (error) {
-    if (
-      error instanceof CatalogManagementError &&
-      error.code === "FORBIDDEN"
-    ) {
+    if (error instanceof CatalogManagementError && error.code === "FORBIDDEN") {
       redirect(localizedPath(locale, accessDeniedRouteSlug));
     }
 
@@ -130,11 +134,27 @@ export default async function CatalogPage({
   }
 
   const { t } = await translationPromise;
-  const translatedLabels = t("pages.dashboard.catalog", {
-    returnObjects: true,
-  }) as Omit<CatalogLabels, "languages">;
+  const translatedLabels = {
+    ...(t("catalog:pages.dashboard.catalog", {
+      returnObjects: true,
+    }) as object),
+    ...(t("catalogFields:pages.dashboard.catalog", {
+      returnObjects: true,
+    }) as object),
+  } as Omit<CatalogLabels, "languages" | "product">;
   const labels: CatalogLabels = {
     ...translatedLabels,
+    product: {
+      ...(t("productEditor:pages.dashboard.catalog.product", {
+        returnObjects: true,
+      }) as object),
+      ...(t("productFields:pages.dashboard.catalog.product", {
+        returnObjects: true,
+      }) as object),
+      ...(t("productFeedback:pages.dashboard.catalog.product", {
+        returnObjects: true,
+      }) as object),
+    } as CatalogLabels["product"],
     languages: Object.fromEntries(
       supportedLocales.map((candidate) => [
         candidate,

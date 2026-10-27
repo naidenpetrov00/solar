@@ -1,29 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/button";
-
-import { authClient } from "@/lib/auth-client";
 import {
-  normalizeCustomerName,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
-  validateCustomerName,
-  validateEmail,
-  validateNewPassword,
 } from "@/lib/auth-validation";
+import { useSignUpSubmission } from "./use-sign-up-submission";
+import { type VerificationRequestLabels } from "./verification-request-form";
 import {
-  VerificationRequestForm,
-  type VerificationRequestLabels,
-} from "./verification-request-form";
-import {
-  SocialSignIn,
   type SocialSignInConfig,
   type SocialSignInLabels,
 } from "./social-sign-in";
-
-type FieldName = "name" | "email" | "password" | "confirmPassword";
-type FieldErrors = Partial<Record<FieldName, string>>;
+import { SocialSignInOptions } from "./social-sign-in-options";
+import { SignUpConfirmation } from "./sign-up-confirmation";
 
 export type SignUpFormLabels = {
   name: string;
@@ -65,120 +54,53 @@ export function SignUpForm({
     facebook: SocialSignInConfig;
   };
 }) {
-  const summaryRef = useRef<HTMLDivElement>(null);
-  const statusHeadingRef = useRef<HTMLHeadingElement>(null);
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const [formError, setFormError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
-  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (registeredEmail) {
-      statusHeadingRef.current?.focus();
-    }
-  }, [registeredEmail]);
-
-  const focusSummary = () => {
-    requestAnimationFrame(() => summaryRef.current?.focus());
-  };
-
-  const clearFieldError = (field: FieldName) => {
-    setFormError(null);
-    setFieldErrors((current) => {
-      if (!current[field]) return current;
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
-  };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = normalizeCustomerName(String(data.get("name") ?? ""));
-    const email = String(data.get("email") ?? "").trim();
-    const password = String(data.get("password") ?? "");
-    const confirmPassword = String(data.get("confirmPassword") ?? "");
-    const nextErrors: FieldErrors = {};
-    const nameError = validateCustomerName(name);
-    const emailError = validateEmail(email);
-    const passwordError = validateNewPassword(password);
-
-    if (nameError === "required") nextErrors.name = labels.nameRequired;
-    if (nameError === "length") nextErrors.name = labels.nameLength;
-    if (emailError === "required") nextErrors.email = labels.emailRequired;
-    if (emailError === "invalid") nextErrors.email = labels.emailInvalid;
-    if (passwordError === "required") nextErrors.password = labels.passwordRequired;
-    if (passwordError === "length") nextErrors.password = labels.passwordLength;
-    if (!confirmPassword || confirmPassword !== password) {
-      nextErrors.confirmPassword = labels.passwordMismatch;
-    }
-
-    setFieldErrors(nextErrors);
-    setFormError(null);
-
-    if (Object.keys(nextErrors).length > 0) {
-      focusSummary();
-      return;
-    }
-
-    setPending(true);
-
-    try {
-      const result = await authClient.signUp.email({
-        name,
-        email,
-        password,
-        callbackURL: verificationCallbackURL,
-      });
-
-      if (result.error) {
-        setFormError(
-          result.error.status === 429
-            ? labels.rateLimited
-            : labels.genericError,
-        );
-        focusSummary();
-        return;
-      }
-
-      setRegisteredEmail(email);
-    } catch {
-      setFormError(labels.genericError);
-      focusSummary();
-    } finally {
-      setPending(false);
-    }
-  };
+  const {
+    summaryRef,
+    statusHeadingRef,
+    fieldErrors,
+    formError,
+    pending,
+    registeredEmail,
+    clearFieldError,
+    handleSubmit,
+  } = useSignUpSubmission(labels, verificationCallbackURL);
 
   if (registeredEmail) {
     return (
-      <div className="auth-state" data-tone="neutral" role="status">
-        <span className="auth-state-mark" aria-hidden="true" />
-        <div>
-          <h2 ref={statusHeadingRef} tabIndex={-1}>{labels.checkEmailTitle}</h2>
-          <p>{labels.checkEmailDescription}</p>
-          <p>{labels.deliveryHelp}</p>
-        </div>
-        <div className="auth-state-content">
-          <VerificationRequestForm
-            callbackURL={verificationCallbackURL}
-            initialEmail={registeredEmail}
-            labels={labels.verificationRequest}
-          />
-        </div>
-      </div>
+      <SignUpConfirmation
+        email={registeredEmail}
+        callbackURL={verificationCallbackURL}
+        headingRef={statusHeadingRef}
+        labels={labels}
+      />
     );
   }
 
-  const errors = [...Object.values(fieldErrors), ...(formError ? [formError] : [])];
+  const errors = [
+    ...Object.values(fieldErrors),
+    ...(formError ? [formError] : []),
+  ];
 
   return (
-    <form className="auth-form" noValidate onSubmit={handleSubmit} aria-busy={pending}>
+    <form
+      className="auth-form"
+      noValidate
+      onSubmit={handleSubmit}
+      aria-busy={pending}
+    >
       {errors.length > 0 ? (
-        <div ref={summaryRef} className="auth-error-summary" role="alert" tabIndex={-1}>
+        <div
+          ref={summaryRef}
+          className="auth-error-summary"
+          role="alert"
+          tabIndex={-1}
+        >
           <p>{labels.validationSummary}</p>
-          <ul>{errors.map((error, index) => <li key={`${index}-${error}`}>{error}</li>)}</ul>
+          <ul>
+            {errors.map((error, index) => (
+              <li key={`${index}-${error}`}>{error}</li>
+            ))}
+          </ul>
         </div>
       ) : null}
 
@@ -194,7 +116,11 @@ export function SignUpForm({
           aria-describedby={fieldErrors.name ? "sign-up-name-error" : undefined}
           onChange={() => clearFieldError("name")}
         />
-        {fieldErrors.name ? <p id="sign-up-name-error" className="auth-field-error">{fieldErrors.name}</p> : null}
+        {fieldErrors.name ? (
+          <p id="sign-up-name-error" className="auth-field-error">
+            {fieldErrors.name}
+          </p>
+        ) : null}
       </div>
 
       <div className="auth-field">
@@ -207,10 +133,16 @@ export function SignUpForm({
           inputMode="email"
           required
           aria-invalid={fieldErrors.email ? true : undefined}
-          aria-describedby={fieldErrors.email ? "sign-up-email-error" : undefined}
+          aria-describedby={
+            fieldErrors.email ? "sign-up-email-error" : undefined
+          }
           onChange={() => clearFieldError("email")}
         />
-        {fieldErrors.email ? <p id="sign-up-email-error" className="auth-field-error">{fieldErrors.email}</p> : null}
+        {fieldErrors.email ? (
+          <p id="sign-up-email-error" className="auth-field-error">
+            {fieldErrors.email}
+          </p>
+        ) : null}
       </div>
 
       <div className="auth-field">
@@ -227,12 +159,20 @@ export function SignUpForm({
           aria-describedby={`sign-up-password-hint${fieldErrors.password ? " sign-up-password-error" : ""}`}
           onChange={() => clearFieldError("password")}
         />
-        <p id="sign-up-password-hint" className="auth-field-hint">{labels.passwordHint}</p>
-        {fieldErrors.password ? <p id="sign-up-password-error" className="auth-field-error">{fieldErrors.password}</p> : null}
+        <p id="sign-up-password-hint" className="auth-field-hint">
+          {labels.passwordHint}
+        </p>
+        {fieldErrors.password ? (
+          <p id="sign-up-password-error" className="auth-field-error">
+            {fieldErrors.password}
+          </p>
+        ) : null}
       </div>
 
       <div className="auth-field">
-        <label htmlFor="sign-up-password-confirmation">{labels.confirmPassword}</label>
+        <label htmlFor="sign-up-password-confirmation">
+          {labels.confirmPassword}
+        </label>
         <input
           id="sign-up-password-confirmation"
           name="confirmPassword"
@@ -242,29 +182,31 @@ export function SignUpForm({
           maxLength={PASSWORD_MAX_LENGTH}
           required
           aria-invalid={fieldErrors.confirmPassword ? true : undefined}
-          aria-describedby={fieldErrors.confirmPassword ? "sign-up-password-confirmation-error" : undefined}
+          aria-describedby={
+            fieldErrors.confirmPassword
+              ? "sign-up-password-confirmation-error"
+              : undefined
+          }
           onChange={() => clearFieldError("confirmPassword")}
         />
-        {fieldErrors.confirmPassword ? <p id="sign-up-password-confirmation-error" className="auth-field-error">{fieldErrors.confirmPassword}</p> : null}
+        {fieldErrors.confirmPassword ? (
+          <p
+            id="sign-up-password-confirmation-error"
+            className="auth-field-error"
+          >
+            {fieldErrors.confirmPassword}
+          </p>
+        ) : null}
       </div>
 
       <Button type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
       </Button>
-      <div className="auth-social">
-        <SocialSignIn
-          {...socialSignIn.google}
-          provider="google"
-          forgotPasswordHref={forgotPasswordHref}
-          labels={labels.google}
-        />
-        <SocialSignIn
-          {...socialSignIn.facebook}
-          provider="facebook"
-          forgotPasswordHref={forgotPasswordHref}
-          labels={labels.facebook}
-        />
-      </div>
+      <SocialSignInOptions
+        socialSignIn={socialSignIn}
+        labels={labels}
+        forgotPasswordHref={forgotPasswordHref}
+      />
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pending ? labels.submitting : ""}
       </p>

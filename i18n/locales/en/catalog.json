@@ -1,0 +1,144 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "title": "Catalog",
+        "description": "Organize categories, localized content, specifications, and publication status.",
+        "readOnly": "Read-only access. You can inspect catalog categories but cannot change them.",
+        "status": {
+          "draft": "Draft",
+          "published": "Published",
+          "archived": "Archived"
+        },
+        "tree": {
+          "title": "Category tree",
+          "empty": "No categories yet.",
+          "createRoot": "Create root category",
+          "addChild": "Add subcategory",
+          "openCategory": "Open category",
+          "moveUp": "Move up",
+          "moveDown": "Move down",
+          "back": "Back to categories"
+        },
+        "editor": {
+          "emptyTitle": "Select a category",
+          "emptyDescription": "Choose a category from the tree to inspect or edit it.",
+          "sourceLanguage": "Bulgarian is the source language for new drafts.",
+          "complete": "Complete",
+          "incomplete": "Incomplete"
+        },
+        "sections": {
+          "general": "Address and position",
+          "content": "Content",
+          "specifications": "Specifications"
+        },
+        "seoPreview": {
+          "title": "Illustrative search preview",
+          "note": "Search engines may display different text.",
+          "emptyTitle": "Category title",
+          "emptyDescription": "Add a clear summary to preview how this category could appear in search."
+        },
+        "actions": {
+          "save": "Save section",
+          "saving": "Saving…",
+          "move": "Move category",
+          "publish": "Publish",
+          "unpublish": "Unpublish",
+          "archive": "Archive",
+          "restore": "Restore as draft",
+          "working": "Working…",
+          "reload": "Reload latest"
+        },
+        "create": {
+          "title": "New category",
+          "description": "Enter a working name in the current language. Nothing is saved yet; you will complete the full editor first.",
+          "parentLabel": "Parent",
+          "root": "Catalog root",
+          "name": "Name",
+          "cancel": "Cancel",
+          "continue": "Continue",
+          "editorTitle": "New category",
+          "editorDescription": "Complete both addresses and all language content. The category is created only after the first successful save.",
+          "discard": "Discard new category",
+          "submit": "Create and save",
+          "submitting": "Creating…"
+        },
+        "move": {
+          "title": "Move category",
+          "description": "Choose a new parent. The category will be appended there without renumbering siblings.",
+          "parent": "New parent",
+          "root": "Catalog root",
+          "cancel": "Cancel",
+          "submit": "Move category"
+        },
+        "lifecycle": {
+          "publish": {
+            "title": "Publish this category?",
+            "description": "Publication is allowed only when the category and its specifications are ready in all languages.",
+            "confirm": "Publish"
+          },
+          "unpublish": {
+            "title": "Unpublish this category?",
+            "description": "The category will return to draft. Existing dependency rules still apply.",
+            "confirm": "Unpublish"
+          },
+          "archive": {
+            "title": "Archive this category?",
+            "description": "The category will be retained but removed from active use. Existing dependency rules still apply.",
+            "confirm": "Archive"
+          },
+          "restore": {
+            "title": "Restore this category?",
+            "description": "The category will be restored as a draft.",
+            "confirm": "Restore"
+          },
+          "cancel": "Cancel"
+        },
+        "readiness": {
+          "title": "Publication readiness",
+          "ready": "Ready to publish.",
+          "blocked": "Resolve these items before publishing:",
+          "messages": {
+            "PARENT_NOT_PUBLISHED": "The parent category must be published first.",
+            "MISSING_CATEGORY_TRANSLATION": "Add a name and introduction in {{locale}}.",
+            "MISSING_SPECIFICATION_TRANSLATION": "Specification {{specification}} needs a label in {{locale}}.",
+            "SELECTION_OPTIONS_REQUIRED": "Specification {{specification}} needs at least one selection option.",
+            "MISSING_OPTION_TRANSLATION": "Option {{option}} in {{specification}} needs a label in {{locale}}."
+          }
+        },
+        "unsaved": {
+          "title": "Unsaved changes",
+          "message": "You have unsaved changes in this category. Continue and discard them?"
+        },
+        "validation": {
+          "required": "This field is required.",
+          "slug": "Use lowercase Latin letters, numbers, and single hyphens between words only.",
+          "conflict": "A sibling category already uses this URL address.",
+          "selectionOption": "Add at least one option and translate it into every language."
+        },
+        "results": {
+          "CREATED": "The draft category was created.",
+          "SAVED": "The section was saved.",
+          "MOVED": "The category was moved and appended under its new parent.",
+          "REORDERED": "The category order was updated.",
+          "PUBLISHED": "The category was published.",
+          "UNPUBLISHED": "The category was unpublished.",
+          "ARCHIVED": "The category was archived.",
+          "RESTORED": "The category was restored as a draft.",
+          "CYCLE": "That move would create a cycle in the category tree.",
+          "DEPENDENCY_EXISTS": "This change is blocked by dependent catalog data.",
+          "PUBLISHED_DEPENDENCY_EXISTS": "Unpublish the category's published children and products first.",
+          "ACTIVE_DEPENDENCY_EXISTS": "Archive every non-archived descendant and product in this branch first.",
+          "ARCHIVED_ANCESTOR": "Restore the archived ancestor before restoring this category.",
+          "FORBIDDEN": "You no longer have permission to perform this action.",
+          "INVALID_INPUT": "Review the entered values and try again.",
+          "NOT_FOUND": "The category no longer exists.",
+          "PUBLICATION_INVALID": "The category is not ready to publish.",
+          "SLUG_CONFLICT": "A sibling category already uses this slug.",
+          "SLUG_IMMUTABLE": "The slug cannot change after the category has first been published.",
+          "STALE": "This record changed after you opened it. Your input is preserved; reload the latest version before retrying."
+        }
+      }
+    }
+  }
+}

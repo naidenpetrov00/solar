@@ -6,7 +6,8 @@ import {
   localizedPath,
 } from "../_lib/routes";
 import { DashboardNavigation } from "./_components/dashboard-navigation";
-import { getCurrentUser, hasPermission } from "@/lib/authorization";
+import { getCurrentUser } from "@/lib/authorization";
+import { hasPermission } from "@/lib/permission-policy";
 
 export default async function DashboardLayout({
   children,
@@ -17,19 +18,19 @@ export default async function DashboardLayout({
 }>) {
   const { locale } = await params;
   const [{ t }, currentUser] = await Promise.all([
-    getT("common", { lng: locale }),
+    getT(["common", "dashboard"], { lng: locale }),
     getCurrentUser(),
   ]);
   const items = [
     {
       href: localizedPath(locale, dashboardRouteSlug),
-      label: t("pages.dashboard.navigation.overview"),
+      label: t("dashboard:pages.dashboard.navigation.overview"),
     },
     ...(currentUser && hasPermission(currentUser.role, "catalog:view")
       ? [
           {
             href: localizedPath(locale, dashboardCatalogRouteSlug),
-            label: t("pages.dashboard.navigation.catalog"),
+            label: t("dashboard:pages.dashboard.navigation.catalog"),
           },
         ]
       : []),
@@ -37,7 +38,7 @@ export default async function DashboardLayout({
       ? [
           {
             href: localizedPath(locale, dashboardUsersRouteSlug),
-            label: t("pages.dashboard.navigation.users"),
+            label: t("dashboard:pages.dashboard.navigation.users"),
           },
         ]
       : []),
@@ -46,7 +47,9 @@ export default async function DashboardLayout({
   return (
     <div className="dashboard-shell">
       <aside className="dashboard-rail">
-        <p className="dashboard-rail-title">{t("pages.dashboard.title")}</p>
+        <p className="dashboard-rail-title">
+          {t("dashboard:pages.dashboard.title")}
+        </p>
         <DashboardNavigation
           ariaLabel={t("accessibility.dashboardNavigation")}
           items={items}

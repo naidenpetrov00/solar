@@ -1,0 +1,95 @@
+.dashboard-catalog-removed-specifications {
+  padding: 1rem;
+  background: color-mix(in srgb, var(--dashboard-muted) 7%, transparent);
+}
+
+.dashboard-catalog-removed-specifications button {
+  width: max-content;
+  max-width: 100%;
+}
+
+.dashboard-catalog-product-save {
+  position: sticky;
+  z-index: 2;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--dashboard-rule);
+  background: var(--dashboard-surface);
+}
+
+.dashboard-catalog-product-save-actions > button[type="submit"] {
+  min-height: 2.75rem;
+  padding-inline: 1.1rem;
+  background: var(--dashboard-foreground);
+  color: var(--dashboard-surface);
+  font-weight: 750;
+}
+
+.dashboard-catalog-product-preview-trigger {
+  min-width: 7rem;
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--dashboard-foreground);
+  border-radius: 0;
+  background: var(--dashboard-surface);
+  color: var(--dashboard-foreground);
+  font: inherit;
+  font-weight: 750;
+  box-shadow: 0 0.35rem 1rem rgb(9 11 10 / 0.16);
+  cursor: pointer;
+}
+
+.dashboard-catalog-product-save-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.dashboard-catalog-product-preview-trigger:hover {
+  border-color: #f59e0b;
+  background: #fcd34d;
+  color: #11130f;
+}
+
+.dashboard-catalog-product-preview-trigger:focus-visible,
+.dashboard-catalog-product-detail-preview-toolbar button:focus-visible,
+.catalog-product-detail h1:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+.dashboard-catalog-product-detail-preview {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.dashboard-catalog-product-detail-preview-toolbar {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.dashboard-catalog-product-detail-preview-toolbar button {
+  min-height: 2.75rem;
+  padding-inline: 0.9rem;
+  border: 1px solid var(--dashboard-foreground);
+  border-radius: 0;
+  background: transparent;
+  color: var(--dashboard-foreground);
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.dashboard-catalog-product-detail-preview > h2 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

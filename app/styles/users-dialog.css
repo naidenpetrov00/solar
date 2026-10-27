@@ -1,0 +1,105 @@
+.dashboard-users-pagination span {
+  color: var(--dashboard-muted);
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-users-dialog {
+  width: min(calc(100% - 2rem), 34rem);
+  max-height: min(48rem, calc(100dvh - 2rem));
+  padding: 0;
+  border: 1px solid var(--dashboard-foreground);
+  border-radius: 0;
+  background: var(--dashboard-surface);
+  color: var(--dashboard-foreground);
+}
+
+.dashboard-users-dialog::backdrop {
+  background: rgba(4, 6, 5, 0.72);
+}
+
+.dashboard-users-dialog form {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.dashboard-users-dialog h2,
+.dashboard-users-dialog p {
+  margin: 0;
+}
+
+.dashboard-users-dialog h2 {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.dashboard-users-dialog
+  > form
+  > p:not(.dashboard-users-result):not(.dashboard-users-dialog-account) {
+  color: var(--dashboard-muted);
+  line-height: 1.6;
+}
+
+.dashboard-users-dialog-account {
+  display: grid;
+  gap: 0.25rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--dashboard-rule);
+  overflow-wrap: anywhere;
+}
+
+.dashboard-users-dialog-account span {
+  color: var(--dashboard-muted);
+}
+
+.dashboard-users-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dashboard-users-field input,
+.dashboard-users-field select {
+  width: 100%;
+  padding-inline: 0.85rem;
+}
+
+.dashboard-users-dialog-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.dashboard-users-dialog button {
+  padding-inline: 1rem;
+}
+
+.dashboard-users-dialog button[type="submit"] {
+  background: var(--dashboard-foreground);
+  color: var(--dashboard-surface);
+}
+
+.dashboard-users-dialog button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.dashboard-users-search input:focus-visible,
+.dashboard-users-field input:focus-visible,
+.dashboard-users-field select:focus-visible,
+.dashboard-users-search button:focus-visible,
+.dashboard-users-search a:focus-visible,
+.dashboard-users-primary-action:focus-visible,
+.dashboard-users-select:focus-visible,
+.dashboard-user-detail-back:focus-visible,
+.dashboard-user-detail h2:focus-visible,
+.dashboard-user-actions button:focus-visible,
+.dashboard-users-dialog button:focus-visible,
+.dashboard-users-dialog .dashboard-users-result:focus-visible,
+.dashboard-users-pagination a:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 3px;
+}

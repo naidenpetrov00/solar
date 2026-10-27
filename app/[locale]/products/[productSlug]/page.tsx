@@ -4,18 +4,17 @@ import { notFound, permanentRedirect } from "next/navigation";
 
 import { ButtonLink } from "@/components/button";
 import { getT } from "@/i18n.server";
-import {
-  catalogLocale,
-  listPublicCategoryBreadcrumbs,
-  resolvePublicProduct,
-} from "@/lib/catalog/public";
-import { getPublicSiteUrl } from "@/lib/server-env";
+import { listPublicCategoryBreadcrumbs } from "@/lib/catalog/public-categories";
+import { resolvePublicProduct } from "@/lib/catalog/public-products";
+import { catalogLocale } from "@/lib/catalog/public-routes";
 import { AddToCartButton } from "../../_components/add-to-cart-button";
 import { CatalogBreadcrumbs } from "../../_components/catalog-breadcrumbs";
 import { CatalogProductDetail } from "../../_components/catalog-product-detail";
 import { StructuredData } from "../../_components/structured-data";
 import { formatCurrencyMinor } from "../../_lib/catalog-format";
-import { localizedPath, openGraphLocale } from "../../_lib/routes";
+import { localizedPath } from "../../_lib/routes";
+import { productStructuredData } from "./product-structured-data";
+import { createProductMetadata } from "./product-metadata";
 
 type Props = {
   params: Promise<{ locale: string; productSlug: string }>;
@@ -32,41 +31,11 @@ async function resolvePage(params: Props["params"]) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const page = await resolvePage(params);
   if (!page) return {};
-  const product = page.resolution.product;
-  const title = product.seoTitle || product.title;
-  const description = product.metaDescription || product.shortDescription;
-  const socialImage =
-    product.media.find(({ isSocialImage }) => isSocialImage) ??
-    product.primaryMedia;
-  const languages = Object.fromEntries([
-    ...Object.entries(product.paths).map(([locale, path]) => [
-      locale,
-      localizedPath(locale, path),
-    ]),
-    ["x-default", localizedPath("bg", product.paths.bg)],
-  ]);
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: localizedPath(page.locale, product.paths[page.validatedLocale]),
-      languages,
-    },
-    openGraph: {
-      title,
-      description,
-      locale: openGraphLocale(page.locale),
-      type: "website",
-      images: socialImage ? [{ url: socialImage.reference, alt: socialImage.altText }] : undefined,
-    },
-    twitter: {
-      card: socialImage ? "summary_large_image" : "summary",
-      title,
-      description,
-      images: socialImage ? [socialImage.reference] : undefined,
-    },
-  };
+  return createProductMetadata(
+    page.resolution.product,
+    page.locale,
+    page.validatedLocale,
+  );
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -111,51 +80,12 @@ export default async function ProductPage({ params }: Props) {
     })),
     { label: product.title },
   ];
-  const origin = getPublicSiteUrl();
-  const canonicalUrl = new URL(
-    localizedPath(page.locale, product.paths[page.validatedLocale]),
-    origin,
-  ).toString();
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.title,
-    description: product.shortDescription,
-    sku: product.sku,
-    mpn: product.model ?? undefined,
-    brand: product.brand
-      ? { "@type": "Brand", name: product.brand }
-      : undefined,
-    image: product.media.map(({ reference }) =>
-      new URL(reference, origin).toString(),
-    ),
-    category: product.primaryCategory.name,
-    url: canonicalUrl,
-    offers: product.price
-      ? {
-          "@type": "Offer",
-          url: canonicalUrl,
-          priceCurrency: product.price.currency,
-          price: `${BigInt(product.price.publicVatInclusiveMinor) / BigInt(100)}.${String(BigInt(product.price.publicVatInclusiveMinor) % BigInt(100)).padStart(2, "0")}`,
-          availability:
-            product.salesMode === "direct_purchase"
-              ? product.availability === "in_stock"
-                ? "https://schema.org/InStock"
-                : "https://schema.org/OutOfStock"
-              : undefined,
-        }
-      : undefined,
-  };
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: breadcrumbItems.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.label,
-      item: item.href ? new URL(item.href, origin).toString() : canonicalUrl,
-    })),
-  };
+  const { productSchema, breadcrumbSchema } = productStructuredData(
+    product,
+    page.locale,
+    page.validatedLocale,
+    breadcrumbItems,
+  );
   const actions =
     product.salesMode === "direct_purchase" &&
     product.availability === "in_stock" &&
@@ -165,7 +95,9 @@ export default async function ProductPage({ params }: Props) {
         name={product.title}
         addLabel={t("pages.shop.addToCart")}
         addedLabel={t("pages.shop.addedToCart")}
-        accessibleLabel={t("pages.shop.addNamedToCart", { name: product.title })}
+        accessibleLabel={t("pages.shop.addNamedToCart", {
+          name: product.title,
+        })}
       />
     ) : product.salesMode === "direct_purchase" &&
       product.availability !== "in_stock" ? null : (
@@ -211,12 +143,19 @@ export default async function ProductPage({ params }: Props) {
           actions={actions}
         />
         {product.additionalCategories.length > 0 ? (
-          <aside className="catalog-related-categories" aria-labelledby="catalog-related-categories-title">
-            <h2 id="catalog-related-categories-title">{t("pages.shop.relatedCategories")}</h2>
+          <aside
+            className="catalog-related-categories"
+            aria-labelledby="catalog-related-categories-title"
+          >
+            <h2 id="catalog-related-categories-title">
+              {t("pages.shop.relatedCategories")}
+            </h2>
             <ul>
               {product.additionalCategories.map((category) => (
                 <li key={category.id}>
-                  <Link href={localizedPath(page.locale, `shop/${category.path}`)}>
+                  <Link
+                    href={localizedPath(page.locale, `shop/${category.path}`)}
+                  >
                     {category.name}
                   </Link>
                 </li>

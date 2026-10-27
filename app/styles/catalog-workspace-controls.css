@@ -1,0 +1,66 @@
+.dashboard-catalog-tree-actions,
+.dashboard-catalog-item-controls,
+.dashboard-catalog-lifecycle-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem;
+}
+
+.dashboard-catalog-tree-actions {
+  justify-content: flex-end;
+  padding-top: 0;
+}
+
+.dashboard-catalog-help-example {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--dashboard-foreground);
+}
+
+.dashboard-catalog-tree-actions button:first-child,
+.dashboard-catalog-tree-actions button:nth-child(2),
+.dashboard-catalog-item-controls button:not(:last-child) {
+  width: 2.75rem;
+  padding-inline: 0;
+}
+
+.dashboard-catalog-tree-empty,
+.dashboard-catalog-detail-empty,
+.dashboard-catalog-specifications-empty {
+  color: var(--dashboard-muted);
+}
+
+.dashboard-catalog-mobile-back {
+  display: inline-flex;
+  margin-bottom: 1.25rem;
+}
+
+.dashboard-catalog-view-switch {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-view-switch a {
+  min-height: 2.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 0.2rem solid transparent;
+  color: var(--dashboard-muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.dashboard-catalog-view-switch a[aria-current="page"] {
+  border-bottom-color: #f59e0b;
+  color: var(--dashboard-foreground);
+}
+
+.dashboard-catalog-products,
+.dashboard-catalog-product-fieldset {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}

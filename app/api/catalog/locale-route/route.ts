@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { catalogLocale, resolveCatalogLocalePath } from "@/lib/catalog/public";
+import {
+  catalogLocale,
+  resolveCatalogLocalePath,
+} from "@/lib/catalog/public-routes";
 
 function localizedPath(locale: string, path = "") {
   const suffix = path ? `/${path.replace(/^\/+|\/+$/gu, "")}` : "";

@@ -15,9 +15,13 @@ import {
   localizedAuthPath,
   localizedSocialErrorPath,
   localizedVerificationCallbackPath,
-} from "../../_lib/routes";
+} from "../../_lib/auth-routes";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
   return getAuthPageMetadata(locale, "sign-in", "auth.signIn");
 }
@@ -33,99 +37,146 @@ export default async function SignInPage({
   const returnTo = await getSignedOutReturnPath(locale, query.returnTo);
   const errorCode = getQueryValue(query.error);
   const errorProvider = getQueryValue(query.provider);
-  const { t } = await getT("common", { lng: locale });
+  const { t } = await getT(["common", "auth"], { lng: locale });
 
   return (
     <AuthShell
-      title={t("pages.auth.signIn.title")}
-      description={t("pages.auth.signIn.description")}
+      title={t("auth:pages.auth.signIn.title")}
+      description={t("auth:pages.auth.signIn.description")}
       footer={
         <p>
-          {t("pages.auth.signIn.noAccount")} {" "}
+          {t("auth:pages.auth.signIn.noAccount")}{" "}
           <Link href={localizedAuthPath(locale, "sign-up", returnTo)}>
-            {t("pages.auth.signIn.createAccount")}
+            {t("auth:pages.auth.signIn.createAccount")}
           </Link>
         </p>
       }
     >
       <SignInForm
         returnTo={returnTo}
-        forgotPasswordHref={localizedAuthPath(locale, "forgot-password", returnTo)}
-        verificationCallbackURL={localizedVerificationCallbackPath(locale, returnTo)}
+        forgotPasswordHref={localizedAuthPath(
+          locale,
+          "forgot-password",
+          returnTo,
+        )}
+        verificationCallbackURL={localizedVerificationCallbackPath(
+          locale,
+          returnTo,
+        )}
         socialSignIn={{
           google: {
             enabled: isGoogleSignInEnabled,
             callbackURL: returnTo,
-            errorCallbackURL: localizedSocialErrorPath(locale, "sign-in", returnTo, "google"),
+            errorCallbackURL: localizedSocialErrorPath(
+              locale,
+              "sign-in",
+              returnTo,
+              "google",
+            ),
             errorCode: errorProvider === "facebook" ? undefined : errorCode,
           },
           facebook: {
             enabled: isFacebookSignInEnabled,
             callbackURL: returnTo,
-            errorCallbackURL: localizedSocialErrorPath(locale, "sign-in", returnTo, "facebook"),
+            errorCallbackURL: localizedSocialErrorPath(
+              locale,
+              "sign-in",
+              returnTo,
+              "facebook",
+            ),
             errorCode: errorProvider === "facebook" ? errorCode : undefined,
           },
         }}
         labels={{
-          email: t("pages.auth.fields.email"),
-          password: t("pages.auth.fields.password"),
-          submit: t("pages.auth.signIn.submit"),
-          submitting: t("pages.auth.signIn.submitting"),
-          validationSummary: t("pages.auth.errors.validationSummary"),
-          emailRequired: t("pages.auth.errors.emailRequired"),
-          emailInvalid: t("pages.auth.errors.emailInvalid"),
-          passwordRequired: t("pages.auth.errors.passwordRequired"),
-          invalidCredentials: t("pages.auth.errors.invalidCredentials"),
-          rateLimited: t("pages.auth.errors.rateLimited"),
-          genericError: t("pages.auth.errors.signInFailed"),
-          forgotPassword: t("pages.auth.signIn.forgotPassword"),
-          unverifiedTitle: t("pages.auth.signIn.unverifiedTitle"),
-          unverifiedDescription: t("pages.auth.signIn.unverifiedDescription"),
-          tryAnotherEmail: t("pages.auth.signIn.tryAnotherEmail"),
+          email: t("auth:pages.auth.fields.email"),
+          password: t("auth:pages.auth.fields.password"),
+          submit: t("auth:pages.auth.signIn.submit"),
+          submitting: t("auth:pages.auth.signIn.submitting"),
+          validationSummary: t("auth:pages.auth.errors.validationSummary"),
+          emailRequired: t("auth:pages.auth.errors.emailRequired"),
+          emailInvalid: t("auth:pages.auth.errors.emailInvalid"),
+          passwordRequired: t("auth:pages.auth.errors.passwordRequired"),
+          invalidCredentials: t("auth:pages.auth.errors.invalidCredentials"),
+          rateLimited: t("auth:pages.auth.errors.rateLimited"),
+          genericError: t("auth:pages.auth.errors.signInFailed"),
+          forgotPassword: t("auth:pages.auth.signIn.forgotPassword"),
+          unverifiedTitle: t("auth:pages.auth.signIn.unverifiedTitle"),
+          unverifiedDescription: t(
+            "auth:pages.auth.signIn.unverifiedDescription",
+          ),
+          tryAnotherEmail: t("auth:pages.auth.signIn.tryAnotherEmail"),
           google: {
-            continue: t("pages.auth.google.continue"),
-            unavailable: t("pages.auth.google.unavailable"),
-            redirecting: t("pages.auth.google.redirecting"),
-            failureTitle: t("pages.auth.google.failureTitle"),
-            failureDescription: t("pages.auth.google.failureDescription"),
-            emailNotFoundTitle: t("pages.auth.google.emailNotFoundTitle"),
-            emailNotFoundDescription: t("pages.auth.google.emailNotFoundDescription"),
-            emailNotVerifiedTitle: t("pages.auth.google.emailNotVerifiedTitle"),
-            emailNotVerifiedDescription: t("pages.auth.google.emailNotVerifiedDescription"),
-            accountNotLinkedTitle: t("pages.auth.google.accountNotLinkedTitle"),
-            accountNotLinkedDescription: t("pages.auth.google.accountNotLinkedDescription"),
-            passwordRecovery: t("pages.auth.google.passwordRecovery"),
+            continue: t("auth:pages.auth.google.continue"),
+            unavailable: t("auth:pages.auth.google.unavailable"),
+            redirecting: t("auth:pages.auth.google.redirecting"),
+            failureTitle: t("auth:pages.auth.google.failureTitle"),
+            failureDescription: t("auth:pages.auth.google.failureDescription"),
+            emailNotFoundTitle: t("auth:pages.auth.google.emailNotFoundTitle"),
+            emailNotFoundDescription: t(
+              "auth:pages.auth.google.emailNotFoundDescription",
+            ),
+            emailNotVerifiedTitle: t(
+              "auth:pages.auth.google.emailNotVerifiedTitle",
+            ),
+            emailNotVerifiedDescription: t(
+              "auth:pages.auth.google.emailNotVerifiedDescription",
+            ),
+            accountNotLinkedTitle: t(
+              "auth:pages.auth.google.accountNotLinkedTitle",
+            ),
+            accountNotLinkedDescription: t(
+              "auth:pages.auth.google.accountNotLinkedDescription",
+            ),
+            passwordRecovery: t("auth:pages.auth.google.passwordRecovery"),
             recoverySteps: {
-              resetPassword: t("pages.auth.google.recoverySteps.resetPassword"),
-              signIn: t("pages.auth.google.recoverySteps.signIn"),
-              verifyEmail: t("pages.auth.google.recoverySteps.verifyEmail"),
-              retry: t("pages.auth.google.recoverySteps.retry"),
+              resetPassword: t(
+                "auth:pages.auth.google.recoverySteps.resetPassword",
+              ),
+              signIn: t("auth:pages.auth.google.recoverySteps.signIn"),
+              verifyEmail: t(
+                "auth:pages.auth.google.recoverySteps.verifyEmail",
+              ),
+              retry: t("auth:pages.auth.google.recoverySteps.retry"),
             },
           },
           facebook: {
-            continue: t("pages.auth.facebook.continue"),
-            unavailable: t("pages.auth.facebook.unavailable"),
-            redirecting: t("pages.auth.facebook.redirecting"),
-            failureTitle: t("pages.auth.facebook.failureTitle"),
-            failureDescription: t("pages.auth.facebook.failureDescription"),
-            emailNotFoundTitle: t("pages.auth.facebook.emailNotFoundTitle"),
-            emailNotFoundDescription: t("pages.auth.facebook.emailNotFoundDescription"),
-            emailNotVerifiedTitle: t("pages.auth.facebook.emailNotVerifiedTitle"),
-            emailNotVerifiedDescription: t("pages.auth.facebook.emailNotVerifiedDescription"),
-            accountNotLinkedTitle: t("pages.auth.facebook.accountNotLinkedTitle"),
-            accountNotLinkedDescription: t("pages.auth.facebook.accountNotLinkedDescription"),
-            passwordRecovery: t("pages.auth.facebook.passwordRecovery"),
+            continue: t("auth:pages.auth.facebook.continue"),
+            unavailable: t("auth:pages.auth.facebook.unavailable"),
+            redirecting: t("auth:pages.auth.facebook.redirecting"),
+            failureTitle: t("auth:pages.auth.facebook.failureTitle"),
+            failureDescription: t(
+              "auth:pages.auth.facebook.failureDescription",
+            ),
+            emailNotFoundTitle: t(
+              "auth:pages.auth.facebook.emailNotFoundTitle",
+            ),
+            emailNotFoundDescription: t(
+              "auth:pages.auth.facebook.emailNotFoundDescription",
+            ),
+            emailNotVerifiedTitle: t(
+              "auth:pages.auth.facebook.emailNotVerifiedTitle",
+            ),
+            emailNotVerifiedDescription: t(
+              "auth:pages.auth.facebook.emailNotVerifiedDescription",
+            ),
+            accountNotLinkedTitle: t(
+              "auth:pages.auth.facebook.accountNotLinkedTitle",
+            ),
+            accountNotLinkedDescription: t(
+              "auth:pages.auth.facebook.accountNotLinkedDescription",
+            ),
+            passwordRecovery: t("auth:pages.auth.facebook.passwordRecovery"),
           },
           verificationRequest: {
-            email: t("pages.auth.fields.email"),
-            submit: t("pages.auth.verificationRequest.submit"),
-            submitting: t("pages.auth.verificationRequest.submitting"),
-            accepted: t("pages.auth.verificationRequest.accepted"),
-            validationSummary: t("pages.auth.errors.validationSummary"),
-            emailRequired: t("pages.auth.errors.emailRequired"),
-            emailInvalid: t("pages.auth.errors.emailInvalid"),
-            rateLimited: t("pages.auth.errors.rateLimited"),
-            genericError: t("pages.auth.errors.verificationRequestFailed"),
+            email: t("auth:pages.auth.fields.email"),
+            submit: t("auth:pages.auth.verificationRequest.submit"),
+            submitting: t("auth:pages.auth.verificationRequest.submitting"),
+            accepted: t("auth:pages.auth.verificationRequest.accepted"),
+            validationSummary: t("auth:pages.auth.errors.validationSummary"),
+            emailRequired: t("auth:pages.auth.errors.emailRequired"),
+            emailInvalid: t("auth:pages.auth.errors.emailInvalid"),
+            rateLimited: t("auth:pages.auth.errors.rateLimited"),
+            genericError: t("auth:pages.auth.errors.verificationRequestFailed"),
           },
         }}
       />

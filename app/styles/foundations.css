@@ -1,0 +1,22 @@
+@theme inline {
+  --color-background: var(--page-background);
+  --color-foreground: var(--page-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--page-background);
+  color: var(--page-foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: clip;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: #fcd34d;
+  color: #11130f;
+}

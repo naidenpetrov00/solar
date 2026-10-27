@@ -1,0 +1,143 @@
+{
+  "pages": {
+    "dashboard": {
+      "catalog": {
+        "product": {
+          "views": {
+            "category": "Category details",
+            "products": "Products",
+            "ariaLabel": "Selected category view"
+          },
+          "list": {
+            "title": "Products",
+            "description": "Products assigned to this category as a primary or additional category.",
+            "add": "Add product",
+            "empty": "No products in this category.",
+            "emptyTitle": "No products in this category",
+            "emptyDescription": "Create a product here or assign an existing product to this category.",
+            "open": "Open product",
+            "localizedTitle": "Localized title",
+            "untitled": "Untitled product"
+          },
+          "editor": {
+            "newTitle": "New product",
+            "newDescription": "Complete the product and save it in one action. It remains a draft until publication.",
+            "editDescription": "Edit and save the whole product in one place.",
+            "back": "Back to products",
+            "readOnly": "Read-only access. You can inspect this product but cannot change it.",
+            "skuPending": "Generated when the product is saved",
+            "complete": "Complete",
+            "incomplete": "Incomplete",
+            "unsaved": "This product has unsaved changes. Continue and discard them?"
+          },
+          "preview": {
+            "open": "Preview",
+            "back": "Back to editing",
+            "title": "Product preview",
+            "emptyTitle": "Product title",
+            "brand": "Brand",
+            "model": "Model",
+            "availability": "Availability",
+            "specifications": "Specifications",
+            "gallery": "Gallery",
+            "noImage": "No primary image has been selected yet"
+          },
+          "sections": {
+            "general": "Product and sales details",
+            "content": "Localized content and SEO",
+            "specifications": "Specifications",
+            "media": "Media references"
+          },
+          "categories": {
+            "title": "Categories",
+            "help": "Expand the branches and choose one primary category and any optional additional categories.",
+            "primaryHelp": "Controls the main placement, URL path, title guidance, and inherited specifications.",
+            "additionalHelp": "Place the product in other relevant locations without changing its specifications.",
+            "setPrimary": "Set as primary",
+            "addAdditional": "Add as additional",
+            "removeAdditional": "Remove additional category",
+            "primary": "Primary",
+            "additional": "Additional",
+            "expand": "Expand {{category}}",
+            "collapse": "Collapse {{category}}"
+          },
+          "sales": {
+            "directPurchase": "Direct purchase",
+            "enquiry": "Enquiry",
+            "exact": "Exact price",
+            "from": "From price",
+            "onRequest": "Price on request",
+            "vatInclusive": "VAT-inclusive",
+            "vatExclusive": "VAT-exclusive",
+            "counterpartInclusive": "VAT-inclusive amount",
+            "counterpartExclusive": "VAT-exclusive amount",
+            "inStock": "In stock",
+            "outOfStock": "Out of stock"
+          },
+          "content": {
+            "titleGuidance": "Primary-category guidance",
+            "titleStructure": "Recommended structure: Brand + model + product type + important specification. The final title remains under administrator control.",
+            "updateSlug": "Update address from title",
+            "seoGroup": "Search appearance",
+            "previewTitle": "Illustrative search preview",
+            "previewNote": "Search engines may display different text.",
+            "emptyProductTitle": "Product title",
+            "emptyMetaDescription": "Add a concise description to preview how the product may appear in search."
+          },
+          "media": {
+            "empty": "No media references yet.",
+            "add": "Add media reference",
+            "remove": "Remove",
+            "moveUp": "Move up",
+            "moveDown": "Move down",
+            "primary": "Primary image",
+            "social": "Social-sharing image",
+            "languageLabel": "Alternative-text language"
+          },
+          "actions": {
+            "create": "Save product",
+            "creating": "Saving…",
+            "save": "Save product",
+            "saving": "Saving…",
+            "publish": "Publish",
+            "unpublish": "Unpublish",
+            "archive": "Archive",
+            "restore": "Restore as draft",
+            "working": "Working…",
+            "cancel": "Cancel",
+            "reload": "Reload latest"
+          },
+          "lifecycle": {
+            "publish": {
+              "title": "Publish this product?",
+              "description": "Publication is allowed only when all readiness requirements are complete.",
+              "confirm": "Publish"
+            },
+            "unpublish": {
+              "title": "Unpublish this product?",
+              "description": "The product will return to draft.",
+              "confirm": "Unpublish"
+            },
+            "archive": {
+              "title": "Archive this product?",
+              "description": "The product will be retained but removed from active use.",
+              "confirm": "Archive"
+            },
+            "restore": {
+              "title": "Restore this product?",
+              "description": "The product will return as a draft.",
+              "confirm": "Restore"
+            }
+          },
+          "validation": {
+            "required": "This field is required.",
+            "invalid": "Review this value.",
+            "slug": "Use lowercase Latin letters, numbers, and single hyphens between words only.",
+            "conflict": "Another product already uses this address for the locale, including through the English fallback."
+          },
+          "primaryCategoryChange": "Changing the primary category will remove the current specification values. Continue?"
+        }
+      }
+    }
+  }
+}

@@ -1,24 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/button";
-
-import { authClient } from "@/lib/auth-client";
-import { validateEmail } from "@/lib/auth-validation";
+import { useSignInSubmission } from "./use-sign-in-submission";
 import {
   VerificationRequestForm,
   type VerificationRequestLabels,
 } from "./verification-request-form";
 import {
-  SocialSignIn,
   type SocialSignInConfig,
   type SocialSignInLabels,
 } from "./social-sign-in";
-
-type FieldName = "email" | "password";
-type FieldErrors = Partial<Record<FieldName, string>>;
+import { SocialSignInOptions } from "./social-sign-in-options";
 
 export type SignInFormLabels = {
   email: string;
@@ -57,97 +50,26 @@ export function SignInForm({
     facebook: SocialSignInConfig;
   };
 }) {
-  const router = useRouter();
-  const summaryRef = useRef<HTMLDivElement>(null);
-  const statusHeadingRef = useRef<HTMLHeadingElement>(null);
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const [formError, setFormError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
-  const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (unverifiedEmail) {
-      statusHeadingRef.current?.focus();
-    }
-  }, [unverifiedEmail]);
-
-  const focusSummary = () => {
-    requestAnimationFrame(() => summaryRef.current?.focus());
-  };
-
-  const clearFieldError = (field: FieldName) => {
-    setFormError(null);
-    setFieldErrors((current) => {
-      if (!current[field]) return current;
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
-  };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-    const email = String(data.get("email") ?? "").trim();
-    const password = String(data.get("password") ?? "");
-    const nextErrors: FieldErrors = {};
-    const emailError = validateEmail(email);
-
-    if (emailError === "required") nextErrors.email = labels.emailRequired;
-    if (emailError === "invalid") nextErrors.email = labels.emailInvalid;
-    if (!password) nextErrors.password = labels.passwordRequired;
-
-    setFieldErrors(nextErrors);
-    setFormError(null);
-
-    if (Object.keys(nextErrors).length > 0) {
-      focusSummary();
-      return;
-    }
-
-    setPending(true);
-
-    try {
-      const result = await authClient.signIn.email({ email, password });
-
-      if (result.error) {
-        if (result.error.code === "EMAIL_NOT_VERIFIED") {
-          setUnverifiedEmail(email);
-          return;
-        }
-
-        const invalidCredentials =
-          result.error.status === 401 &&
-          result.error.code === "INVALID_EMAIL_OR_PASSWORD";
-
-        setFormError(
-          result.error.status === 429
-            ? labels.rateLimited
-            : invalidCredentials
-              ? labels.invalidCredentials
-              : labels.genericError,
-        );
-        focusSummary();
-        return;
-      }
-
-      router.replace(returnTo);
-      router.refresh();
-    } catch {
-      setFormError(labels.genericError);
-      focusSummary();
-    } finally {
-      setPending(false);
-    }
-  };
+  const {
+    summaryRef,
+    statusHeadingRef,
+    fieldErrors,
+    formError,
+    pending,
+    unverifiedEmail,
+    setUnverifiedEmail,
+    clearFieldError,
+    handleSubmit,
+  } = useSignInSubmission(labels, returnTo);
 
   if (unverifiedEmail) {
     return (
       <div className="auth-state" data-tone="neutral" role="status">
         <span className="auth-state-mark" aria-hidden="true" />
         <div>
-          <h2 ref={statusHeadingRef} tabIndex={-1}>{labels.unverifiedTitle}</h2>
+          <h2 ref={statusHeadingRef} tabIndex={-1}>
+            {labels.unverifiedTitle}
+          </h2>
           <p>{labels.unverifiedDescription}</p>
         </div>
         <div className="auth-state-content">
@@ -168,10 +90,18 @@ export function SignInForm({
     );
   }
 
-  const errors = [...Object.values(fieldErrors), ...(formError ? [formError] : [])];
+  const errors = [
+    ...Object.values(fieldErrors),
+    ...(formError ? [formError] : []),
+  ];
 
   return (
-    <form className="auth-form" noValidate onSubmit={handleSubmit} aria-busy={pending}>
+    <form
+      className="auth-form"
+      noValidate
+      onSubmit={handleSubmit}
+      aria-busy={pending}
+    >
       {errors.length > 0 ? (
         <div
           ref={summaryRef}
@@ -181,7 +111,9 @@ export function SignInForm({
         >
           <p>{labels.validationSummary}</p>
           <ul>
-            {errors.map((error, index) => <li key={`${index}-${error}`}>{error}</li>)}
+            {errors.map((error, index) => (
+              <li key={`${index}-${error}`}>{error}</li>
+            ))}
           </ul>
         </div>
       ) : null}
@@ -196,10 +128,16 @@ export function SignInForm({
           inputMode="email"
           required
           aria-invalid={fieldErrors.email ? true : undefined}
-          aria-describedby={fieldErrors.email ? "sign-in-email-error" : undefined}
+          aria-describedby={
+            fieldErrors.email ? "sign-in-email-error" : undefined
+          }
           onChange={() => clearFieldError("email")}
         />
-        {fieldErrors.email ? <p id="sign-in-email-error" className="auth-field-error">{fieldErrors.email}</p> : null}
+        {fieldErrors.email ? (
+          <p id="sign-in-email-error" className="auth-field-error">
+            {fieldErrors.email}
+          </p>
+        ) : null}
       </div>
 
       <div className="auth-field">
@@ -211,10 +149,16 @@ export function SignInForm({
           autoComplete="current-password"
           required
           aria-invalid={fieldErrors.password ? true : undefined}
-          aria-describedby={fieldErrors.password ? "sign-in-password-error" : undefined}
+          aria-describedby={
+            fieldErrors.password ? "sign-in-password-error" : undefined
+          }
           onChange={() => clearFieldError("password")}
         />
-        {fieldErrors.password ? <p id="sign-in-password-error" className="auth-field-error">{fieldErrors.password}</p> : null}
+        {fieldErrors.password ? (
+          <p id="sign-in-password-error" className="auth-field-error">
+            {fieldErrors.password}
+          </p>
+        ) : null}
       </div>
 
       <Link className="auth-form-link" href={forgotPasswordHref}>
@@ -224,20 +168,11 @@ export function SignInForm({
       <Button type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
       </Button>
-      <div className="auth-social">
-        <SocialSignIn
-          {...socialSignIn.google}
-          provider="google"
-          forgotPasswordHref={forgotPasswordHref}
-          labels={labels.google}
-        />
-        <SocialSignIn
-          {...socialSignIn.facebook}
-          provider="facebook"
-          forgotPasswordHref={forgotPasswordHref}
-          labels={labels.facebook}
-        />
-      </div>
+      <SocialSignInOptions
+        socialSignIn={socialSignIn}
+        labels={labels}
+        forgotPasswordHref={forgotPasswordHref}
+      />
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pending ? labels.submitting : ""}
       </p>

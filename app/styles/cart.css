@@ -1,0 +1,169 @@
+.cart-content {
+  display: grid;
+  gap: 2.5rem;
+}
+.cart-storage-note {
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid currentColor;
+}
+.cart-hydration-failure {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid currentColor;
+}
+.cart-hydration-failure p {
+  margin: 0;
+}
+.cart-state {
+  margin: 0;
+}
+.cart-empty {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  padding-block: 2rem;
+  border-top: 1px solid currentColor;
+}
+.cart-empty h2 {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  letter-spacing: -0.035em;
+}
+.cart-empty p {
+  max-width: 55ch;
+  margin: 0;
+  line-height: 1.5;
+}
+.cart-items {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid currentColor;
+  list-style: none;
+}
+.cart-item {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+}
+.cart-item-main a {
+  color: inherit;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-underline-offset: 0.2em;
+}
+.cart-item-main p {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+.cart-item-controls {
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+.cart-quantity-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid currentColor;
+}
+.cart-quantity-control button {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.cart-quantity-control button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.cart-quantity-control svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+.cart-quantity-control output {
+  min-width: 2.25rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.cart-remove {
+  min-height: 2.75rem;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+.cart-line-total {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  margin: 0;
+  font-size: 0.9rem;
+}
+.cart-line-total strong {
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+}
+.cart-summary {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 28rem);
+  margin-left: auto;
+}
+.cart-summary > p:not(.cart-price-note) {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+}
+.cart-summary strong {
+  font-variant-numeric: tabular-nums;
+}
+.cart-grand-total {
+  padding-top: 1rem;
+  border-top: 1px solid currentColor;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.cart-shop-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  width: fit-content;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  background: #fcd34d;
+  color: #11130f;
+  font-weight: 650;
+  text-decoration: none;
+}
+.cart-shop-link:hover {
+  background: #fde68a;
+}
+
+@media (min-width: 48rem) {
+  .cart-item {
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.5fr) minmax(
+        8rem,
+        0.4fr
+      );
+    align-items: start;
+  }
+  .cart-line-total {
+    justify-items: end;
+    text-align: right;
+  }
+}

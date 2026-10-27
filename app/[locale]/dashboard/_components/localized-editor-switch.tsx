@@ -3,10 +3,7 @@
 import { type KeyboardEvent } from "react";
 import { Button } from "@/components/button";
 
-import {
-  catalogLocales,
-  type CatalogLocale,
-} from "@/lib/catalog/model";
+import { catalogLocales, type CatalogLocale } from "@/lib/catalog/model";
 
 type LocalizedEditorSwitchProps = {
   idPrefix: string;
