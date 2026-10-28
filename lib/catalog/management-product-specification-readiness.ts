@@ -1,5 +1,4 @@
 import "server-only";
-import { catalogLocales } from "./model";
 import type { CatalogProductSpecificationConfigurationInput } from "./catalog-inputs";
 import type { getProductPublicationAggregate } from "./product-repository";
 import type { CatalogProductPublicationIssue } from "./management-product-types";
@@ -28,17 +27,19 @@ export function specificationIssues(
     specificationConfiguration.excludedSpecificationIds,
   );
   for (const specification of aggregate.specifications) {
-    if (excludedIds.has(specification.id)) continue;
     const value = valueBySpecification.get(specification.id);
 
-    if (specification.isRequired && !value) {
+    if (
+      specification.isRequired &&
+      (excludedIds.has(specification.id) || !value)
+    ) {
       issues.push({
         code: "MISSING_REQUIRED_SPECIFICATION",
         specificationId: specification.id,
       });
     }
 
-    if (!value) continue;
+    if (excludedIds.has(specification.id) || !value) continue;
 
     const valid =
       (specification.valueType === "text" && value.textValue !== null) ||
@@ -52,48 +53,6 @@ export function specificationIssues(
     if (!valid) {
       issues.push({
         code: "INVALID_SPECIFICATION_VALUE",
-        specificationId: specification.id,
-      });
-    }
-  }
-
-  for (const specification of specificationConfiguration.customSpecifications) {
-    for (const locale of catalogLocales) {
-      if (
-        !specification.translations.find(
-          (translation) =>
-            translation.locale === locale && translation.label.trim(),
-        )
-      ) {
-        issues.push({
-          code: "MISSING_CUSTOM_SPECIFICATION_LABEL",
-          specificationId: specification.id,
-          locale,
-        });
-      }
-    }
-    if (specification.valueType === "selection") {
-      for (const option of specification.options) {
-        for (const locale of catalogLocales) {
-          if (
-            !option.translations.find(
-              (translation) =>
-                translation.locale === locale && translation.label.trim(),
-            )
-          ) {
-            issues.push({
-              code: "MISSING_CUSTOM_OPTION_LABEL",
-              specificationId: specification.id,
-              optionId: option.id,
-              locale,
-            });
-          }
-        }
-      }
-    }
-    if (!specification.value) {
-      issues.push({
-        code: "MISSING_REQUIRED_SPECIFICATION",
         specificationId: specification.id,
       });
     }

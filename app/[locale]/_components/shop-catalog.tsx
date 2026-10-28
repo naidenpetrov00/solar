@@ -69,6 +69,8 @@ async function CatalogBrowse({
             categoriesLabel={t("pages.shop.categories")}
             categoryNavigationLabel={t("pages.shop.categoryNavigation")}
             allProductsLabel={t("pages.shop.allProducts")}
+            expandCategoryLabel={t("pages.shop.expandCategory")}
+            collapseCategoryLabel={t("pages.shop.collapseCategory")}
             filtersLabel={t("pages.shop.filters")}
             filterLabels={filterLabels}
           />

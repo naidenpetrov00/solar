@@ -69,6 +69,8 @@
       "categories": "Kategoriler",
       "categoryNavigation": "Mağaza kategorileri",
       "allProducts": "Tüm ürünler",
+      "expandCategory": "{{category}} alt kategorilerini göster",
+      "collapseCategory": "{{category}} alt kategorilerini gizle",
       "products": "Ürünler",
       "filters": "Filtreler",
       "clearFilters": "Filtreleri temizle",

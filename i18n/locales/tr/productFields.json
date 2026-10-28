@@ -102,39 +102,8 @@
             "removeInherited": "Bu üründen kaldır",
             "restoreInherited": "Geri yükle",
             "removed": "Yalnızca bu üründen kaldırılan özellikler",
-            "addCustom": "Ürüne özel özellik ekle",
-            "customTitle": "Ürün özelliği",
-            "customHelp": "Bu özellik yalnızca bu ürün için geçerlidir.",
-            "customName": {
-              "label": "Özellik adı",
-              "help": "Adı seçili dilde girin."
-            },
-            "customType": {
-              "label": "Tür",
-              "help": "Değerin nasıl girileceğini belirler."
-            },
-            "customUnit": {
-              "label": "Birim",
-              "help": "W veya kg gibi isteğe bağlı birim."
-            },
-            "customValue": {
-              "label": "Değer",
-              "help": "Bu ürünün değeri."
-            },
-            "customOption": {
-              "label": "Seçenek",
-              "help": "Seçeneğin seçili dildeki adı."
-            },
-            "addOption": "Seçenek ekle",
-            "removeOption": "Seçeneği kaldır",
-            "removeCustom": "Özelliği kaldır",
-            "categoryChangePending": "Yeni devralınan özellikler, birincil kategori değişikliği kaydedildikten sonra yüklenecek.",
-            "types": {
-              "text": "Metin",
-              "number": "Sayı",
-              "boolean": "Evet / hayır",
-              "selection": "Seçenek seçimi"
-            }
+            "manageCategory": "Kategori özelliklerini yönet",
+            "categoryChangePending": "Yeni devralınan özellikler, birincil kategori değişikliği kaydedildikten sonra yüklenecek."
           }
         }
       }

@@ -17,8 +17,6 @@
               "CATEGORY_NOT_PUBLISHED": "Publish the assigned category {{category}}.",
               "MISSING_REQUIRED_SPECIFICATION": "Add a value for {{specification}}.",
               "INVALID_SPECIFICATION_VALUE": "Correct the value for {{specification}}.",
-              "MISSING_CUSTOM_SPECIFICATION_LABEL": "Add a {{locale}} name for {{specification}}.",
-              "MISSING_CUSTOM_OPTION_LABEL": "Translate every option into {{locale}} for {{specification}}.",
               "MODEL_REQUIRED": "Add the model (MPN).",
               "INVALID_COMMERCE": "Complete a valid sales mode, price, VAT basis, and availability combination.",
               "PRIMARY_IMAGE_REQUIRED": "Select exactly one primary image.",

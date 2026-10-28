@@ -1,7 +1,6 @@
-import { DashboardButton, emptyLocalizedText } from "./product-editor-draft";
+import { ButtonLink } from "@/components/button";
 import type { ProductSpecificationSectionProps } from "./product-specification-model";
 import { ProductInheritedSpecifications } from "./product-inherited-specifications";
-import { ProductCustomSpecificationItem } from "./product-custom-specification-item";
 
 export function ProductSpecificationSection(
   props: ProductSpecificationSectionProps,
@@ -12,10 +11,14 @@ export function ProductSpecificationSection(
     markDirty,
     initialPrimaryCategoryId,
     visibleInheritedSpecifications,
+    removedInheritedSpecifications,
     primaryCategoryId,
-    customSpecifications,
-    setCustomSpecifications,
+    catalogPath,
   } = props;
+  const hasSpecifications =
+    visibleInheritedSpecifications.length > 0 ||
+    removedInheritedSpecifications.length > 0;
+
   return (
     <details className="dashboard-catalog-section" open>
       <summary>{labels.sections.specifications}</summary>
@@ -27,39 +30,14 @@ export function ProductSpecificationSection(
         {primaryCategoryId !== initialPrimaryCategoryId ? (
           <p>{labels.specifications.categoryChangePending}</p>
         ) : null}
-        {visibleInheritedSpecifications.length === 0 &&
-        customSpecifications.length === 0 ? (
-          <p>{labels.specifications.empty}</p>
-        ) : null}
+        {!hasSpecifications ? <p>{labels.specifications.empty}</p> : null}
         <ProductInheritedSpecifications props={props} />
-        {customSpecifications.map((specification, index) => (
-          <ProductCustomSpecificationItem
-            key={specification.id}
-            specification={specification}
-            index={index}
-            props={props}
-          />
-        ))}
-        <DashboardButton
-          type="button"
-          onClick={() => {
-            setCustomSpecifications((current) => [
-              ...current,
-              {
-                id: crypto.randomUUID(),
-                valueType: "text",
-                unit: null,
-                displayOrder: current.length,
-                labels: emptyLocalizedText(),
-                options: [],
-                value: null,
-              },
-            ]);
-            markDirty("specifications");
-          }}
+        <ButtonLink
+          variant="informational"
+          href={`${catalogPath}?category=${encodeURIComponent(primaryCategoryId)}&view=category#catalog-category-specifications`}
         >
-          {labels.specifications.addCustom}
-        </DashboardButton>
+          {labels.specifications.manageCategory}
+        </ButtonLink>
       </fieldset>
     </details>
   );

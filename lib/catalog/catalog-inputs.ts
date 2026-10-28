@@ -66,29 +66,9 @@ export type CatalogProductSpecificationValueInput =
   | { specificationId: string; type: "boolean"; value: boolean }
   | { specificationId: string; type: "selection"; optionId: string };
 
-export type CatalogProductCustomSpecificationValueInput =
-  | { type: "text"; value: string }
-  | { type: "number"; value: string }
-  | { type: "boolean"; value: boolean }
-  | { type: "selection"; optionId: string };
-
-export type CatalogProductCustomSpecificationInput = {
-  id: string;
-  valueType: CatalogSpecificationValueType;
-  unit?: string | null;
-  displayOrder: number;
-  translations: CatalogSpecificationTranslationInput[];
-  options: Array<{
-    id: string;
-    displayOrder: number;
-    translations: CatalogSpecificationTranslationInput[];
-  }>;
-  value: CatalogProductCustomSpecificationValueInput | null;
-};
-
 export type CatalogProductSpecificationConfigurationInput = {
   excludedSpecificationIds: string[];
-  customSpecifications: CatalogProductCustomSpecificationInput[];
+  customSpecifications: [];
 };
 
 export type CatalogProductMediaInput = {

@@ -69,6 +69,8 @@
       "categories": "Categories",
       "categoryNavigation": "Shop categories",
       "allProducts": "All products",
+      "expandCategory": "Show subcategories of {{category}}",
+      "collapseCategory": "Hide subcategories of {{category}}",
       "products": "Products",
       "filters": "Filters",
       "clearFilters": "Clear filters",

@@ -4,19 +4,15 @@ import type { useProductDraft } from "./use-product-draft";
 
 type SpecificationDraft = Pick<
   ReturnType<typeof useProductDraft>,
-  | "activeLocale"
-  | "setActiveLocale"
   | "primaryCategoryId"
   | "specValues"
   | "setSpecValues"
   | "setExcludedSpecificationIds"
-  | "customSpecifications"
-  | "setCustomSpecifications"
 >;
 
 export type ProductSpecificationSectionProps = SpecificationDraft & {
   labels: Props["labels"];
-  languages: Props["languages"];
+  catalogPath: string;
   locale: string;
   editorDisabled: boolean;
   markDirty: (section: ProductEditorSection) => void;
@@ -27,9 +23,4 @@ export type ProductSpecificationSectionProps = SpecificationDraft & {
     specificationId: string,
     value: CatalogProductSpecificationValueInput | null,
   ) => void;
-};
-
-export type ProductCustomSpecificationProps = {
-  specification: ProductSpecificationSectionProps["customSpecifications"][number];
-  props: ProductSpecificationSectionProps;
 };

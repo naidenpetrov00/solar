@@ -69,6 +69,8 @@
       "categories": "Категории",
       "categoryNavigation": "Категории в магазина",
       "allProducts": "Всички продукти",
+      "expandCategory": "Показване на подкатегориите на {{category}}",
+      "collapseCategory": "Скриване на подкатегориите на {{category}}",
       "products": "Продукти",
       "filters": "Филтри",
       "clearFilters": "Изчистване на филтрите",

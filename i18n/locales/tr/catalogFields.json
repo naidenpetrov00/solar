@@ -78,6 +78,14 @@
             "label": "Birim",
             "help": "Sayısal değer için isteğe bağlı birim; örneğin W, kW veya kg."
           },
+          "required": {
+            "label": "Zorunlu",
+            "help": "Ürün yayımlanmadan önce bu özellik için bir değere sahip olmalıdır."
+          },
+          "filterable": {
+            "label": "Filtre olarak kullan",
+            "help": "Ziyaretçilerin ürünleri bu özelliğe göre filtrelemesini sağlar."
+          },
           "options": "Seçenekler",
           "optionsHelp": "Ürün oluşturulurken yöneticinin seçebileceği hazır değerleri ekleyin.",
           "addOption": "Seçenek ekle",

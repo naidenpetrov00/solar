@@ -17,8 +17,6 @@
               "CATEGORY_NOT_PUBLISHED": "Atanmış {{category}} kategorisini yayımlayın.",
               "MISSING_REQUIRED_SPECIFICATION": "{{specification}} için bir değer ekleyin.",
               "INVALID_SPECIFICATION_VALUE": "{{specification}} değerini düzeltin.",
-              "MISSING_CUSTOM_SPECIFICATION_LABEL": "{{specification}} için {{locale}} adını ekleyin.",
-              "MISSING_CUSTOM_OPTION_LABEL": "{{specification}} seçeneklerinin tümünü {{locale}} diline çevirin.",
               "MODEL_REQUIRED": "Modeli (MPN) ekleyin.",
               "INVALID_COMMERCE": "Geçerli satış modu, fiyat, KDV temeli ve stok durumu kombinasyonunu tamamlayın.",
               "PRIMARY_IMAGE_REQUIRED": "Tam olarak bir birincil görsel seçin.",

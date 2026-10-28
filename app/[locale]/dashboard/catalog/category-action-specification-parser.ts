@@ -51,14 +51,14 @@ export function parseSpecifications(
         "id",
         "valueType",
         "unit",
+        "isRequired",
+        "isFilterable",
         "displayOrder",
         "translations",
         "options",
       ]) ||
       !("id" in candidate) ||
       "key" in candidate ||
-      "isRequired" in candidate ||
-      "isFilterable" in candidate ||
       (candidate.id !== null &&
         (typeof candidate.id !== "string" || !isUuid(candidate.id))) ||
       !("valueType" in candidate) ||
@@ -67,6 +67,10 @@ export function parseSpecifications(
       ) ||
       !("unit" in candidate) ||
       (candidate.unit !== null && typeof candidate.unit !== "string") ||
+      !("isRequired" in candidate) ||
+      typeof candidate.isRequired !== "boolean" ||
+      !("isFilterable" in candidate) ||
+      typeof candidate.isFilterable !== "boolean" ||
       !("displayOrder" in candidate) ||
       typeof candidate.displayOrder !== "number" ||
       !Number.isSafeInteger(candidate.displayOrder) ||
@@ -115,6 +119,8 @@ export function parseSpecifications(
       valueType:
         candidate.valueType as CatalogSpecificationEditorInput["valueType"],
       unit: candidate.unit,
+      isRequired: candidate.isRequired,
+      isFilterable: candidate.isFilterable,
       displayOrder: candidate.displayOrder,
       translations,
       options,

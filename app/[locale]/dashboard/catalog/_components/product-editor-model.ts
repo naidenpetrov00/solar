@@ -7,7 +7,6 @@ import {
   type ManagedCatalogProductWorkspace,
 } from "@/lib/catalog/management-product-types";
 import { type CatalogLocale } from "@/lib/catalog/model";
-import { type CatalogProductCustomSpecificationInput } from "@/lib/catalog/catalog-inputs";
 import { type ProductActionResult } from "../product-action-model";
 import { type ProductLabels } from "./product-labels";
 import type { ProductEditorSection } from "./product-editor-types";
@@ -53,17 +52,6 @@ export type MediaDraft = {
   isPrimary: boolean;
   isSocialImage: boolean;
   translations: Record<CatalogLocale, string>;
-};
-
-export type CustomSpecificationDraft = Omit<
-  CatalogProductCustomSpecificationInput,
-  "translations" | "options"
-> & {
-  labels: Record<CatalogLocale, string>;
-  options: Array<{
-    id: string;
-    labels: Record<CatalogLocale, string>;
-  }>;
 };
 
 export const initialResult: ProductActionResult = { status: "idle" };

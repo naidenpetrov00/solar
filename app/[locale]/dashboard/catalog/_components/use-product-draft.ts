@@ -8,15 +8,11 @@ import type {
   CatalogSalesMode,
 } from "@/lib/catalog/model";
 import type { CatalogProductSpecificationValueInput } from "@/lib/catalog/catalog-inputs";
-import type {
-  CustomSpecificationDraft,
-  MediaDraft,
-} from "./product-editor-model";
+import type { MediaDraft } from "./product-editor-model";
 import {
   translationsFromDetail,
   safeSlug,
   minorToInput,
-  customSpecificationsFromDetail,
   mediaFromDetail,
 } from "./product-editor-draft";
 
@@ -82,9 +78,6 @@ export function useProductDraft(
   const [excludedSpecificationIds, setExcludedSpecificationIds] = useState(
     detail?.specificationConfiguration.excludedSpecificationIds ?? [],
   );
-  const [customSpecifications, setCustomSpecifications] = useState<
-    CustomSpecificationDraft[]
-  >(() => customSpecificationsFromDetail(detail));
   const [media, setMedia] = useState<MediaDraft[]>(() =>
     mediaFromDetail(detail),
   );
@@ -127,7 +120,6 @@ export function useProductDraft(
       setExcludedSpecificationIds(
         nextDetail.specificationConfiguration.excludedSpecificationIds,
       );
-      setCustomSpecifications(customSpecificationsFromDetail(nextDetail));
       setMedia(mediaFromDetail(nextDetail));
     },
     [],
@@ -176,8 +168,6 @@ export function useProductDraft(
     setSpecValues,
     excludedSpecificationIds,
     setExcludedSpecificationIds,
-    customSpecifications,
-    setCustomSpecifications,
     media,
     setMedia,
     isPreviewing,

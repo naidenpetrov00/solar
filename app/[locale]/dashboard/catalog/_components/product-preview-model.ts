@@ -7,7 +7,6 @@ import type {
 } from "@/lib/catalog/model";
 import type { CatalogProductSpecificationValueInput } from "@/lib/catalog/catalog-inputs";
 import type {
-  CustomSpecificationDraft,
   MediaDraft,
   ProductTranslationDraft,
   Props,
@@ -19,7 +18,6 @@ export function createProductPreview({
   activeLocale,
   visibleInheritedSpecifications,
   specValues,
-  customSpecifications,
   media,
   labels,
   brand,
@@ -33,7 +31,6 @@ export function createProductPreview({
   activeLocale: CatalogLocale;
   visibleInheritedSpecifications: Props["categoryConfigurations"][number]["specifications"];
   specValues: CatalogProductSpecificationValueInput[];
-  customSpecifications: CustomSpecificationDraft[];
   media: MediaDraft[];
   labels: ProductLabels;
   brand: string;
@@ -69,25 +66,6 @@ export function createProductPreview({
               .find((option) => option.id === value.optionId)
               ?.translations.find((item) => item.locale === "bg")?.label ??
             "");
-    return renderedValue ? [{ label, value: renderedValue }] : [];
-  });
-  const custom = customSpecifications.flatMap((specification) => {
-    const value = specification.value;
-    if (!value) return [];
-    const label = specification.labels[activeLocale] || specification.labels.bg;
-    if (!label) return [];
-    const renderedValue =
-      value.type === "text" || value.type === "number"
-        ? `${value.value}${value.type === "number" && specification.unit ? ` ${specification.unit}` : ""}`
-        : value.type === "boolean"
-          ? value.value
-            ? labels.specifications.yes
-            : labels.specifications.no
-          : specification.options.find((option) => option.id === value.optionId)
-              ?.labels[activeLocale] ||
-            specification.options.find((option) => option.id === value.optionId)
-              ?.labels.bg ||
-            "";
     return renderedValue ? [{ label, value: renderedValue }] : [];
   });
   const previewMedia = media
@@ -127,6 +105,6 @@ export function createProductPreview({
         : null,
     primaryMedia: primary,
     gallery: previewMedia,
-    specifications: [...inherited, ...custom],
+    specifications: inherited,
   };
 }

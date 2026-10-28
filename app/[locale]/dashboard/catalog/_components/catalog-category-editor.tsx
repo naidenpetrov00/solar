@@ -125,7 +125,10 @@ export function CategoryEditor({
         enSlug={enSlug}
       />
 
-      <details className="dashboard-catalog-section">
+      <details
+        id="catalog-category-specifications"
+        className="dashboard-catalog-section"
+      >
         <summary>{labels.sections.specifications}</summary>
         <SpecificationEditor
           detail={detail}

@@ -24,17 +24,6 @@ export type CatalogProductPublicationIssue =
       specificationId: string;
     }
   | { code: "INVALID_SPECIFICATION_VALUE"; specificationId: string }
-  | {
-      code: "MISSING_CUSTOM_SPECIFICATION_LABEL";
-      specificationId: string;
-      locale: CatalogLocale;
-    }
-  | {
-      code: "MISSING_CUSTOM_OPTION_LABEL";
-      specificationId: string;
-      optionId: string;
-      locale: CatalogLocale;
-    }
   | { code: "MODEL_REQUIRED" }
   | { code: "INVALID_COMMERCE" }
   | { code: "PRIMARY_IMAGE_REQUIRED" }

@@ -78,6 +78,14 @@
             "label": "Unit",
             "help": "Optional unit for a numeric value, for example W, kW, or kg."
           },
+          "required": {
+            "label": "Required",
+            "help": "A product must have a value for this specification before it can be published."
+          },
+          "filterable": {
+            "label": "Use as a filter",
+            "help": "Allows visitors to filter products by this specification."
+          },
           "options": "Options",
           "optionsHelp": "Add the prepared values an administrator can choose from when creating a product.",
           "addOption": "Add option",

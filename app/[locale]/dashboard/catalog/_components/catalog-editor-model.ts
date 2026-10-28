@@ -36,6 +36,8 @@ export type SpecificationDraft = {
   persistedId: string | null;
   valueType: CatalogSpecificationValueType;
   unit: string;
+  isRequired: boolean;
+  isFilterable: boolean;
   labels: Record<CatalogLocale, string>;
   options: Array<{
     clientId: string;

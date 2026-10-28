@@ -101,6 +101,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .catalog-category-navigation-row svg {
+    transition: none;
+  }
+
   .catalog-category-navigation a,
   .catalog-product-card a {
     scroll-behavior: auto;

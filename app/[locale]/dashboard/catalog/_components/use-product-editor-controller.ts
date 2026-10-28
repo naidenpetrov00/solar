@@ -114,7 +114,6 @@ export function useProductEditorController(props: ProductEditorProps) {
     activeLocale: draft.activeLocale,
     visibleInheritedSpecifications: view.visibleInheritedSpecifications,
     specValues: draft.specValues,
-    customSpecifications: draft.customSpecifications,
     media: draft.media,
     labels: props.labels,
     brand: draft.brand,

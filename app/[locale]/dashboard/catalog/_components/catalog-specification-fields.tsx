@@ -117,6 +117,38 @@ export function SpecificationFields({
           />
         </Field>
       ) : null}
+      <label className="dashboard-catalog-specification-setting">
+        <input
+          type="checkbox"
+          checked={specification.isRequired}
+          onChange={(event) =>
+            updateSpecification(index, (current) => ({
+              ...current,
+              isRequired: event.target.checked,
+            }))
+          }
+        />
+        <span>
+          <strong>{labels.specifications.required.label}</strong>
+          <small>{labels.specifications.required.help}</small>
+        </span>
+      </label>
+      <label className="dashboard-catalog-specification-setting">
+        <input
+          type="checkbox"
+          checked={specification.isFilterable}
+          onChange={(event) =>
+            updateSpecification(index, (current) => ({
+              ...current,
+              isFilterable: event.target.checked,
+            }))
+          }
+        />
+        <span>
+          <strong>{labels.specifications.filterable.label}</strong>
+          <small>{labels.specifications.filterable.help}</small>
+        </span>
+      </label>
     </div>
   );
 }

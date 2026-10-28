@@ -49,8 +49,6 @@ export function ProductEditorSections({
     specValues,
     setSpecValues,
     setExcludedSpecificationIds,
-    customSpecifications,
-    setCustomSpecifications,
     media,
     setMedia,
   } = draft;
@@ -118,6 +116,7 @@ export function ProductEditorSections({
 
       <ProductSpecificationSection
         {...localeEditor}
+        catalogPath={props.catalogPath}
         locale={locale}
         markDirty={markDirty}
         initialPrimaryCategoryId={initialPrimaryCategoryId}
@@ -128,8 +127,6 @@ export function ProductEditorSections({
         specValues={specValues}
         setSpecValues={setSpecValues}
         setExcludedSpecificationIds={setExcludedSpecificationIds}
-        customSpecifications={customSpecifications}
-        setCustomSpecifications={setCustomSpecifications}
       />
 
       <ProductContentSection

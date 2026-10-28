@@ -11,45 +11,11 @@ import {
   catalogSpecificationTranslation,
 } from "@/db/schema";
 import type { CatalogLocale } from "@/lib/catalog/model";
-import {
-  CatalogProductCustomSpecificationInput,
+import type {
   CatalogProductSpecificationConfigurationInput,
 } from "@/lib/catalog/catalog-inputs";
 import type { ProductRow } from "@/lib/catalog/public-product-index";
 import type { PublicCatalogSpecification } from "@/lib/catalog/public-types";
-
-function customSpecificationValue(
-  specification: CatalogProductCustomSpecificationInput,
-  locale: CatalogLocale,
-): PublicCatalogSpecification | null {
-  const label = specification.translations.find(
-    (translation) => translation.locale === locale,
-  )?.label;
-  if (!label || !specification.value) return null;
-
-  if (specification.value.type === "selection") {
-    const selectedOptionId = specification.value.optionId;
-    const option = specification.options.find(
-      ({ id }) => id === selectedOptionId,
-    );
-    const value = option?.translations.find(
-      (translation) => translation.locale === locale,
-    )?.label;
-    return value ? { label, value, unit: specification.unit ?? null } : null;
-  }
-  if (specification.value.type === "boolean") {
-    return {
-      label,
-      value: specification.value.value,
-      unit: specification.unit ?? null,
-    };
-  }
-  return {
-    label,
-    value: specification.value.value,
-    unit: specification.unit ?? null,
-  };
-}
 
 export async function productSpecifications(
   row: ProductRow,
@@ -144,15 +110,6 @@ export async function productSpecifications(
       if (optionLabel)
         result.push({ label, value: optionLabel, unit: specification.unit });
     }
-  }
-
-  const configuration =
-    row.specificationConfiguration as CatalogProductSpecificationConfigurationInput;
-  for (const custom of configuration.customSpecifications.toSorted(
-    (left, right) => left.displayOrder - right.displayOrder,
-  )) {
-    const value = customSpecificationValue(custom, locale);
-    if (value) result.push(value);
   }
 
   return result;

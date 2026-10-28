@@ -69,6 +69,8 @@
       "categories": "Категорії",
       "categoryNavigation": "Категорії магазину",
       "allProducts": "Усі товари",
+      "expandCategory": "Показати підкатегорії {{category}}",
+      "collapseCategory": "Сховати підкатегорії {{category}}",
       "products": "Товари",
       "filters": "Фільтри",
       "clearFilters": "Очистити фільтри",

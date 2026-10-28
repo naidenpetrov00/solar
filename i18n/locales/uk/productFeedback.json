@@ -17,8 +17,6 @@
               "CATEGORY_NOT_PUBLISHED": "Опублікуйте призначену категорію {{category}}.",
               "MISSING_REQUIRED_SPECIFICATION": "Додайте значення для {{specification}}.",
               "INVALID_SPECIFICATION_VALUE": "Виправте значення для {{specification}}.",
-              "MISSING_CUSTOM_SPECIFICATION_LABEL": "Додайте назву мовою {{locale}} для {{specification}}.",
-              "MISSING_CUSTOM_OPTION_LABEL": "Перекладіть усі варіанти мовою {{locale}} для {{specification}}.",
               "MODEL_REQUIRED": "Додайте модель (MPN).",
               "INVALID_COMMERCE": "Заповніть дійсну комбінацію режиму продажу, ціни, основи ПДВ і наявності.",
               "PRIMARY_IMAGE_REQUIRED": "Виберіть рівно одне основне зображення.",

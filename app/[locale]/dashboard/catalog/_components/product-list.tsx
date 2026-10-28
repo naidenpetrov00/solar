@@ -93,21 +93,11 @@ export function issueText(
     const categorySpecification = detail.specifications.find(
       ({ id }) => id === issue.specificationId,
     );
-    const customSpecification =
-      detail.specificationConfiguration.customSpecifications.find(
-        ({ id }) => id === issue.specificationId,
-      );
     const name =
       categorySpecification?.translations.find(
         (translation) => translation.locale === locale,
       )?.label ??
       categorySpecification?.key ??
-      customSpecification?.translations.find(
-        (translation) => translation.locale === locale,
-      )?.label ??
-      customSpecification?.translations.find(
-        (translation) => translation.locale === "bg",
-      )?.label ??
       issue.specificationId;
     text = text.replace("{{specification}}", name);
   }

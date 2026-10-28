@@ -19,7 +19,6 @@ export function productEditorViewModel(
     primaryCategoryId,
     excludedSpecificationIds,
     translations,
-    customSpecifications,
   } = draft;
   const initialPrimaryCategoryId = detail?.primaryCategoryId ?? categoryId;
   const configuration = categoryConfigurations.find(
@@ -27,10 +26,12 @@ export function productEditorViewModel(
   );
   const inherited = configuration?.specifications ?? [];
   const visibleInheritedSpecifications = inherited.filter(
-    ({ id }) => !excludedSpecificationIds.includes(id),
+    ({ id, isRequired }) =>
+      isRequired || !excludedSpecificationIds.includes(id),
   );
-  const removedInheritedSpecifications = inherited.filter(({ id }) =>
-    excludedSpecificationIds.includes(id),
+  const removedInheritedSpecifications = inherited.filter(
+    ({ id, isRequired }) =>
+      !isRequired && excludedSpecificationIds.includes(id),
   );
   const titleGuidance = configuration?.titleGuidance ?? [];
   const contentComplete = Object.fromEntries(
@@ -75,28 +76,8 @@ export function productEditorViewModel(
     ? labels.validation.required
     : undefined;
   const serializeConfiguration = JSON.stringify({
-    excludedSpecificationIds,
-    customSpecifications: customSpecifications.map(
-      (specification, displayOrder) => ({
-        id: specification.id,
-        valueType: specification.valueType,
-        unit: specification.unit,
-        displayOrder,
-        translations: catalogLocales.map((locale) => ({
-          locale,
-          label: specification.labels[locale],
-        })),
-        options: specification.options.map((option, optionOrder) => ({
-          id: option.id,
-          displayOrder: optionOrder,
-          translations: catalogLocales.map((locale) => ({
-            locale,
-            label: option.labels[locale],
-          })),
-        })),
-        value: specification.value,
-      }),
-    ),
+    excludedSpecificationIds: removedInheritedSpecifications.map(({ id }) => id),
+    customSpecifications: [],
   });
 
   return {

@@ -8,12 +8,10 @@ import {
   type CatalogLocale,
   type CatalogPriceEntryBasis,
 } from "@/lib/catalog/model";
-import { type CatalogProductCustomSpecificationInput } from "@/lib/catalog/catalog-inputs";
 import { catalogSlugFromName } from "@/lib/catalog/text-validation";
 import {
   type ProductTranslationDraft,
   type MediaDraft,
-  type CustomSpecificationDraft,
 } from "./product-editor-model";
 
 export const DashboardButton = ({
@@ -79,45 +77,6 @@ export function mediaFromDetail(detail: ManagedCatalogProductDetail | null) {
       ]),
     ) as Record<CatalogLocale, string>,
   }));
-}
-
-export function customSpecificationsFromDetail(
-  detail: ManagedCatalogProductDetail | null,
-) {
-  return (detail?.specificationConfiguration.customSpecifications ?? []).map(
-    (specification): CustomSpecificationDraft => ({
-      id: specification.id,
-      valueType: specification.valueType,
-      unit: specification.unit,
-      displayOrder: specification.displayOrder,
-      value: specification.value,
-      labels: Object.fromEntries(
-        catalogLocales.map((locale) => [
-          locale,
-          specification.translations.find(
-            (translation) => translation.locale === locale,
-          )?.label ?? "",
-        ]),
-      ) as Record<CatalogLocale, string>,
-      options: specification.options.map((option) => ({
-        id: option.id,
-        labels: Object.fromEntries(
-          catalogLocales.map((locale) => [
-            locale,
-            option.translations.find(
-              (translation) => translation.locale === locale,
-            )?.label ?? "",
-          ]),
-        ) as Record<CatalogLocale, string>,
-      })),
-    }),
-  );
-}
-
-export function customScalarValue(
-  value: CatalogProductCustomSpecificationInput["value"],
-) {
-  return value?.type === "text" || value?.type === "number" ? value.value : "";
 }
 
 export function safeSlug(value: string) {

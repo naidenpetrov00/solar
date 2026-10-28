@@ -120,6 +120,8 @@ export type CatalogLabels = {
     name: FieldCopy;
     type: FieldCopy;
     unit: FieldCopy;
+    required: FieldCopy;
+    filterable: FieldCopy;
     options: string;
     optionsHelp: string;
     addOption: string;

@@ -90,6 +90,8 @@ export type CatalogSpecificationEditorInput = {
   id?: string | null;
   valueType: CatalogSpecificationValueType;
   unit?: string | null;
+  isRequired: boolean;
+  isFilterable: boolean;
   displayOrder: number;
   translations: Array<{ locale: CatalogLocale; label: string }>;
   options: CatalogSpecificationEditorOptionInput[];

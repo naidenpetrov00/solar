@@ -39,23 +39,25 @@ export function ProductInheritedSpecificationItem({
             <small> {labels.specifications.required}</small>
           ) : null}
         </label>
-        <DashboardButton
-          type="button"
-          onClick={() => {
-            setExcludedSpecificationIds((current) => [
-              ...current,
-              specification.id,
-            ]);
-            setSpecValues((current) =>
-              current.filter(
-                (item) => item.specificationId !== specification.id,
-              ),
-            );
-            markDirty("specifications");
-          }}
-        >
-          {labels.specifications.removeInherited}
-        </DashboardButton>
+        {!specification.isRequired ? (
+          <DashboardButton
+            type="button"
+            onClick={() => {
+              setExcludedSpecificationIds((current) => [
+                ...current.filter((id) => id !== specification.id),
+                specification.id,
+              ]);
+              setSpecValues((current) =>
+                current.filter(
+                  (item) => item.specificationId !== specification.id,
+                ),
+              );
+              markDirty("specifications");
+            }}
+          >
+            {labels.specifications.removeInherited}
+          </DashboardButton>
+        ) : null}
       </div>
       {specification.valueType === "text" ? (
         <input

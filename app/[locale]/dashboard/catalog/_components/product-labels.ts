@@ -2,7 +2,6 @@
 
 import { type CatalogProductDetailLabels } from "../../../_components/catalog-product-detail";
 import { type CatalogProductPublicationIssue } from "@/lib/catalog/management-product-types";
-import { type CatalogSpecificationValueType } from "@/lib/catalog/model";
 import {
   type LifecycleIntent,
   type ProductEditorSection,
@@ -106,19 +105,8 @@ export type ProductLabels = {
     removeInherited: string;
     restoreInherited: string;
     removed: string;
-    addCustom: string;
-    customTitle: string;
-    customHelp: string;
-    customName: FieldCopy;
-    customType: FieldCopy;
-    customUnit: FieldCopy;
-    customValue: FieldCopy;
-    customOption: FieldCopy;
-    addOption: string;
-    removeOption: string;
-    removeCustom: string;
+    manageCategory: string;
     categoryChangePending: string;
-    types: Record<CatalogSpecificationValueType, string>;
   };
   media: {
     empty: string;

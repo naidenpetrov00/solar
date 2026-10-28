@@ -76,8 +76,7 @@ export async function assertProductCategoryChange(
     product.specificationConfiguration as CatalogProductSpecificationConfigurationInput;
   if (
     (dependentValue ||
-      currentConfiguration.excludedSpecificationIds.length > 0 ||
-      currentConfiguration.customSpecifications.length > 0) &&
+      currentConfiguration.excludedSpecificationIds.length > 0) &&
     !discardSpecificationValues
   ) {
     throw new CatalogManagementError("DEPENDENCY_EXISTS");

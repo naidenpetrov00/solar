@@ -24,6 +24,8 @@ export function initialSpecifications(
     persistedId: specification.id,
     valueType: specification.valueType,
     unit: specification.unit ?? "",
+    isRequired: specification.isRequired,
+    isFilterable: specification.isFilterable,
     labels: Object.fromEntries(
       catalogLocales.map((locale) => [
         locale,
@@ -56,6 +58,8 @@ export function serializeSpecifications(specifications: SpecificationDraft[]) {
         specification.valueType === "number"
           ? specification.unit.trim() || null
           : null,
+      isRequired: specification.isRequired,
+      isFilterable: specification.isFilterable,
       displayOrder: specificationIndex,
       translations: catalogLocales.flatMap((locale) =>
         specification.labels[locale].trim()

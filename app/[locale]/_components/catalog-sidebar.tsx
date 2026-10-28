@@ -19,6 +19,8 @@ type Props = {
   categoriesLabel: string;
   categoryNavigationLabel: string;
   allProductsLabel: string;
+  expandCategoryLabel: string;
+  collapseCategoryLabel: string;
   filtersLabel: string;
   filterLabels: FilterLabels;
 };
@@ -28,11 +30,14 @@ function CategoryPanel(props: Props) {
     <div className="catalog-sidebar-panel">
       <h2>{props.categoriesLabel}</h2>
       <CatalogCategoryNavigation
+        key={props.currentCategoryId ?? "all-products"}
         categories={props.categories}
         currentCategoryId={props.currentCategoryId}
         locale={props.locale}
         label={props.categoryNavigationLabel}
         allProductsLabel={props.allProductsLabel}
+        expandLabel={props.expandCategoryLabel}
+        collapseLabel={props.collapseCategoryLabel}
       />
     </div>
   );

@@ -140,6 +140,8 @@ export function SpecificationEditor({
                       persistedId: null,
                       valueType: "text",
                       unit: "",
+                      isRequired: false,
+                      isFilterable: true,
                       labels: emptyLocaleLabels(),
                       options: [],
                     },
