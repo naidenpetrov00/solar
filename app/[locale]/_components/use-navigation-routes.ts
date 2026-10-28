@@ -35,10 +35,16 @@ export function useNavigationRoutes(locale: string, routes: NavigationRoute[]) {
   const signUpHref = localizedAuthPath(locale, "sign-up", returnTo);
   const equivalentSlug = isLocaleEquivalentSlug(activeSlug) ? activeSlug : "";
   const isCatalogEntity =
-    activeSlug.startsWith("shop/") || activeSlug.startsWith("products/");
+    activeSlug === "shop" ||
+    activeSlug.startsWith("shop/") ||
+    activeSlug.startsWith("products/");
   const localizedRoute = (targetLocale: string) =>
     isCatalogEntity
-      ? `/api/catalog/locale-route?${new URLSearchParams({ target: targetLocale, path: pathname }).toString()}`
+      ? `/api/catalog/locale-route?${new URLSearchParams({
+          target: targetLocale,
+          path: pathname,
+          ...(currentSearch ? { search: currentSearch } : {}),
+        }).toString()}`
       : isAuthRouteSlug(equivalentSlug)
         ? localizedAuthLanguagePath(
             locale,

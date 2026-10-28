@@ -20,6 +20,48 @@ export type PublicCatalogCategory = {
   updatedAt: Date;
 };
 
+export type PublicCatalogCategoryNode = PublicCatalogCategory & {
+  children: PublicCatalogCategoryNode[];
+};
+
+export const publicCatalogSorts = [
+  "name-asc",
+  "name-desc",
+  "price-asc",
+  "price-desc",
+] as const;
+
+export type PublicCatalogSort = (typeof publicCatalogSorts)[number];
+
+export type PublicCatalogFacetOption = {
+  value: string;
+  label: string | null;
+  count: number;
+  selected: boolean;
+};
+
+export type PublicCatalogFacet = {
+  id: string;
+  label: string;
+  contextLabel: string | null;
+  valueType: "text" | "number" | "boolean" | "selection";
+  unit: string | null;
+  options: PublicCatalogFacetOption[];
+  minimum: string | null;
+  maximum: string | null;
+  selectedMinimum: string | null;
+  selectedMaximum: string | null;
+};
+
+export type PublicCatalogListing = {
+  products: PublicCatalogProductSummary[];
+  facets: PublicCatalogFacet[];
+  totalCount: number;
+  resultCount: number;
+  sort: PublicCatalogSort;
+  hasActiveFilters: boolean;
+};
+
 export type PublicCatalogProductSummary = {
   id: string;
   slug: string;

@@ -1,98 +1,165 @@
-import Image from "next/image";
+import { Suspense, type ReactNode } from "react";
+
 import { getT } from "@/i18n.server";
 import type {
   PublicCatalogCategory,
-  PublicCatalogProductSummary,
+  PublicCatalogCategoryNode,
+  PublicCatalogListing,
+  PublicCatalogSort,
 } from "@/lib/catalog/public-types";
-import { CategoryLinks } from "./catalog-category-links";
+import {
+  CatalogClearFilters,
+  CatalogSortControl,
+} from "./catalog-query-controls";
 import { ProductList } from "./catalog-product-list";
+import { CatalogSidebar } from "./catalog-sidebar";
 
-export async function CatalogLanding({
+type BrowseProps = {
+  locale: string;
+  categories: PublicCatalogCategoryNode[];
+  listing: PublicCatalogListing;
+  title?: string;
+  introduction?: string;
+  currentCategory?: PublicCatalogCategory;
+  breadcrumbs?: ReactNode;
+  detailedContent?: string | null;
+};
+
+async function CatalogBrowse({
   locale,
   categories,
-}: {
-  locale: string;
-  categories: PublicCatalogCategory[];
-}) {
+  listing,
+  title,
+  introduction,
+  currentCategory,
+  breadcrumbs,
+  detailedContent,
+}: BrowseProps) {
   const { t } = await getT("common", { lng: locale });
+  const sortOptions: Record<PublicCatalogSort, string> = {
+    "name-asc": t("pages.shop.sortNameAsc"),
+    "name-desc": t("pages.shop.sortNameDesc"),
+    "price-asc": t("pages.shop.sortPriceAsc"),
+    "price-desc": t("pages.shop.sortPriceDesc"),
+  };
+  const filterLabels = {
+    clear: t("pages.shop.clearFilters"),
+    minimum: t("pages.shop.minimum"),
+    maximum: t("pages.shop.maximum"),
+    yes: t("pages.shop.yes"),
+    no: t("pages.shop.no"),
+    updating: t("pages.shop.updatingResults"),
+  };
 
   return (
-    <main id="main-content" className="shop-page catalog-landing">
-      <header className="shop-introduction catalog-hero">
-        <div className="shop-introduction-copy">
-          <h1>{t("pages.shop.title")}</h1>
-          <p>{t("pages.shop.description")}</p>
-        </div>
-        <div className="shop-hero-media">
-          <Image
-            src="/images/welcome-solar-hero.jpg"
-            alt={t("pages.shop.heroImageAlt")}
-            fill
-            preload
-            sizes="100vw"
-          />
-        </div>
-      </header>
+    <main id="main-content" className="shop-page">
       <div className="catalog-shell">
-        <CategoryLinks
-          categories={categories}
-          locale={locale}
-          heading={t("pages.shop.categories")}
-          id="catalog-root-categories-title"
-        />
-        {categories.length === 0 ? (
-          <p className="catalog-empty-state">{t("pages.shop.emptyCatalog")}</p>
-        ) : null}
+        {breadcrumbs}
+        <header className="catalog-page-heading">
+          <h1>{title ?? t("pages.shop.title")}</h1>
+          <p>{introduction ?? t("pages.shop.description")}</p>
+        </header>
+        <div className="catalog-commerce-layout">
+          <CatalogSidebar
+            locale={locale}
+            categories={categories}
+            currentCategoryId={currentCategory?.id}
+            facets={listing.facets}
+            hasActiveFilters={listing.hasActiveFilters}
+            categoriesLabel={t("pages.shop.categories")}
+            categoryNavigationLabel={t("pages.shop.categoryNavigation")}
+            allProductsLabel={t("pages.shop.allProducts")}
+            filtersLabel={t("pages.shop.filters")}
+            filterLabels={filterLabels}
+          />
+          <section className="catalog-results" aria-labelledby="catalog-results-title">
+            <h2 id="catalog-results-title" className="sr-only">
+              {t("pages.shop.products")}
+            </h2>
+            <div className="catalog-results-toolbar">
+              <p role="status">
+                {t("pages.shop.resultCount", { count: listing.resultCount })}
+              </p>
+              <Suspense fallback={null}>
+                <CatalogSortControl
+                  value={listing.sort}
+                  label={t("pages.shop.sortBy")}
+                  options={sortOptions}
+                  updating={t("pages.shop.updatingResults")}
+                />
+              </Suspense>
+            </div>
+            {listing.resultCount > 0 ? (
+              <ProductList locale={locale} products={listing.products} />
+            ) : (
+              <div className="catalog-empty-results">
+                <h2>
+                  {listing.hasActiveFilters
+                    ? t("pages.shop.noMatches")
+                    : t(
+                        currentCategory
+                          ? "pages.shop.emptyProducts"
+                          : "pages.shop.emptyCatalog",
+                      )}
+                </h2>
+                {listing.hasActiveFilters ? (
+                  <Suspense fallback={null}>
+                    <CatalogClearFilters label={t("pages.shop.clearFilters")} />
+                  </Suspense>
+                ) : null}
+              </div>
+            )}
+            {detailedContent ? (
+              <div className="catalog-category-description">{detailedContent}</div>
+            ) : null}
+          </section>
+        </div>
       </div>
     </main>
   );
 }
 
-export async function CatalogCategoryView({
+export function CatalogLanding({
   locale,
-  category,
-  siblings,
-  children,
-  products,
+  categories,
+  listing,
 }: {
   locale: string;
-  category: PublicCatalogCategory;
-  siblings: PublicCatalogCategory[];
-  children: PublicCatalogCategory[];
-  products: PublicCatalogProductSummary[];
+  categories: PublicCatalogCategoryNode[];
+  listing: PublicCatalogListing;
 }) {
-  const { t } = await getT("common", { lng: locale });
-
   return (
-    <div className="catalog-category-content">
-      <header className="catalog-category-heading">
-        <h1>{category.name}</h1>
-        <p>{category.introduction}</p>
-      </header>
-      {category.detailedContent ? (
-        <div className="catalog-category-description">
-          {category.detailedContent}
-        </div>
-      ) : null}
-      <CategoryLinks
-        categories={siblings}
-        locale={locale}
-        heading={t("pages.shop.siblingCategories")}
-        id="catalog-sibling-categories-title"
-      />
-      <CategoryLinks
-        categories={children}
-        locale={locale}
-        heading={t("pages.shop.subcategories")}
-        id="catalog-subcategories-title"
-      />
-      <section
-        className="catalog-category-products"
-        aria-labelledby="catalog-products-title"
-      >
-        <h2 id="catalog-products-title">{t("pages.shop.products")}</h2>
-        <ProductList locale={locale} products={products} />
-      </section>
-    </div>
+    <CatalogBrowse
+      locale={locale}
+      categories={categories}
+      listing={listing}
+    />
+  );
+}
+
+export function CatalogCategoryView({
+  locale,
+  categories,
+  category,
+  listing,
+  breadcrumbs,
+}: {
+  locale: string;
+  categories: PublicCatalogCategoryNode[];
+  category: PublicCatalogCategory;
+  listing: PublicCatalogListing;
+  breadcrumbs: ReactNode;
+}) {
+  return (
+    <CatalogBrowse
+      locale={locale}
+      categories={categories}
+      listing={listing}
+      title={category.name}
+      introduction={category.introduction}
+      currentCategory={category}
+      breadcrumbs={breadcrumbs}
+      detailedContent={category.detailedContent}
+    />
   );
 }

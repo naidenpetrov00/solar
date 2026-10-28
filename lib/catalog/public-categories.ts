@@ -7,16 +7,63 @@ import {
   loadCategoryIndex,
   publicCategoryFromRow,
 } from "@/lib/catalog/public-category-index";
-import type { PublicCatalogCategory } from "@/lib/catalog/public-types";
+import type {
+  PublicCatalogCategory,
+  PublicCatalogCategoryNode,
+} from "@/lib/catalog/public-types";
 
-export const listPublicRootCategories = cache(
-  async (locale: CatalogLocale): Promise<PublicCatalogCategory[]> => {
+export const listPublicCategoryTree = cache(
+  async (locale: CatalogLocale): Promise<PublicCatalogCategoryNode[]> => {
     const index = await loadCategoryIndex();
-    return index.rows.flatMap((row) => {
-      if (row.parentId !== null) return [];
+    const nodes = new Map<string, PublicCatalogCategoryNode>();
+
+    for (const row of index.rows) {
       const category = publicCategoryFromRow(index, row, locale);
-      return category ? [category] : [];
-    });
+      if (category) nodes.set(row.id, { ...category, children: [] });
+    }
+
+    const roots: PublicCatalogCategoryNode[] = [];
+    for (const row of index.rows) {
+      const node = nodes.get(row.id);
+      if (!node) continue;
+      if (row.parentId === null) {
+        roots.push(node);
+      } else {
+        nodes.get(row.parentId)?.children.push(node);
+      }
+    }
+
+    return roots;
+  },
+);
+
+export const listPublicCategoryBranchIds = cache(
+  async (categoryId: string, locale: CatalogLocale): Promise<string[]> => {
+    const index = await loadCategoryIndex();
+    const publicIds = new Set(
+      index.rows.flatMap((row) =>
+        publicCategoryFromRow(index, row, locale) ? [row.id] : [],
+      ),
+    );
+    if (!publicIds.has(categoryId)) return [];
+    const childIds = new Map<string, string[]>();
+    for (const row of index.rows) {
+      if (!row.parentId || !publicIds.has(row.id)) continue;
+      const children = childIds.get(row.parentId) ?? [];
+      children.push(row.id);
+      childIds.set(row.parentId, children);
+    }
+
+    const result: string[] = [];
+    const pending = [categoryId];
+    while (pending.length > 0) {
+      const current = pending.shift();
+      if (!current) continue;
+      result.push(current);
+      pending.push(...(childIds.get(current) ?? []));
+    }
+
+    return result;
   },
 );
 

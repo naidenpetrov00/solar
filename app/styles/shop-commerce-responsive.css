@@ -1,0 +1,108 @@
+@media (max-width: 79.999rem) {
+  .catalog-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 63.999rem) {
+  .catalog-page-heading {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .catalog-commerce-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .catalog-sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .catalog-sidebar-desktop {
+    display: none;
+  }
+
+  .catalog-sidebar-mobile {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .catalog-sidebar-section {
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  }
+
+  .catalog-sidebar-section > summary {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 0.85rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    list-style-position: inside;
+  }
+
+  .catalog-sidebar-panel {
+    max-height: min(60vh, 34rem);
+    overflow-y: auto;
+    padding: 0 0.85rem 1rem;
+  }
+
+  .catalog-sidebar-panel > h2 {
+    display: none;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .catalog-shell {
+    padding-inline: 1.25rem;
+  }
+
+  .catalog-page-heading h1 {
+    font-size: clamp(2.8rem, 14vw, 4.5rem);
+  }
+
+  .catalog-sidebar-mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .catalog-results-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .catalog-sort-control {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .catalog-sort-control select {
+    width: 100%;
+    max-width: none;
+  }
+
+  .catalog-product-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .catalog-product-card-media > div {
+    aspect-ratio: 16 / 10;
+  }
+
+  .catalog-related-categories {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-category-navigation a,
+  .catalog-product-card a {
+    scroll-behavior: auto;
+  }
+}

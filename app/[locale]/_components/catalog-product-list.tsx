@@ -6,7 +6,6 @@ import { formatCurrencyMinor } from "../_lib/catalog-format";
 import { localizedPath } from "../_lib/routes";
 import { AddToCartButton } from "./add-to-cart-button";
 import { CatalogMedia } from "./catalog-media";
-import { Arrow } from "./catalog-category-links";
 
 export async function ProductList({
   locale,
@@ -17,14 +16,10 @@ export async function ProductList({
 }) {
   const { t } = await getT("common", { lng: locale });
 
-  if (products.length === 0) {
-    return (
-      <p className="catalog-empty-state">{t("pages.shop.emptyProducts")}</p>
-    );
-  }
+  if (products.length === 0) return null;
 
   return (
-    <div className="catalog-product-list">
+    <div className="catalog-product-grid">
       {products.map((product) => {
         const href = localizedPath(locale, `products/${product.slug}`);
         const price = product.price
@@ -35,9 +30,13 @@ export async function ProductList({
             )
           : t("pages.shop.priceOnRequest");
         return (
-          <article className="catalog-product-row" key={product.id}>
-            <Link className="catalog-product-row-link" href={href}>
-              <div className="catalog-product-row-media">
+          <article className="catalog-product-card" key={product.id}>
+            <Link
+              className="catalog-product-card-media"
+              href={href}
+              aria-label={product.title}
+            >
+              <div>
                 {product.primaryMedia ? (
                   <CatalogMedia
                     reference={product.primaryMedia.reference}
@@ -46,21 +45,17 @@ export async function ProductList({
                   />
                 ) : null}
               </div>
-              <div className="catalog-product-row-copy">
-                {product.marketingLabel ? (
-                  <p className="catalog-marketing-label">
-                    {product.marketingLabel}
-                  </p>
-                ) : null}
-                <h3>{product.title}</h3>
-                <p>{product.shortDescription}</p>
-                <span className="catalog-inline-link">
-                  {t("pages.shop.viewProduct")}
-                  <Arrow />
-                </span>
-              </div>
             </Link>
-            <div className="catalog-product-row-commerce">
+            <div className="catalog-product-card-copy">
+              {product.marketingLabel ? (
+                <p className="catalog-marketing-label">
+                  {product.marketingLabel}
+                </p>
+              ) : null}
+              <h3><Link href={href}>{product.title}</Link></h3>
+              <p>{product.shortDescription}</p>
+            </div>
+            <div className="catalog-product-card-commerce">
               <p>
                 {product.price?.presentation === "from" ? (
                   <span>{t("pages.shop.priceFrom")}</span>

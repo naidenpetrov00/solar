@@ -9,10 +9,10 @@
 @import "./styles/home-motion.css";
 @import "./styles/home-destinations.css";
 @import "./styles/shop-foundations.css";
-@import "./styles/shop-index.css";
-@import "./styles/shop-categories.css";
-@import "./styles/shop-product-list.css";
-@import "./styles/shop-responsive.css";
+@import "./styles/shop-commerce-layout.css";
+@import "./styles/shop-commerce-filters.css";
+@import "./styles/shop-product-grid.css";
+@import "./styles/shop-commerce-responsive.css";
 @import "./styles/cart.css";
 @import "./styles/auth-shell.css";
 @import "./styles/auth-fields.css";

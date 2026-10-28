@@ -3,10 +3,16 @@ import { notFound, permanentRedirect } from "next/navigation";
 
 import { getT } from "@/i18n.server";
 import {
+  listPublicCategoryTree,
   listPublicCategoryBreadcrumbs,
   listPublicChildCategories,
   resolvePublicCategory,
 } from "@/lib/catalog/public-categories";
+import { getPublicCatalogListing } from "@/lib/catalog/public-catalog-listing";
+import {
+  hasPublicCatalogQueryState,
+  type PublicCatalogSearchParams,
+} from "@/lib/catalog/public-catalog-query";
 import { listPublicProductsForCategory } from "@/lib/catalog/public-product-list";
 import { resolvePublicProduct } from "@/lib/catalog/public-products";
 import { catalogLocale } from "@/lib/catalog/public-routes";
@@ -18,6 +24,7 @@ import { localizedPath, openGraphLocale } from "../../_lib/routes";
 
 type Props = {
   params: Promise<{ locale: string; categoryPath: string[] }>;
+  searchParams: Promise<PublicCatalogSearchParams>;
 };
 
 const legacyPackageSlugs = new Set([
@@ -57,8 +64,11 @@ async function resolvePage(params: Props["params"]) {
   return resolution ? { locale, validatedLocale, resolution } : null;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const page = await resolvePage(params);
+export async function generateMetadata({
+  params,
+  searchParams,
+}: Props): Promise<Metadata> {
+  const [page, query] = await Promise.all([resolvePage(params), searchParams]);
   if (!page) return {};
   const { category } = page.resolution;
   const [children, products] = await Promise.all([
@@ -83,7 +93,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: localizedPath(page.locale, `shop/${category.path}`),
       languages,
     },
-    robots: emptyLeaf ? { index: false, follow: true } : undefined,
+    robots:
+      emptyLeaf || hasPublicCatalogQueryState(query)
+        ? { index: false, follow: true }
+        : undefined,
     openGraph: {
       title,
       description,
@@ -94,18 +107,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function CategoryPage({ params }: Props) {
-  const page = await resolvePage(params);
+export default async function CategoryPage({ params, searchParams }: Props) {
+  const [page, query] = await Promise.all([resolvePage(params), searchParams]);
   if (!page) notFound();
   const { category } = page.resolution;
   if (!page.resolution.canonical) {
     permanentRedirect(localizedPath(page.locale, `shop/${category.path}`));
   }
-  const [children, siblings, products, breadcrumbCategories, translation] =
+  const [categories, listing, breadcrumbCategories, translation] =
     await Promise.all([
-      listPublicChildCategories(category.id, page.validatedLocale),
-      listPublicChildCategories(category.parentId, page.validatedLocale),
-      listPublicProductsForCategory(category.id, page.validatedLocale),
+      listPublicCategoryTree(page.validatedLocale),
+      getPublicCatalogListing({
+        categoryId: category.id,
+        locale: page.validatedLocale,
+        searchParams: query,
+      }),
       listPublicCategoryBreadcrumbs(category.id, page.validatedLocale),
       getT("common", { lng: page.locale }),
     ]);
@@ -136,22 +152,20 @@ export default async function CategoryPage({ params }: Props) {
   };
 
   return (
-    <main id="main-content" className="shop-page catalog-category-page">
-      <div className="catalog-shell">
-        <CatalogBreadcrumbs
-          label={t("pages.shop.breadcrumbLabel")}
-          items={breadcrumbItems}
-        />
-        <CatalogCategoryView
-          locale={page.locale}
-          category={category}
-          siblings={siblings.filter((sibling) => sibling.id !== category.id)}
-          products={products}
-        >
-          {children}
-        </CatalogCategoryView>
-      </div>
+    <>
+      <CatalogCategoryView
+        locale={page.locale}
+        categories={categories}
+        category={category}
+        listing={listing}
+        breadcrumbs={
+          <CatalogBreadcrumbs
+            label={t("pages.shop.breadcrumbLabel")}
+            items={breadcrumbItems}
+          />
+        }
+      />
       <StructuredData value={breadcrumbSchema} />
-    </main>
+    </>
   );
 }

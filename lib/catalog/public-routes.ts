@@ -26,6 +26,7 @@ export async function resolveCatalogLocalePath(
       ? sourceLocaleMatch[1]
       : "bg";
   const path = sourcePath.replace(/^\/(?:bg|en|tr|uk)(?=\/|$)/u, "") || "/";
+  if (/^\/shop\/?$/u.test(path)) return "shop";
   const productMatch = path.match(/^\/products\/([^/]+)\/?$/u);
   if (productMatch) {
     const source = await resolvePublicProduct(productMatch[1], sourceLocale);
