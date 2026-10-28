@@ -3,6 +3,7 @@ import type { CatalogLabels } from "./catalog-labels";
 import type { EditorSection } from "./catalog-editor-model";
 import { DashboardButton, slugErrorLabel } from "./catalog-editor-actions";
 import { Field, ResultMessage } from "./catalog-editor-fields";
+import { CatalogSectionSaveState } from "./catalog-section-save-state";
 import type { useCategoryEditorState } from "./use-category-editor-state";
 
 type GeneralState = Pick<
@@ -23,6 +24,7 @@ export function CategoryGeneralSection({
   labels,
   locale,
   canManage,
+  isDirty,
   parentName,
   onDirty,
   onMove,
@@ -41,14 +43,26 @@ export function CategoryGeneralSection({
   labels: CatalogLabels;
   locale: string;
   canManage: boolean;
+  isDirty: boolean;
   parentName?: string;
   onDirty: (section: EditorSection) => void;
   onMove: () => void;
   onReload: () => void;
 }) {
   return (
-    <details className="dashboard-catalog-section" open>
-      <summary>{labels.sections.general}</summary>
+    <details
+      className="dashboard-catalog-section"
+      data-unsaved={isDirty || undefined}
+      open
+    >
+      <summary>
+        {labels.sections.general}
+        {isDirty ? (
+          <span className="dashboard-catalog-section-unsaved">
+            {labels.saveState.unsavedLabel}
+          </span>
+        ) : null}
+      </summary>
       <form action={generalAction} aria-busy={generalPending}>
         <input type="hidden" name="locale" value={locale} />
         <input type="hidden" name="categoryId" value={detail.id} />
@@ -135,21 +149,34 @@ export function CategoryGeneralSection({
             </div>
           </dl>
         </fieldset>
+        <CatalogSectionSaveState
+          id="catalog-category-general-save-state"
+          isDirty={isDirty}
+          pending={generalPending}
+          result={generalResult}
+          copy={labels.saveState}
+        />
         {canManage ? (
           <div className="dashboard-catalog-form-actions">
             <DashboardButton type="button" onClick={onMove}>
               {labels.actions.move}
             </DashboardButton>
-            <DashboardButton type="submit" disabled={generalPending}>
+            <DashboardButton
+              type="submit"
+              disabled={!isDirty || generalPending}
+              aria-describedby="catalog-category-general-save-state"
+            >
               {generalPending ? labels.actions.saving : labels.actions.save}
             </DashboardButton>
           </div>
         ) : null}
-        <ResultMessage
-          result={generalResult}
-          labels={labels}
-          onReload={onReload}
-        />
+        {generalResult.status === "error" ? (
+          <ResultMessage
+            result={generalResult}
+            labels={labels}
+            onReload={onReload}
+          />
+        ) : null}
       </form>
     </details>
   );

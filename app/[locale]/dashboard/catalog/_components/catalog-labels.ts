@@ -12,6 +12,7 @@ import {
   type FieldCopy,
   type LifecycleIntent,
 } from "./catalog-editor-types";
+import type { CatalogSectionSaveCopy } from "./catalog-section-save-state";
 
 export type CatalogLabels = {
   title: string;
@@ -135,6 +136,7 @@ export type CatalogLabels = {
     title: string;
     message: string;
   };
+  saveState: CatalogSectionSaveCopy;
   validation: {
     required: string;
     slug: string;

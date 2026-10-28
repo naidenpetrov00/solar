@@ -110,6 +110,13 @@
           "title": "Kaydedilmemiş değişiklikler",
           "message": "Bu kategoride kaydedilmemiş değişiklikler var. Devam edip bunları atmak istiyor musunuz?"
         },
+        "saveState": {
+          "unchanged": "Bu bölümde kaydedilmemiş değişiklik yok.",
+          "unsaved": "Bu bölümde kaydedilmemiş değişiklikler var. Uygulamak için “Bölümü kaydet” seçeneğini kullanın.",
+          "saving": "Bu bölüm kaydediliyor…",
+          "saved": "Bu bölüm kaydedildi.",
+          "unsavedLabel": "Kaydedilmedi"
+        },
         "validation": {
           "required": "Bu alan zorunludur.",
           "slug": "Yalnızca küçük Latin harfleri, rakamlar ve kelimeler arasında tek kısa çizgi kullanın.",

@@ -23,6 +23,7 @@ export function CatalogWorkspace(props: CatalogWorkspaceProps) {
     view,
   } = props;
   const {
+    dirtySections,
     setDirtySections,
     productDirtySections,
     editorRevision,
@@ -106,6 +107,7 @@ export function CatalogWorkspace(props: CatalogWorkspaceProps) {
           workspace={props}
           newCategory={newCategory}
           editorRevision={editorRevision}
+          categoryDirtySections={dirtySections}
           productDirtySections={productDirtySections}
           manageResult={manageResult}
           markDirty={markDirty}

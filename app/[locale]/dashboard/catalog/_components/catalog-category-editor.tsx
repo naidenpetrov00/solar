@@ -22,6 +22,7 @@ export function CategoryEditor({
   labels,
   locale,
   canManage,
+  dirtySections,
   onDirty,
   clearDirty,
   onMove,
@@ -33,6 +34,7 @@ export function CategoryEditor({
   labels: CatalogLabels;
   locale: string;
   canManage: boolean;
+  dirtySections: Set<EditorSection>;
   onDirty: (section: EditorSection) => void;
   clearDirty: (section: EditorSection) => void;
   onMove: () => void;
@@ -88,6 +90,7 @@ export function CategoryEditor({
         labels={labels}
         locale={locale}
         canManage={canManage}
+        isDirty={dirtySections.has("general")}
         parentName={parent?.name}
         onDirty={onDirty}
         onMove={onMove}
@@ -108,6 +111,7 @@ export function CategoryEditor({
         labels={labels}
         locale={locale}
         canManage={canManage}
+        isDirty={dirtySections.has("content")}
         onDirty={onDirty}
         onReload={onReload}
         activeLocale={activeLocale}
@@ -128,12 +132,21 @@ export function CategoryEditor({
       <details
         id="catalog-category-specifications"
         className="dashboard-catalog-section"
+        data-unsaved={dirtySections.has("specifications") || undefined}
       >
-        <summary>{labels.sections.specifications}</summary>
+        <summary>
+          {labels.sections.specifications}
+          {dirtySections.has("specifications") ? (
+            <span className="dashboard-catalog-section-unsaved">
+              {labels.saveState.unsavedLabel}
+            </span>
+          ) : null}
+        </summary>
         <SpecificationEditor
           detail={detail}
           labels={labels}
           disabled={!canManage}
+          isDirty={dirtySections.has("specifications")}
           onDirty={() => onDirty("specifications")}
           result={specificationResult}
           action={specificationAction}

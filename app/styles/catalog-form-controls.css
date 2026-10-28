@@ -44,6 +44,27 @@
   line-height: 1.45;
 }
 
+.dashboard-catalog-section-save-state {
+  margin: 1rem 0 0;
+  color: var(--dashboard-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.dashboard-catalog-section-save-state[data-state="unsaved"] {
+  color: var(--dashboard-foreground);
+  font-weight: 700;
+}
+
+.dashboard-catalog-section-save-state[data-state="saving"] {
+  color: #a16207;
+}
+
+:root[data-theme="dark"]
+  .dashboard-catalog-section-save-state[data-state="saving"] {
+  color: #fcd34d;
+}
+
 .dashboard-catalog-form-actions {
   margin-top: 1.5rem;
 }

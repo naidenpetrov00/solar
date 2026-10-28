@@ -5,6 +5,7 @@ import type { CatalogLabels } from "./catalog-labels";
 import type { EditorSection } from "./catalog-editor-model";
 import { DashboardButton, contentCompletion } from "./catalog-editor-actions";
 import { ResultMessage } from "./catalog-editor-fields";
+import { CatalogSectionSaveState } from "./catalog-section-save-state";
 import { LocaleContentPanel } from "./catalog-locale-content";
 import type { useCategoryEditorState } from "./use-category-editor-state";
 
@@ -30,6 +31,7 @@ export function CategoryContentSection({
   labels,
   locale,
   canManage,
+  isDirty,
   onDirty,
   onReload,
   activeLocale,
@@ -50,12 +52,24 @@ export function CategoryContentSection({
   labels: CatalogLabels;
   locale: string;
   canManage: boolean;
+  isDirty: boolean;
   onDirty: (section: EditorSection) => void;
   onReload: () => void;
 }) {
   return (
-    <details className="dashboard-catalog-section" open>
-      <summary>{labels.sections.content}</summary>
+    <details
+      className="dashboard-catalog-section"
+      data-unsaved={isDirty || undefined}
+      open
+    >
+      <summary>
+        {labels.sections.content}
+        {isDirty ? (
+          <span className="dashboard-catalog-section-unsaved">
+            {labels.saveState.unsavedLabel}
+          </span>
+        ) : null}
+      </summary>
       <form
         action={contentAction}
         aria-busy={contentPending}
@@ -133,19 +147,32 @@ export function CategoryContentSection({
             idPrefix="catalog-content"
           />
         ))}
+        <CatalogSectionSaveState
+          id="catalog-category-content-save-state"
+          isDirty={isDirty}
+          pending={contentPending}
+          result={contentResult}
+          copy={labels.saveState}
+        />
         {canManage ? (
           <div className="dashboard-catalog-form-actions">
             <span />
-            <DashboardButton type="submit" disabled={contentPending}>
+            <DashboardButton
+              type="submit"
+              disabled={!isDirty || contentPending}
+              aria-describedby="catalog-category-content-save-state"
+            >
               {contentPending ? labels.actions.saving : labels.actions.save}
             </DashboardButton>
           </div>
         ) : null}
-        <ResultMessage
-          result={contentResult}
-          labels={labels}
-          onReload={onReload}
-        />
+        {contentResult.status === "error" ? (
+          <ResultMessage
+            result={contentResult}
+            labels={labels}
+            onReload={onReload}
+          />
+        ) : null}
       </form>
     </details>
   );

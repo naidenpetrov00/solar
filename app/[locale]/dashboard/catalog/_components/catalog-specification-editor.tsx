@@ -6,6 +6,7 @@ import { type CatalogLabels } from "./catalog-labels";
 import { serializeSpecifications } from "./catalog-specification-draft";
 import { DashboardButton, emptyLocaleLabels } from "./catalog-editor-actions";
 import { ResultMessage } from "./catalog-editor-fields";
+import { CatalogSectionSaveState } from "./catalog-section-save-state";
 import { ProductCharacteristicsPreview } from "./catalog-characteristics-preview";
 import { firstInvalidSpecification } from "./catalog-specification-validation";
 import { useSpecificationEditor } from "./use-specification-editor";
@@ -16,6 +17,7 @@ export function SpecificationEditor({
   detail,
   labels,
   disabled,
+  isDirty,
   onDirty,
   result,
   action,
@@ -26,6 +28,7 @@ export function SpecificationEditor({
   detail: ManagedCatalogCategoryDetail;
   labels: CatalogLabels;
   disabled: boolean;
+  isDirty: boolean;
   onDirty: () => void;
   result: CatalogActionResult;
   action: (payload: FormData) => void;
@@ -82,6 +85,13 @@ export function SpecificationEditor({
         specifications={specifications}
         activeLocale={specificationLocale}
         onChange={setSpecificationLocale}
+      />
+      <CatalogSectionSaveState
+        id="catalog-category-specifications-save-state"
+        isDirty={isDirty}
+        pending={pending}
+        result={result}
+        copy={labels.saveState}
       />
       <div className="dashboard-catalog-specification-workspace">
         <div className="dashboard-catalog-specification-editor-column">
@@ -152,12 +162,18 @@ export function SpecificationEditor({
               >
                 {labels.specifications.add}
               </DashboardButton>
-              <DashboardButton type="submit" disabled={pending}>
+              <DashboardButton
+                type="submit"
+                disabled={!isDirty || pending}
+                aria-describedby="catalog-category-specifications-save-state"
+              >
                 {pending ? labels.actions.saving : labels.actions.save}
               </DashboardButton>
             </div>
           ) : null}
-          <ResultMessage result={result} labels={labels} onReload={onReload} />
+          {result.status === "error" ? (
+            <ResultMessage result={result} labels={labels} onReload={onReload} />
+          ) : null}
         </div>
         <ProductCharacteristicsPreview
           specifications={specifications}

@@ -17,6 +17,7 @@ export function CatalogWorkspaceDetail({
   workspace,
   newCategory,
   editorRevision,
+  categoryDirtySections,
   productDirtySections,
   manageResult,
   markDirty,
@@ -34,6 +35,7 @@ export function CatalogWorkspaceDetail({
   workspace: CatalogWorkspaceProps;
   newCategory: NewCategorySeed | null;
   editorRevision: number;
+  categoryDirtySections: Set<EditorSection>;
   productDirtySections: Set<ProductEditorSection>;
   manageResult: CatalogActionResult;
   markDirty: (section: EditorSection) => void;
@@ -126,6 +128,7 @@ export function CatalogWorkspaceDetail({
           labels={labels}
           locale={locale}
           canManage={canManage}
+          dirtySections={categoryDirtySections}
           onDirty={markDirty}
           clearDirty={clearDirty}
           onMove={onMove}

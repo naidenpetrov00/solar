@@ -110,6 +110,13 @@
           "title": "Unsaved changes",
           "message": "You have unsaved changes in this category. Continue and discard them?"
         },
+        "saveState": {
+          "unchanged": "There are no unsaved changes in this section.",
+          "unsaved": "This section has unsaved changes. Select “Save section” to apply them.",
+          "saving": "Saving this section…",
+          "saved": "This section has been saved.",
+          "unsavedLabel": "Unsaved"
+        },
         "validation": {
           "required": "This field is required.",
           "slug": "Use lowercase Latin letters, numbers, and single hyphens between words only.",
