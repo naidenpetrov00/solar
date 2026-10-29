@@ -1,0 +1,14 @@
+{
+  "Rules": [
+    {
+      "ID": "expire-catalog-pending-after-two-days",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "catalog/pending/"
+      },
+      "Expiration": {
+        "Days": 2
+      }
+    }
+  ]
+}

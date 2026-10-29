@@ -8,7 +8,7 @@ Public solar-installation website built with Next.js, including a database-drive
 - npm
 - Docker Desktop or another Docker Engine with Docker Compose
 
-The Compose file provisions PostgreSQL and Mailpit for local development only. They are not production infrastructure, and Docker does not need to be running for schema generation or static validation.
+The Compose file provisions PostgreSQL, Mailpit, and development-only LocalStack S3 object storage. They are not production infrastructure, and Docker does not need to be running for schema generation or static validation.
 
 ## Environment configuration
 
@@ -38,12 +38,13 @@ Configuration variables:
 | `PUBLIC_SITE_URL` | Canonical public website origin used by metadata, sitemap, and structured data |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
 | `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
-| `CATALOG_STORAGE_PUBLIC_BASE_URL` | Public HTTPS base URL that serves immutable objects under `catalog/assets/` |
-| `CATALOG_STORAGE_S3_ENDPOINT` | Server-only S3-compatible endpoint, for example the selected Hetzner Object Storage location |
+| `LOCALSTACK_GATEWAY_PORT` | Loopback-only LocalStack S3 gateway port; defaults to `4566` |
+| `CATALOG_STORAGE_PUBLIC_BASE_URL` | Public base URL serving immutable `catalog/assets/` objects; local LocalStack uses path-style addressing |
+| `CATALOG_STORAGE_S3_ENDPOINT` | Server-only S3-compatible endpoint; local LocalStack or production Hetzner Object Storage |
 | `CATALOG_STORAGE_S3_REGION` | S3-compatible region matching the bucket location |
 | `CATALOG_STORAGE_S3_BUCKET` | Bucket used only for catalog-managed public assets and private pending uploads |
-| `CATALOG_STORAGE_S3_ACCESS_KEY_ID` | Server-only least-privilege object-storage access key |
-| `CATALOG_STORAGE_S3_SECRET_ACCESS_KEY` | Server-only object-storage secret key |
+| `CATALOG_STORAGE_S3_ACCESS_KEY_ID` | LocalStack uses `test`; production uses a server-only least-privilege object-storage access key |
+| `CATALOG_STORAGE_S3_SECRET_ACCESS_KEY` | LocalStack uses `test`; production uses a server-only object-storage secret key |
 | `GOOGLE_CLIENT_ID` | Optional Google OAuth client ID; enable it together with `GOOGLE_CLIENT_SECRET` |
 | `GOOGLE_CLIENT_SECRET` | Optional Google OAuth client secret; never expose it to browser code |
 | `FACEBOOK_CLIENT_ID` | Optional Facebook app ID; enable it together with `FACEBOOK_CLIENT_SECRET` |
@@ -79,11 +80,41 @@ Stop the container while preserving the named volume:
 docker compose down
 ```
 
-The following command deletes both the local PostgreSQL data and Mailpit's stored emails. Use it only when a deliberate reset is required:
+The following command deletes local PostgreSQL data, Mailpit's stored emails, and LocalStack objects. Use it only when a deliberate reset is required:
 
 ```powershell
 docker compose down --volumes
 ```
+
+## Local object storage
+
+Running the full local stack starts the LocalStack S3 emulator alongside PostgreSQL and Mailpit:
+
+```powershell
+docker compose up -d
+docker compose ps
+docker compose logs object-storage
+```
+
+The LocalStack READY hook creates the `solar-catalog` bucket and applies the reviewed public-read, CORS, and lifecycle configuration idempotently. A successful startup log includes `LocalStack catalog bucket 'solar-catalog' is ready.` The S3 gateway is available at `http://127.0.0.1:4566`; this S3-only archive has no local management console, and the catalog dashboard remains the media-management interface.
+
+Check the emulator health from PowerShell with:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:4566/_localstack/health
+```
+
+The local bucket keeps `catalog/pending/*` private and exposes only `catalog/assets/*` for anonymous download. Direct browser POST uploads are allowed from both local Next.js origins. A lifecycle rule expires pending objects after two days and never applies to final assets. To reapply the local bucket baseline after changing bootstrap assets, recreate the emulator:
+
+```powershell
+docker compose up -d --force-recreate object-storage
+```
+
+`docker compose down` preserves the PostgreSQL, Mailpit, and LocalStack volumes. Do not reset PostgreSQL or LocalStack independently: catalog rows can then point to missing local objects, or objects can be left unreferenced. Use the full `down --volumes` reset above when a clean local catalog is required.
+
+Local development uses LocalStack's conventional `test`/`test` signing credentials. They are emulator values, not secrets or a substitute for production access control. Production must use restricted Hetzner Object Storage credentials through the same S3-compatible adapter and immutable provider/key model.
+
+The pinned `s3-community-archive` image is frozen and receives no security updates. It is intentionally bound to loopback for local development only and must not be exposed publicly, used in production, or treated as proof of exact Hetzner behavior. Moving to another S3-compatible development or production service changes configuration, not stored provider/key data or catalog code.
 
 ## Drizzle schema and migrations
 

@@ -1,4 +1,4 @@
-# Local PostgreSQL for development only. Production infrastructure is configured separately.
+# Local development services. Production infrastructure is configured separately.
 services:
   database:
     image: postgres:17-alpine
@@ -28,6 +28,32 @@ services:
     volumes:
       - mailpit_data:/data
 
+  # Development-only S3 emulator. Production uses Hetzner Object Storage.
+  object-storage:
+    image: localstack/localstack:s3-community-archive@sha256:b14111811a1071ff8e05ea2d89fac68dc3aa115bcb0b053f5502a1dfffba4ff8
+    restart: unless-stopped
+    environment:
+      SERVICES: s3
+      PERSISTENCE: "1"
+      AWS_DEFAULT_REGION: ${CATALOG_STORAGE_S3_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      CATALOG_STORAGE_S3_BUCKET: ${CATALOG_STORAGE_S3_BUCKET:-solar-catalog}
+      S3_SKIP_SIGNATURE_VALIDATION: "0"
+      SKIP_SSL_CERT_DOWNLOAD: "1"
+    ports:
+      - "127.0.0.1:${LOCALSTACK_GATEWAY_PORT:-4566}:4566"
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./docker/localstack:/etc/localstack/init/ready.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:4566/_localstack/health >/dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
 volumes:
   postgres_data:
   mailpit_data:
+  localstack_data:
