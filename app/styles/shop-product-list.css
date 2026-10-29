@@ -18,9 +18,7 @@
   text-decoration: none;
 }
 
-.catalog-product-row-media,
-.catalog-product-detail-media,
-.catalog-product-detail-gallery-item {
+.catalog-product-row-media {
   position: relative;
   overflow: hidden;
   background: color-mix(
@@ -34,9 +32,7 @@
   aspect-ratio: 4 / 3;
 }
 
-.catalog-product-row-media img,
-.catalog-product-detail-media img,
-.catalog-product-detail-gallery-item img {
+.catalog-product-row-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;

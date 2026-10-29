@@ -60,7 +60,7 @@ function documentDrafts(documents: ManagedCatalogDocument[]): DocumentDraft[] {
 }
 
 export function ProductMediaSection(props: ProductMediaSectionProps) {
-  const { labels, languages, editorDisabled, markDirty, clearDirty, activeLocale, setActiveLocale, media, setMedia, documents, setDocuments, assetsUpdatedAt, setAssetsUpdatedAt, productId, productStatus, locale } = props;
+  const { labels, languages, editorDisabled, clearDirty, activeLocale, setActiveLocale, media, setMedia, documents, setDocuments, assetsUpdatedAt, setAssetsUpdatedAt, productId, productStatus, locale } = props;
   const [imageQueue, setImageQueue] = useState<QueueItem[]>([]);
   const [documentQueue, setDocumentQueue] = useState<QueueItem[]>([]);
   const [announcement, setAnnouncement] = useState("");
@@ -315,81 +315,117 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
   }
 
   return <>
-    {announcement ? <p role="status" aria-live="polite" aria-atomic="true">{announcement}</p> : null}
-    {reconciliationRequired ? <div role="alert"><p>{labels.media.statuses.reconciliation}</p><DashboardButton type="button" onClick={() => void reconcileAssets()}>{labels.actions.reload}</DashboardButton></div> : null}
-    <details className="dashboard-catalog-section">
+    {announcement ? <p className="dashboard-catalog-media-feedback" role="status" aria-live="polite" aria-atomic="true">{announcement}</p> : null}
+    {reconciliationRequired ? <div className="dashboard-catalog-media-alert" role="alert"><p>{labels.media.statuses.reconciliation}</p><DashboardButton type="button" onClick={() => void reconcileAssets()}>{labels.actions.reload}</DashboardButton></div> : null}
+    <details className="dashboard-catalog-section dashboard-catalog-media-section">
       <summary>{labels.sections.media}</summary>
-      <LocalizedEditorSwitch idPrefix="product-media" variant="selector" activeLocale={activeLocale} onChange={setActiveLocale} languageNames={languages} statusByLocale={localeStatus} completeLabel={labels.editor.complete} incompleteLabel={labels.editor.incomplete} ariaLabel={labels.media.languageLabel} />
-      <fieldset disabled={editorDisabled || !productId} className="dashboard-catalog-product-fieldset">
-        <label htmlFor="catalog-product-image-upload">{labels.media.select}</label>
-        <input ref={imageInputRef} id="catalog-product-image-upload" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple disabled={busy} onChange={(event) => { void runUpload("image", Array.from(event.target.files ?? [])); event.target.value = ""; }} />
-        <p>{labels.media.upload}</p>
-        <Queue items={imageQueue} labels={labels} locale={locale} controllers={controllers} onRetry={(id, file) => pendingFinalizations.current.has(id) ? void resumeFinalization(id) : void runUpload("image", [file])} onResume={(id) => void resumeFinalization(id)} onRemove={(id) => void removeQueueItem(id, setImageQueue)} />
-        {media.length === 0 ? <p>{labels.media.empty}</p> : <div className="dashboard-catalog-media-list">{media.map((item, index) => <ImageItem key={item.clientId} item={item} index={index} props={props} activeLocale={activeLocale} applyProductSlice={applyProductSlice} inputRef={imageInputRef} setAnnouncement={setAnnouncement} onStale={() => setReconciliationRequired(true)} />)}</div>}
-        {media.length ? <DashboardButton type="button" onClick={() => void saveImages()}>{labels.media.save}</DashboardButton> : null}
-      </fieldset>
+      <div className="dashboard-catalog-media-body">
+        <LocalizedEditorSwitch idPrefix="product-media" variant="selector" activeLocale={activeLocale} onChange={setActiveLocale} languageNames={languages} statusByLocale={localeStatus} completeLabel={labels.editor.complete} incompleteLabel={labels.editor.incomplete} ariaLabel={labels.media.languageLabel} />
+        <fieldset disabled={editorDisabled || !productId} className="dashboard-catalog-product-fieldset dashboard-catalog-media-workspace">
+          <div className="dashboard-catalog-upload-panel">
+            <div className="dashboard-catalog-upload-copy">
+              <label htmlFor="catalog-product-image-upload">{labels.media.select}</label>
+              <p id="catalog-product-image-upload-help">{labels.media.upload}</p>
+            </div>
+            <input ref={imageInputRef} id="catalog-product-image-upload" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple disabled={busy} aria-describedby="catalog-product-image-upload-help" onChange={(event) => { void runUpload("image", Array.from(event.target.files ?? [])); event.target.value = ""; }} />
+          </div>
+          <Queue items={imageQueue} labels={labels} locale={locale} controllers={controllers} onRetry={(id, file) => pendingFinalizations.current.has(id) ? void resumeFinalization(id) : void runUpload("image", [file])} onResume={(id) => void resumeFinalization(id)} onRemove={(id) => void removeQueueItem(id, setImageQueue)} />
+          {media.length === 0 ? <p className="dashboard-catalog-media-empty">{labels.media.empty}</p> : <div className="dashboard-catalog-media-list">{media.map((item, index) => <ImageItem key={item.clientId} item={item} index={index} props={props} activeLocale={activeLocale} applyProductSlice={applyProductSlice} inputRef={imageInputRef} setAnnouncement={setAnnouncement} onStale={() => setReconciliationRequired(true)} />)}</div>}
+          {media.length ? <div className="dashboard-catalog-media-save"><DashboardButton type="button" variant="primary" onClick={() => void saveImages()}>{labels.media.save}</DashboardButton></div> : null}
+        </fieldset>
+      </div>
     </details>
-    <details className="dashboard-catalog-section">
+    <details className="dashboard-catalog-section dashboard-catalog-media-section">
       <summary>{labels.sections.documents}</summary>
-      <LocalizedEditorSwitch idPrefix="product-documents" variant="selector" activeLocale={activeLocale} onChange={setActiveLocale} languageNames={languages} statusByLocale={Object.fromEntries(catalogLocales.map((contentLocale) => [contentLocale, documents.every((item) => item.translations[contentLocale].title.trim())])) as Record<CatalogLocale, boolean>} completeLabel={labels.editor.complete} incompleteLabel={labels.editor.incomplete} ariaLabel={labels.documents.languageLabel} />
-      <fieldset disabled={editorDisabled || !productId} className="dashboard-catalog-product-fieldset">
-        <label htmlFor="catalog-product-document-upload">{labels.documents.select}</label>
-        <input ref={documentInputRef} id="catalog-product-document-upload" type="file" accept="application/pdf,.pdf" multiple disabled={busy} onChange={(event) => { void runUpload("document", Array.from(event.target.files ?? [])); event.target.value = ""; }} />
-        <p>{labels.documents.upload}</p>
-        <Queue items={documentQueue} labels={labels} locale={locale} controllers={controllers} onRetry={(id, file) => pendingFinalizations.current.has(id) ? void resumeFinalization(id) : void runUpload("document", [file])} onResume={(id) => void resumeFinalization(id)} onRemove={(id) => void removeQueueItem(id, setDocumentQueue)} />
-        {documents.length === 0 ? <p>{labels.documents.empty}</p> : <div className="dashboard-catalog-media-list">{documents.map((document, index) => <DocumentItem key={document.clientId} document={document} index={index} props={props} activeLocale={activeLocale} applyProductSlice={applyProductSlice} inputRef={documentInputRef} setAnnouncement={setAnnouncement} onStale={() => setReconciliationRequired(true)} />)}</div>}
-        {documents.length ? <DashboardButton type="button" onClick={() => void saveDocuments()}>{labels.documents.save}</DashboardButton> : null}
-      </fieldset>
+      <div className="dashboard-catalog-media-body">
+        <LocalizedEditorSwitch idPrefix="product-documents" variant="selector" activeLocale={activeLocale} onChange={setActiveLocale} languageNames={languages} statusByLocale={Object.fromEntries(catalogLocales.map((contentLocale) => [contentLocale, documents.every((item) => item.translations[contentLocale].title.trim())])) as Record<CatalogLocale, boolean>} completeLabel={labels.editor.complete} incompleteLabel={labels.editor.incomplete} ariaLabel={labels.documents.languageLabel} />
+        <fieldset disabled={editorDisabled || !productId} className="dashboard-catalog-product-fieldset dashboard-catalog-media-workspace">
+          <div className="dashboard-catalog-upload-panel">
+            <div className="dashboard-catalog-upload-copy">
+              <label htmlFor="catalog-product-document-upload">{labels.documents.select}</label>
+              <p id="catalog-product-document-upload-help">{labels.documents.upload}</p>
+            </div>
+            <input ref={documentInputRef} id="catalog-product-document-upload" type="file" accept="application/pdf,.pdf" multiple disabled={busy} aria-describedby="catalog-product-document-upload-help" onChange={(event) => { void runUpload("document", Array.from(event.target.files ?? [])); event.target.value = ""; }} />
+          </div>
+          <Queue items={documentQueue} labels={labels} locale={locale} controllers={controllers} onRetry={(id, file) => pendingFinalizations.current.has(id) ? void resumeFinalization(id) : void runUpload("document", [file])} onResume={(id) => void resumeFinalization(id)} onRemove={(id) => void removeQueueItem(id, setDocumentQueue)} />
+          {documents.length === 0 ? <p className="dashboard-catalog-media-empty">{labels.documents.empty}</p> : <div className="dashboard-catalog-media-list">{documents.map((document, index) => <DocumentItem key={document.clientId} document={document} index={index} props={props} activeLocale={activeLocale} applyProductSlice={applyProductSlice} inputRef={documentInputRef} setAnnouncement={setAnnouncement} onStale={() => setReconciliationRequired(true)} />)}</div>}
+          {documents.length ? <div className="dashboard-catalog-media-save"><DashboardButton type="button" variant="primary" onClick={() => void saveDocuments()}>{labels.documents.save}</DashboardButton></div> : null}
+        </fieldset>
+      </div>
     </details>
   </>;
 }
 
 function Queue({ items, labels, locale, controllers, onRetry, onResume, onRemove }: { items: QueueItem[]; labels: ProductMediaSectionProps["labels"]; locale: string; controllers: RefObject<Map<string, AbortController>>; onRetry: (id: string, file: File) => void; onResume: (id: string) => void; onRemove: (id: string) => void }) {
   if (!items.length) return null;
-  return <div aria-label={labels.media.upload} aria-live="polite"><p role="status">{items.filter((item) => item.status === "success").length}/{items.length} {labels.media.statuses.success}</p>{items.map((item) => <div key={item.id} className="dashboard-catalog-media-item">
-    {item.previewUrl ? <><span className="sr-only">{item.file.name}</span>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={item.previewUrl} alt="" className="dashboard-catalog-media-preview" /></> : null}
-    <strong>{item.file.name}</strong>
-    <p>{labels.media.statuses[item.status]}{item.status === "uploading" ? ` ${item.progress}%` : ""}</p>
-    <p>{labels.media.originalSize}: {formatCatalogBytes(item.originalSize, locale)}{item.uploadSize !== null ? ` · ${labels.media.uploadSize}: ${formatCatalogBytes(item.uploadSize, locale)}` : ""}</p>
-    {item.error ? <p role="alert">{labels.media.errors[item.error] ?? item.error}</p> : null}
-    {item.status === "uploading" ? <DashboardButton type="button" onClick={() => controllers.current?.get(item.id)?.abort()}>{labels.media.cancel}</DashboardButton> : null}
-    {item.status === "error" || item.status === "canceled" ? <DashboardButton type="button" onClick={() => onRetry(item.id, item.file)}>{labels.media.retry}</DashboardButton> : null}
-    {item.status === "reconciliation" ? <DashboardButton type="button" onClick={() => onResume(item.id)}>{labels.media.retry}</DashboardButton> : null}
-    {item.status !== "uploading" && item.status !== "finalizing" ? <DashboardButton type="button" onClick={() => onRemove(item.id)}>{labels.media.remove}</DashboardButton> : null}
-  </div>)}</div>;
+  const successful = items.filter((item) => item.status === "success").length;
+  return <div className="dashboard-catalog-upload-queue" aria-label={labels.media.upload} aria-live="polite">
+    <p className="dashboard-catalog-upload-summary" role="status"><strong>{successful}/{items.length}</strong><span>{labels.media.statuses.success}</span></p>
+    <div className="dashboard-catalog-upload-list">
+      {items.map((item) => <article key={item.id} className={`dashboard-catalog-upload-item${item.previewUrl ? " dashboard-catalog-upload-item--preview" : ""}`} data-status={item.status}>
+        {item.previewUrl ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={item.previewUrl} alt="" className="dashboard-catalog-upload-preview" /></> : null}
+        <div className="dashboard-catalog-upload-item-content">
+          <div className="dashboard-catalog-upload-item-heading"><strong>{item.file.name}</strong><span className="dashboard-catalog-media-badge" data-status={item.status}>{labels.media.statuses[item.status]}{item.status === "uploading" ? ` ${item.progress}%` : ""}</span></div>
+          <p className="dashboard-catalog-media-meta">{labels.media.originalSize}: {formatCatalogBytes(item.originalSize, locale)}{item.uploadSize !== null ? ` · ${labels.media.uploadSize}: ${formatCatalogBytes(item.uploadSize, locale)}` : ""}</p>
+          {item.status === "uploading" ? <progress max="100" value={item.progress} aria-label={`${item.file.name}: ${labels.media.statuses.uploading}`} /> : null}
+          {item.error ? <p className="dashboard-catalog-media-error" role="alert">{labels.media.errors[item.error] ?? item.error}</p> : null}
+          <div className="dashboard-catalog-item-controls dashboard-catalog-media-actions">
+            {item.status === "uploading" ? <DashboardButton type="button" onClick={() => controllers.current?.get(item.id)?.abort()}>{labels.media.cancel}</DashboardButton> : null}
+            {item.status === "error" || item.status === "canceled" ? <DashboardButton type="button" onClick={() => onRetry(item.id, item.file)}>{labels.media.retry}</DashboardButton> : null}
+            {item.status === "reconciliation" ? <DashboardButton type="button" onClick={() => onResume(item.id)}>{labels.media.retry}</DashboardButton> : null}
+            {item.status !== "uploading" && item.status !== "finalizing" ? <DashboardButton type="button" onClick={() => onRemove(item.id)}>{labels.media.remove}</DashboardButton> : null}
+          </div>
+        </div>
+      </article>)}
+    </div>
+  </div>;
 }
 
 function ImageItem({ item, index, props, activeLocale, applyProductSlice, inputRef, setAnnouncement, onStale }: { item: MediaDraft; index: number; props: ProductMediaSectionProps; activeLocale: CatalogLocale; applyProductSlice: (data: { assetsUpdatedAt: string; images: ManagedCatalogImage[]; documents: ManagedCatalogDocument[] }) => void; inputRef: RefObject<HTMLInputElement | null>; setAnnouncement: (value: string) => void; onStale: () => void }) {
   const { labels, media, setMedia, markDirty, locale, productId, assetsUpdatedAt } = props;
-  return <section className="dashboard-catalog-media-item" aria-label={`${labels.sections.media} ${index + 1}`}>
-    {/* Administrator previews may include legacy hosts that cannot be configured for next/image. */}
-    {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img src={item.url} alt="" className="dashboard-catalog-media-preview" />
-    <p><strong>{item.source === "legacy" ? labels.media.legacy : labels.media.managed}</strong></p>
-    {item.source === "legacy" ? <Field id={`product-media-reference-${item.clientId}`} copy={labels.fields.mediaReference}><input id={`product-media-reference-${item.clientId}`} value={item.reference ?? ""} onChange={(event) => { setMedia((current) => current.map((candidate) => candidate.clientId === item.clientId ? { ...candidate, reference: event.target.value, url: event.target.value } : candidate)); markDirty("media"); }} /></Field> : null}
-    <Field id={`product-media-alt-${item.clientId}`} copy={labels.fields.altText}><input id={`product-media-alt-${item.clientId}`} value={item.translations[activeLocale]} onChange={(event) => { setMedia((current) => current.map((candidate) => candidate.clientId === item.clientId ? { ...candidate, translations: { ...candidate.translations, [activeLocale]: event.target.value } } : candidate)); markDirty("media"); }} /></Field>
-    <div className="dashboard-catalog-media-flags">
-      <label><input type="radio" name="primaryMedia" checked={item.isPrimary} onChange={() => { setMedia((current) => current.map((candidate) => ({ ...candidate, isPrimary: candidate.clientId === item.clientId }))); markDirty("media"); }} /> {labels.media.primary}</label>
-      <label><input type="checkbox" checked={item.isSocialImage} onChange={(event) => { setMedia((current) => current.map((candidate) => ({ ...candidate, isSocialImage: candidate.clientId === item.clientId ? event.target.checked : false }))); markDirty("media"); }} /> {labels.media.social}</label>
+  return <section className="dashboard-catalog-media-item dashboard-catalog-image-item" aria-label={`${labels.sections.media} ${index + 1}`}>
+    <div className="dashboard-catalog-media-preview-column">
+      {/* Administrator previews may include legacy hosts that cannot be configured for next/image. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={item.url} alt="" className="dashboard-catalog-media-preview" />
+      {item.byteSize || (item.width && item.height) ? <p className="dashboard-catalog-media-meta">{item.width && item.height ? `${item.width} × ${item.height}` : null}{item.byteSize ? `${item.width && item.height ? " · " : ""}${formatCatalogBytes(item.byteSize, locale)}` : null}</p> : null}
     </div>
-    <div className="dashboard-catalog-item-controls">
-      <DashboardButton type="button" disabled={index === 0} onClick={() => { setMedia((current) => { const next = [...current]; [next[index - 1], next[index]] = [next[index], next[index - 1]]; return next; }); markDirty("media"); }}>{labels.media.moveUp}</DashboardButton>
-      <DashboardButton type="button" disabled={index === media.length - 1} onClick={() => { setMedia((current) => { const next = [...current]; [next[index], next[index + 1]] = [next[index + 1], next[index]]; return next; }); markDirty("media"); }}>{labels.media.moveDown}</DashboardButton>
-      <DashboardButton type="button" variant="danger" onClick={async () => { if (!window.confirm(item.source === "legacy" ? labels.media.removeLegacyConfirm : labels.media.deleteConfirm) || !productId) return; const result = await deleteCatalogProductImageAction({ locale, productId, mediaId: item.clientId, expectedAssetsUpdatedAt: assetsUpdatedAt }); if (result.status === "success") { applyProductSlice(result.data); if (result.data.cleanupPending) setAnnouncement(labels.media.cleanupPending); requestAnimationFrame(() => inputRef.current?.focus()); } else { if (result.code === "STALE") onStale(); setAnnouncement(labels.media.errors[result.code] ?? result.code); } }}>{labels.media.remove}</DashboardButton>
+    <div className="dashboard-catalog-media-item-content">
+      <header className="dashboard-catalog-media-item-heading">
+        <div><span className="dashboard-catalog-media-badge">{item.source === "legacy" ? labels.media.legacy : labels.media.managed}</span><strong>{item.originalFilename ?? (item.source === "legacy" ? labels.media.legacy : labels.media.managed)}</strong></div>
+        <span className="dashboard-catalog-media-position" aria-hidden="true">{index + 1}</span>
+      </header>
+      {item.source === "legacy" ? <Field id={`product-media-reference-${item.clientId}`} copy={labels.fields.mediaReference}><input id={`product-media-reference-${item.clientId}`} aria-describedby={`product-media-reference-${item.clientId}-help`} value={item.reference ?? ""} onChange={(event) => { setMedia((current) => current.map((candidate) => candidate.clientId === item.clientId ? { ...candidate, reference: event.target.value, url: event.target.value } : candidate)); markDirty("media"); }} /></Field> : null}
+      <Field id={`product-media-alt-${item.clientId}`} copy={labels.fields.altText}><input id={`product-media-alt-${item.clientId}`} aria-describedby={`product-media-alt-${item.clientId}-help`} value={item.translations[activeLocale]} onChange={(event) => { setMedia((current) => current.map((candidate) => candidate.clientId === item.clientId ? { ...candidate, translations: { ...candidate.translations, [activeLocale]: event.target.value } } : candidate)); markDirty("media"); }} /></Field>
+      <div className="dashboard-catalog-media-flags">
+        <label><input type="radio" name="primaryMedia" checked={item.isPrimary} onChange={() => { setMedia((current) => current.map((candidate) => ({ ...candidate, isPrimary: candidate.clientId === item.clientId }))); markDirty("media"); }} /> {labels.media.primary}</label>
+        <label><input type="checkbox" checked={item.isSocialImage} onChange={(event) => { setMedia((current) => current.map((candidate) => ({ ...candidate, isSocialImage: candidate.clientId === item.clientId ? event.target.checked : false }))); markDirty("media"); }} /> {labels.media.social}</label>
+      </div>
+      <div className="dashboard-catalog-item-controls dashboard-catalog-media-actions">
+        <DashboardButton type="button" disabled={index === 0} onClick={() => { setMedia((current) => { const next = [...current]; [next[index - 1], next[index]] = [next[index], next[index - 1]]; return next; }); markDirty("media"); }}>{labels.media.moveUp}</DashboardButton>
+        <DashboardButton type="button" disabled={index === media.length - 1} onClick={() => { setMedia((current) => { const next = [...current]; [next[index], next[index + 1]] = [next[index + 1], next[index]]; return next; }); markDirty("media"); }}>{labels.media.moveDown}</DashboardButton>
+        <DashboardButton type="button" tone="danger" onClick={async () => { if (!window.confirm(item.source === "legacy" ? labels.media.removeLegacyConfirm : labels.media.deleteConfirm) || !productId) return; const result = await deleteCatalogProductImageAction({ locale, productId, mediaId: item.clientId, expectedAssetsUpdatedAt: assetsUpdatedAt }); if (result.status === "success") { applyProductSlice(result.data); if (result.data.cleanupPending) setAnnouncement(labels.media.cleanupPending); requestAnimationFrame(() => inputRef.current?.focus()); } else { if (result.code === "STALE") onStale(); setAnnouncement(labels.media.errors[result.code] ?? result.code); } }}>{labels.media.remove}</DashboardButton>
+      </div>
     </div>
   </section>;
 }
 
 function DocumentItem({ document, index, props, activeLocale, applyProductSlice, inputRef, setAnnouncement, onStale }: { document: DocumentDraft; index: number; props: ProductMediaSectionProps; activeLocale: CatalogLocale; applyProductSlice: (data: { assetsUpdatedAt: string; images: ManagedCatalogImage[]; documents: ManagedCatalogDocument[] }) => void; inputRef: RefObject<HTMLInputElement | null>; setAnnouncement: (value: string) => void; onStale: () => void }) {
   const { labels, documents, setDocuments, markDirty, locale, productId, assetsUpdatedAt } = props;
-  return <section className="dashboard-catalog-media-item" aria-label={`${labels.sections.documents} ${index + 1}`}>
-    <p><strong>{document.originalFilename}</strong> · {labels.documents.pdf} · {formatCatalogBytes(document.byteSize, locale)}</p>
-    <Field id={`product-document-title-${document.clientId}`} copy={{ label: labels.documents.title, help: "" }}><input id={`product-document-title-${document.clientId}`} value={document.translations[activeLocale].title} onChange={(event) => { setDocuments((current) => current.map((candidate) => candidate.clientId === document.clientId ? { ...candidate, translations: { ...candidate.translations, [activeLocale]: { ...candidate.translations[activeLocale], title: event.target.value } } } : candidate)); markDirty("documents"); }} /></Field>
-    <Field id={`product-document-description-${document.clientId}`} copy={{ label: labels.documents.description, help: "" }}><textarea id={`product-document-description-${document.clientId}`} value={document.translations[activeLocale].description} onChange={(event) => { setDocuments((current) => current.map((candidate) => candidate.clientId === document.clientId ? { ...candidate, translations: { ...candidate.translations, [activeLocale]: { ...candidate.translations[activeLocale], description: event.target.value } } } : candidate)); markDirty("documents"); }} /></Field>
-    <div className="dashboard-catalog-item-controls">
-      <DashboardButton type="button" disabled={index === 0} onClick={() => { setDocuments((current) => { const next = [...current]; [next[index - 1], next[index]] = [next[index], next[index - 1]]; return next; }); markDirty("documents"); }}>{labels.documents.moveUp}</DashboardButton>
-      <DashboardButton type="button" disabled={index === documents.length - 1} onClick={() => { setDocuments((current) => { const next = [...current]; [next[index], next[index + 1]] = [next[index + 1], next[index]]; return next; }); markDirty("documents"); }}>{labels.documents.moveDown}</DashboardButton>
-      <DashboardButton type="button" variant="danger" onClick={async () => { if (!window.confirm(labels.documents.deleteConfirm) || !productId) return; const result = await deleteCatalogProductDocumentAction({ locale, productId, documentId: document.clientId, expectedAssetsUpdatedAt: assetsUpdatedAt }); if (result.status === "success") { applyProductSlice(result.data); if (result.data.cleanupPending) setAnnouncement(labels.media.cleanupPending); requestAnimationFrame(() => inputRef.current?.focus()); } else { if (result.code === "STALE") onStale(); setAnnouncement(labels.media.errors[result.code] ?? result.code); } }}>{labels.documents.remove}</DashboardButton>
+  return <section className="dashboard-catalog-media-item dashboard-catalog-document-item" aria-label={`${labels.sections.documents} ${index + 1}`}>
+    <div className="dashboard-catalog-document-mark" aria-hidden="true">{labels.documents.pdf}</div>
+    <div className="dashboard-catalog-media-item-content">
+      <header className="dashboard-catalog-media-item-heading">
+        <div><strong>{document.originalFilename}</strong><span className="dashboard-catalog-media-meta">{labels.documents.pdf} · {formatCatalogBytes(document.byteSize, locale)}</span></div>
+        <span className="dashboard-catalog-media-position" aria-hidden="true">{index + 1}</span>
+      </header>
+      <Field id={`product-document-title-${document.clientId}`} copy={{ label: labels.documents.title, help: "" }}><input id={`product-document-title-${document.clientId}`} aria-describedby={`product-document-title-${document.clientId}-help`} value={document.translations[activeLocale].title} onChange={(event) => { setDocuments((current) => current.map((candidate) => candidate.clientId === document.clientId ? { ...candidate, translations: { ...candidate.translations, [activeLocale]: { ...candidate.translations[activeLocale], title: event.target.value } } } : candidate)); markDirty("documents"); }} /></Field>
+      <Field id={`product-document-description-${document.clientId}`} copy={{ label: labels.documents.description, help: "" }}><textarea id={`product-document-description-${document.clientId}`} aria-describedby={`product-document-description-${document.clientId}-help`} value={document.translations[activeLocale].description} onChange={(event) => { setDocuments((current) => current.map((candidate) => candidate.clientId === document.clientId ? { ...candidate, translations: { ...candidate.translations, [activeLocale]: { ...candidate.translations[activeLocale], description: event.target.value } } } : candidate)); markDirty("documents"); }} /></Field>
+      <div className="dashboard-catalog-item-controls dashboard-catalog-media-actions">
+        <DashboardButton type="button" disabled={index === 0} onClick={() => { setDocuments((current) => { const next = [...current]; [next[index - 1], next[index]] = [next[index], next[index - 1]]; return next; }); markDirty("documents"); }}>{labels.documents.moveUp}</DashboardButton>
+        <DashboardButton type="button" disabled={index === documents.length - 1} onClick={() => { setDocuments((current) => { const next = [...current]; [next[index], next[index + 1]] = [next[index + 1], next[index]]; return next; }); markDirty("documents"); }}>{labels.documents.moveDown}</DashboardButton>
+        <DashboardButton type="button" tone="danger" onClick={async () => { if (!window.confirm(labels.documents.deleteConfirm) || !productId) return; const result = await deleteCatalogProductDocumentAction({ locale, productId, documentId: document.clientId, expectedAssetsUpdatedAt: assetsUpdatedAt }); if (result.status === "success") { applyProductSlice(result.data); if (result.data.cleanupPending) setAnnouncement(labels.media.cleanupPending); requestAnimationFrame(() => inputRef.current?.focus()); } else { if (result.code === "STALE") onStale(); setAnnouncement(labels.media.errors[result.code] ?? result.code); } }}>{labels.documents.remove}</DashboardButton>
+      </div>
     </div>
   </section>;
 }

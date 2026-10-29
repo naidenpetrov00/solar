@@ -40,6 +40,10 @@
             "availability": "Наявність",
             "specifications": "Характеристики",
             "gallery": "Галерея",
+            "previousImage": "Попереднє зображення",
+            "nextImage": "Наступне зображення",
+            "imagePosition": "Зображення {{current}} з {{total}}",
+            "selectImage": "Показати зображення {{current}} з {{total}}",
             "noImage": "Основне зображення ще не вибрано"
           },
           "sections": {

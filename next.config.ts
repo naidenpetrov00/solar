@@ -9,9 +9,18 @@ const storagePattern = storagePublicBase
         : `${storagePublicBase}/`,
     )
   : null;
+const allowLocalStorageImage =
+  process.env.NODE_ENV !== "production" &&
+  storagePattern !== null &&
+  ["127.0.0.1", "localhost", "::1"].includes(storagePattern.hostname);
 
 const nextConfig: NextConfig = {
-  images: storagePattern ? { remotePatterns: [storagePattern] } : undefined,
+  images: storagePattern
+    ? {
+        remotePatterns: [storagePattern],
+        dangerouslyAllowLocalIP: allowLocalStorageImage,
+      }
+    : undefined,
 };
 
 export default nextConfig;

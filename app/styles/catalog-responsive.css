@@ -132,7 +132,12 @@
   }
 
   .catalog-product-detail-media {
-    min-height: 16rem;
+    min-height: 0;
+  }
+
+  .catalog-product-gallery-viewport,
+  .catalog-product-detail-empty-media {
+    aspect-ratio: 1;
   }
 
   .catalog-product-detail-facts,
@@ -140,8 +145,8 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .catalog-product-detail-gallery {
-    grid-column: auto;
+  .catalog-product-gallery-dots {
+    justify-content: flex-start;
   }
 }
 

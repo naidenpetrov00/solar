@@ -40,6 +40,10 @@
             "availability": "Наличност",
             "specifications": "Спецификации",
             "gallery": "Галерия",
+            "previousImage": "Предишно изображение",
+            "nextImage": "Следващо изображение",
+            "imagePosition": "Изображение {{current}} от {{total}}",
+            "selectImage": "Показване на изображение {{current}} от {{total}}",
             "noImage": "Все още няма избрано основно изображение"
           },
           "sections": {

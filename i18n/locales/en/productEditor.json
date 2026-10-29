@@ -40,6 +40,10 @@
             "availability": "Availability",
             "specifications": "Specifications",
             "gallery": "Gallery",
+            "previousImage": "Previous image",
+            "nextImage": "Next image",
+            "imagePosition": "Image {{current}} of {{total}}",
+            "selectImage": "Show image {{current}} of {{total}}",
             "noImage": "No primary image has been selected yet"
           },
           "sections": {

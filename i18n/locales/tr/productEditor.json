@@ -40,6 +40,10 @@
             "availability": "Stok durumu",
             "specifications": "Özellikler",
             "gallery": "Galeri",
+            "previousImage": "Önceki görsel",
+            "nextImage": "Sonraki görsel",
+            "imagePosition": "{{total}} görselden {{current}}. görsel",
+            "selectImage": "{{total}} görselden {{current}}. görseli göster",
             "noImage": "Henüz birincil görsel seçilmedi"
           },
           "sections": {

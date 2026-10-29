@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 
-import { CatalogMedia } from "./catalog-media";
+import {
+  CatalogProductGallery,
+  type CatalogProductGalleryItem,
+} from "./catalog-product-gallery";
 
 export type CatalogProductDetailView = {
   title: string;
@@ -12,20 +15,8 @@ export type CatalogProductDetailView = {
   price: string | null;
   availability: string | null;
   vatInformation?: string | null;
-  primaryMedia: {
-    reference: string;
-    altText: string;
-    source?: "managed" | "legacy";
-    width?: number | null;
-    height?: number | null;
-  } | null;
-  gallery: Array<{
-    reference: string;
-    altText: string;
-    source?: "managed" | "legacy";
-    width?: number | null;
-    height?: number | null;
-  }>;
+  primaryMedia: CatalogProductGalleryItem | null;
+  gallery: CatalogProductGalleryItem[];
   specifications: Array<{ label: string; value: string }>;
   documents?: Array<{
     url: string;
@@ -41,6 +32,10 @@ export type CatalogProductDetailLabels = {
   model: string;
   specifications: string;
   gallery: string;
+  previousImage: string;
+  nextImage: string;
+  imagePosition: string;
+  selectImage: string;
   noImage: string;
   documents?: string;
   downloadDocument?: string;
@@ -59,24 +54,18 @@ type Props = {
  * dependencies, so either surface supplies its own view model.
  */
 export function CatalogProductDetail({ product, labels, actions, locale = "en" }: Props) {
-  const gallery = product.gallery.filter(
+  const secondaryMedia = product.gallery.filter(
     (item) => item.reference !== product.primaryMedia?.reference,
   );
+  const media = product.primaryMedia
+    ? [product.primaryMedia, ...secondaryMedia]
+    : secondaryMedia;
 
   return (
     <article className="catalog-product-detail">
       <div className="catalog-product-detail-media">
-        {product.primaryMedia ? (
-          <CatalogMedia
-            reference={product.primaryMedia.reference}
-            altText={product.primaryMedia.altText}
-            className="catalog-product-detail-primary-image"
-            source={product.primaryMedia.source}
-            width={product.primaryMedia.width}
-            height={product.primaryMedia.height}
-            preload
-            sizes="(max-width: 48rem) 100vw, 55vw"
-          />
+        {media.length > 0 ? (
+          <CatalogProductGallery media={media} labels={labels} />
         ) : (
           <div className="catalog-product-detail-empty-media" role="img" aria-label={labels.noImage} />
         )}
@@ -128,25 +117,6 @@ export function CatalogProductDetail({ product, labels, actions, locale = "en" }
         ) : null}
       </div>
 
-      {gallery.length > 0 ? (
-        <section className="catalog-product-detail-gallery" aria-labelledby="catalog-product-detail-gallery">
-          <h2 id="catalog-product-detail-gallery">{labels.gallery}</h2>
-          <div>
-            {gallery.map((item, index) => (
-              <div className="catalog-product-detail-gallery-item" key={`${item.reference}-${index}`}>
-                <CatalogMedia
-                  reference={item.reference}
-                  altText={item.altText}
-                  source={item.source}
-                  width={item.width}
-                  height={item.height}
-                  sizes="(max-width: 48rem) 100vw, 30vw"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      ) : null}
       {product.documents?.length ? (
         <section
           className="catalog-product-detail-documents"
