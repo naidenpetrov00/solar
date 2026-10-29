@@ -10,7 +10,6 @@ export function ProductEditorHiddenFields({
     primaryCategoryId,
     specValues,
     excludedSpecificationIds,
-    media,
     additionalCategoryIds,
   } = draft;
   const { initialPrimaryCategoryId, serializeConfiguration } = view;
@@ -46,7 +45,6 @@ export function ProductEditorHiddenFields({
         name="specificationConfiguration"
         value={serializeConfiguration}
       />
-      <input type="hidden" name="media" value={JSON.stringify(media)} />
       {additionalCategoryIds.map((id) => (
         <input key={id} type="hidden" name="additionalCategoryIds" value={id} />
       ))}

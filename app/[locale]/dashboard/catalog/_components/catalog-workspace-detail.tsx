@@ -23,6 +23,7 @@ export function CatalogWorkspaceDetail({
   markDirty,
   clearDirty,
   markProductDirty,
+  clearProductDirty,
   clearAllProductDirty,
   confirmDiscard,
   onBack,
@@ -41,6 +42,7 @@ export function CatalogWorkspaceDetail({
   markDirty: (section: EditorSection) => void;
   clearDirty: (section: EditorSection) => void;
   markProductDirty: (section: ProductEditorSection) => void;
+  clearProductDirty: (section: ProductEditorSection) => void;
   clearAllProductDirty: () => void;
   confirmDiscard: () => boolean;
   onBack: () => void;
@@ -117,6 +119,7 @@ export function CatalogWorkspaceDetail({
           statusLabels={labels.status}
           dirtySections={productDirtySections}
           onDirty={markProductDirty}
+          clearDirty={clearProductDirty}
           clearAllDirty={clearAllProductDirty}
           confirmDiscard={confirmDiscard}
         />

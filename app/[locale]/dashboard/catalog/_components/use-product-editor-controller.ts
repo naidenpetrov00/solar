@@ -22,6 +22,7 @@ export function useProductEditorController(props: ProductEditorProps) {
     catalogPath,
     dirtySections,
     clearAllDirty,
+    clearDirty,
     onDirty,
   } = props;
   const creating = detail === null;
@@ -30,6 +31,7 @@ export function useProductEditorController(props: ProductEditorProps) {
     detail,
     creating,
     clearAllDirty,
+    clearDirty,
     categoryId,
     catalogPath,
     resetFromDetail: draft.resetFromDetail,

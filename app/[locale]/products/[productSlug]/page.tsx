@@ -132,6 +132,7 @@ export default async function ProductPage({ params }: Props) {
             primaryMedia: product.primaryMedia,
             gallery: product.media,
             specifications,
+            documents: product.documents,
           }}
           labels={{
             brand: t("pages.shop.brand"),
@@ -139,8 +140,11 @@ export default async function ProductPage({ params }: Props) {
             specifications: t("pages.shop.specifications"),
             gallery: t("pages.shop.gallery"),
             noImage: t("pages.shop.noImage"),
+            documents: t("pages.shop.documents"),
+            downloadDocument: t("pages.shop.downloadDocument"),
           }}
           actions={actions}
+          locale={page.locale}
         />
         {product.additionalCategories.length > 0 ? (
           <aside

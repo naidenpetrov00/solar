@@ -99,7 +99,9 @@ export const listPublicSitemapEntries = cache(async () => {
         entries.push({
           path: `products/${product.slug}`,
           locale,
-          updatedAt: row.updatedAt,
+          updatedAt: new Date(
+            Math.max(row.updatedAt.getTime(), row.assetsUpdatedAt.getTime()),
+          ),
         });
       }
     }

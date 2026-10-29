@@ -5,11 +5,14 @@ import type {
 } from "@/lib/catalog/model";
 import type {
   CatalogPriceInput,
-  CatalogProductMediaInput,
   CatalogProductSpecificationConfigurationInput,
   CatalogProductSpecificationValueInput,
   CatalogProductTranslationInput,
 } from "@/lib/catalog/catalog-inputs";
+import type {
+  ManagedCatalogDocument,
+  ManagedCatalogImage,
+} from "./management-asset-types";
 import type { ManagedCatalogCategoryDetail } from "@/lib/catalog/management-category-types";
 
 export type CatalogProductPublicationIssue =
@@ -28,6 +31,7 @@ export type CatalogProductPublicationIssue =
   | { code: "INVALID_COMMERCE" }
   | { code: "PRIMARY_IMAGE_REQUIRED" }
   | { code: "SOCIAL_IMAGE_LIMIT" }
+  | { code: "INVALID_MEDIA_ASSET"; mediaId: string }
   | {
       code: "MISSING_MEDIA_ALT";
       mediaId: string;
@@ -59,6 +63,7 @@ export type ManagedCatalogProductDetail = ManagedCatalogProductSummary & {
   priceInputMinor: string | null;
   publishedAt: string | null;
   archivedAt: string | null;
+  assetsUpdatedAt: string;
   translations: CatalogProductTranslationInput[];
   titleGuidance: Array<{
     locale: CatalogLocale;
@@ -67,7 +72,8 @@ export type ManagedCatalogProductDetail = ManagedCatalogProductSummary & {
   specifications: ManagedCatalogCategoryDetail["specifications"];
   specificationValues: CatalogProductSpecificationValueInput[];
   specificationConfiguration: CatalogProductSpecificationConfigurationInput;
-  media: Array<CatalogProductMediaInput & { id: string }>;
+  media: ManagedCatalogImage[];
+  documents: ManagedCatalogDocument[];
   publicationIssues: CatalogProductPublicationIssue[];
 };
 
@@ -97,7 +103,6 @@ export type CreateCatalogProductInput = {
   translations?: CatalogProductTranslationInput[];
   specificationValues?: CatalogProductSpecificationValueInput[];
   specificationConfiguration?: CatalogProductSpecificationConfigurationInput;
-  media?: CatalogProductMediaInput[];
 };
 
 export type UpdateCatalogProductInput = {
@@ -119,5 +124,4 @@ export type UpdateCatalogProductInput = {
   translations: CatalogProductTranslationInput[];
   specificationValues: CatalogProductSpecificationValueInput[];
   specificationConfiguration: CatalogProductSpecificationConfigurationInput;
-  media: CatalogProductMediaInput[];
 };

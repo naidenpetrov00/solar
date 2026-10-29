@@ -106,7 +106,9 @@
       "specifications": "Характеристики",
       "gallery": "Галерея",
       "noImage": "Зображення недоступне",
-      "relatedCategories": "Інші доречні категорії"
+      "relatedCategories": "Інші доречні категорії",
+      "documents": "Документи",
+      "downloadDocument": "Завантажити документ"
     },
     "cart": {
       "title": "Кошик",

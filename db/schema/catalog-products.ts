@@ -56,6 +56,7 @@ export const catalogProduct = pgTable(
     publishedAt: timestamp("published_at"),
     archivedAt: timestamp("archived_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    assetsUpdatedAt: timestamp("assets_updated_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())

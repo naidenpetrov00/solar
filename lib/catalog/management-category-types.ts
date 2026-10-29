@@ -6,6 +6,7 @@ import type {
   CatalogCategoryTranslationInput,
   CatalogSpecificationInput,
 } from "@/lib/catalog/catalog-inputs";
+import type { ManagedCatalogCover } from "./management-asset-types";
 
 export type CatalogCategoryPublicationIssue =
   | { code: "PARENT_NOT_PUBLISHED" }
@@ -33,6 +34,7 @@ export type ManagedCatalogCategoryTreeItem = {
   sortOrder: number;
   status: "draft" | "published" | "archived";
   updatedAt: string;
+  assetsUpdatedAt: string;
 };
 
 export type ManagedCatalogCategoryDetail = {
@@ -71,6 +73,7 @@ export type ManagedCatalogCategoryDetail = {
       translations: Array<{ locale: CatalogLocale; label: string }>;
     }>;
   }>;
+  cover: ManagedCatalogCover | null;
   publicationIssues: CatalogCategoryPublicationIssue[];
 };
 

@@ -21,7 +21,7 @@
           },
           "editor": {
             "newTitle": "New product",
-            "newDescription": "Complete the product and save it in one action. It remains a draft until publication.",
+            "newDescription": "Save the product as a draft first. Image and document uploads become available after the first save.",
             "editDescription": "Edit and save the whole product in one place.",
             "back": "Back to products",
             "readOnly": "Read-only access. You can inspect this product but cannot change it.",
@@ -46,7 +46,8 @@
             "general": "Product and sales details",
             "content": "Localized content and SEO",
             "specifications": "Specifications",
-            "media": "Media references"
+            "media": "Images",
+            "documents": "Documents"
           },
           "categories": {
             "title": "Categories",
@@ -85,14 +86,31 @@
             "emptyMetaDescription": "Add a concise description to preview how the product may appear in search."
           },
           "media": {
-            "empty": "No media references yet.",
-            "add": "Add media reference",
+            "empty": "No product images yet.",
+            "upload": "JPEG, PNG, or WebP. Images are optimized before upload; maximum original size 10 MB.",
+            "select": "Select product images",
+            "legacy": "Legacy external reference",
+            "managed": "Managed image",
+            "save": "Save image details",
+            "saved": "Media changes saved.",
+            "cleanupPending": "The catalog entry was removed. Storage cleanup will be retried automatically.",
             "remove": "Remove",
+            "deleteConfirm": "Permanently delete this image?",
+            "removeLegacyConfirm": "Remove this external reference? The application does not own or delete the external file.",
             "moveUp": "Move up",
             "moveDown": "Move down",
             "primary": "Primary image",
             "social": "Social-sharing image",
-            "languageLabel": "Alternative-text language"
+            "languageLabel": "Alternative-text language",
+            "originalSize": "Original",
+            "uploadSize": "Upload",
+            "statuses": { "queued": "Queued", "optimizing": "Optimizing", "uploading": "Uploading", "awaiting": "Awaiting finalization", "finalizing": "Finalizing", "success": "Complete", "canceled": "Canceled", "reconciliation": "Reconciliation required", "error": "Error" },
+            "retry": "Retry",
+            "cancel": "Cancel upload",
+            "errors": { "IMAGE_TOO_LARGE": "The original image exceeds 10 MB.", "PDF_TOO_LARGE": "The PDF exceeds 20 MB.", "INVALID_IMAGE": "Select a JPEG, PNG, or WebP image.", "INVALID_PDF": "Select a PDF file.", "IMAGE_PROCESSING_FAILED": "The image could not be prepared safely.", "UPLOAD_FAILED": "The upload failed. Try again.", "UPLOAD_CANCELED": "The upload was canceled.", "ASSET_LIMIT_REACHED": "This item has reached its media limit.", "FORBIDDEN": "You no longer have permission to manage catalog media.", "INVALID_INPUT": "The file or metadata is invalid.", "NOT_FOUND": "The catalog item no longer exists.", "PUBLICATION_INVALID": "Choose another primary image before deleting this one.", "STALE": "Media changed elsewhere. Reconcile the media section before continuing.", "STORAGE_ERROR": "Storage could not complete the operation.", "UPLOAD_EXPIRED": "The upload authorization expired. Retry the file." }
+          },
+          "documents": {
+            "empty": "No product documents yet.", "upload": "PDF only, maximum 20 MB. PDFs are uploaded without modification.", "select": "Select PDF documents", "title": "Document title", "description": "Optional description", "save": "Save document details", "remove": "Delete", "deleteConfirm": "Permanently delete this document?", "moveUp": "Move up", "moveDown": "Move down", "languageLabel": "Document text language", "pdf": "PDF"
           },
           "actions": {
             "create": "Save product",

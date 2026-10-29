@@ -106,7 +106,9 @@
       "specifications": "Specifications",
       "gallery": "Gallery",
       "noImage": "No image available",
-      "relatedCategories": "More relevant categories"
+      "relatedCategories": "More relevant categories",
+      "documents": "Documents",
+      "downloadDocument": "Download document"
     },
     "cart": {
       "title": "Cart",

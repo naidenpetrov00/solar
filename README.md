@@ -1,6 +1,6 @@
 # Solar website
 
-Public solar-installation website built with Next.js. This repository also contains the milestone-one server-side identity and database foundation.
+Public solar-installation website built with Next.js, including a database-driven multilingual catalog, cart, customer authentication, and administration dashboard.
 
 ## Local prerequisites
 
@@ -38,6 +38,12 @@ Configuration variables:
 | `PUBLIC_SITE_URL` | Canonical public website origin used by metadata, sitemap, and structured data |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
 | `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
+| `CATALOG_STORAGE_PUBLIC_BASE_URL` | Public HTTPS base URL that serves immutable objects under `catalog/assets/` |
+| `CATALOG_STORAGE_S3_ENDPOINT` | Server-only S3-compatible endpoint, for example the selected Hetzner Object Storage location |
+| `CATALOG_STORAGE_S3_REGION` | S3-compatible region matching the bucket location |
+| `CATALOG_STORAGE_S3_BUCKET` | Bucket used only for catalog-managed public assets and private pending uploads |
+| `CATALOG_STORAGE_S3_ACCESS_KEY_ID` | Server-only least-privilege object-storage access key |
+| `CATALOG_STORAGE_S3_SECRET_ACCESS_KEY` | Server-only object-storage secret key |
 | `GOOGLE_CLIENT_ID` | Optional Google OAuth client ID; enable it together with `GOOGLE_CLIENT_SECRET` |
 | `GOOGLE_CLIENT_SECRET` | Optional Google OAuth client secret; never expose it to browser code |
 | `FACEBOOK_CLIENT_ID` | Optional Facebook app ID; enable it together with `FACEBOOK_CLIENT_SECRET` |
@@ -155,13 +161,11 @@ When both Facebook OAuth variables are configured, the same localized pages also
 
 Better Auth's installed version enables its built-in limiter by default in production, including stricter limits for sign-in and sign-up routes. A later milestone must still review and configure persistent rate limiting suitable for the final self-hosted or multi-instance deployment.
 
-The customer profile menu and logout experience are available. An admin interface is not included yet.
+The customer profile menu and logout experience are available. The administration dashboard includes user and database-driven catalog management for authorized roles.
 
-## Catalog foundation
+## Database-driven catalog
 
-The database contains an isolated catalog model, but the public shop and cart still use the existing hard-coded solar packages. Do not seed or copy those temporary packages into the catalog until a separate public-catalog migration is approved.
-
-Catalog categories use one ASCII slug shared by every locale and enforce slug uniqueness among siblings, including root categories. Product slugs are globally unique. A slug may change only before the record's first publication; `published_at` records that first publication permanently and is retained when an item is unpublished, archived, or restored.
+The public shop, product routes, category routes, and cart read from the PostgreSQL catalog. Catalog categories have Bulgarian and English route slugs; Turkish and Ukrainian use the project's established locale fallback rules. Product slugs are unique within the locale-aware routing model. A slug may change only before the record's first publication; `published_at` records that first publication permanently and is retained when an item is unpublished, archived, or restored.
 
 Products receive an immutable, database-generated SKU such as `PRD-000001`. Optional brand, GTIN/EAN, and MPN values are stored directly on the product. Brand is non-localized, GTIN/EAN is checksum-validated by the server domain, and MPN is not globally unique.
 
@@ -170,6 +174,63 @@ Prices are stored as EUR integer minor units. Administrator input may be VAT-inc
 Normal catalog management uses draft, published, and archived lifecycle states and exposes no hard-delete command. Foreign keys protect referenced data, while reviewed migrations and deliberate maintenance may delete records in dependency-safe order. Category cycles beyond direct self-parenting are prevented by the transactional catalog management service rather than database triggers.
 
 Both `administrator` and `admin` roles have `catalog:view` and `catalog:manage`; customers have neither. There is no separate publishing role in this milestone.
+
+## Catalog object storage
+
+Managed product images, product PDF documents, and category covers use an application-owned storage boundary backed initially by Hetzner's S3-compatible API. The database stores the logical provider ID and immutable object key, never a Hetzner URL. Browser uploads go directly to the bucket through short-lived signed POST policies; the Next.js server authorizes and verifies uploads but does not proxy file bodies.
+
+Use a dedicated bucket. `catalog/pending/*` must remain private. Anonymous reads may be granted only to `catalog/assets/*`; anonymous list, write, and delete access must remain denied. The application credential needs only the object actions required to create signed uploads, inspect temporary objects, copy them to final keys, and delete owned objects: `s3:PutObject`, `s3:GetObject`, `s3:DeleteObject`, and the equivalent metadata/head access for the two prefixes. Bucket-policy and credential administration should use a separate infrastructure identity.
+
+The bucket CORS policy must name the exact local and production administration origins. Do not use `*` in production. An AWS CLI-compatible example is:
+
+```json
+{
+  "CORSRules": [
+    {
+      "AllowedOrigins": ["http://localhost:3000", "https://www.example.com"],
+      "AllowedMethods": ["POST"],
+      "AllowedHeaders": ["*"],
+      "ExposeHeaders": ["ETag"],
+      "MaxAgeSeconds": 3600
+    }
+  ]
+}
+```
+
+Apply and verify it with a separately configured infrastructure profile, replacing the endpoint, bucket, and file paths:
+
+```powershell
+aws s3api put-bucket-cors --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket --cors-configuration file://catalog-cors.json
+aws s3api get-bucket-cors --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket
+```
+
+Abandoned temporary uploads require this storage-level lifecycle safety net. The prefix filter is deliberate and must never be broadened to `catalog/` or `catalog/assets/`:
+
+```json
+{
+  "Rules": [
+    {
+      "ID": "expire-catalog-pending-after-two-days",
+      "Status": "Enabled",
+      "Filter": { "Prefix": "catalog/pending/" },
+      "Expiration": { "Days": 2 }
+    }
+  ]
+}
+```
+
+Apply and read back the lifecycle configuration:
+
+```powershell
+aws s3api put-bucket-lifecycle-configuration --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket --lifecycle-configuration file://catalog-lifecycle.json
+aws s3api get-bucket-lifecycle-configuration --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket
+```
+
+Verify separately that a test object under `catalog/pending/` expires and that objects under `catalog/assets/` do not match the rule. Application cleanup removes expired upload records and retries deletion tombstones during later media operations; the lifecycle rule guarantees storage cleanup even when no later request occurs.
+
+For local development, use a dedicated non-production S3-compatible bucket or a loopback S3-compatible service and set all six catalog-storage variables. HTTP is accepted only for loopback endpoints outside production. Production endpoints and public bases must use HTTPS. PDF objects are stored with `application/pdf` and attachment disposition; add `X-Content-Type-Options: nosniff` at the CDN or reverse-proxy layer if the direct object service cannot emit it.
+
+Migration order is: review and apply the committed database migration, configure bucket read policy/CORS/lifecycle, deploy server-only credentials, and then deploy the application. Never commit credentials. For a future S3-compatible provider, copy `catalog/assets/*` with identical keys and change the endpoint, region, bucket, public base, and credentials. Pending uploads should be allowed to expire before cutover. A non-S3 provider requires a new adapter behind the same narrow boundary; catalog schema, editor, and public presentation remain unchanged.
 
 ## Database backup expectation
 

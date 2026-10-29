@@ -20,7 +20,7 @@ export function ProductEditorSections({
     setInheritedValue,
     setPrimary,
   } = editor;
-  const { labels, locale, languages, categories } = props;
+  const { labels, locale, languages, categories, clearDirty } = props;
   const {
     activeLocale,
     setActiveLocale,
@@ -51,6 +51,10 @@ export function ProductEditorSections({
     setExcludedSpecificationIds,
     media,
     setMedia,
+    documents,
+    setDocuments,
+    assetsUpdatedAt,
+    setAssetsUpdatedAt,
   } = draft;
   const { markDirty } = save;
   const {
@@ -150,9 +154,17 @@ export function ProductEditorSections({
 
       <ProductMediaSection
         {...localeEditor}
+        locale={locale}
+        productId={detail?.id ?? null}
+        productStatus={detail?.status ?? "draft"}
         markDirty={markDirty}
+        clearDirty={clearDirty}
         media={media}
         setMedia={setMedia}
+        documents={documents}
+        setDocuments={setDocuments}
+        assetsUpdatedAt={assetsUpdatedAt}
+        setAssetsUpdatedAt={setAssetsUpdatedAt}
       />
     </>
   );

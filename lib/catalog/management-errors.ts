@@ -10,7 +10,10 @@ export type CatalogManagementErrorCode =
   | "PUBLISHED_DEPENDENCY_EXISTS"
   | "SLUG_CONFLICT"
   | "SLUG_IMMUTABLE"
-  | "STALE";
+  | "STALE"
+  | "ASSET_LIMIT_REACHED"
+  | "UPLOAD_EXPIRED"
+  | "STORAGE_ERROR";
 
 export class CatalogManagementError extends Error {
   constructor(

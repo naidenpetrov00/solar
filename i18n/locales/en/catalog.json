@@ -30,7 +30,13 @@
         "sections": {
           "general": "Address and position",
           "content": "Content",
-          "specifications": "Specifications"
+          "specifications": "Specifications",
+          "cover": "Cover image"
+        },
+        "cover": {
+          "title": "Cover image", "empty": "No cover image.", "select": "Select cover image", "upload": "Upload cover", "replace": "Replace cover", "save": "Save alternative text", "cleanupPending": "The cover was removed. Storage cleanup will be retried automatically.", "remove": "Delete cover", "deleteConfirm": "Permanently delete this cover image?", "altText": "Alternative text", "languageLabel": "Cover alternative-text language",
+          "statuses": { "optimizing": "Optimizing", "uploading": "Uploading", "finalizing": "Finalizing", "success": "Saved", "error": "Error" },
+          "errors": { "ALT_REQUIRED": "Add alternative text in all four languages.", "IMAGE_TOO_LARGE": "The original image exceeds 10 MB.", "INVALID_IMAGE": "Select a JPEG, PNG, or WebP image.", "IMAGE_PROCESSING_FAILED": "The image could not be prepared safely.", "UPLOAD_FAILED": "The upload failed. Try again.", "ASSET_LIMIT_REACHED": "A cover upload is already pending.", "FORBIDDEN": "You no longer have permission to manage catalog media.", "INVALID_INPUT": "The image or metadata is invalid.", "NOT_FOUND": "The category no longer exists.", "STALE": "The cover changed elsewhere. Reload the latest media state.", "STORAGE_ERROR": "Storage could not complete the operation.", "UPLOAD_EXPIRED": "The upload authorization expired. Retry the image." }
         },
         "seoPreview": {
           "title": "Illustrative search preview",

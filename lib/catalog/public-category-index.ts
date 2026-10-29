@@ -4,7 +4,13 @@ import { cache } from "react";
 import { asc, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { catalogCategory, catalogCategoryTranslation } from "@/db/schema";
+import {
+  catalogCategory,
+  catalogCategoryCover,
+  catalogCategoryCoverTranslation,
+  catalogCategoryTranslation,
+  catalogManagedAsset,
+} from "@/db/schema";
 import {
   catalogCategorySlugForLocale,
   catalogLocales,
@@ -12,6 +18,7 @@ import {
   type CatalogLocale,
 } from "@/lib/catalog/model";
 import type { PublicCatalogCategory } from "@/lib/catalog/public-types";
+import { catalogAssetStorage } from "@/lib/storage";
 
 type CategoryRow = typeof catalogCategory.$inferSelect;
 type CategoryTranslationRow = typeof catalogCategoryTranslation.$inferSelect;
@@ -20,22 +27,49 @@ export type CategoryIndex = {
   rows: CategoryRow[];
   byId: Map<string, CategoryRow>;
   translations: Map<string, Map<CatalogLocale, CategoryTranslationRow>>;
+  covers: Map<
+    string,
+    Map<CatalogLocale, NonNullable<PublicCatalogCategory["cover"]>>
+  >;
 };
 
 export const loadCategoryIndex = cache(async (): Promise<CategoryIndex> => {
-  const [rows, translationRows] = await Promise.all([
+  const [rows, translationRows, coverRows] = await Promise.all([
     db
       .select()
       .from(catalogCategory)
       .where(eq(catalogCategory.status, "published"))
       .orderBy(asc(catalogCategory.sortOrder), asc(catalogCategory.id)),
     db.select().from(catalogCategoryTranslation),
+    db
+      .select({
+        categoryId: catalogCategoryCover.categoryId,
+        objectKey: catalogManagedAsset.objectKey,
+        state: catalogManagedAsset.state,
+        width: catalogManagedAsset.width,
+        height: catalogManagedAsset.height,
+        locale: catalogCategoryCoverTranslation.locale,
+        altText: catalogCategoryCoverTranslation.altText,
+      })
+      .from(catalogCategoryCover)
+      .innerJoin(
+        catalogManagedAsset,
+        eq(catalogManagedAsset.id, catalogCategoryCover.assetId),
+      )
+      .innerJoin(
+        catalogCategoryCoverTranslation,
+        eq(
+          catalogCategoryCoverTranslation.categoryId,
+          catalogCategoryCover.categoryId,
+        ),
+      ),
   ]);
   const byId = new Map(rows.map((row) => [row.id, row]));
   const translations = new Map<
     string,
     Map<CatalogLocale, CategoryTranslationRow>
   >();
+  const covers: CategoryIndex["covers"] = new Map();
 
   for (const translation of translationRows) {
     if (
@@ -48,8 +82,29 @@ export const loadCategoryIndex = cache(async (): Promise<CategoryIndex> => {
     localized.set(translation.locale, translation);
     translations.set(translation.categoryId, localized);
   }
+  for (const cover of coverRows) {
+    if (
+      cover.state !== "ready" ||
+      !cover.width ||
+      !cover.height ||
+      !isCatalogLocale(cover.locale)
+    ) {
+      continue;
+    }
+    const localized = covers.get(cover.categoryId) ?? new Map();
+    localized.set(cover.locale, {
+      reference: catalogAssetStorage.resolvePublicAssetUrl(cover.objectKey),
+      altText: cover.altText,
+      isPrimary: false,
+      isSocialImage: false,
+      source: "managed",
+      width: cover.width,
+      height: cover.height,
+    });
+    covers.set(cover.categoryId, localized);
+  }
 
-  return { rows, byId, translations };
+  return { rows, byId, translations, covers };
 });
 
 function hasPublicAncestorChain(index: CategoryIndex, categoryId: string) {
@@ -120,6 +175,9 @@ export function publicCategoryFromRow(
     metaDescription: translation.metaDescription,
     path,
     paths,
-    updatedAt: row.updatedAt,
+    updatedAt: new Date(
+      Math.max(row.updatedAt.getTime(), row.assetsUpdatedAt.getTime()),
+    ),
+    cover: index.covers.get(row.id)?.get(locale) ?? null,
   };
 }

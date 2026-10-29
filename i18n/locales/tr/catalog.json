@@ -30,7 +30,13 @@
         "sections": {
           "general": "Adres ve konum",
           "content": "İçerik",
-          "specifications": "Özellikler"
+          "specifications": "Özellikler",
+          "cover": "Kapak görseli"
+        },
+        "cover": {
+          "title": "Kapak görseli", "empty": "Kapak görseli yok.", "select": "Kapak görseli seç", "upload": "Kapağı yükle", "replace": "Kapağı değiştir", "save": "Alternatif metni kaydet", "cleanupPending": "Kapak kaldırıldı. Depolama temizliği otomatik olarak yeniden denenecek.", "remove": "Kapağı sil", "deleteConfirm": "Bu kapak görseli kalıcı olarak silinsin mi?", "altText": "Alternatif metin", "languageLabel": "Kapak alternatif metni dili",
+          "statuses": { "optimizing": "Optimize ediliyor", "uploading": "Yükleniyor", "finalizing": "Tamamlanıyor", "success": "Kaydedildi", "error": "Hata" },
+          "errors": { "ALT_REQUIRED": "Dört dilde alternatif metin ekleyin.", "IMAGE_TOO_LARGE": "Özgün görsel 10 MB sınırını aşıyor.", "INVALID_IMAGE": "JPEG, PNG veya WebP görsel seçin.", "IMAGE_PROCESSING_FAILED": "Görsel güvenli biçimde hazırlanamadı.", "UPLOAD_FAILED": "Yükleme başarısız oldu. Yeniden deneyin.", "ASSET_LIMIT_REACHED": "Bekleyen bir kapak yüklemesi zaten var.", "FORBIDDEN": "Katalog medyasını yönetme izniniz kalmadı.", "INVALID_INPUT": "Görsel veya bilgiler geçersiz.", "NOT_FOUND": "Kategori artık mevcut değil.", "STALE": "Kapak başka yerde değiştirildi. Güncel durumu yükleyin.", "STORAGE_ERROR": "Depolama işlemi tamamlayamadı.", "UPLOAD_EXPIRED": "Yükleme izninin süresi doldu. Görseli yeniden deneyin." }
         },
         "seoPreview": {
           "title": "Örnek arama önizlemesi",

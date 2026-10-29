@@ -1,7 +1,12 @@
 import "server-only";
-import { asc } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { catalogCategory, catalogCategoryTranslation } from "@/db/schema";
+import {
+  catalogCategoryCover,
+  catalogCategoryCoverTranslation,
+  catalogManagedAsset,
+} from "@/db/schema";
 import {
   catalogCategorySlugForLocale,
   isCatalogLocale,
@@ -20,6 +25,7 @@ import {
   catalogSpecificationValueType,
 } from "@/lib/catalog/management-access";
 import { getCatalogCategoryPublicationIssues } from "./management-category-readiness";
+import { catalogAssetStorage } from "@/lib/storage";
 
 export async function getManagedCatalogCategoryWorkspace(
   actorId: string,
@@ -99,6 +105,27 @@ export async function getManagedCatalogCategoryWorkspace(
   if (!aggregate) {
     throw new CatalogManagementError("NOT_FOUND");
   }
+  const [coverRow, coverTranslations] = await Promise.all([
+    db
+      .select({
+        originalFilename: catalogManagedAsset.originalFilename,
+        objectKey: catalogManagedAsset.objectKey,
+        width: catalogManagedAsset.width,
+        height: catalogManagedAsset.height,
+        state: catalogManagedAsset.state,
+      })
+      .from(catalogCategoryCover)
+      .innerJoin(
+        catalogManagedAsset,
+        eq(catalogManagedAsset.id, catalogCategoryCover.assetId),
+      )
+      .where(eq(catalogCategoryCover.categoryId, selectedId))
+      .limit(1),
+    db
+      .select()
+      .from(catalogCategoryCoverTranslation)
+      .where(eq(catalogCategoryCoverTranslation.categoryId, selectedId)),
+  ]);
 
   const specifications = aggregate.specifications
     .toSorted(
@@ -151,6 +178,7 @@ export async function getManagedCatalogCategoryWorkspace(
     publishedAt: aggregate.category.publishedAt?.toISOString() ?? null,
     archivedAt: aggregate.category.archivedAt?.toISOString() ?? null,
     updatedAt: aggregate.category.updatedAt.toISOString(),
+    assetsUpdatedAt: aggregate.category.assetsUpdatedAt.toISOString(),
     translations: aggregate.translations.flatMap((translation) =>
       isCatalogLocale(translation.locale)
         ? [
@@ -167,6 +195,27 @@ export async function getManagedCatalogCategoryWorkspace(
         : [],
     ),
     specifications,
+    cover:
+      coverRow[0]?.state === "ready" &&
+      coverRow[0].width &&
+      coverRow[0].height
+        ? {
+            url: catalogAssetStorage.resolvePublicAssetUrl(
+              coverRow[0].objectKey,
+            ),
+            originalFilename: coverRow[0].originalFilename,
+            width: coverRow[0].width,
+            height: coverRow[0].height,
+            translations: coverTranslations.flatMap((translation) =>
+              isCatalogLocale(translation.locale)
+                ? [{
+                    locale: translation.locale,
+                    altText: translation.altText,
+                  }]
+                : [],
+            ),
+          }
+        : null,
     publicationIssues: getCatalogCategoryPublicationIssues(aggregate),
   };
 

@@ -15,6 +15,7 @@ import { SpecificationEditor } from "./catalog-specification-editor";
 import { useCategoryEditorState } from "./use-category-editor-state";
 import { CategoryGeneralSection } from "./catalog-category-general-section";
 import { CategoryContentSection } from "./catalog-category-content-section";
+import { CategoryCoverSection } from "./catalog-category-cover-section";
 
 export function CategoryEditor({
   detail,
@@ -127,6 +128,16 @@ export function CategoryEditor({
         setDismissedContentErrors={setDismissedContentErrors}
         bgSlug={bgSlug}
         enSlug={enSlug}
+      />
+
+      <CategoryCoverSection
+        detail={detail}
+        labels={labels}
+        locale={locale}
+        canManage={canManage}
+        isDirty={dirtySections.has("cover")}
+        onDirty={() => onDirty("cover")}
+        clearDirty={() => clearDirty("cover")}
       />
 
       <details

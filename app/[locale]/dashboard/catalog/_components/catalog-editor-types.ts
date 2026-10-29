@@ -1,4 +1,4 @@
-export type EditorSection = "general" | "content" | "specifications";
+export type EditorSection = "general" | "content" | "specifications" | "cover";
 
 export type LifecycleIntent = "publish" | "unpublish" | "archive" | "restore";
 

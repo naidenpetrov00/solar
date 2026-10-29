@@ -10,13 +10,20 @@ import {
   catalogProductMedia,
   catalogProductMediaTranslation,
   catalogProductTranslation,
+  catalogManagedAsset,
+  catalogProductDocument,
+  catalogProductDocumentTranslation,
 } from "@/db/schema";
 import {
   catalogLocales,
   isCatalogLocale,
   type CatalogLocale,
 } from "@/lib/catalog/model";
-import type { PublicCatalogMedia } from "@/lib/catalog/public-types";
+import type {
+  PublicCatalogDocument,
+  PublicCatalogMedia,
+} from "@/lib/catalog/public-types";
+import { catalogAssetStorage } from "@/lib/storage";
 
 export type ProductRow = typeof catalogProduct.$inferSelect;
 type ProductTranslationRow = typeof catalogProductTranslation.$inferSelect;
@@ -26,6 +33,7 @@ export type ProductIndex = {
   translations: Map<string, Map<CatalogLocale, ProductTranslationRow>>;
   additionalCategoryIds: Map<string, string[]>;
   media: Map<string, PublicCatalogMedia[]>;
+  documents: Map<string, PublicCatalogDocument[]>;
 };
 
 function isPublicMediaReference(reference: string) {
@@ -49,10 +57,11 @@ export const loadProductIndex = cache(async (): Promise<ProductIndex> => {
       translations: new Map(),
       additionalCategoryIds: new Map(),
       media: new Map(),
+      documents: new Map(),
     };
   }
 
-  const [translationRows, additionalRows, mediaRows] = await Promise.all([
+  const [translationRows, additionalRows, mediaRows, documentRows] = await Promise.all([
     db
       .select()
       .from(catalogProductTranslation)
@@ -69,6 +78,14 @@ export const loadProductIndex = cache(async (): Promise<ProductIndex> => {
         asc(catalogProductMedia.displayOrder),
         asc(catalogProductMedia.id),
       ),
+    db
+      .select()
+      .from(catalogProductDocument)
+      .where(inArray(catalogProductDocument.productId, productIds))
+      .orderBy(
+        asc(catalogProductDocument.displayOrder),
+        asc(catalogProductDocument.id),
+      ),
   ]);
   const mediaIds = mediaRows.map(({ id }) => id);
   const mediaTranslations = mediaIds.length
@@ -77,6 +94,24 @@ export const loadProductIndex = cache(async (): Promise<ProductIndex> => {
         .from(catalogProductMediaTranslation)
         .where(inArray(catalogProductMediaTranslation.productMediaId, mediaIds))
     : [];
+  const documentIds = documentRows.map(({ id }) => id);
+  const documentTranslations = documentIds.length
+    ? await db
+        .select()
+        .from(catalogProductDocumentTranslation)
+        .where(inArray(catalogProductDocumentTranslation.documentId, documentIds))
+    : [];
+  const assetIds = [
+    ...mediaRows.flatMap(({ assetId }) => (assetId ? [assetId] : [])),
+    ...documentRows.map(({ assetId }) => assetId),
+  ];
+  const assetRows = assetIds.length
+    ? await db
+        .select()
+        .from(catalogManagedAsset)
+        .where(inArray(catalogManagedAsset.id, assetIds))
+    : [];
+  const assetById = new Map(assetRows.map((asset) => [asset.id, asset]));
   const translations = new Map<
     string,
     Map<CatalogLocale, ProductTranslationRow>
@@ -98,7 +133,13 @@ export const loadProductIndex = cache(async (): Promise<ProductIndex> => {
   const localizedMedia = new Map<string, PublicCatalogMedia[]>();
   for (const productLocale of catalogLocales) {
     for (const mediaRow of mediaRows) {
-      if (!isPublicMediaReference(mediaRow.reference)) continue;
+      const asset = mediaRow.assetId ? assetById.get(mediaRow.assetId) : null;
+      const reference = asset
+        ? asset.state === "ready"
+          ? catalogAssetStorage.resolvePublicAssetUrl(asset.objectKey)
+          : null
+        : mediaRow.reference;
+      if (!reference || (!asset && !isPublicMediaReference(reference))) continue;
       const altText = mediaTranslations.find(
         (translation) =>
           translation.productMediaId === mediaRow.id &&
@@ -108,12 +149,37 @@ export const loadProductIndex = cache(async (): Promise<ProductIndex> => {
       const key = `${mediaRow.productId}:${productLocale}`;
       const items = localizedMedia.get(key) ?? [];
       items.push({
-        reference: mediaRow.reference,
+        reference,
         altText,
         isPrimary: mediaRow.isPrimary,
         isSocialImage: mediaRow.isSocialImage,
+        source: asset ? "managed" : "legacy",
+        width: asset?.width ?? null,
+        height: asset?.height ?? null,
       });
       localizedMedia.set(key, items);
+    }
+  }
+  const localizedDocuments = new Map<string, PublicCatalogDocument[]>();
+  for (const productLocale of catalogLocales) {
+    for (const document of documentRows) {
+      const asset = assetById.get(document.assetId);
+      const translation = documentTranslations.find(
+        (candidate) =>
+          candidate.documentId === document.id &&
+          candidate.locale === productLocale,
+      );
+      if (!asset || asset.state !== "ready" || !translation?.title.trim()) continue;
+      const key = `${document.productId}:${productLocale}`;
+      const items = localizedDocuments.get(key) ?? [];
+      items.push({
+        url: catalogAssetStorage.resolvePublicAssetUrl(asset.objectKey),
+        title: translation.title,
+        description: translation.description,
+        originalFilename: asset.originalFilename,
+        byteSize: asset.byteSize,
+      });
+      localizedDocuments.set(key, items);
     }
   }
 
@@ -122,5 +188,6 @@ export const loadProductIndex = cache(async (): Promise<ProductIndex> => {
     translations,
     additionalCategoryIds,
     media: localizedMedia,
+    documents: localizedDocuments,
   };
 });

@@ -69,14 +69,17 @@ export function createProductPreview({
     return renderedValue ? [{ label, value: renderedValue }] : [];
   });
   const previewMedia = media
-    .filter((item) => item.reference.trim())
+    .filter((item) => item.url.trim())
     .map((item) => ({
-      reference: item.reference.trim(),
+      reference: item.url.trim(),
       altText:
         item.translations[activeLocale].trim() ||
         item.translations.bg.trim() ||
         "",
       isPrimary: item.isPrimary,
+      source: item.source,
+      width: item.width,
+      height: item.height,
     }));
   const primary = previewMedia.find((item) => item.isPrimary) ?? null;
   const presentationLabel =

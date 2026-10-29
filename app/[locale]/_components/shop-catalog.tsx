@@ -13,6 +13,7 @@ import {
 } from "./catalog-query-controls";
 import { ProductList } from "./catalog-product-list";
 import { CatalogSidebar } from "./catalog-sidebar";
+import { CatalogMedia } from "./catalog-media";
 
 type BrowseProps = {
   locale: string;
@@ -56,6 +57,19 @@ async function CatalogBrowse({
       <div className="catalog-shell">
         {breadcrumbs}
         <header className="catalog-page-heading">
+          {currentCategory?.cover ? (
+            <figure className="catalog-category-cover">
+              <CatalogMedia
+                reference={currentCategory.cover.reference}
+                altText={currentCategory.cover.altText}
+                source="managed"
+                width={currentCategory.cover.width}
+                height={currentCategory.cover.height}
+                sizes="(max-width: 64rem) 100vw, 90rem"
+                preload
+              />
+            </figure>
+          ) : null}
           <h1>{title ?? t("pages.shop.title")}</h1>
           <p>{introduction ?? t("pages.shop.description")}</p>
         </header>

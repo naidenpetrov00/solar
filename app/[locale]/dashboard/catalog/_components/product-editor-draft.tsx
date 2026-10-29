@@ -12,6 +12,7 @@ import { catalogSlugFromName } from "@/lib/catalog/text-validation";
 import {
   type ProductTranslationDraft,
   type MediaDraft,
+  type DocumentDraft,
 } from "./product-editor-model";
 
 export const DashboardButton = ({
@@ -66,7 +67,13 @@ export function translationsFromDetail(
 export function mediaFromDetail(detail: ManagedCatalogProductDetail | null) {
   return (detail?.media ?? []).map((item): MediaDraft => ({
     clientId: item.id,
+    source: item.source,
     reference: item.reference,
+    url: item.url,
+    originalFilename: item.originalFilename,
+    byteSize: item.byteSize,
+    width: item.width,
+    height: item.height,
     isPrimary: item.isPrimary,
     isSocialImage: item.isSocialImage,
     translations: Object.fromEntries(
@@ -76,6 +83,31 @@ export function mediaFromDetail(detail: ManagedCatalogProductDetail | null) {
           ?.altText ?? "",
       ]),
     ) as Record<CatalogLocale, string>,
+  }));
+}
+
+export function documentsFromDetail(
+  detail: ManagedCatalogProductDetail | null,
+) {
+  return (detail?.documents ?? []).map((item): DocumentDraft => ({
+    clientId: item.id,
+    url: item.url,
+    originalFilename: item.originalFilename,
+    byteSize: item.byteSize,
+    translations: Object.fromEntries(
+      catalogLocales.map((locale) => {
+        const translation = item.translations.find(
+          (candidate) => candidate.locale === locale,
+        );
+        return [
+          locale,
+          {
+            title: translation?.title ?? "",
+            description: translation?.description ?? "",
+          },
+        ];
+      }),
+    ) as DocumentDraft["translations"],
   }));
 }
 

@@ -8,7 +8,13 @@ type ServerEnvironmentVariable =
   | "SMTP_HOST"
   | "SMTP_PORT"
   | "SMTP_SECURE"
-  | "SMTP_FROM";
+  | "SMTP_FROM"
+  | "CATALOG_STORAGE_PUBLIC_BASE_URL"
+  | "CATALOG_STORAGE_S3_ENDPOINT"
+  | "CATALOG_STORAGE_S3_REGION"
+  | "CATALOG_STORAGE_S3_BUCKET"
+  | "CATALOG_STORAGE_S3_ACCESS_KEY_ID"
+  | "CATALOG_STORAGE_S3_SECRET_ACCESS_KEY";
 
 export function requireServerEnvironmentVariable(
   name: ServerEnvironmentVariable,

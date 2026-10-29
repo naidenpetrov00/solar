@@ -33,6 +33,7 @@ export type Props = {
   statusLabels: Record<ProductStatus, string>;
   dirtySections: Set<ProductEditorSection>;
   onDirty: (section: ProductEditorSection) => void;
+  clearDirty: (section: ProductEditorSection) => void;
   clearAllDirty: () => void;
   confirmDiscard: () => boolean;
 };
@@ -48,10 +49,27 @@ export type ProductTranslationDraft = {
 
 export type MediaDraft = {
   clientId: string;
-  reference: string;
+  source: "managed" | "legacy";
+  reference: string | null;
+  url: string;
+  originalFilename: string | null;
+  byteSize: number | null;
+  width: number | null;
+  height: number | null;
   isPrimary: boolean;
   isSocialImage: boolean;
   translations: Record<CatalogLocale, string>;
+};
+
+export type DocumentDraft = {
+  clientId: string;
+  url: string;
+  originalFilename: string;
+  byteSize: number;
+  translations: Record<
+    CatalogLocale,
+    { title: string; description: string }
+  >;
 };
 
 export const initialResult: ProductActionResult = { status: "idle" };

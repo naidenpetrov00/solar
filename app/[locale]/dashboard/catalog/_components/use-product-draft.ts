@@ -8,12 +8,13 @@ import type {
   CatalogSalesMode,
 } from "@/lib/catalog/model";
 import type { CatalogProductSpecificationValueInput } from "@/lib/catalog/catalog-inputs";
-import type { MediaDraft } from "./product-editor-model";
+import type { DocumentDraft, MediaDraft } from "./product-editor-model";
 import {
   translationsFromDetail,
   safeSlug,
   minorToInput,
   mediaFromDetail,
+  documentsFromDetail,
 } from "./product-editor-draft";
 
 export function useProductDraft(
@@ -81,10 +82,16 @@ export function useProductDraft(
   const [media, setMedia] = useState<MediaDraft[]>(() =>
     mediaFromDetail(detail),
   );
+  const [documents, setDocuments] = useState<DocumentDraft[]>(() =>
+    documentsFromDetail(detail),
+  );
+  const [assetsUpdatedAt, setAssetsUpdatedAt] = useState(
+    detail?.assetsUpdatedAt ?? "",
+  );
   const [isPreviewing, setIsPreviewing] = useState(false);
 
   const resetFromDetail = useCallback(
-    (nextDetail: ManagedCatalogProductDetail) => {
+    (nextDetail: ManagedCatalogProductDetail, preserveAssets = false) => {
       setIsPreviewing(false);
       setBrand(nextDetail.brand ?? "");
       setMpn(nextDetail.mpn ?? "");
@@ -120,7 +127,11 @@ export function useProductDraft(
       setExcludedSpecificationIds(
         nextDetail.specificationConfiguration.excludedSpecificationIds,
       );
-      setMedia(mediaFromDetail(nextDetail));
+      if (!preserveAssets) {
+        setMedia(mediaFromDetail(nextDetail));
+        setDocuments(documentsFromDetail(nextDetail));
+        setAssetsUpdatedAt(nextDetail.assetsUpdatedAt);
+      }
     },
     [],
   );
@@ -170,6 +181,10 @@ export function useProductDraft(
     setExcludedSpecificationIds,
     media,
     setMedia,
+    documents,
+    setDocuments,
+    assetsUpdatedAt,
+    setAssetsUpdatedAt,
     isPreviewing,
     setIsPreviewing,
     resetFromDetail,

@@ -14,6 +14,7 @@ import {
   catalogProductMedia,
   catalogProductMediaTranslation,
 } from "@/db/schema/catalog-product-media";
+import { catalogManagedAsset, catalogProductDocument } from "@/db/schema/catalog-assets";
 
 export const catalogProductRelations = relations(
   catalogProduct,
@@ -26,6 +27,7 @@ export const catalogProductRelations = relations(
     additionalCategories: many(catalogProductAdditionalCategory),
     specificationValues: many(catalogProductSpecificationValue),
     media: many(catalogProductMedia),
+    documents: many(catalogProductDocument),
   }),
 );
 
@@ -77,6 +79,10 @@ export const catalogProductMediaRelations = relations(
     product: one(catalogProduct, {
       fields: [catalogProductMedia.productId],
       references: [catalogProduct.id],
+    }),
+    asset: one(catalogManagedAsset, {
+      fields: [catalogProductMedia.assetId],
+      references: [catalogManagedAsset.id],
     }),
     translations: many(catalogProductMediaTranslation),
   }),

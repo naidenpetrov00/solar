@@ -12,6 +12,7 @@ export function useProductSave({
   detail,
   creating,
   clearAllDirty,
+  clearDirty,
   categoryId,
   catalogPath,
   resetFromDetail,
@@ -21,9 +22,13 @@ export function useProductSave({
   detail: ManagedCatalogProductDetail | null;
   creating: boolean;
   clearAllDirty: () => void;
+  clearDirty: (section: ProductEditorSection) => void;
   categoryId: string;
   catalogPath: string;
-  resetFromDetail: (detail: ManagedCatalogProductDetail) => void;
+  resetFromDetail: (
+    detail: ManagedCatalogProductDetail,
+    preserveAssets?: boolean,
+  ) => void;
   setActiveLocale: (locale: CatalogLocale) => void;
   onDirty: (section: ProductEditorSection) => void;
 }) {
@@ -80,14 +85,17 @@ export function useProductSave({
       return;
     acceptedSaveRef.current = saveResult.updatedAt;
     if (submittedRevisionRef.current === revisionRef.current) {
-      resetFromDetail(detail);
-      clearAllDirty();
+      resetFromDetail(detail, true);
+      clearDirty("general");
+      clearDirty("content");
+      clearDirty("specifications");
     }
   }, [
     saveResult,
     detail,
     creating,
     clearAllDirty,
+    clearDirty,
     router,
     catalogPath,
     categoryId,

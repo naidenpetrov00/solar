@@ -13,6 +13,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { catalogProduct } from "@/db/schema/catalog-products";
+import { catalogManagedAsset } from "@/db/schema/catalog-assets";
 
 export const catalogProductMedia = pgTable(
   "catalog_product_media",
@@ -21,7 +22,10 @@ export const catalogProductMedia = pgTable(
     productId: uuid("product_id")
       .notNull()
       .references(() => catalogProduct.id, { onDelete: "cascade" }),
-    reference: text("reference").notNull(),
+    reference: text("reference"),
+    assetId: uuid("asset_id").references(() => catalogManagedAsset.id, {
+      onDelete: "restrict",
+    }),
     displayOrder: integer("display_order").default(0).notNull(),
     isPrimary: boolean("is_primary").default(false).notNull(),
     isSocialImage: boolean("is_social_image").default(false).notNull(),
@@ -36,6 +40,7 @@ export const catalogProductMedia = pgTable(
       table.productId,
       table.reference,
     ),
+    unique("catalog_product_media_asset_unique").on(table.assetId),
     unique("catalog_product_media_product_order_unique").on(
       table.productId,
       table.displayOrder,
@@ -53,7 +58,11 @@ export const catalogProductMedia = pgTable(
     ),
     check(
       "catalog_product_media_reference_check",
-      sql`char_length(btrim(${table.reference})) BETWEEN 1 AND 2048`,
+      sql`${table.reference} IS NULL OR char_length(btrim(${table.reference})) BETWEEN 1 AND 2048`,
+    ),
+    check(
+      "catalog_product_media_source_check",
+      sql`(${table.reference} IS NOT NULL) <> (${table.assetId} IS NOT NULL)`,
     ),
     check(
       "catalog_product_media_display_order_check",

@@ -21,7 +21,7 @@
           },
           "editor": {
             "newTitle": "Yeni ürün",
-            "newDescription": "Ürünü tamamlayın ve tek işlemle kaydedin. Yayımlanana kadar taslak olarak kalır.",
+            "newDescription": "Önce ürünü taslak olarak kaydedin. Görsel ve belge yükleme ilk kayıttan sonra açılır.",
             "editDescription": "Ürünün tamamını tek yerde düzenleyip kaydedin.",
             "back": "Ürünlere dön",
             "readOnly": "Salt okunur erişim. Ürünü inceleyebilirsiniz ancak değiştiremezsiniz.",
@@ -46,7 +46,8 @@
             "general": "Ürün ve satış bilgileri",
             "content": "Yerelleştirilmiş içerik ve SEO",
             "specifications": "Özellikler",
-            "media": "Medya referansları"
+            "media": "Görseller",
+            "documents": "Belgeler"
           },
           "categories": {
             "title": "Kategoriler",
@@ -85,14 +86,31 @@
             "emptyMetaDescription": "Ürünün aramada nasıl görünebileceğini önizlemek için kısa bir açıklama ekleyin."
           },
           "media": {
-            "empty": "Henüz medya referansı yok.",
-            "add": "Medya referansı ekle",
+            "empty": "Henüz ürün görseli yok.",
+            "upload": "JPEG, PNG veya WebP. Görseller yüklemeden önce optimize edilir; özgün dosya en fazla 10 MB olabilir.",
+            "select": "Ürün görsellerini seç",
+            "legacy": "Eski harici referans",
+            "managed": "Yönetilen görsel",
+            "save": "Görsel bilgilerini kaydet",
+            "saved": "Medya değişiklikleri kaydedildi.",
+            "cleanupPending": "Katalog kaydı kaldırıldı. Depolama temizliği otomatik olarak yeniden denenecek.",
             "remove": "Kaldır",
+            "deleteConfirm": "Bu görsel kalıcı olarak silinsin mi?",
+            "removeLegacyConfirm": "Bu harici referans kaldırılsın mı? Uygulama harici dosyanın sahibi değildir ve dosyayı silmez.",
             "moveUp": "Yukarı taşı",
             "moveDown": "Aşağı taşı",
             "primary": "Birincil görsel",
             "social": "Sosyal paylaşım görseli",
-            "languageLabel": "Alternatif metin dili"
+            "languageLabel": "Alternatif metin dili",
+            "originalSize": "Özgün",
+            "uploadSize": "Yüklenecek",
+            "statuses": { "queued": "Sırada", "optimizing": "Optimize ediliyor", "uploading": "Yükleniyor", "awaiting": "Tamamlanmayı bekliyor", "finalizing": "Tamamlanıyor", "success": "Tamamlandı", "canceled": "İptal edildi", "reconciliation": "Eşitleme gerekli", "error": "Hata" },
+            "retry": "Yeniden dene",
+            "cancel": "Yüklemeyi iptal et",
+            "errors": { "IMAGE_TOO_LARGE": "Özgün görsel 10 MB sınırını aşıyor.", "PDF_TOO_LARGE": "PDF 20 MB sınırını aşıyor.", "INVALID_IMAGE": "JPEG, PNG veya WebP görsel seçin.", "INVALID_PDF": "Bir PDF dosyası seçin.", "IMAGE_PROCESSING_FAILED": "Görsel güvenli biçimde hazırlanamadı.", "UPLOAD_FAILED": "Yükleme başarısız oldu. Yeniden deneyin.", "UPLOAD_CANCELED": "Yükleme iptal edildi.", "ASSET_LIMIT_REACHED": "Medya sınırına ulaşıldı.", "FORBIDDEN": "Katalog medyasını yönetme izniniz kalmadı.", "INVALID_INPUT": "Dosya veya bilgiler geçersiz.", "NOT_FOUND": "Katalog öğesi artık mevcut değil.", "PUBLICATION_INVALID": "Silmeden önce başka bir birincil görsel seçin.", "STALE": "Medya başka yerde değiştirildi. Devam etmeden önce eşitleyin.", "STORAGE_ERROR": "Depolama işlemi tamamlayamadı.", "UPLOAD_EXPIRED": "Yükleme izninin süresi doldu. Dosyayı yeniden deneyin." }
+          },
+          "documents": {
+            "empty": "Henüz ürün belgesi yok.", "upload": "Yalnızca PDF, en fazla 20 MB. PDF dosyaları değiştirilmez.", "select": "PDF belgelerini seç", "title": "Belge başlığı", "description": "İsteğe bağlı açıklama", "save": "Belge bilgilerini kaydet", "remove": "Sil", "deleteConfirm": "Bu belge kalıcı olarak silinsin mi?", "moveUp": "Yukarı taşı", "moveDown": "Aşağı taşı", "languageLabel": "Belge metni dili", "pdf": "PDF"
           },
           "actions": {
             "create": "Ürünü kaydet",

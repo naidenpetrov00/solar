@@ -99,11 +99,14 @@ export const resolvePublicProduct = cache(
         seoTitle: translation.seoTitle,
         metaDescription: translation.metaDescription,
         media: productIndex.media.get(`${row.id}:${locale}`) ?? [],
+        documents: productIndex.documents.get(`${row.id}:${locale}`) ?? [],
         specifications,
         primaryCategory,
         additionalCategories,
         paths,
-        updatedAt: row.updatedAt,
+        updatedAt: new Date(
+          Math.max(row.updatedAt.getTime(), row.assetsUpdatedAt.getTime()),
+        ),
       },
     };
   },

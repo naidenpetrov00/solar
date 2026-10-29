@@ -14,6 +14,7 @@ import {
   catalogProductAdditionalCategory,
   catalogProductSpecificationValue,
 } from "@/db/schema/catalog-product-details";
+import { catalogCategoryCover } from "@/db/schema/catalog-assets";
 
 export const catalogCategoryRelations = relations(
   catalogCategory,
@@ -28,6 +29,7 @@ export const catalogCategoryRelations = relations(
     specifications: many(catalogSpecification),
     primaryProducts: many(catalogProduct),
     additionalProducts: many(catalogProductAdditionalCategory),
+    cover: one(catalogCategoryCover),
   }),
 );
 

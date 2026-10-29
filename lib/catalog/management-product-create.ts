@@ -16,11 +16,9 @@ import {
   normalizeProductSpecificationConfiguration,
   assertProductSpecificationConfiguration,
 } from "./management-product-input";
-import { normalizeMedia } from "./management-product-media";
 import { assertProductCategories } from "./management-product-categories";
 import { replaceProductTranslations } from "./management-product-translations";
 import { insertProductValues } from "./management-product-values";
-import { insertProductMedia } from "./management-product-media-write";
 export async function createCatalogProduct(input: CreateCatalogProductInput) {
   assertIdentifier(input.primaryCategoryId);
   const brand = normalizeBrand(input.brand);
@@ -34,7 +32,6 @@ export async function createCatalogProduct(input: CreateCatalogProductInput) {
   if (!translations.find(({ locale }) => locale === "bg")?.title) {
     throw new CatalogManagementError("INVALID_INPUT");
   }
-  const media = normalizeMedia(input.media ?? []);
   const specificationConfiguration = normalizeProductSpecificationConfiguration(
     input.specificationConfiguration ?? {
       excludedSpecificationIds: [],
@@ -111,7 +108,6 @@ export async function createCatalogProduct(input: CreateCatalogProductInput) {
       input.primaryCategoryId,
       input.specificationValues ?? [],
     );
-    await insertProductMedia(transaction, created.id, media);
     return { ...created, updatedAt: created.updatedAt.toISOString() };
   });
 }

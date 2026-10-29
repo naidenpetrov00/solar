@@ -5,6 +5,8 @@ export * from "@/db/schema/catalog-products";
 export * from "@/db/schema/catalog-product-translations";
 export * from "@/db/schema/catalog-product-details";
 export * from "@/db/schema/catalog-product-media";
+export * from "@/db/schema/catalog-assets";
 export * from "@/db/schema/catalog-category-relations";
 export * from "@/db/schema/catalog-product-relations";
+export * from "@/db/schema/catalog-asset-relations";
 export * from "@/db/schema/profiles";

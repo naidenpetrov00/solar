@@ -5,6 +5,17 @@ export type PublicCatalogMedia = {
   altText: string;
   isPrimary: boolean;
   isSocialImage: boolean;
+  source: "managed" | "legacy";
+  width: number | null;
+  height: number | null;
+};
+
+export type PublicCatalogDocument = {
+  url: string;
+  title: string;
+  description: string | null;
+  originalFilename: string;
+  byteSize: number;
 };
 
 export type PublicCatalogCategory = {
@@ -18,6 +29,7 @@ export type PublicCatalogCategory = {
   path: string;
   paths: Record<CatalogLocale, string>;
   updatedAt: Date;
+  cover: (PublicCatalogMedia & { width: number; height: number }) | null;
 };
 
 export type PublicCatalogCategoryNode = PublicCatalogCategory & {
@@ -95,6 +107,7 @@ export type PublicCatalogProductDetail = PublicCatalogProductSummary & {
   seoTitle: string | null;
   metaDescription: string | null;
   media: PublicCatalogMedia[];
+  documents: PublicCatalogDocument[];
   specifications: PublicCatalogSpecification[];
   primaryCategory: PublicCatalogCategory;
   additionalCategories: PublicCatalogCategory[];

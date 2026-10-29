@@ -21,7 +21,8 @@
               "INVALID_COMMERCE": "Geçerli satış modu, fiyat, KDV temeli ve stok durumu kombinasyonunu tamamlayın.",
               "PRIMARY_IMAGE_REQUIRED": "Tam olarak bir birincil görsel seçin.",
               "SOCIAL_IMAGE_LIMIT": "En fazla bir sosyal paylaşım görseli seçin.",
-              "MISSING_MEDIA_ALT": "{{media}} numaralı medya için {{locale}} alternatif metni ekleyin."
+              "MISSING_MEDIA_ALT": "{{media}} numaralı medya için {{locale}} alternatif metni ekleyin.",
+              "INVALID_MEDIA_ASSET": "Eksik veya geçersiz yönetilen görseli değiştirin."
             }
           },
           "results": {

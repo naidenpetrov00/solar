@@ -106,7 +106,9 @@
       "specifications": "Özellikler",
       "gallery": "Galeri",
       "noImage": "Görsel mevcut değil",
-      "relatedCategories": "Diğer ilgili kategoriler"
+      "relatedCategories": "Diğer ilgili kategoriler",
+      "documents": "Belgeler",
+      "downloadDocument": "Belgeyi indir"
     },
     "cart": {
       "title": "Sepet",

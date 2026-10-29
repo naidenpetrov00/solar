@@ -31,7 +31,6 @@ import {
   parseSpecificationConfiguration,
   parseSpecificationValues,
 } from "./product-action-specifications";
-import { parseMedia } from "./product-action-media";
 import { errorResult } from "./product-action-errors";
 
 async function requireCatalogManager() {
@@ -67,7 +66,6 @@ export async function saveCatalogProductAction(
   const specificationConfiguration = parseSpecificationConfiguration(
     stringValue(formData, "specificationConfiguration"),
   );
-  const media = parseMedia(stringValue(formData, "media"));
   const fieldErrors = { ...commerce.fieldErrors };
   const bgTitle = translations.find(
     ({ locale: candidate }) => candidate === "bg",
@@ -113,7 +111,6 @@ export async function saveCatalogProductAction(
   }
   if (!specificationValues || !specificationConfiguration)
     fieldErrors.specifications = "INVALID";
-  if (!media) fieldErrors.media = "INVALID";
   if (
     !locale ||
     (!creating &&
@@ -137,7 +134,6 @@ export async function saveCatalogProductAction(
     translations,
     specificationValues: specificationValues!,
     specificationConfiguration: specificationConfiguration!,
-    media: media!,
   };
   try {
     const actor = await requireCatalogManager();

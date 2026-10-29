@@ -40,6 +40,13 @@ export function useCatalogUnsavedGuard(unsavedMessage: string) {
   const clearAllProductDirty = useCallback(() => {
     setProductDirtySections(new Set());
   }, []);
+  const clearProductDirty = useCallback((section: ProductEditorSection) => {
+    setProductDirtySections((current) => {
+      const next = new Set(current);
+      next.delete(section);
+      return next;
+    });
+  }, []);
   const confirmDiscard = useCallback(() => {
     if (!hasUnsavedChanges) return true;
     if (!window.confirm(unsavedMessage)) return false;
@@ -146,6 +153,7 @@ export function useCatalogUnsavedGuard(unsavedMessage: string) {
     markDirty,
     clearDirty,
     markProductDirty,
+    clearProductDirty,
     clearAllProductDirty,
     confirmDiscard,
   };

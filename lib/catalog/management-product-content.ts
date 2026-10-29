@@ -4,12 +4,9 @@ import { db } from "@/db";
 import {
   catalogProduct,
   catalogProductAdditionalCategory,
-  catalogProductMedia,
   catalogProductSpecificationValue,
 } from "@/db/schema";
-import { hasAllCatalogLocales } from "@/lib/catalog/model";
 import {
-  type CatalogProductMediaInput,
   type CatalogProductSpecificationValueInput,
   type CatalogProductTranslationInput,
 } from "@/lib/catalog/catalog-inputs";
@@ -31,9 +28,7 @@ import {
   assertProductCategories,
 } from "./management-product-categories";
 import { insertProductValues } from "./management-product-values";
-import { insertProductMedia } from "./management-product-media-write";
 import { assertProductPublishable } from "@/lib/catalog/management-product-readiness";
-import { normalizeMedia } from "@/lib/catalog/management-product-media";
 
 export async function replaceCatalogProductTranslations(input: {
   actorId: string;
@@ -134,38 +129,6 @@ export async function replaceCatalogProductSpecificationValues(input: {
       assertProductPublishable(aggregate);
     }
 
-    return touchProduct(transaction, product.id);
-  });
-}
-
-export async function replaceCatalogProductMedia(input: {
-  actorId: string;
-  productId: string;
-  expectedUpdatedAt: string;
-  media: CatalogProductMediaInput[];
-}) {
-  assertIdentifier(input.productId);
-  const media = normalizeMedia(input.media);
-
-  return db.transaction(async (transaction) => {
-    await assertCatalogActor(transaction, input.actorId, "catalog:manage");
-    const product = await lockCatalogProduct(transaction, input.productId);
-    if (!product) throw new CatalogManagementError("NOT_FOUND");
-    assertFresh(product.updatedAt, input.expectedUpdatedAt);
-
-    if (
-      product.status === "published" &&
-      (media.length === 0 ||
-        media.filter(({ isPrimary }) => isPrimary).length !== 1 ||
-        media.some((item) => !hasAllCatalogLocales(item.translations)))
-    ) {
-      throw new CatalogManagementError("PUBLICATION_INVALID");
-    }
-
-    await transaction
-      .delete(catalogProductMedia)
-      .where(eq(catalogProductMedia.productId, product.id));
-    await insertProductMedia(transaction, product.id, media);
     return touchProduct(transaction, product.id);
   });
 }

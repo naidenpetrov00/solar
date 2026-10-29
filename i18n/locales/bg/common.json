@@ -106,7 +106,9 @@
       "specifications": "Характеристики",
       "gallery": "Галерия",
       "noImage": "Няма налично изображение",
-      "relatedCategories": "Още подходящи категории"
+      "relatedCategories": "Още подходящи категории",
+      "documents": "Документи",
+      "downloadDocument": "Изтегляне на документа"
     },
     "cart": {
       "title": "Количка",

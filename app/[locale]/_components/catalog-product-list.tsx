@@ -41,6 +41,9 @@ export async function ProductList({
                   <CatalogMedia
                     reference={product.primaryMedia.reference}
                     altText={product.primaryMedia.altText}
+                    source={product.primaryMedia.source}
+                    width={product.primaryMedia.width}
+                    height={product.primaryMedia.height}
                     sizes="(max-width: 48rem) 100vw, 22rem"
                   />
                 ) : null}

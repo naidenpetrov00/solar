@@ -55,6 +55,7 @@ export type CatalogLabels = {
   };
   actions: {
     save: string;
+    cleanupPending: string;
     saving: string;
     move: string;
     publish: string;
@@ -131,6 +132,20 @@ export type CatalogLabels = {
     confirmRemove: string;
     confirmClearOptions: string;
     types: Record<CatalogSpecificationValueType, string>;
+  };
+  cover: {
+    title: string;
+    empty: string;
+    select: string;
+    upload: string;
+    replace: string;
+    save: string;
+    remove: string;
+    deleteConfirm: string;
+    altText: string;
+    languageLabel: string;
+    statuses: Record<"optimizing" | "uploading" | "finalizing" | "success" | "error", string>;
+    errors: Record<string, string>;
   };
   unsaved: {
     title: string;

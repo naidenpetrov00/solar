@@ -21,7 +21,8 @@
               "INVALID_COMMERCE": "Complete a valid sales mode, price, VAT basis, and availability combination.",
               "PRIMARY_IMAGE_REQUIRED": "Select exactly one primary image.",
               "SOCIAL_IMAGE_LIMIT": "Select at most one social-sharing image.",
-              "MISSING_MEDIA_ALT": "Add {{locale}} alternative text for media item {{media}}."
+              "MISSING_MEDIA_ALT": "Add {{locale}} alternative text for media item {{media}}.",
+              "INVALID_MEDIA_ASSET": "Replace the missing or invalid managed image."
             }
           },
           "results": {

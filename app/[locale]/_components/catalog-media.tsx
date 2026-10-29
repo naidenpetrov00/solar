@@ -6,6 +6,9 @@ type Props = {
   className?: string;
   preload?: boolean;
   sizes?: string;
+  source?: "managed" | "legacy";
+  width?: number | null;
+  height?: number | null;
 };
 
 export function CatalogMedia({
@@ -14,8 +17,12 @@ export function CatalogMedia({
   className,
   preload = false,
   sizes = "(max-width: 48rem) 100vw, 50vw",
+  source = "legacy",
 }: Props) {
-  if (reference.startsWith("/") && !reference.startsWith("//")) {
+  if (
+    source === "managed" ||
+    (reference.startsWith("/") && !reference.startsWith("//"))
+  ) {
     return (
       <Image
         src={reference}

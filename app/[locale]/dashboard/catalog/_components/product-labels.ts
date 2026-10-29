@@ -110,13 +110,52 @@ export type ProductLabels = {
   };
   media: {
     empty: string;
-    add: string;
+    upload: string;
+    select: string;
+    legacy: string;
+    managed: string;
+    save: string;
+    saved: string;
+    cleanupPending: string;
     remove: string;
+    deleteConfirm: string;
+    removeLegacyConfirm: string;
     moveUp: string;
     moveDown: string;
     primary: string;
     social: string;
     languageLabel: string;
+    originalSize: string;
+    uploadSize: string;
+    statuses: Record<
+      | "queued"
+      | "optimizing"
+      | "uploading"
+      | "awaiting"
+      | "finalizing"
+      | "success"
+      | "canceled"
+      | "reconciliation"
+      | "error",
+      string
+    >;
+    retry: string;
+    cancel: string;
+    errors: Record<string, string>;
+  };
+  documents: {
+    empty: string;
+    upload: string;
+    select: string;
+    title: string;
+    description: string;
+    save: string;
+    remove: string;
+    deleteConfirm: string;
+    moveUp: string;
+    moveDown: string;
+    languageLabel: string;
+    pdf: string;
   };
   actions: {
     create: string;

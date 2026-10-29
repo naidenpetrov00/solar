@@ -8,6 +8,9 @@ import {
   catalogProductAdditionalCategory,
   catalogProductMedia,
   catalogProductMediaTranslation,
+  catalogManagedAsset,
+  catalogProductDocument,
+  catalogProductDocumentTranslation,
   catalogProductSpecificationValue,
   catalogProductTranslation,
   catalogSpecification,
@@ -45,7 +48,7 @@ export async function getProductPublicationAggregate(
     return null;
   }
 
-  const [translations, additionalCategories, specificationValues, media] =
+  const [translations, additionalCategories, specificationValues, media, documents] =
     await Promise.all([
       executor
         .select({
@@ -72,6 +75,10 @@ export async function getProductPublicationAggregate(
         .select()
         .from(catalogProductMedia)
         .where(eq(catalogProductMedia.productId, productId)),
+      executor
+        .select()
+        .from(catalogProductDocument)
+        .where(eq(catalogProductDocument.productId, productId)),
     ]);
   const categoryIds = [
     product.primaryCategoryId,
@@ -104,6 +111,23 @@ export async function getProductPublicationAggregate(
         .from(catalogProductMediaTranslation)
         .where(inArray(catalogProductMediaTranslation.productMediaId, mediaIds))
     : [];
+  const documentIds = documents.map(({ id }) => id);
+  const documentTranslations = documentIds.length
+    ? await executor
+        .select()
+        .from(catalogProductDocumentTranslation)
+        .where(inArray(catalogProductDocumentTranslation.documentId, documentIds))
+    : [];
+  const assetIds = [
+    ...media.flatMap(({ assetId }) => (assetId ? [assetId] : [])),
+    ...documents.map(({ assetId }) => assetId),
+  ];
+  const assets = assetIds.length
+    ? await executor
+        .select()
+        .from(catalogManagedAsset)
+        .where(inArray(catalogManagedAsset.id, assetIds))
+    : [];
 
   return {
     product,
@@ -115,5 +139,8 @@ export async function getProductPublicationAggregate(
     selectedOptions,
     media,
     mediaTranslations,
+    documents,
+    documentTranslations,
+    assets,
   };
 }

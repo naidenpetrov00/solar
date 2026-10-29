@@ -91,7 +91,22 @@ function mediaIssues(
   aggregate: PublicationAggregate,
   issues: CatalogProductPublicationIssue[],
 ) {
-  if (aggregate.media.filter(({ isPrimary }) => isPrimary).length !== 1) {
+  const validMedia = aggregate.media.filter((media) => {
+    if (!media.assetId) return Boolean(media.reference);
+    return aggregate.assets.some(
+      (asset) =>
+        asset.id === media.assetId &&
+        asset.state === "ready" &&
+        ["image/jpeg", "image/png", "image/webp"].includes(asset.mimeType) &&
+        Boolean(asset.width && asset.height),
+    );
+  });
+  for (const media of aggregate.media) {
+    if (!validMedia.some(({ id }) => id === media.id)) {
+      issues.push({ code: "INVALID_MEDIA_ASSET", mediaId: media.id });
+    }
+  }
+  if (validMedia.filter(({ isPrimary }) => isPrimary).length !== 1) {
     issues.push({ code: "PRIMARY_IMAGE_REQUIRED" });
   }
   if (aggregate.media.filter(({ isSocialImage }) => isSocialImage).length > 1) {
@@ -110,7 +125,7 @@ function mediaIssues(
         issues.push({
           code: "MISSING_MEDIA_ALT",
           mediaId: media.id,
-          mediaReference: media.reference,
+          mediaReference: media.reference ?? media.id,
           locale,
         });
       }

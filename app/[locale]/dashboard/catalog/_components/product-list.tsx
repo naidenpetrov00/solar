@@ -104,8 +104,8 @@ export function issueText(
   if ("mediaId" in issue) {
     text = text.replace(
       "{{media}}",
-      issue.mediaReference ||
-        detail.media.find(({ id }) => id === issue.mediaId)?.reference ||
+      ("mediaReference" in issue ? issue.mediaReference : null) ||
+        detail.media.find(({ id }) => id === issue.mediaId)?.url ||
         issue.mediaId,
     );
   }

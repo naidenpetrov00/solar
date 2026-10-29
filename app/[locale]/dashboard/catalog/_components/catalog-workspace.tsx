@@ -31,6 +31,7 @@ export function CatalogWorkspace(props: CatalogWorkspaceProps) {
     markDirty,
     clearDirty,
     markProductDirty,
+    clearProductDirty,
     clearAllProductDirty,
     confirmDiscard,
   } = useCatalogUnsavedGuard(labels.unsaved.message);
@@ -113,6 +114,7 @@ export function CatalogWorkspace(props: CatalogWorkspaceProps) {
           markDirty={markDirty}
           clearDirty={clearDirty}
           markProductDirty={markProductDirty}
+          clearProductDirty={clearProductDirty}
           clearAllProductDirty={clearAllProductDirty}
           confirmDiscard={confirmDiscard}
           onBack={closeEditor}

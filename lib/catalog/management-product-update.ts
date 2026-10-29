@@ -4,7 +4,6 @@ import { db } from "@/db";
 import {
   catalogProduct,
   catalogProductAdditionalCategory,
-  catalogProductMedia,
   catalogProductSpecificationValue,
 } from "@/db/schema";
 import {
@@ -30,7 +29,6 @@ import {
   normalizeProductSpecificationConfiguration,
   assertProductSpecificationConfiguration,
 } from "./management-product-input";
-import { normalizeMedia } from "./management-product-media";
 import {
   assertProductCategories,
   assertProductCategoryChange,
@@ -38,7 +36,6 @@ import {
 } from "./management-product-categories";
 import { replaceProductTranslations } from "./management-product-translations";
 import { insertProductValues } from "./management-product-values";
-import { insertProductMedia } from "./management-product-media-write";
 import { assertProductPublishable } from "./management-product-readiness";
 export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
   assertIdentifier(input.productId);
@@ -54,7 +51,6 @@ export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
   if (!translations.find(({ locale }) => locale === "bg")?.title) {
     throw new CatalogManagementError("INVALID_INPUT");
   }
-  const media = normalizeMedia(input.media);
   const specificationConfiguration = normalizeProductSpecificationConfiguration(
     input.specificationConfiguration,
   );
@@ -161,11 +157,6 @@ export async function updateCatalogProduct(input: UpdateCatalogProductInput) {
       input.specificationValues,
     );
     await replaceProductTranslations(transaction, product.id, translations);
-    await transaction
-      .delete(catalogProductMedia)
-      .where(eq(catalogProductMedia.productId, product.id));
-    await insertProductMedia(transaction, product.id, media);
-
     if (product.status === "published") {
       const aggregate = await getProductPublicationAggregate(
         transaction,

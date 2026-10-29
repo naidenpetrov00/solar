@@ -7,6 +7,7 @@ import type {
 import { getProductPublicationAggregate } from "@/lib/catalog/product-repository";
 import { getCatalogProductPublicationIssues } from "@/lib/catalog/management-product-readiness";
 import type { ManagedCatalogProductWorkspace } from "@/lib/catalog/management-product-types";
+import { catalogAssetStorage } from "@/lib/storage";
 
 export function mapManagedProductDetail(
   aggregate: NonNullable<
@@ -63,9 +64,24 @@ export function mapManagedProductDetail(
         left.displayOrder - right.displayOrder ||
         left.id.localeCompare(right.id),
     )
-    .map((item) => ({
+    .flatMap((item) => {
+      const asset = item.assetId
+        ? aggregate.assets.find(({ id }) => id === item.assetId)
+        : null;
+      const url = asset
+        ? catalogAssetStorage.resolvePublicAssetUrl(asset.objectKey)
+        : item.reference;
+      if (!url) return [];
+      return [{
       id: item.id,
       reference: item.reference,
+      source: asset ? ("managed" as const) : ("legacy" as const),
+      url,
+      originalFilename: asset?.originalFilename ?? null,
+      mimeType: asset?.mimeType ?? null,
+      byteSize: asset?.byteSize ?? null,
+      width: asset?.width ?? null,
+      height: asset?.height ?? null,
       displayOrder: item.displayOrder,
       isPrimary: item.isPrimary,
       isSocialImage: item.isSocialImage,
@@ -75,7 +91,35 @@ export function mapManagedProductDetail(
           ? [{ locale: translation.locale, altText: translation.altText }]
           : [],
       ),
-    }));
+      }];
+    });
+  const documents = aggregate.documents
+    .toSorted(
+      (left, right) =>
+        left.displayOrder - right.displayOrder || left.id.localeCompare(right.id),
+    )
+    .flatMap((document) => {
+      const asset = aggregate.assets.find(({ id }) => id === document.assetId);
+      if (!asset || asset.mimeType !== "application/pdf") return [];
+      return [{
+        id: document.id,
+        url: catalogAssetStorage.resolvePublicAssetUrl(asset.objectKey),
+        originalFilename: asset.originalFilename,
+        mimeType: "application/pdf" as const,
+        byteSize: asset.byteSize,
+        displayOrder: document.displayOrder,
+        translations: aggregate.documentTranslations.flatMap((translation) =>
+          translation.documentId === document.id &&
+          isCatalogLocale(translation.locale)
+            ? [{
+                locale: translation.locale,
+                title: translation.title,
+                description: translation.description,
+              }]
+            : [],
+        ),
+      }];
+    });
 
   return {
     ...summary,
@@ -96,6 +140,7 @@ export function mapManagedProductDetail(
     priceInputMinor: aggregate.product.priceInputMinor?.toString() ?? null,
     publishedAt: aggregate.product.publishedAt?.toISOString() ?? null,
     archivedAt: aggregate.product.archivedAt?.toISOString() ?? null,
+    assetsUpdatedAt: aggregate.product.assetsUpdatedAt.toISOString(),
     translations: aggregate.translations.flatMap((translation) =>
       isCatalogLocale(translation.locale)
         ? [
@@ -117,6 +162,7 @@ export function mapManagedProductDetail(
     specificationConfiguration: aggregate.product
       .specificationConfiguration as CatalogProductSpecificationConfigurationInput,
     media,
+    documents,
     publicationIssues: getCatalogProductPublicationIssues(aggregate),
   };
 }

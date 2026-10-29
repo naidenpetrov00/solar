@@ -12,9 +12,28 @@ export type CatalogProductDetailView = {
   price: string | null;
   availability: string | null;
   vatInformation?: string | null;
-  primaryMedia: { reference: string; altText: string } | null;
-  gallery: Array<{ reference: string; altText: string }>;
+  primaryMedia: {
+    reference: string;
+    altText: string;
+    source?: "managed" | "legacy";
+    width?: number | null;
+    height?: number | null;
+  } | null;
+  gallery: Array<{
+    reference: string;
+    altText: string;
+    source?: "managed" | "legacy";
+    width?: number | null;
+    height?: number | null;
+  }>;
   specifications: Array<{ label: string; value: string }>;
+  documents?: Array<{
+    url: string;
+    title: string;
+    description: string | null;
+    originalFilename: string;
+    byteSize: number;
+  }>;
 };
 
 export type CatalogProductDetailLabels = {
@@ -23,12 +42,15 @@ export type CatalogProductDetailLabels = {
   specifications: string;
   gallery: string;
   noImage: string;
+  documents?: string;
+  downloadDocument?: string;
 };
 
 type Props = {
   product: CatalogProductDetailView;
   labels: CatalogProductDetailLabels;
   actions?: ReactNode;
+  locale?: string;
 };
 
 /**
@@ -36,7 +58,7 @@ type Props = {
  * public catalog route. It deliberately has no editor or data-fetching
  * dependencies, so either surface supplies its own view model.
  */
-export function CatalogProductDetail({ product, labels, actions }: Props) {
+export function CatalogProductDetail({ product, labels, actions, locale = "en" }: Props) {
   const gallery = product.gallery.filter(
     (item) => item.reference !== product.primaryMedia?.reference,
   );
@@ -49,6 +71,9 @@ export function CatalogProductDetail({ product, labels, actions }: Props) {
             reference={product.primaryMedia.reference}
             altText={product.primaryMedia.altText}
             className="catalog-product-detail-primary-image"
+            source={product.primaryMedia.source}
+            width={product.primaryMedia.width}
+            height={product.primaryMedia.height}
             preload
             sizes="(max-width: 48rem) 100vw, 55vw"
           />
@@ -112,11 +137,41 @@ export function CatalogProductDetail({ product, labels, actions }: Props) {
                 <CatalogMedia
                   reference={item.reference}
                   altText={item.altText}
+                  source={item.source}
+                  width={item.width}
+                  height={item.height}
                   sizes="(max-width: 48rem) 100vw, 30vw"
                 />
               </div>
             ))}
           </div>
+        </section>
+      ) : null}
+      {product.documents?.length ? (
+        <section
+          className="catalog-product-detail-documents"
+          aria-labelledby="catalog-product-detail-documents"
+        >
+          <h2 id="catalog-product-detail-documents">{labels.documents}</h2>
+          <ul>
+            {product.documents.map((document) => (
+              <li key={document.url}>
+                <a
+                  href={document.url}
+                  aria-label={`${labels.downloadDocument ?? "Download"}: ${document.title} (PDF)`}
+                >
+                  <strong>{document.title}</strong>
+                  <span>
+                    PDF · {new Intl.NumberFormat(locale, {
+                      maximumFractionDigits: 1,
+                    }).format(document.byteSize / 1024 / 1024)} MB
+                  </span>
+                  <small>{document.originalFilename}</small>
+                </a>
+                {document.description ? <p>{document.description}</p> : null}
+              </li>
+            ))}
+          </ul>
         </section>
       ) : null}
     </article>

@@ -67,6 +67,10 @@
     font-size: clamp(2.8rem, 14vw, 4.5rem);
   }
 
+  .catalog-category-cover {
+    aspect-ratio: 16 / 10;
+  }
+
   .catalog-sidebar-mobile {
     grid-template-columns: minmax(0, 1fr);
   }

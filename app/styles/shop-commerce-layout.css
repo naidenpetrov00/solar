@@ -12,6 +12,20 @@
   margin-bottom: clamp(3rem, 6vw, 5rem);
 }
 
+.catalog-category-cover {
+  position: relative;
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 7;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--page-foreground) 7%, var(--page-background));
+}
+
+.catalog-category-cover img {
+  object-fit: cover;
+}
+
 .catalog-page-heading h1 {
   max-width: 13ch;
   margin: 0;

@@ -57,6 +57,13 @@
       "when": 1792502306060,
       "tag": "0007_material_shard",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793184000000,
+      "tag": "0008_portable_catalog_media",
+      "breakpoints": true
     }
   ]
 }

@@ -70,14 +70,3 @@ export type CatalogProductSpecificationConfigurationInput = {
   excludedSpecificationIds: string[];
   customSpecifications: [];
 };
-
-export type CatalogProductMediaInput = {
-  reference: string;
-  displayOrder: number;
-  isPrimary: boolean;
-  isSocialImage: boolean;
-  translations: Array<{
-    locale: CatalogLocale;
-    altText: string;
-  }>;
-};
