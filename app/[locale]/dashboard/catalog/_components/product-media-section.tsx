@@ -16,10 +16,12 @@ import {
 } from "../catalog-asset-actions";
 import { DashboardButton } from "./product-editor-draft";
 import { Field } from "./product-editor-fields";
+import { CatalogSectionSaveState } from "./catalog-section-save-state";
 import type { DocumentDraft, MediaDraft } from "./product-editor-model";
 import {
   filenameStem,
   formatCatalogBytes,
+  createCatalogClientId,
   prepareCatalogImage,
   prepareCatalogPdf,
   type PreparedCatalogFile,
@@ -65,6 +67,10 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
   const [documentQueue, setDocumentQueue] = useState<QueueItem[]>([]);
   const [announcement, setAnnouncement] = useState("");
   const [busy, setBusy] = useState(false);
+  const [imageSavePending, setImageSavePending] = useState(false);
+  const [documentSavePending, setDocumentSavePending] = useState(false);
+  const [imageSaved, setImageSaved] = useState(false);
+  const [documentsSaved, setDocumentsSaved] = useState(false);
   const [reconciliationRequired, setReconciliationRequired] = useState(false);
   const controllers = useRef(new Map<string, AbortController>());
   const pendingFinalizations = useRef(new Map<string, { uploadId: string; kind: "image" | "document"; defaultText: string }>());
@@ -114,7 +120,7 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
   async function prepareFiles(kind: "image" | "document", files: File[]) {
     const prepared: Array<{ queueId: string; prepared: PreparedCatalogFile }> = [];
     for (const file of files) {
-      const queueId = crypto.randomUUID();
+      const queueId = createCatalogClientId();
       const item: QueueItem = { id: queueId, file, status: kind === "image" ? "optimizing" : "queued", progress: 0, originalSize: file.size, uploadSize: null };
       (kind === "image" ? setImageQueue : setDocumentQueue)((current) => [...current, item]);
       try {
@@ -274,11 +280,17 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
         }
       }
     }
-    const result = await saveCatalogProductImagesAction({ locale, productId, expectedAssetsUpdatedAt: assetsUpdatedAt, images: media.map((item) => ({ id: item.clientId, reference: item.reference, isPrimary: item.isPrimary, isSocialImage: item.isSocialImage, translations: catalogLocales.map((contentLocale) => ({ locale: contentLocale, altText: item.translations[contentLocale] })) })) });
-    if (result.status === "success") { applyProductSlice(result.data); clearDirty("media"); setAnnouncement(labels.media.saved); }
-    else {
-      if (result.code === "STALE") setReconciliationRequired(true);
-      setAnnouncement(labels.media.errors[result.code] ?? result.code);
+    setImageSavePending(true);
+    setImageSaved(false);
+    try {
+      const result = await saveCatalogProductImagesAction({ locale, productId, expectedAssetsUpdatedAt: assetsUpdatedAt, images: media.map((item) => ({ id: item.clientId, reference: item.reference, isPrimary: item.isPrimary, isSocialImage: item.isSocialImage, translations: catalogLocales.map((contentLocale) => ({ locale: contentLocale, altText: item.translations[contentLocale] })) })) });
+      if (result.status === "success") { applyProductSlice(result.data); clearDirty("media"); setImageSaved(true); setAnnouncement(labels.media.saved); }
+      else {
+        if (result.code === "STALE") setReconciliationRequired(true);
+        setAnnouncement(labels.media.errors[result.code] ?? result.code);
+      }
+    } finally {
+      setImageSavePending(false);
     }
   }
 
@@ -293,11 +305,17 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
         return;
       }
     }
-    const result = await saveCatalogProductDocumentsAction({ locale, productId, expectedAssetsUpdatedAt: assetsUpdatedAt, documents: documents.map((document) => ({ id: document.clientId, translations: catalogLocales.map((contentLocale) => ({ locale: contentLocale, title: document.translations[contentLocale].title, description: document.translations[contentLocale].description || null })) })) });
-    if (result.status === "success") { applyProductSlice(result.data); clearDirty("documents"); setAnnouncement(labels.media.saved); }
-    else {
-      if (result.code === "STALE") setReconciliationRequired(true);
-      setAnnouncement(labels.media.errors[result.code] ?? result.code);
+    setDocumentSavePending(true);
+    setDocumentsSaved(false);
+    try {
+      const result = await saveCatalogProductDocumentsAction({ locale, productId, expectedAssetsUpdatedAt: assetsUpdatedAt, documents: documents.map((document) => ({ id: document.clientId, translations: catalogLocales.map((contentLocale) => ({ locale: contentLocale, title: document.translations[contentLocale].title, description: document.translations[contentLocale].description || null })) })) });
+      if (result.status === "success") { applyProductSlice(result.data); clearDirty("documents"); setDocumentsSaved(true); setAnnouncement(labels.media.saved); }
+      else {
+        if (result.code === "STALE") setReconciliationRequired(true);
+        setAnnouncement(labels.media.errors[result.code] ?? result.code);
+      }
+    } finally {
+      setDocumentSavePending(false);
     }
   }
 
@@ -317,11 +335,11 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
   return <>
     {announcement ? <p className="dashboard-catalog-media-feedback" role="status" aria-live="polite" aria-atomic="true">{announcement}</p> : null}
     {reconciliationRequired ? <div className="dashboard-catalog-media-alert" role="alert"><p>{labels.media.statuses.reconciliation}</p><DashboardButton type="button" onClick={() => void reconcileAssets()}>{labels.actions.reload}</DashboardButton></div> : null}
-    <details className="dashboard-catalog-section dashboard-catalog-media-section">
-      <summary>{labels.sections.media}</summary>
+    <details className="dashboard-catalog-section dashboard-catalog-media-section" data-unsaved={props.isMediaDirty || undefined}>
+      <summary>{labels.sections.media}{props.isMediaDirty ? <span className="dashboard-catalog-section-unsaved">{labels.saveState.unsavedLabel}</span> : null}</summary>
       <div className="dashboard-catalog-media-body">
         <LocalizedEditorSwitch idPrefix="product-media" variant="selector" activeLocale={activeLocale} onChange={setActiveLocale} languageNames={languages} statusByLocale={localeStatus} completeLabel={labels.editor.complete} incompleteLabel={labels.editor.incomplete} ariaLabel={labels.media.languageLabel} />
-        <fieldset disabled={editorDisabled || !productId} className="dashboard-catalog-product-fieldset dashboard-catalog-media-workspace">
+        <fieldset disabled={editorDisabled || !productId || imageSavePending} aria-busy={imageSavePending} className="dashboard-catalog-product-fieldset dashboard-catalog-media-workspace">
           <div className="dashboard-catalog-upload-panel">
             <div className="dashboard-catalog-upload-copy">
               <label htmlFor="catalog-product-image-upload">{labels.media.select}</label>
@@ -331,15 +349,15 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
           </div>
           <Queue items={imageQueue} labels={labels} locale={locale} controllers={controllers} onRetry={(id, file) => pendingFinalizations.current.has(id) ? void resumeFinalization(id) : void runUpload("image", [file])} onResume={(id) => void resumeFinalization(id)} onRemove={(id) => void removeQueueItem(id, setImageQueue)} />
           {media.length === 0 ? <p className="dashboard-catalog-media-empty">{labels.media.empty}</p> : <div className="dashboard-catalog-media-list">{media.map((item, index) => <ImageItem key={item.clientId} item={item} index={index} props={props} activeLocale={activeLocale} applyProductSlice={applyProductSlice} inputRef={imageInputRef} setAnnouncement={setAnnouncement} onStale={() => setReconciliationRequired(true)} />)}</div>}
-          {media.length ? <div className="dashboard-catalog-media-save"><DashboardButton type="button" variant="primary" onClick={() => void saveImages()}>{labels.media.save}</DashboardButton></div> : null}
+          {media.length ? <><CatalogSectionSaveState id="catalog-product-media-save-state" isDirty={props.isMediaDirty} pending={imageSavePending} result={{ status: imageSaved ? "success" : "idle" }} copy={labels.saveState} /><div className="dashboard-catalog-media-save"><DashboardButton type="button" variant="primary" disabled={!props.isMediaDirty || imageSavePending || busy} aria-describedby="catalog-product-media-save-state" onClick={() => void saveImages()}>{imageSavePending ? labels.actions.saving : labels.media.save}</DashboardButton></div></> : null}
         </fieldset>
       </div>
     </details>
-    <details className="dashboard-catalog-section dashboard-catalog-media-section">
-      <summary>{labels.sections.documents}</summary>
+    <details className="dashboard-catalog-section dashboard-catalog-media-section" data-unsaved={props.isDocumentsDirty || undefined}>
+      <summary>{labels.sections.documents}{props.isDocumentsDirty ? <span className="dashboard-catalog-section-unsaved">{labels.saveState.unsavedLabel}</span> : null}</summary>
       <div className="dashboard-catalog-media-body">
         <LocalizedEditorSwitch idPrefix="product-documents" variant="selector" activeLocale={activeLocale} onChange={setActiveLocale} languageNames={languages} statusByLocale={Object.fromEntries(catalogLocales.map((contentLocale) => [contentLocale, documents.every((item) => item.translations[contentLocale].title.trim())])) as Record<CatalogLocale, boolean>} completeLabel={labels.editor.complete} incompleteLabel={labels.editor.incomplete} ariaLabel={labels.documents.languageLabel} />
-        <fieldset disabled={editorDisabled || !productId} className="dashboard-catalog-product-fieldset dashboard-catalog-media-workspace">
+        <fieldset disabled={editorDisabled || !productId || documentSavePending} aria-busy={documentSavePending} className="dashboard-catalog-product-fieldset dashboard-catalog-media-workspace">
           <div className="dashboard-catalog-upload-panel">
             <div className="dashboard-catalog-upload-copy">
               <label htmlFor="catalog-product-document-upload">{labels.documents.select}</label>
@@ -349,7 +367,7 @@ export function ProductMediaSection(props: ProductMediaSectionProps) {
           </div>
           <Queue items={documentQueue} labels={labels} locale={locale} controllers={controllers} onRetry={(id, file) => pendingFinalizations.current.has(id) ? void resumeFinalization(id) : void runUpload("document", [file])} onResume={(id) => void resumeFinalization(id)} onRemove={(id) => void removeQueueItem(id, setDocumentQueue)} />
           {documents.length === 0 ? <p className="dashboard-catalog-media-empty">{labels.documents.empty}</p> : <div className="dashboard-catalog-media-list">{documents.map((document, index) => <DocumentItem key={document.clientId} document={document} index={index} props={props} activeLocale={activeLocale} applyProductSlice={applyProductSlice} inputRef={documentInputRef} setAnnouncement={setAnnouncement} onStale={() => setReconciliationRequired(true)} />)}</div>}
-          {documents.length ? <div className="dashboard-catalog-media-save"><DashboardButton type="button" variant="primary" onClick={() => void saveDocuments()}>{labels.documents.save}</DashboardButton></div> : null}
+          {documents.length ? <><CatalogSectionSaveState id="catalog-product-documents-save-state" isDirty={props.isDocumentsDirty} pending={documentSavePending} result={{ status: documentsSaved ? "success" : "idle" }} copy={labels.saveState} /><div className="dashboard-catalog-media-save"><DashboardButton type="button" variant="primary" disabled={!props.isDocumentsDirty || documentSavePending || busy} aria-describedby="catalog-product-documents-save-state" onClick={() => void saveDocuments()}>{documentSavePending ? labels.actions.saving : labels.documents.save}</DashboardButton></div></> : null}
         </fieldset>
       </div>
     </details>

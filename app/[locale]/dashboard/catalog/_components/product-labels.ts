@@ -6,6 +6,7 @@ import {
   type LifecycleIntent,
   type ProductEditorSection,
 } from "./product-editor-types";
+import type { CatalogSectionSaveCopy } from "./catalog-section-save-state";
 
 export type FieldCopy = { label: string; help: string; example?: string };
 
@@ -29,6 +30,7 @@ export type ProductLabels = {
     incomplete: string;
     unsaved: string;
   };
+  saveState: CatalogSectionSaveCopy;
   preview: CatalogProductDetailLabels & {
     open: string;
     back: string;

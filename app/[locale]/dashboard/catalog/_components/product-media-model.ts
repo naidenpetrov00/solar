@@ -20,6 +20,8 @@ export type ProductMediaSectionProps = MediaState & {
   locale: string;
   productId: string | null;
   productStatus: "draft" | "published" | "archived";
+  isMediaDirty: boolean;
+  isDocumentsDirty: boolean;
   markDirty: (section: ProductEditorSection) => void;
   clearDirty: (section: ProductEditorSection) => void;
 };

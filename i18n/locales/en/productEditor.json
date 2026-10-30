@@ -30,6 +30,13 @@
             "incomplete": "Incomplete",
             "unsaved": "This product has unsaved changes. Continue and discard them?"
           },
+          "saveState": {
+            "unchanged": "There are no unsaved changes.",
+            "unsaved": "There are unsaved changes. Use the enabled save button below to apply them.",
+            "saving": "Saving changes…",
+            "saved": "Changes saved.",
+            "unsavedLabel": "Unsaved"
+          },
           "preview": {
             "open": "Preview",
             "back": "Back to editing",

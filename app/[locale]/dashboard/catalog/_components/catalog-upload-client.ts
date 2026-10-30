@@ -4,6 +4,29 @@ import type { CatalogUploadAuthorization } from "@/lib/catalog/management-asset-
 
 const imageLimit = 10 * 1024 * 1024;
 const pdfLimit = 20 * 1024 * 1024;
+let fallbackClientIdCounter = 0;
+
+/**
+ * Client-only identity for draft rows and upload queue entries. It is not used
+ * for authorization, ownership, or storage keys.
+ */
+export function createCatalogClientId() {
+  const cryptoApi = globalThis.crypto;
+  if (cryptoApi && typeof cryptoApi.getRandomValues === "function") {
+    try {
+      const bytes = new Uint8Array(16);
+      cryptoApi.getRandomValues(bytes);
+      bytes[6] = (bytes[6] & 0x0f) | 0x40;
+      bytes[8] = (bytes[8] & 0x3f) | 0x80;
+      const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0"));
+      return `${hex.slice(0, 4).join("")}-${hex.slice(4, 6).join("")}-${hex.slice(6, 8).join("")}-${hex.slice(8, 10).join("")}-${hex.slice(10).join("")}`;
+    } catch {
+      // Older iOS browsers may expose crypto without a usable RNG in an HTTP context.
+    }
+  }
+  fallbackClientIdCounter += 1;
+  return `client-${Date.now().toString(36)}-${fallbackClientIdCounter.toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
 
 export type PreparedCatalogFile = {
   original: File;

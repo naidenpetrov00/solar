@@ -4,6 +4,7 @@ import type { CatalogLabels } from "./catalog-labels";
 import type { SpecificationDraft } from "./catalog-editor-model";
 import { DashboardButton, emptyLocaleLabels } from "./catalog-editor-actions";
 import { SpecificationOptionRow } from "./catalog-specification-option-row";
+import { createCatalogClientId } from "./catalog-upload-client";
 
 export function SpecificationOptions({
   specification,
@@ -55,7 +56,7 @@ export function SpecificationOptions({
             ) {
               setClientValidationId(null);
             }
-            const optionId = crypto.randomUUID();
+            const optionId = createCatalogClientId();
             setSpecificationLocale("bg");
             updateSpecification(index, (current) => ({
               ...current,

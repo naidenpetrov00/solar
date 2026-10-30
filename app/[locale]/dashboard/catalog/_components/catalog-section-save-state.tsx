@@ -1,7 +1,5 @@
 "use client";
 
-import type { CatalogActionResult } from "../category-action-model";
-
 export type CatalogSectionSaveCopy = {
   unchanged: string;
   unsaved: string;
@@ -20,7 +18,7 @@ export function CatalogSectionSaveState({
   id: string;
   isDirty: boolean;
   pending: boolean;
-  result: CatalogActionResult;
+  result: { status: "idle" | "success" | "error" };
   copy: CatalogSectionSaveCopy;
 }) {
   const state = pending

@@ -157,6 +157,8 @@ export function ProductEditorSections({
         locale={locale}
         productId={detail?.id ?? null}
         productStatus={detail?.status ?? "draft"}
+        isMediaDirty={props.dirtySections.has("media")}
+        isDocumentsDirty={props.dirtySections.has("documents")}
         markDirty={markDirty}
         clearDirty={clearDirty}
         media={media}

@@ -12,6 +12,7 @@ import { firstInvalidSpecification } from "./catalog-specification-validation";
 import { useSpecificationEditor } from "./use-specification-editor";
 import { SpecificationItem } from "./catalog-specification-item";
 import { SpecificationLanguage } from "./catalog-specification-language";
+import { createCatalogClientId } from "./catalog-upload-client";
 
 export function SpecificationEditor({
   detail,
@@ -140,7 +141,7 @@ export function SpecificationEditor({
                 type="button"
                 onClick={() => {
                   setDismissedServerErrors(true);
-                  const clientId = crypto.randomUUID();
+                  const clientId = createCatalogClientId();
                   setSpecificationLocale("bg");
                   setExpanded((current) => new Set(current).add(clientId));
                   setSpecifications((current) => [
