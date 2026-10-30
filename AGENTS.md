@@ -31,6 +31,7 @@ Do not read every supporting guide by default. Read only the guide whose trigger
 1. Inspect the relevant implementation and supporting guidance before changing it.
 2. Make the smallest coherent change that preserves the existing architecture and leaves future extension possible.
 3. Do not run tests, production builds, development servers, previews, the application, database generation, or migrations unless the user explicitly requests it. Static inspection and code changes are allowed.
+4. Never hand-author or manually patch generated artifacts when the project provides a canonical command that produces them. This includes database migrations and snapshots, generated schemas, code-generated files, dependency lockfiles, and framework-managed files. Do not run the generating command yourself: provide the user with the exact command and any prerequisites, wait for the user to run it, then inspect and review the generated output before continuing.
 
 
 <!-- BEGIN:nextjs-agent-rules -->
