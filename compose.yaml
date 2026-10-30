@@ -39,10 +39,11 @@ services:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       CATALOG_STORAGE_S3_BUCKET: ${CATALOG_STORAGE_S3_BUCKET:-solar-catalog}
+      CATALOG_STORAGE_BROWSER_ORIGIN: ${CATALOG_STORAGE_BROWSER_ORIGIN:-}
       S3_SKIP_SIGNATURE_VALIDATION: "0"
       SKIP_SSL_CERT_DOWNLOAD: "1"
     ports:
-      - "127.0.0.1:${LOCALSTACK_GATEWAY_PORT:-4566}:4566"
+      - "${LOCALSTACK_BIND_ADDRESS:-127.0.0.1}:${LOCALSTACK_GATEWAY_PORT:-4566}:4566"
     volumes:
       - localstack_data:/var/lib/localstack
       - ./docker/localstack:/etc/localstack/init/ready.d:ro

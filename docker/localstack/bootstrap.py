@@ -46,6 +46,11 @@ if not bucket_exists(client):
 policy = load_json("public-assets-policy.json")
 policy_text = json.dumps(policy).replace("__CATALOG_BUCKET__", BUCKET)
 cors = load_json("cors.json")
+browser_origin = os.environ.get("CATALOG_STORAGE_BROWSER_ORIGIN", "").strip()
+if browser_origin:
+    allowed_origins = cors["CORSRules"][0]["AllowedOrigins"]
+    if browser_origin not in allowed_origins:
+        allowed_origins.append(browser_origin)
 lifecycle = load_json("lifecycle.json")
 
 client.put_bucket_policy(Bucket=BUCKET, Policy=policy_text)

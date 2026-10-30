@@ -11,8 +11,7 @@ const storagePattern = storagePublicBase
   : null;
 const allowLocalStorageImage =
   process.env.NODE_ENV !== "production" &&
-  storagePattern !== null &&
-  ["127.0.0.1", "localhost", "::1"].includes(storagePattern.hostname);
+  storagePattern !== null;
 const allowedDevOrigins = [
   ...new Set(
     (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")

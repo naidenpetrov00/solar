@@ -40,6 +40,8 @@ Configuration variables:
 | `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
 | `BETTER_AUTH_TRUSTED_ORIGINS` | Optional comma-separated additional origins for LAN or preview development, such as the exact URL opened on a phone |
 | `LOCALSTACK_GATEWAY_PORT` | Loopback-only LocalStack S3 gateway port; defaults to `4566` |
+| `LOCALSTACK_BIND_ADDRESS` | LocalStack host bind address; keep `127.0.0.1` by default and use `0.0.0.0` only for trusted LAN testing |
+| `CATALOG_STORAGE_BROWSER_ORIGIN` | Exact browser origin added to local object-storage CORS for LAN testing |
 | `CATALOG_STORAGE_PUBLIC_BASE_URL` | Public base URL serving immutable `catalog/assets/` objects; local LocalStack uses path-style addressing |
 | `CATALOG_STORAGE_S3_ENDPOINT` | Server-only S3-compatible endpoint; local LocalStack or production Hetzner Object Storage |
 | `CATALOG_STORAGE_S3_REGION` | S3-compatible region matching the bucket location |
@@ -98,6 +100,8 @@ docker compose logs object-storage
 ```
 
 The LocalStack READY hook creates the `solar-catalog` bucket and applies the reviewed public-read, CORS, and lifecycle configuration idempotently. A successful startup log includes `LocalStack catalog bucket 'solar-catalog' is ready.` The S3 gateway is available at `http://127.0.0.1:4566`; this S3-only archive has no local management console, and the catalog dashboard remains the media-management interface.
+
+For testing from a phone on the same LAN, loopback addresses are not usable: on the phone, `127.0.0.1` means the phone itself. Set `LOCALSTACK_BIND_ADDRESS=0.0.0.0`, replace `127.0.0.1` with the development computer's LAN IP in `CATALOG_STORAGE_PUBLIC_BASE_URL` and `CATALOG_STORAGE_S3_ENDPOINT`, and set `CATALOG_STORAGE_BROWSER_ORIGIN` to the exact browser origin, for example `http://192.168.1.123:3000`. Recreate the object-storage service after changing these values so the port binding and CORS policy are applied. Keep this LAN exposure limited to a trusted private network and return `LOCALSTACK_BIND_ADDRESS` to `127.0.0.1` afterward.
 
 Check the emulator health from PowerShell with:
 
