@@ -20,10 +20,18 @@ import {
 import { requireServerEnvironmentVariable } from "@/lib/server-env";
 import { enforceManagementRequestInvariants } from "@/lib/auth-management-guard";
 import { verifyAdministratorAfterPasswordReset } from "@/lib/auth-reset-verification";
+import { getAuthOriginConfig } from "@/lib/auth-origin-config";
+
+const authOrigins = getAuthOriginConfig({
+  baseUrl: requireServerEnvironmentVariable("BETTER_AUTH_URL"),
+  trustedOrigins: process.env.BETTER_AUTH_TRUSTED_ORIGINS,
+  production: process.env.NODE_ENV === "production",
+});
 
 export const auth = betterAuth({
   appName: "Solar",
-  baseURL: requireServerEnvironmentVariable("BETTER_AUTH_URL"),
+  baseURL: authOrigins.baseUrl,
+  trustedOrigins: authOrigins.trustedOrigins,
   secret: requireServerEnvironmentVariable("BETTER_AUTH_SECRET"),
   database: drizzleAdapter(db, {
     provider: "pg",

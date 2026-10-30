@@ -108,6 +108,9 @@
             "remove": "Remove",
             "deleteConfirm": "Permanently delete this image?",
             "removeLegacyConfirm": "Remove this external reference? The application does not own or delete the external file.",
+            "discardChangesConfirm": "Images changed elsewhere. Discard your unsaved image changes and load the current version?",
+            "reconciled": "Catalog media synchronized.",
+            "reconciliationCanceled": "Synchronization canceled. Your unsaved changes were preserved.",
             "moveUp": "Move up",
             "moveDown": "Move down",
             "primary": "Primary image",
@@ -118,10 +121,10 @@
             "statuses": { "queued": "Queued", "optimizing": "Optimizing", "uploading": "Uploading", "awaiting": "Awaiting finalization", "finalizing": "Finalizing", "success": "Complete", "canceled": "Canceled", "reconciliation": "Reconciliation required", "error": "Error" },
             "retry": "Retry",
             "cancel": "Cancel upload",
-            "errors": { "IMAGE_TOO_LARGE": "The original image exceeds 10 MB.", "PDF_TOO_LARGE": "The PDF exceeds 20 MB.", "INVALID_IMAGE": "Select a JPEG, PNG, or WebP image.", "INVALID_PDF": "Select a PDF file.", "IMAGE_PROCESSING_FAILED": "The image could not be prepared safely.", "UPLOAD_FAILED": "The upload failed. Try again.", "UPLOAD_CANCELED": "The upload was canceled.", "ASSET_LIMIT_REACHED": "This item has reached its media limit.", "FORBIDDEN": "You no longer have permission to manage catalog media.", "INVALID_INPUT": "The file or metadata is invalid.", "NOT_FOUND": "The catalog item no longer exists.", "PUBLICATION_INVALID": "Choose another primary image before deleting this one.", "STALE": "Media changed elsewhere. Reconcile the media section before continuing.", "STORAGE_ERROR": "Storage could not complete the operation.", "UPLOAD_EXPIRED": "The upload authorization expired. Retry the file." }
+            "errors": { "IMAGE_TOO_LARGE": "The original image exceeds 10 MB.", "PDF_TOO_LARGE": "The PDF exceeds 20 MB.", "INVALID_IMAGE": "Select a JPEG, PNG, or WebP image.", "INVALID_PDF": "Select a PDF file.", "IMAGE_PROCESSING_FAILED": "The image could not be prepared safely.", "UPLOAD_FAILED": "The upload failed. Try again.", "UPLOAD_CANCELED": "The upload was canceled.", "ASSET_LIMIT_REACHED": "This item has reached its media limit.", "FORBIDDEN": "You no longer have permission to manage catalog media.", "INVALID_INPUT": "The file or metadata is invalid.", "NOT_FOUND": "The catalog item no longer exists.", "PUBLICATION_INVALID": "Choose another primary image before deleting this one.", "STALE": "Media changed elsewhere. Reconcile the media section before continuing.", "STORAGE_ERROR": "Storage could not complete the operation.", "UPLOAD_EXPIRED": "The upload authorization expired. Retry the file.", "NETWORK_ERROR": "The connection failed. Retry; successfully uploaded files were preserved.", "ABANDON_FAILED": "The pending upload could not be cleaned up. Try again.", "UNEXPECTED_ERROR": "An unexpected error occurred. Try again." }
           },
           "documents": {
-            "empty": "No product documents yet.", "upload": "PDF only, maximum 20 MB. PDFs are uploaded without modification.", "select": "Select PDF documents", "title": "Document title", "description": "Optional description", "save": "Save document details", "remove": "Delete", "deleteConfirm": "Permanently delete this document?", "moveUp": "Move up", "moveDown": "Move down", "languageLabel": "Document text language", "pdf": "PDF"
+            "empty": "No product documents yet.", "upload": "PDF only, maximum 20 MB. PDFs are uploaded without modification.", "select": "Select PDF documents", "title": "Document title", "description": "Optional description", "save": "Save document details", "remove": "Delete", "deleteConfirm": "Permanently delete this document?", "discardChangesConfirm": "Documents changed elsewhere. Discard your unsaved document changes and load the current version?", "moveUp": "Move up", "moveDown": "Move down", "languageLabel": "Document text language", "pdf": "PDF"
           },
           "actions": {
             "create": "Save product",

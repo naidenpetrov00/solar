@@ -48,6 +48,7 @@ export type CatalogAssetActionResult<T> =
         | "PUBLICATION_INVALID"
         | "STALE"
         | "STORAGE_ERROR"
+        | "UNEXPECTED_ERROR"
         | "UPLOAD_EXPIRED";
     };
 
@@ -69,7 +70,7 @@ function actionError<T>(error: unknown): CatalogAssetActionResult<T> {
       return { status: "error", code: error.code };
     }
   }
-  return { status: "error", code: "INVALID_INPUT" };
+  return { status: "error", code: "UNEXPECTED_ERROR" };
 }
 
 function scheduleCleanup() {

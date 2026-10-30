@@ -7,9 +7,13 @@ import type {
   UploadDescriptor,
 } from "./management-asset-types";
 import type { CatalogUploadPurpose } from "@/lib/storage/catalog-asset-storage";
+import {
+  catalogDocumentMaxBytes,
+  catalogImageMaxBytes,
+} from "./catalog-asset-limits";
 
-export const imageUploadLimit = 10 * 1024 * 1024;
-export const documentUploadLimit = 20 * 1024 * 1024;
+export const imageUploadLimit = catalogImageMaxBytes;
+export const documentUploadLimit = catalogDocumentMaxBytes;
 
 const imageExtensions: Record<string, string[]> = {
   "image/jpeg": ["jpg", "jpeg"],

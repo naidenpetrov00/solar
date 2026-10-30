@@ -1,9 +1,12 @@
 "use client";
 
 import type { CatalogUploadAuthorization } from "@/lib/catalog/management-asset-types";
+import {
+  catalogDocumentMaxBytes,
+  catalogImageMaxBytes,
+  catalogImageMaxEdge,
+} from "@/lib/catalog/catalog-asset-limits";
 
-const imageLimit = 10 * 1024 * 1024;
-const pdfLimit = 20 * 1024 * 1024;
 let fallbackClientIdCounter = 0;
 
 /**
@@ -49,7 +52,7 @@ function outputName(filename: string, outputExtension: string) {
 export async function prepareCatalogImage(
   file: File,
 ): Promise<PreparedCatalogFile> {
-  if (file.size > imageLimit) throw new Error("IMAGE_TOO_LARGE");
+  if (file.size > catalogImageMaxBytes) throw new Error("IMAGE_TOO_LARGE");
   const ext = extension(file.name);
   if (
     !["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
@@ -76,7 +79,12 @@ export async function prepareCatalogImage(
     bitmap = await createImageBitmap(file);
   }
   try {
-    const scale = Math.min(1, 2560 / Math.max(bitmap.width, bitmap.height));
+    const sourceNeedsResize =
+      Math.max(bitmap.width, bitmap.height) > catalogImageMaxEdge;
+    const scale = Math.min(
+      1,
+      catalogImageMaxEdge / Math.max(bitmap.width, bitmap.height),
+    );
     const width = Math.max(1, Math.round(bitmap.width * scale));
     const height = Math.max(1, Math.round(bitmap.height * scale));
     const canvas = document.createElement("canvas");
@@ -94,8 +102,8 @@ export async function prepareCatalogImage(
     if (
       !blob ||
       blob.type !== outputType ||
-      blob.size >= file.size ||
-      blob.size > imageLimit
+      blob.size > catalogImageMaxBytes ||
+      (!sourceNeedsResize && blob.size >= file.size)
     ) {
       return {
         original: file,
@@ -125,7 +133,7 @@ export async function prepareCatalogImage(
 }
 
 export function prepareCatalogPdf(file: File): PreparedCatalogFile {
-  if (file.size > pdfLimit) throw new Error("PDF_TOO_LARGE");
+  if (file.size > catalogDocumentMaxBytes) throw new Error("PDF_TOO_LARGE");
   if (file.type !== "application/pdf" || extension(file.name) !== "pdf") {
     throw new Error("INVALID_PDF");
   }
@@ -148,6 +156,13 @@ export function uploadCatalogFile(
   return new Promise<void>((resolve, reject) => {
     const request = new XMLHttpRequest();
     const abort = () => request.abort();
+    let settled = false;
+    const finish = (callback: () => void) => {
+      if (settled) return;
+      settled = true;
+      signal.removeEventListener("abort", abort);
+      callback();
+    };
     signal.addEventListener("abort", abort, { once: true });
     request.open("POST", authorization.url);
     request.upload.addEventListener("progress", (event) => {
@@ -156,12 +171,17 @@ export function uploadCatalogFile(
       }
     });
     request.addEventListener("load", () => {
-      signal.removeEventListener("abort", abort);
-      if (request.status >= 200 && request.status < 300) resolve();
-      else reject(new Error("UPLOAD_FAILED"));
+      finish(() => {
+        if (request.status >= 200 && request.status < 300) resolve();
+        else reject(new Error("UPLOAD_FAILED"));
+      });
     });
-    request.addEventListener("error", () => reject(new Error("UPLOAD_FAILED")));
-    request.addEventListener("abort", () => reject(new Error("UPLOAD_CANCELED")));
+    request.addEventListener("error", () =>
+      finish(() => reject(new Error("UPLOAD_FAILED"))),
+    );
+    request.addEventListener("abort", () =>
+      finish(() => reject(new Error("UPLOAD_CANCELED"))),
+    );
     const body = new FormData();
     for (const [key, value] of Object.entries(authorization.fields)) {
       body.append(key, value);

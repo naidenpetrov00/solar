@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { getAuthOriginConfig } from "./lib/auth-origin-config";
 
 const storagePublicBase = process.env.CATALOG_STORAGE_PUBLIC_BASE_URL;
 const storagePattern = storagePublicBase
@@ -12,24 +13,16 @@ const storagePattern = storagePublicBase
 const allowLocalStorageImage =
   process.env.NODE_ENV !== "production" &&
   storagePattern !== null;
-const allowedDevOrigins = [
-  ...new Set(
-    (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
-      .split(",")
-      .map((origin) => origin.trim())
-      .filter(Boolean)
-      .flatMap((origin) => {
-        try {
-          return [new URL(origin).hostname];
-        } catch {
-          return [];
-        }
-      }),
-  ),
-];
+const authOrigins = getAuthOriginConfig({
+  baseUrl: process.env.BETTER_AUTH_URL,
+  trustedOrigins: process.env.BETTER_AUTH_TRUSTED_ORIGINS,
+  production: process.env.NODE_ENV === "production",
+});
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: allowedDevOrigins.length ? allowedDevOrigins : undefined,
+  allowedDevOrigins: authOrigins.allowedDevHostnames.length
+    ? authOrigins.allowedDevHostnames
+    : undefined,
   images: storagePattern
     ? {
         remotePatterns: [storagePattern],

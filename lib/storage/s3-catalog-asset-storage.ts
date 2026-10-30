@@ -14,6 +14,10 @@ import {
   type CatalogAssetStorage,
 } from "./catalog-asset-storage";
 import { getCatalogStorageConfig } from "./catalog-storage-config";
+import {
+  catalogImageMaxEdge,
+  catalogImageMaxPixels,
+} from "@/lib/catalog/catalog-asset-limits";
 
 const imageMimeTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const imageFormats = new Set(["jpeg", "png", "webp"]);
@@ -127,12 +131,22 @@ export class S3CatalogAssetStorage implements CatalogAssetStorage {
         );
         const body = await response.Body?.transformToByteArray();
         if (!body) throw new CatalogStorageError("OBJECT_MISMATCH");
-        const metadata = await sharp(body).metadata();
+        let metadata: sharp.Metadata;
+        try {
+          metadata = await sharp(body, {
+            limitInputPixels: catalogImageMaxPixels,
+          }).metadata();
+        } catch {
+          throw new CatalogStorageError("OBJECT_MISMATCH");
+        }
         if (
           !metadata.format ||
           !imageFormats.has(metadata.format) ||
           !metadata.width ||
           !metadata.height ||
+          metadata.width > catalogImageMaxEdge ||
+          metadata.height > catalogImageMaxEdge ||
+          metadata.width * metadata.height > catalogImageMaxPixels ||
           (metadata.pages ?? 1) > 1
         ) {
           throw new CatalogStorageError("OBJECT_MISMATCH");

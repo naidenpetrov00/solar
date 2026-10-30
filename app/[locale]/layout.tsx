@@ -86,9 +86,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       data-theme={initialTheme}
-      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      suppressHydrationWarning
     >
       <body className="site-page min-h-full">
         <I18nProvider language={locale} resources={resources}>

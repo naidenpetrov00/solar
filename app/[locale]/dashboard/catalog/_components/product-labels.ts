@@ -122,6 +122,9 @@ export type ProductLabels = {
     remove: string;
     deleteConfirm: string;
     removeLegacyConfirm: string;
+    discardChangesConfirm: string;
+    reconciled: string;
+    reconciliationCanceled: string;
     moveUp: string;
     moveDown: string;
     primary: string;
@@ -154,6 +157,7 @@ export type ProductLabels = {
     save: string;
     remove: string;
     deleteConfirm: string;
+    discardChangesConfirm: string;
     moveUp: string;
     moveDown: string;
     languageLabel: string;
