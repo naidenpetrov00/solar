@@ -38,6 +38,7 @@ Configuration variables:
 | `PUBLIC_SITE_URL` | Canonical public website origin used by metadata, sitemap, and structured data |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
 | `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
+| `BETTER_AUTH_TRUSTED_ORIGINS` | Optional comma-separated additional origins for LAN or preview development, such as the exact URL opened on a phone |
 | `LOCALSTACK_GATEWAY_PORT` | Loopback-only LocalStack S3 gateway port; defaults to `4566` |
 | `CATALOG_STORAGE_PUBLIC_BASE_URL` | Public base URL serving immutable `catalog/assets/` objects; local LocalStack uses path-style addressing |
 | `CATALOG_STORAGE_S3_ENDPOINT` | Server-only S3-compatible endpoint; local LocalStack or production Hetzner Object Storage |

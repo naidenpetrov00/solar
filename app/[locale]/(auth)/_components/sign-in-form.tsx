@@ -101,6 +101,7 @@ export function SignInForm({
       noValidate
       onSubmit={handleSubmit}
       aria-busy={pending}
+      suppressHydrationWarning
     >
       {errors.length > 0 ? (
         <div
@@ -132,6 +133,7 @@ export function SignInForm({
             fieldErrors.email ? "sign-in-email-error" : undefined
           }
           onChange={() => clearFieldError("email")}
+          suppressHydrationWarning
         />
         {fieldErrors.email ? (
           <p id="sign-in-email-error" className="auth-field-error">
@@ -153,6 +155,7 @@ export function SignInForm({
             fieldErrors.password ? "sign-in-password-error" : undefined
           }
           onChange={() => clearFieldError("password")}
+          suppressHydrationWarning
         />
         {fieldErrors.password ? (
           <p id="sign-in-password-error" className="auth-field-error">
