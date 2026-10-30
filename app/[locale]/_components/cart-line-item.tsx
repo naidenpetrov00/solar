@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/button";
 import { formatCurrencyMinor } from "../_lib/catalog-format";
+import { CatalogPrice } from "./catalog-price";
 import { maxCartQuantity } from "./cart-store";
 import type { CartLabels } from "./cart-labels";
 import type { useCartHydration } from "./use-cart-hydration";
@@ -20,7 +21,8 @@ export function CartLineItem({
   const { item, product } = entry;
   const { resolvedItems, setQuantity, removeItem, setAnnouncement } = cart;
 
-  const lineTotal = BigInt(product.priceMinor) * BigInt(item.quantity);
+  const lineTotal =
+    BigInt(product.price.effectiveVatInclusiveMinor) * BigInt(item.quantity);
   return (
     <li className="cart-item" key={item.id}>
       <div className="cart-item-main">
@@ -29,7 +31,13 @@ export function CartLineItem({
         </Link>
         <p>
           {labels.unitPrice}:{" "}
-          {formatCurrencyMinor(locale, product.priceMinor, product.currency)}
+          <CatalogPrice
+            locale={locale}
+            price={product.price}
+            fromLabel={labels.priceFrom}
+            saveLabel={labels.savePercentage}
+            vatLabel={labels.vatIncluded}
+          />
         </p>
       </div>
       <div className="cart-item-controls">
@@ -100,7 +108,11 @@ export function CartLineItem({
       <p className="cart-line-total">
         <span>{labels.lineTotal}</span>
         <strong>
-          {formatCurrencyMinor(locale, lineTotal.toString(), product.currency)}
+          {formatCurrencyMinor(
+            locale,
+            lineTotal.toString(),
+            product.price.currency,
+          )}
         </strong>
       </p>
     </li>

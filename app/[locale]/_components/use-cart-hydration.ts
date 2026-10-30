@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import type { PublicCatalogPrice } from "@/lib/catalog/public-types";
 import { useCart } from "./cart-store";
 
 type CartProduct = {
   id: string;
   title: string;
   href: string;
-  priceMinor: string;
-  currency: string;
+  price: PublicCatalogPrice;
 };
 
 export function useCartHydration(locale: string, unavailableRemoved: string) {
@@ -23,6 +23,7 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
   const [hydrating, setHydrating] = useState(false);
   const [hydrationError, setHydrationError] = useState(false);
   const [hydrationAttempt, setHydrationAttempt] = useState(0);
+  const [refreshAfterMs, setRefreshAfterMs] = useState<number | null>(null);
   const itemIds = useMemo(() => items.map(({ id }) => id).join(","), [items]);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
       queueMicrotask(() => {
         if (!active) return;
         setProducts([]);
+        setRefreshAfterMs(null);
         setHydrating(false);
         setHydrationError(false);
       });
@@ -50,15 +52,20 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
 
     fetch(`/api/catalog/cart?${query.toString()}`, {
       signal: controller.signal,
+      cache: "no-store",
     })
       .then(async (response) => {
         if (!response.ok) throw new Error("cart hydration failed");
-        return response.json() as Promise<{ products: CartProduct[] }>;
+        return response.json() as Promise<{
+          products: CartProduct[];
+          refreshAfterMs: number | null;
+        }>;
       })
-      .then(({ products: hydratedProducts }) => {
+      .then(({ products: hydratedProducts, refreshAfterMs: nextRefresh }) => {
         const validIds = new Set(hydratedProducts.map(({ id }) => id));
         const removed = requestedIds.length - validIds.size;
         setProducts(hydratedProducts);
+        setRefreshAfterMs(nextRefresh);
         if (removed > 0) {
           retainItems(validIds);
           setAnnouncement(unavailableRemoved);
@@ -68,6 +75,7 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
         if (error instanceof DOMException && error.name === "AbortError")
           return;
         setProducts([]);
+        setRefreshAfterMs(null);
         setHydrationError(true);
       })
       .finally(() => {
@@ -84,6 +92,28 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
     retainItems,
   ]);
 
+  useEffect(() => {
+    if (refreshAfterMs === null) return;
+    const timeout = window.setTimeout(
+      () => setHydrationAttempt((attempt) => attempt + 1),
+      refreshAfterMs,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [refreshAfterMs]);
+
+  useEffect(() => {
+    const refresh = () => setHydrationAttempt((attempt) => attempt + 1);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   const productById = new Map(products.map((product) => [product.id, product]));
   const resolvedItems = items.flatMap((item) => {
     const product = productById.get(item.id);
@@ -91,7 +121,8 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
   });
   const totalMinor = resolvedItems.reduce(
     (sum, { item, product }) =>
-      sum + BigInt(product.priceMinor) * BigInt(item.quantity),
+      sum +
+      BigInt(product.price.effectiveVatInclusiveMinor) * BigInt(item.quantity),
     BigInt(0),
   );
   const resolvedCount = resolvedItems.reduce(

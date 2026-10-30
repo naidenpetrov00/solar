@@ -15,6 +15,7 @@ import {
   catalogProductMediaTranslation,
 } from "@/db/schema/catalog-product-media";
 import { catalogManagedAsset, catalogProductDocument } from "@/db/schema/catalog-assets";
+import { catalogPromotionProduct } from "@/db/schema/catalog-promotions";
 
 export const catalogProductRelations = relations(
   catalogProduct,
@@ -28,6 +29,7 @@ export const catalogProductRelations = relations(
     specificationValues: many(catalogProductSpecificationValue),
     media: many(catalogProductMedia),
     documents: many(catalogProductDocument),
+    promotions: many(catalogPromotionProduct),
   }),
 );
 

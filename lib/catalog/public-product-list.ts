@@ -7,7 +7,11 @@ import {
   type CatalogLocale,
   type CatalogPriceEntryBasis,
 } from "@/lib/catalog/model";
-import { publicVatInclusiveMinor } from "@/lib/catalog/commerce";
+import { resolveCatalogPrice } from "@/lib/catalog/promotion-pricing";
+import {
+  loadPublicPromotionPricing,
+  type PublicPromotionPricingContext,
+} from "@/lib/catalog/public-promotion-pricing";
 import {
   loadCategoryIndex,
   publicCategoryFromRow,
@@ -23,7 +27,12 @@ import type {
   PublicCatalogProductSummary,
 } from "@/lib/catalog/public-types";
 
-function publicPrice(row: ProductRow): PublicCatalogPrice | null {
+function publicPrice(
+  row: ProductRow,
+  categoryIds: string[],
+  locale: CatalogLocale,
+  pricing: PublicPromotionPricingContext,
+): PublicCatalogPrice | null {
   if (
     row.pricePresentation === "on_request" ||
     row.priceInputMinor === null ||
@@ -32,15 +41,26 @@ function publicPrice(row: ProductRow): PublicCatalogPrice | null {
     return null;
   }
 
+  const resolved = resolveCatalogPrice({
+    productId: row.id,
+    salesMode: row.salesMode as "direct_purchase" | "enquiry",
+    presentation: row.pricePresentation as "exact" | "from",
+    entryBasis: row.priceEntryBasis as CatalogPriceEntryBasis,
+    inputMinor: row.priceInputMinor,
+    categoryIds,
+    locale,
+    now: pricing.now,
+    promotions: pricing.promotions,
+  });
   return {
     presentation: row.pricePresentation as "exact" | "from",
     currency: "EUR",
-    publicVatInclusiveMinor: publicVatInclusiveMinor({
-      presentation: row.pricePresentation as "exact" | "from",
-      entryBasis: row.priceEntryBasis as CatalogPriceEntryBasis,
-      inputMinor: row.priceInputMinor,
-    }).toString(),
-    vatRateBasisPoints: row.vatRateBasisPoints,
+    vatRateBasisPoints: 2000,
+    originalVatInclusiveMinor: resolved.originalVatInclusiveMinor.toString(),
+    originalVatExclusiveMinor: resolved.originalVatExclusiveMinor.toString(),
+    effectiveVatInclusiveMinor: resolved.effectiveVatInclusiveMinor.toString(),
+    effectiveVatExclusiveMinor: resolved.effectiveVatExclusiveMinor.toString(),
+    promotion: resolved.promotion,
   };
 }
 
@@ -49,6 +69,7 @@ export function publicProductSummary(
   categoryIndex: CategoryIndex,
   row: ProductRow,
   locale: CatalogLocale,
+  pricing: PublicPromotionPricingContext,
 ): PublicCatalogProductSummary | null {
   const primaryCategory = categoryIndex.byId.get(row.primaryCategoryId);
   if (
@@ -68,6 +89,10 @@ export function publicProductSummary(
   const media = productIndex.media.get(`${row.id}:${locale}`) ?? [];
   const primaryMedia = media.find(({ isPrimary }) => isPrimary) ?? null;
   if (!primaryMedia) return null;
+  const categoryIds = [
+    row.primaryCategoryId,
+    ...(productIndex.additionalCategoryIds.get(row.id) ?? []),
+  ];
 
   return {
     id: row.id,
@@ -77,7 +102,7 @@ export function publicProductSummary(
     shortDescription: translation.shortDescription,
     salesMode: row.salesMode as "direct_purchase" | "enquiry",
     availability: row.availability as "in_stock" | "out_of_stock" | null,
-    price: publicPrice(row),
+    price: publicPrice(row, categoryIds, locale, pricing),
     primaryMedia,
   };
 }
@@ -87,9 +112,10 @@ export const listPublicProductsForCategory = cache(
     categoryId: string,
     locale: CatalogLocale,
   ): Promise<PublicCatalogProductSummary[]> => {
-    const [productIndex, categoryIndex] = await Promise.all([
+    const [productIndex, categoryIndex, pricing] = await Promise.all([
       loadProductIndex(),
       loadCategoryIndex(),
+      loadPublicPromotionPricing(),
     ]);
     return productIndex.rows
       .flatMap((row) => {
@@ -104,6 +130,7 @@ export const listPublicProductsForCategory = cache(
           categoryIndex,
           row,
           locale,
+          pricing,
         );
         return summary ? [summary] : [];
       })

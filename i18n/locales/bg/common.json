@@ -91,6 +91,7 @@
       "emptyProducts": "В тази категория все още няма публикувани продукти.",
       "priceOnRequest": "Цена при запитване",
       "priceFrom": "От",
+      "savePercentage": "Спестявате {percentage}%",
       "vatIncluded": "Цената е с включен ДДС",
       "addToCart": "Добавяне в количката",
       "addedToCart": "Добавено",

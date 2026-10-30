@@ -5,7 +5,8 @@
       "description": "Централно място за административните инструменти на сайта.",
       "navigation": {
         "overview": "Преглед",
-        "catalog": "Каталог",
+      "catalog": "Каталог",
+      "promotions": "Промоции",
         "users": "Потребители"
       },
       "overview": {

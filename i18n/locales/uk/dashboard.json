@@ -5,7 +5,8 @@
       "description": "Центральний простір для адміністративних інструментів сайту.",
       "navigation": {
         "overview": "Огляд",
-        "catalog": "Каталог",
+      "catalog": "Каталог",
+      "promotions": "Акції",
         "users": "Користувачі"
       },
       "overview": {

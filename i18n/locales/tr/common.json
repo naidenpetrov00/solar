@@ -91,6 +91,7 @@
       "emptyProducts": "Bu kategoride henüz yayımlanmış ürün yok.",
       "priceOnRequest": "Teklif üzerine",
       "priceFrom": "Başlangıç",
+      "savePercentage": "%{percentage} tasarruf",
       "vatIncluded": "Fiyata KDV dahildir",
       "addToCart": "Sepete ekle",
       "addedToCart": "Eklendi",

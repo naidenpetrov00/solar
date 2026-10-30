@@ -1,0 +1,40 @@
+{
+  "pages": {
+    "dashboard": {
+      "promotions": {
+        "title": "Promosyonlar",
+        "description": "Katalog geneli, kategori ve ürün indirimlerini yönetin.",
+        "listLabel": "Promosyonlar",
+        "newPromotion": "Yeni promosyon",
+        "empty": "Henüz promosyon oluşturulmadı.",
+        "readOnly": "Promosyonları görüntüleyebilirsiniz ancak değiştiremezsiniz.",
+        "noSelectionTitle": "Bir promosyon seçin",
+        "noSelectionDescription": "Listeden bir promosyon seçin veya yeni bir tane oluşturun.",
+        "fields": {
+          "internalName": { "label": "Dahili ad", "help": "Yalnızca yöneticiler tarafından görülür." },
+          "publicLabel": { "label": "Genel etiket", "help": "Bu dilde ziyaretçilere gösterilen isteğe bağlı etiket." },
+          "discountType": { "label": "İndirim türü", "help": "Yüzde veya KDV dahil sabit EUR tutarı seçin." },
+          "discountValue": { "label": "İndirim değeri", "help": "En fazla iki ondalık basamak kullanın. Ürün fiyatına eşit veya daha yüksek sabit indirim o ürün için atlanır." },
+          "scope": { "label": "Kapsam", "help": "Promosyonun nerede uygulanacağını seçin." },
+          "categories": { "label": "Kategoriler", "help": "Seçilen kategoriler tüm alt kategorileri ve ürünlerin birincil ve ek kategori atamalarını içerir." },
+          "products": { "label": "Ürünler", "help": "Teklif ürünleri seçili kalabilir ancak promosyon fiyatı almaz." },
+          "isActive": { "label": "Etkin", "help": "Etkin olmayan promosyonlar uygulanmaz." },
+          "startsAt": { "label": "Başlangıç", "help": "İsteğe bağlı, UTC." },
+          "endsAt": { "label": "Bitiş", "help": "İsteğe bağlı, UTC. Promosyon tam bu anda sona erer." }
+        },
+        "discountTypes": { "percentage": "Yüzde", "fixed_eur": "Sabit EUR tutarı" },
+        "scopes": { "catalog": "Tüm katalog", "category": "Seçili kategoriler", "product": "Seçili ürünler" },
+        "statuses": { "inactive": "Etkin değil", "scheduled": "Planlandı", "active": "Etkin", "ended": "Sona erdi" },
+        "salesModes": { "direct_purchase": "Doğrudan satın alma", "enquiry": "Teklif" },
+        "catalogStatuses": { "draft": "Taslak", "published": "Yayında", "archived": "Arşivlendi" },
+        "actions": { "save": "Promosyonu kaydet", "saving": "Kaydediliyor…", "reload": "En son sürümü yükle" },
+        "results": { "CREATED": "Promosyon oluşturuldu.", "SAVED": "Promosyon kaydedildi.", "INVALID_INPUT": "İşaretli alanları kontrol edin.", "FORBIDDEN": "Promosyonları yönetme izniniz yok.", "NOT_FOUND": "Bu promosyon artık mevcut değil.", "STALE": "Bu promosyon başka bir oturumda değiştirildi. Yeniden kaydetmeden önce en son sürümü yükleyin." },
+        "validation": { "summary": "Geçersiz alanları kontrol edin.", "invalid": "Geçerli bir değer girin.", "required": "En az bir hedef seçin." },
+        "localeSwitch": { "label": "Genel etiket dili", "set": "Etiket var", "empty": "Etiket yok" },
+        "targetCount": "{count} hedef",
+        "lastUpdated": "Son güncelleme",
+        "unsavedChanges": "Bu promosyonda kaydedilmemiş değişiklikler var. Devam edip bunları atmak istiyor musunuz?"
+      }
+    }
+  }
+}

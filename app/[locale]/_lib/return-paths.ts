@@ -1,6 +1,7 @@
 import {
   authRouteSlugs,
   dashboardCatalogRouteSlug,
+  dashboardPromotionsRouteSlug,
   dashboardRouteSlug,
   dashboardUsersRouteSlug,
   localizedPath,
@@ -138,6 +139,7 @@ export function safeAuthReturnPath(
 
   return slug === dashboardRouteSlug ||
     slug === dashboardCatalogRouteSlug ||
+    slug === dashboardPromotionsRouteSlug ||
     slug === dashboardUsersRouteSlug
     ? safePath
     : safePublicReturnPath(safePath, locale);

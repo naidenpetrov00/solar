@@ -42,6 +42,9 @@ export default async function CartPage({ params }: { params: Promise<{ locale: s
             retry: t("pages.cart.retry"),
             storageUnavailable: t("pages.cart.storageUnavailable"),
             priceNote: t("pages.cart.priceNote"),
+            priceFrom: t("pages.shop.priceFrom"),
+            savePercentage: t("pages.shop.savePercentage"),
+            vatIncluded: t("pages.shop.vatIncluded"),
           }}
         />
       </div>

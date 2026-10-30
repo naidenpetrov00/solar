@@ -14,6 +14,7 @@ export function openGraphLocale(locale: string) {
 
 export const dashboardRouteSlug = "dashboard";
 export const dashboardCatalogRouteSlug = "dashboard/catalog";
+export const dashboardPromotionsRouteSlug = "dashboard/catalog/promotions";
 export const dashboardUsersRouteSlug = "dashboard/users";
 export const accessDeniedRouteSlug = "access-denied";
 
@@ -59,6 +60,7 @@ export function isLocaleEquivalentSlug(slug: string) {
     slug === "cart" ||
     slug === dashboardRouteSlug ||
     slug === dashboardCatalogRouteSlug ||
+    slug === dashboardPromotionsRouteSlug ||
     slug === dashboardUsersRouteSlug ||
     slug === accessDeniedRouteSlug ||
     routeDefinitions.some((route) => route.slug === slug) ||

@@ -12,6 +12,7 @@ import {
   loadProductIndex,
   type ProductRow,
 } from "@/lib/catalog/public-product-index";
+import { loadPublicPromotionPricing } from "@/lib/catalog/public-promotion-pricing";
 import type { CatalogLocale } from "@/lib/catalog/model";
 import type {
   PublicCatalogFacet,
@@ -55,8 +56,8 @@ function comparePrice(
   if (!left.price && !right.price) return 0;
   if (!left.price) return 1;
   if (!right.price) return -1;
-  const leftPrice = BigInt(left.price.publicVatInclusiveMinor);
-  const rightPrice = BigInt(right.price.publicVatInclusiveMinor);
+  const leftPrice = BigInt(left.price.effectiveVatInclusiveMinor);
+  const rightPrice = BigInt(right.price.effectiveVatInclusiveMinor);
   return leftPrice === rightPrice ? 0 : leftPrice < rightPrice ? -direction : direction;
 }
 
@@ -84,10 +85,11 @@ export async function getPublicCatalogListing({
   locale: CatalogLocale;
   searchParams: PublicCatalogSearchParams;
 }): Promise<PublicCatalogListing> {
-  const [productIndex, categoryIndex, categoryIds] = await Promise.all([
+  const [productIndex, categoryIndex, categoryIds, pricing] = await Promise.all([
     loadProductIndex(),
     loadCategoryIndex(),
     categoryId ? listPublicCategoryBranchIds(categoryId, locale) : null,
+    loadPublicPromotionPricing(),
   ]);
   const includedCategories = categoryIds ? new Set(categoryIds) : null;
   const candidates = productIndex.rows.flatMap((row): Candidate[] => {
@@ -101,7 +103,13 @@ export async function getPublicCatalogListing({
     ) {
       return [];
     }
-    const summary = publicProductSummary(productIndex, categoryIndex, row, locale);
+    const summary = publicProductSummary(
+      productIndex,
+      categoryIndex,
+      row,
+      locale,
+      pricing,
+    );
     return summary ? [{ row, summary }] : [];
   });
   const query = parsePublicCatalogQuery(searchParams);

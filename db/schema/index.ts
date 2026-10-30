@@ -2,6 +2,7 @@ export * from "@/db/schema/auth";
 export * from "@/db/schema/catalog-categories";
 export * from "@/db/schema/catalog-specifications";
 export * from "@/db/schema/catalog-products";
+export * from "@/db/schema/catalog-promotions";
 export * from "@/db/schema/catalog-product-translations";
 export * from "@/db/schema/catalog-product-details";
 export * from "@/db/schema/catalog-product-media";

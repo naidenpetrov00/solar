@@ -34,7 +34,15 @@ export function productStructuredData(
           "@type": "Offer",
           url: canonicalUrl,
           priceCurrency: product.price.currency,
-          price: `${BigInt(product.price.publicVatInclusiveMinor) / BigInt(100)}.${String(BigInt(product.price.publicVatInclusiveMinor) % BigInt(100)).padStart(2, "0")}`,
+          price: `${BigInt(product.price.effectiveVatInclusiveMinor) / BigInt(100)}.${String(BigInt(product.price.effectiveVatInclusiveMinor) % BigInt(100)).padStart(2, "0")}`,
+          priceSpecification: product.price.promotion
+            ? {
+                "@type": "UnitPriceSpecification",
+                priceCurrency: product.price.currency,
+                price: `${BigInt(product.price.originalVatInclusiveMinor) / BigInt(100)}.${String(BigInt(product.price.originalVatInclusiveMinor) % BigInt(100)).padStart(2, "0")}`,
+                priceType: "https://schema.org/StrikethroughPrice",
+              }
+            : undefined,
           availability:
             product.salesMode === "direct_purchase"
               ? product.availability === "in_stock"

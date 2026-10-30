@@ -14,6 +14,7 @@ import {
 import { resolvePublicCategory } from "@/lib/catalog/public-categories";
 import { loadProductIndex } from "@/lib/catalog/public-product-index";
 import { publicProductSummary } from "@/lib/catalog/public-product-list";
+import { loadPublicPromotionPricing } from "@/lib/catalog/public-promotion-pricing";
 import { resolvePublicProduct } from "@/lib/catalog/public-products";
 
 export async function resolveCatalogLocalePath(
@@ -50,9 +51,10 @@ export async function resolveCatalogLocalePath(
 }
 
 export const listPublicSitemapEntries = cache(async () => {
-  const [categoryIndex, productIndex] = await Promise.all([
+  const [categoryIndex, productIndex, pricing] = await Promise.all([
     loadCategoryIndex(),
     loadProductIndex(),
+    loadPublicPromotionPricing(),
   ]);
   const entries: Array<{
     path: string;
@@ -77,7 +79,13 @@ export const listPublicSitemapEntries = cache(async () => {
           );
         return Boolean(
           assigned &&
-          publicProductSummary(productIndex, categoryIndex, row, locale),
+          publicProductSummary(
+            productIndex,
+            categoryIndex,
+            row,
+            locale,
+            pricing,
+          ),
         );
       });
       if (hasPublishedChild || hasPublishedProduct) {
@@ -94,6 +102,7 @@ export const listPublicSitemapEntries = cache(async () => {
         categoryIndex,
         row,
         locale,
+        pricing,
       );
       if (product) {
         entries.push({

@@ -15,6 +15,7 @@ const i18nConfig = {
     "productEditor",
     "productFields",
     "productFeedback",
+    "promotions",
   ],
   localeInPath: true,
   localeParamName: "locale",

@@ -1,0 +1,40 @@
+{
+  "pages": {
+    "dashboard": {
+      "promotions": {
+        "title": "Promotions",
+        "description": "Manage catalog-wide, category, and product discounts.",
+        "listLabel": "Promotions",
+        "newPromotion": "New promotion",
+        "empty": "No promotions have been created.",
+        "readOnly": "You can view promotions but cannot change them.",
+        "noSelectionTitle": "Select a promotion",
+        "noSelectionDescription": "Choose a promotion from the list or create a new one.",
+        "fields": {
+          "internalName": { "label": "Internal name", "help": "Visible only to administrators." },
+          "publicLabel": { "label": "Public label", "help": "Optional label shown to visitors in this language." },
+          "discountType": { "label": "Discount type", "help": "Choose percentage or a fixed VAT-inclusive EUR amount." },
+          "discountValue": { "label": "Discount value", "help": "Use up to two decimal places. A fixed discount at or above a product price is skipped for that product." },
+          "scope": { "label": "Scope", "help": "Choose where the promotion applies." },
+          "categories": { "label": "Categories", "help": "Selected categories include every descendant category and both primary and additional product assignments." },
+          "products": { "label": "Products", "help": "Enquiry products may remain selected but never receive a promotional price." },
+          "isActive": { "label": "Active", "help": "Inactive promotions never apply." },
+          "startsAt": { "label": "Starts at", "help": "Optional, in UTC." },
+          "endsAt": { "label": "Ends at", "help": "Optional, in UTC. The promotion is inactive at this exact time." }
+        },
+        "discountTypes": { "percentage": "Percentage", "fixed_eur": "Fixed EUR amount" },
+        "scopes": { "catalog": "Whole catalog", "category": "Selected categories", "product": "Selected products" },
+        "statuses": { "inactive": "Inactive", "scheduled": "Scheduled", "active": "Active", "ended": "Ended" },
+        "salesModes": { "direct_purchase": "Direct purchase", "enquiry": "Enquiry" },
+        "catalogStatuses": { "draft": "Draft", "published": "Published", "archived": "Archived" },
+        "actions": { "save": "Save promotion", "saving": "Saving…", "reload": "Reload latest" },
+        "results": { "CREATED": "Promotion created.", "SAVED": "Promotion saved.", "INVALID_INPUT": "Review the highlighted fields.", "FORBIDDEN": "You do not have permission to manage promotions.", "NOT_FOUND": "This promotion no longer exists.", "STALE": "This promotion changed in another session. Reload the latest version before saving again." },
+        "validation": { "summary": "Review the invalid fields.", "invalid": "Enter a valid value.", "required": "Select at least one target." },
+        "localeSwitch": { "label": "Public label language", "set": "Label set", "empty": "No label" },
+        "targetCount": "{count} targets",
+        "lastUpdated": "Last updated",
+        "unsavedChanges": "This promotion has unsaved changes. Continue and discard them?"
+      }
+    }
+  }
+}

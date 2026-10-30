@@ -10,8 +10,8 @@ import { catalogLocale } from "@/lib/catalog/public-routes";
 import { AddToCartButton } from "../../_components/add-to-cart-button";
 import { CatalogBreadcrumbs } from "../../_components/catalog-breadcrumbs";
 import { CatalogProductDetail } from "../../_components/catalog-product-detail";
+import { CatalogPrice } from "../../_components/catalog-price";
 import { StructuredData } from "../../_components/structured-data";
-import { formatCurrencyMinor } from "../../_lib/catalog-format";
 import { localizedPath } from "../../_lib/routes";
 import { productStructuredData } from "./product-structured-data";
 import { createProductMetadata } from "./product-metadata";
@@ -55,13 +55,17 @@ export default async function ProductPage({ params }: Props) {
     getT("common", { lng: page.locale }),
   ]);
   const { t } = translation;
-  const price = product.price
-    ? `${product.price.presentation === "from" ? `${t("pages.shop.priceFrom")} ` : ""}${formatCurrencyMinor(
-        page.locale,
-        product.price.publicVatInclusiveMinor,
-        product.price.currency,
-      )}`
-    : t("pages.shop.priceOnRequest");
+  const price = product.price ? (
+    <CatalogPrice
+      locale={page.locale}
+      price={product.price}
+      fromLabel={t("pages.shop.priceFrom")}
+      saveLabel={t("pages.shop.savePercentage")}
+      vatLabel={t("pages.shop.vatIncluded")}
+    />
+  ) : (
+    t("pages.shop.priceOnRequest")
+  );
   const specifications = product.specifications.map((specification) => ({
     label: specification.label,
     value: `${
@@ -122,7 +126,7 @@ export default async function ProductPage({ params }: Props) {
             shortDescription: product.shortDescription,
             fullDescription: product.fullDescription,
             price,
-            vatInformation: product.price ? t("pages.shop.vatIncluded") : null,
+            vatInformation: null,
             availability:
               product.salesMode === "direct_purchase"
                 ? product.availability === "in_stock"

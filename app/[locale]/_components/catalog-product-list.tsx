@@ -2,10 +2,10 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/button";
 import { getT } from "@/i18n.server";
 import type { PublicCatalogProductSummary } from "@/lib/catalog/public-types";
-import { formatCurrencyMinor } from "../_lib/catalog-format";
 import { localizedPath } from "../_lib/routes";
 import { AddToCartButton } from "./add-to-cart-button";
 import { CatalogMedia } from "./catalog-media";
+import { CatalogPrice } from "./catalog-price";
 
 export async function ProductList({
   locale,
@@ -22,13 +22,6 @@ export async function ProductList({
     <div className="catalog-product-grid">
       {products.map((product) => {
         const href = localizedPath(locale, `products/${product.slug}`);
-        const price = product.price
-          ? formatCurrencyMinor(
-              locale,
-              product.price.publicVatInclusiveMinor,
-              product.price.currency,
-            )
-          : t("pages.shop.priceOnRequest");
         return (
           <article className="catalog-product-card" key={product.id}>
             <Link
@@ -60,13 +53,17 @@ export async function ProductList({
             </div>
             <div className="catalog-product-card-commerce">
               <p>
-                {product.price?.presentation === "from" ? (
-                  <span>{t("pages.shop.priceFrom")}</span>
-                ) : null}
-                <strong>{price}</strong>
                 {product.price ? (
-                  <small>{t("pages.shop.vatIncluded")}</small>
-                ) : null}
+                  <CatalogPrice
+                    locale={locale}
+                    price={product.price}
+                    fromLabel={t("pages.shop.priceFrom")}
+                    saveLabel={t("pages.shop.savePercentage")}
+                    vatLabel={t("pages.shop.vatIncluded")}
+                  />
+                ) : (
+                  <strong>{t("pages.shop.priceOnRequest")}</strong>
+                )}
               </p>
               {product.salesMode === "direct_purchase" &&
               product.availability === "in_stock" &&

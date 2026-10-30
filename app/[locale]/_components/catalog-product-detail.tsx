@@ -12,7 +12,7 @@ export type CatalogProductDetailView = {
   model: string | null;
   shortDescription: string;
   fullDescription: string;
-  price: string | null;
+  price: ReactNode | null;
   availability: string | null;
   vatInformation?: string | null;
   primaryMedia: CatalogProductGalleryItem | null;
@@ -82,7 +82,9 @@ export function CatalogProductDetail({ product, labels, actions, locale = "en" }
 
         {product.price || product.availability ? (
           <div className="catalog-product-detail-commerce">
-            {product.price ? <strong>{product.price}</strong> : null}
+            {product.price ? (
+              <div className="catalog-product-detail-price">{product.price}</div>
+            ) : null}
             {product.vatInformation ? <small>{product.vatInformation}</small> : null}
             {product.availability ? (
               <span className="catalog-product-detail-availability">

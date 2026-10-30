@@ -91,6 +91,7 @@
       "emptyProducts": "There are no published products in this category yet.",
       "priceOnRequest": "Price on request",
       "priceFrom": "From",
+      "savePercentage": "Save {percentage}%",
       "vatIncluded": "Price includes VAT",
       "addToCart": "Add to cart",
       "addedToCart": "Added",

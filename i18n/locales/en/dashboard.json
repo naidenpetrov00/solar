@@ -5,7 +5,8 @@
       "description": "A central workspace for the site's administration tools.",
       "navigation": {
         "overview": "Overview",
-        "catalog": "Catalog",
+      "catalog": "Catalog",
+      "promotions": "Promotions",
         "users": "Users"
       },
       "overview": {

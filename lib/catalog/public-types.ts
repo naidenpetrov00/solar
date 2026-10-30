@@ -86,11 +86,21 @@ export type PublicCatalogProductSummary = {
   primaryMedia: PublicCatalogMedia | null;
 };
 
+export type PublicCatalogPromotion = {
+  id: string;
+  label: string | null;
+  savingsBasisPoints: number | null;
+};
+
 export type PublicCatalogPrice = {
   presentation: "exact" | "from";
   currency: "EUR";
-  publicVatInclusiveMinor: string;
-  vatRateBasisPoints: number;
+  vatRateBasisPoints: 2000;
+  originalVatInclusiveMinor: string;
+  originalVatExclusiveMinor: string;
+  effectiveVatInclusiveMinor: string;
+  effectiveVatExclusiveMinor: string;
+  promotion: PublicCatalogPromotion | null;
 };
 
 export type PublicCatalogSpecification = {

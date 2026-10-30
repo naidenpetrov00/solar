@@ -1,6 +1,7 @@
 import { getT } from "@/i18n.server";
 import {
   dashboardCatalogRouteSlug,
+  dashboardPromotionsRouteSlug,
   dashboardRouteSlug,
   dashboardUsersRouteSlug,
   localizedPath,
@@ -31,6 +32,10 @@ export default async function DashboardLayout({
           {
             href: localizedPath(locale, dashboardCatalogRouteSlug),
             label: t("dashboard:pages.dashboard.navigation.catalog"),
+          },
+          {
+            href: localizedPath(locale, dashboardPromotionsRouteSlug),
+            label: t("dashboard:pages.dashboard.navigation.promotions"),
           },
         ]
       : []),

@@ -18,4 +18,7 @@ export type CartLabels = {
   retry: string;
   storageUnavailable: string;
   priceNote: string;
+  priceFrom: string;
+  savePercentage: string;
+  vatIncluded: string;
 };

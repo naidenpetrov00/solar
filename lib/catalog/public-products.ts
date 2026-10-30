@@ -16,6 +16,7 @@ import {
   type ProductRow,
 } from "@/lib/catalog/public-product-index";
 import { publicProductSummary } from "@/lib/catalog/public-product-list";
+import { loadPublicPromotionPricing } from "@/lib/catalog/public-promotion-pricing";
 import { productSpecifications } from "@/lib/catalog/public-product-specifications";
 import type { PublicCatalogProductDetail } from "@/lib/catalog/public-types";
 
@@ -38,9 +39,10 @@ export const resolvePublicProduct = cache(
     requestedSlug: string,
     locale: CatalogLocale,
   ): Promise<PublicProductResolution | null> => {
-    const [productIndex, categoryIndex] = await Promise.all([
+    const [productIndex, categoryIndex, pricing] = await Promise.all([
       loadProductIndex(),
       loadCategoryIndex(),
+      loadPublicPromotionPricing(),
     ]);
     const row =
       productIndex.rows.find(
@@ -60,6 +62,7 @@ export const resolvePublicProduct = cache(
       categoryIndex,
       row,
       locale,
+      pricing,
     );
     if (!summary) return null;
     const translation = productIndex.translations.get(row.id)?.get(locale);
@@ -114,12 +117,13 @@ export const resolvePublicProduct = cache(
 
 export const listPublicCartProducts = cache(
   async (locale: CatalogLocale, productIds: string[]) => {
-    const [productIndex, categoryIndex] = await Promise.all([
+    const [productIndex, categoryIndex, pricing] = await Promise.all([
       loadProductIndex(),
       loadCategoryIndex(),
+      loadPublicPromotionPricing(),
     ]);
     const requested = new Set(productIds);
-    return productIndex.rows
+    const products = productIndex.rows
       .flatMap((row) => {
         if (
           !requested.has(row.id) ||
@@ -133,6 +137,7 @@ export const listPublicCartProducts = cache(
           categoryIndex,
           row,
           locale,
+          pricing,
         );
         if (!summary?.price) return [];
         return [
@@ -140,8 +145,7 @@ export const listPublicCartProducts = cache(
             id: summary.id,
             title: summary.title,
             href: `${locale === "bg" ? "" : `/${locale}`}/products/${summary.slug}`,
-            priceMinor: summary.price.publicVatInclusiveMinor,
-            currency: summary.price.currency,
+            price: summary.price,
           },
         ];
       })
@@ -149,5 +153,6 @@ export const listPublicCartProducts = cache(
         (left, right) =>
           productIds.indexOf(left.id) - productIds.indexOf(right.id),
       );
+    return { products, refreshAfterMs: pricing.refreshAfterMs };
   },
 );

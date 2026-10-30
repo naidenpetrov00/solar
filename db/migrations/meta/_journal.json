@@ -64,6 +64,13 @@
       "when": 1793184000000,
       "tag": "0008_portable_catalog_media",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793369406118,
+      "tag": "0009_pink_freak",
+      "breakpoints": true
     }
   ]
 }

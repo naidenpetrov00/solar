@@ -15,6 +15,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ products: [] }, { status: 400 });
   }
 
-  const products = await listPublicCartProducts(locale, ids);
-  return NextResponse.json({ products });
+  const result = await listPublicCartProducts(locale, ids);
+  return NextResponse.json(result, {
+    headers: { "Cache-Control": "private, no-store" },
+  });
 }
