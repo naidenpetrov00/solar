@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { maximumOrderItemQuantity } from "@/lib/orders/model";
 
 type CartItem = { id: string; quantity: number };
 type CartSnapshot = {
@@ -11,7 +12,7 @@ type CartSnapshot = {
 
 const storageKey = "solar-cart:v2";
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
-export const maxCartQuantity = 999;
+export const maxCartQuantity = maximumOrderItemQuantity;
 const serverSnapshot: CartSnapshot = { items: [], ready: false, storageUnavailable: false };
 let snapshot = serverSnapshot;
 let initialized = false;

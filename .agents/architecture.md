@@ -8,6 +8,7 @@ Read this file only for cross-feature changes, repository-wide refactors, or unc
 * `app/api/` owns thin HTTP handlers that delegate domain and persistence work to `lib/`.
 * `components/` owns application-wide UI primitives. Keep feature-specific UI with its route or feature.
 * `lib/catalog/` owns catalog models, validation, public reads, management operations, and repositories. Storefront code must not depend on dashboard presentation modules.
+* `lib/orders/` owns order validation, money calculations, immutable revisions, lifecycle/payment transitions, audit history, and order repositories.
 * `lib/auth.ts`, `lib/authorization.ts`, `lib/permission-policy.ts`, and `lib/user-management-*` own authentication, authorization, and user management. `lib/email/` owns email composition and delivery integration.
 * `db/schema/` owns Drizzle tables and relations; `db/schema/index.ts` is its export surface. Treat `db/migrations/` as history, not ordinary implementation.
 * `i18n.config.ts` defines namespaces. `i18n/locales/<locale>/` owns resources whose namespace and key shapes must match across locales.

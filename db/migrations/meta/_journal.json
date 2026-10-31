@@ -71,6 +71,20 @@
       "when": 1793369406118,
       "tag": "0009_pink_freak",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793438937787,
+      "tag": "0010_bizarre_post",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793439721332,
+      "tag": "0011_ancient_misty_knight",
+      "breakpoints": true
     }
   ]
 }

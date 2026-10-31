@@ -134,6 +134,7 @@ The schema is split by ownership:
 - `db/schema/auth.ts` contains the Better Auth identity, session, account, verification, and Admin plugin fields.
 - `db/schema/catalog-*.ts` separates category, specification, product, and media tables from their relations.
 - `db/schema/profiles.ts` contains application-owned profile data separately from authentication records.
+- `db/schema/order-*.ts` contains persistent order revisions, item snapshots, adjustments, lifecycle state, and audit history.
 - `db/schema/index.ts` exposes the complete Drizzle schema.
 
 After an intentional schema change, generate and review a new migration:
@@ -210,6 +211,14 @@ Prices are stored as EUR integer minor units. Administrator input may be VAT-inc
 Normal catalog management uses draft, published, and archived lifecycle states and exposes no hard-delete command. Foreign keys protect referenced data, while reviewed migrations and deliberate maintenance may delete records in dependency-safe order. Category cycles beyond direct self-parenting are prevented by the transactional catalog management service rather than database triggers.
 
 Both `administrator` and `admin` roles have `catalog:view` and `catalog:manage`; customers have neither. There is no separate publishing role in this milestone.
+
+## Persistent order domain
+
+Orders use an internal UUID and a separate generated customer-facing order number. Guest submissions are stored as immutable revision 1 snapshots containing customer and delivery data, payment method, localized product identity, catalog and promotion pricing, VAT, quantities, and totals. Administrator content changes append complete revisions; they do not rewrite the original submission or earlier history.
+
+Order lifecycle status and payment status are independent. Rejected, cancelled, and completed orders cannot have their contents or lifecycle status changed, but authorized payment transitions remain possible and are recorded separately. Every administrator mutation uses optimistic concurrency and appends an audit event with the actor snapshot and meaningful before/after data. Orders are not deleted as a consequence of rejection, cancellation, or completion.
+
+All order money is stored as EUR integer minor units and calculated on the server with integer VAT rounding. Public cart prices are advisory: order creation reloads eligible catalog products and active promotions transactionally before persisting snapshots. Both `administrator` and `admin` roles have `order:view` and `order:manage`; customers have neither.
 
 ## Catalog object storage
 
