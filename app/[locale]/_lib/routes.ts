@@ -18,6 +18,14 @@ export const dashboardPromotionsRouteSlug = "dashboard/catalog/promotions";
 export const dashboardUsersRouteSlug = "dashboard/users";
 export const accessDeniedRouteSlug = "access-denied";
 
+export const publicUtilityRouteSlugs = [
+  "cart",
+  "checkout",
+  "checkout/confirmation",
+  "privacy",
+  "terms",
+] as const;
+
 export const routeDefinitions = [
   { slug: "", key: "home" },
   { slug: "shop", key: "shop" },
@@ -57,7 +65,7 @@ export function isAuthRouteSlug(slug: string): slug is AuthRouteSlug {
 export function isLocaleEquivalentSlug(slug: string) {
   return (
     slug === "" ||
-    slug === "cart" ||
+    publicUtilityRouteSlugs.some((utilitySlug) => utilitySlug === slug) ||
     slug === dashboardRouteSlug ||
     slug === dashboardCatalogRouteSlug ||
     slug === dashboardPromotionsRouteSlug ||

@@ -12,7 +12,7 @@ function localizedPath(locale: string, path = "") {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const origin = getPublicSiteUrl();
   const dynamicEntries = await listPublicSitemapEntries();
-  const staticPaths = ["", "shop", "projects", "contact"];
+  const staticPaths = ["", "shop", "projects", "contact", "privacy", "terms"];
 
   return [
     ...catalogLocales.flatMap((locale) =>

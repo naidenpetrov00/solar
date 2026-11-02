@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { maximumOrderItemQuantity } from "@/lib/orders/model";
 
-type CartItem = { id: string; quantity: number };
+export type CartItem = { id: string; quantity: number };
 type CartSnapshot = {
   items: CartItem[];
   ready: boolean;
@@ -99,6 +99,21 @@ function removeItem(id: string) {
   updateItems((items) => items.filter((item) => item.id !== id));
 }
 
+function consumeItems(submittedItems: CartItem[]) {
+  const submittedQuantities = new Map<string, number>();
+  for (const item of submittedItems) {
+    if (!Number.isSafeInteger(item.quantity) || item.quantity < 1) continue;
+    submittedQuantities.set(
+      item.id,
+      (submittedQuantities.get(item.id) ?? 0) + item.quantity,
+    );
+  }
+  updateItems((items) => items.flatMap((item) => {
+    const remaining = item.quantity - (submittedQuantities.get(item.id) ?? 0);
+    return remaining > 0 ? [{ ...item, quantity: remaining }] : [];
+  }));
+}
+
 function retainItems(ids: Set<string>) {
   updateItems((items) => items.filter((item) => ids.has(item.id)));
 }
@@ -113,6 +128,7 @@ export function useCart() {
     addItem,
     setQuantity,
     removeItem,
+    consumeItems,
     retainItems,
   };
 }

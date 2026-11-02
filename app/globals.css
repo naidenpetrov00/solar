@@ -14,6 +14,8 @@
 @import "./styles/shop-product-grid.css";
 @import "./styles/shop-commerce-responsive.css";
 @import "./styles/cart.css";
+@import "./styles/checkout.css";
+@import "./styles/policies.css";
 @import "./styles/auth-shell.css";
 @import "./styles/auth-fields.css";
 @import "./styles/auth-actions.css";

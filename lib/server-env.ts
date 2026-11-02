@@ -3,6 +3,7 @@ import "server-only";
 type ServerEnvironmentVariable =
   | "DATABASE_URL"
   | "BETTER_AUTH_SECRET"
+  | "ORDER_CONFIRMATION_SIGNING_KEY"
   | "BETTER_AUTH_URL"
   | "PUBLIC_SITE_URL"
   | "SMTP_HOST"

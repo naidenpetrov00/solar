@@ -16,6 +16,7 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
     storageUnavailable,
     setQuantity,
     removeItem,
+    consumeItems,
     retainItems,
   } = useCart();
   const [announcement, setAnnouncement] = useState("");
@@ -135,6 +136,7 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
     storageUnavailable,
     setQuantity,
     removeItem,
+    consumeItems,
     announcement,
     setAnnouncement,
     hydrating,

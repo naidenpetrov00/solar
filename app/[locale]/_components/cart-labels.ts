@@ -3,6 +3,7 @@ export type CartLabels = {
   empty: string;
   emptyDescription: string;
   continueShopping: string;
+  buy: string;
   itemCount: string;
   quantity: string;
   unitPrice: string;

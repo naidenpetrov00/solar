@@ -5,6 +5,7 @@ import {
   dashboardRouteSlug,
   dashboardUsersRouteSlug,
   localizedPath,
+  publicUtilityRouteSlugs,
   routeDefinitions,
   supportedLocales,
 } from "./routes";
@@ -111,7 +112,7 @@ export function safePublicReturnPath(
   const slug = pathWithoutLocale.replace(/^\/+|\/+$/gu, "");
   const isPublicRoute =
     slug === "" ||
-    slug === "cart" ||
+    publicUtilityRouteSlugs.some((utilitySlug) => utilitySlug === slug) ||
     routeDefinitions.some((route) => route.slug === slug) ||
     slug.startsWith("shop/") ||
     slug.startsWith("products/");

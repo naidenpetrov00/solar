@@ -37,6 +37,7 @@ Configuration variables:
 | `DATABASE_URL` | PostgreSQL connection string used by the application and Drizzle |
 | `PUBLIC_SITE_URL` | Canonical public website origin used by metadata, sitemap, and structured data |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
+| `ORDER_CONFIRMATION_SIGNING_KEY` | Separate high-entropy secret used only to sign short-lived public order-confirmation state; do not reuse an authentication or session secret |
 | `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
 | `BETTER_AUTH_TRUSTED_ORIGINS` | Optional comma-separated additional origins for LAN or preview development, such as the exact URL opened on a phone |
 | `LOCALSTACK_GATEWAY_PORT` | Loopback-only LocalStack S3 gateway port; defaults to `4566` |
@@ -219,6 +220,12 @@ Orders use an internal UUID and a separate generated customer-facing order numbe
 Order lifecycle status and payment status are independent. Rejected, cancelled, and completed orders cannot have their contents or lifecycle status changed, but authorized payment transitions remain possible and are recorded separately. Every administrator mutation uses optimistic concurrency and appends an audit event with the actor snapshot and meaningful before/after data. Orders are not deleted as a consequence of rejection, cancellation, or completion.
 
 All order money is stored as EUR integer minor units and calculated on the server with integer VAT rounding. Public cart prices are advisory: order creation reloads eligible catalog products and active promotions transactionally before persisting snapshots. Both `administrator` and `admin` roles have `order:view` and `order:manage`; customers have neither.
+
+## Guest checkout and customer policies
+
+The localized guest checkout sends only customer-entered details, product IDs and quantities, payment method, locale, and an idempotency key to the server-owned order service. A successful submission clears only the submitted cart items and uses a short-lived, purpose-signed confirmation cookie containing the order number and expiry; there is no public order lookup.
+
+Verified operator, privacy, processor, retention, delivery, cancellation, return, complaint, and contract facts belong in `lib/legal/policy-facts.ts`. Official Bulgarian and EU materials are structural references, not publishable policy copy. Development routes display explicit incomplete markers, while production rendering fails until every required fact is non-empty. Configure `ORDER_CONFIRMATION_SIGNING_KEY` independently from authentication secrets before using checkout.
 
 ## Catalog object storage
 

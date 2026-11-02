@@ -133,6 +133,11 @@
 .cart-summary strong {
   font-variant-numeric: tabular-nums;
 }
+.cart-summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
 .cart-grand-total {
   padding-top: 1rem;
   border-top: 1px solid currentColor;

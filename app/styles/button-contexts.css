@@ -8,7 +8,9 @@
 }
 
 .shop-page .ui-button,
-.cart-page .ui-button {
+.cart-page .ui-button,
+.checkout-page .ui-button,
+.policy-page .ui-button {
   --button-secondary-border: currentColor;
   --button-secondary-hover-background: var(--page-foreground);
   --button-secondary-foreground: inherit;
@@ -17,7 +19,9 @@
 }
 
 .shop-page .ui-button--secondary:hover:not(:disabled),
-.cart-page .ui-button--secondary:hover:not(:disabled) {
+.cart-page .ui-button--secondary:hover:not(:disabled),
+.checkout-page .ui-button--secondary:hover:not(:disabled),
+.policy-page .ui-button--secondary:hover:not(:disabled) {
   color: var(--page-background);
 }
 

@@ -18,11 +18,16 @@ import type {
   OrderCustomerInput,
 } from "@/lib/orders/types";
 
-function normalizedText(value: string, minimum: number, maximum: number) {
+function normalizedText(
+  value: string,
+  minimum: number,
+  maximum: number,
+  field: string,
+) {
   const normalized = value.trim().replace(/\s+/gu, " ");
   const length = Array.from(normalized).length;
   if (length < minimum || length > maximum) {
-    throw new OrderError("INVALID_INPUT");
+    throw new OrderError("INVALID_INPUT", { field });
   }
   return normalized;
 }
@@ -36,18 +41,18 @@ export function normalizeOrderCustomer(input: OrderCustomerInput) {
   const email = input.email.trim();
   const phone = input.phone.trim().replace(/\s+/gu, " ");
   const phoneDigits = phone.replace(/\D/gu, "");
-  if (
-    validateCustomerName(name) ||
-    validateEmail(email) ||
-    !/^\+?[0-9().\-\s]+$/u.test(phone) ||
-    phoneDigits.length < 7 ||
-    phoneDigits.length > 20
-  ) {
-    throw new OrderError("INVALID_INPUT");
+  if (validateCustomerName(name)) {
+    throw new OrderError("INVALID_INPUT", { field: "name" });
+  }
+  if (validateEmail(email)) {
+    throw new OrderError("INVALID_INPUT", { field: "email" });
+  }
+  if (!/^\+?[0-9().\-\s]+$/u.test(phone) || phoneDigits.length < 7 || phoneDigits.length > 20) {
+    throw new OrderError("INVALID_INPUT", { field: "phone" });
   }
   const phoneNormalized = `${phone.startsWith("+") ? "+" : ""}${phoneDigits}`;
-  const city = normalizedText(input.city, 2, 120);
-  const deliveryAddress = normalizedText(input.deliveryAddress, 5, 500);
+  const city = normalizedText(input.city, 2, 120, "city");
+  const deliveryAddress = normalizedText(input.deliveryAddress, 5, 500, "deliveryAddress");
   const note = input.note?.trim();
   return {
     name,
@@ -60,19 +65,19 @@ export function normalizeOrderCustomer(input: OrderCustomerInput) {
     cityNormalized: city.toLocaleLowerCase("en-US"),
     deliveryAddress,
     deliveryAddressNormalized: technicalNormalization(deliveryAddress),
-    note: note ? normalizedText(note, 1, 2000) : null,
+    note: note ? normalizedText(note, 1, 2000, "note") : null,
   };
 }
 
 export function normalizeGuestOrderInput(input: GuestOrderInput) {
-  if (
-    !isUuid(input.submissionKey) ||
-    !isCatalogLocale(input.locale) ||
-    !isOrderPaymentMethod(input.paymentMethod) ||
-    input.items.length < 1 ||
-    input.items.length > maximumOrderItems
-  ) {
-    throw new OrderError("INVALID_INPUT");
+  if (!isUuid(input.submissionKey) || !isCatalogLocale(input.locale)) {
+    throw new OrderError("INVALID_INPUT", { field: "order" });
+  }
+  if (!isOrderPaymentMethod(input.paymentMethod)) {
+    throw new OrderError("INVALID_INPUT", { field: "paymentMethod" });
+  }
+  if (input.items.length < 1 || input.items.length > maximumOrderItems) {
+    throw new OrderError("INVALID_INPUT", { field: "items" });
   }
   const productIds = new Set<string>();
   const items = input.items.map((item) => {
@@ -83,7 +88,7 @@ export function normalizeGuestOrderInput(input: GuestOrderInput) {
       item.quantity < 1 ||
       item.quantity > maximumOrderItemQuantity
     ) {
-      throw new OrderError("INVALID_INPUT");
+      throw new OrderError("INVALID_INPUT", { field: "items" });
     }
     productIds.add(item.productId);
     return item;
@@ -106,6 +111,6 @@ export function normalizeAdjustments(values: ManualAdjustmentInput[]) {
       throw new OrderError("INVALID_INPUT");
     }
     if (value.adjustmentKey !== undefined) keys.add(value.adjustmentKey);
-    return { ...value, reason: normalizedText(value.reason, 1, 500) };
+    return { ...value, reason: normalizedText(value.reason, 1, 500, "reason") };
   });
 }

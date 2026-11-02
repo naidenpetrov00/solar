@@ -22,11 +22,13 @@ export default async function CartPage({ params }: { params: Promise<{ locale: s
         <CartContents
           locale={locale}
           shopHref={localizedPath(locale, "shop")}
+          checkoutHref={localizedPath(locale, "checkout")}
           labels={{
             loading: t("pages.cart.loading"),
             empty: t("pages.cart.empty"),
             emptyDescription: t("pages.cart.emptyDescription"),
             continueShopping: t("pages.cart.continueShopping"),
+            buy: t("pages.cart.buy"),
             itemCount: t("pages.cart.itemCount"),
             quantity: t("pages.cart.quantity"),
             unitPrice: t("pages.cart.unitPrice"),

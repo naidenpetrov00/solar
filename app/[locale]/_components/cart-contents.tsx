@@ -9,10 +9,12 @@ import type { CartLabels } from "./cart-labels";
 export function CartContents({
   locale,
   shopHref,
+  checkoutHref,
   labels,
 }: {
   locale: string;
   shopHref: string;
+  checkoutHref: string;
   labels: CartLabels;
 }) {
   const cart = useCartHydration(locale, labels.unavailableRemoved);
@@ -98,7 +100,12 @@ export function CartContents({
               </strong>
             </p>
             <p className="cart-price-note">{labels.priceNote}</p>
-            <ButtonLink href={shopHref}>{labels.continueShopping}</ButtonLink>
+            <div className="cart-summary-actions">
+              <ButtonLink href={checkoutHref}>{labels.buy}</ButtonLink>
+              <ButtonLink href={shopHref} variant="secondary">
+                {labels.continueShopping}
+              </ButtonLink>
+            </div>
           </div>
         </>
       )}
