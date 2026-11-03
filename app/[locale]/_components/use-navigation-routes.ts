@@ -1,14 +1,12 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import {
   isAuthRouteSlug,
+  isDashboardOrderRouteSlug,
   isLocaleEquivalentSlug,
   localizedPath,
 } from "../_lib/routes";
-import {
-  localizedAuthLanguagePath,
-  localizedAuthPath,
-} from "../_lib/auth-routes";
-import { safePublicReturnPath } from "../_lib/return-paths";
+import { localizedAuthLanguagePath, localizedAuthPath } from "../_lib/auth-routes";
+import { localizedReturnPath, safePublicReturnPath } from "../_lib/return-paths";
 import {
   navigationLocales as locales,
   type NavigationRoute,
@@ -39,7 +37,9 @@ export function useNavigationRoutes(locale: string, routes: NavigationRoute[]) {
     activeSlug.startsWith("shop/") ||
     activeSlug.startsWith("products/");
   const localizedRoute = (targetLocale: string) =>
-    isCatalogEntity
+    isDashboardOrderRouteSlug(activeSlug)
+      ? localizedReturnPath(locale, targetLocale, currentPath)
+      : isCatalogEntity
       ? `/api/catalog/locale-route?${new URLSearchParams({
           target: targetLocale,
           path: pathname,

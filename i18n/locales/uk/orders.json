@@ -1,0 +1,36 @@
+{
+  "pages": { "dashboard": { "orders": {
+    "title": "Замовлення", "description": "Переглядайте гостьові замовлення, узгоджуйте вміст замовлень на підтвердженні та окремо керуйте статусами замовлення й оплати.",
+    "loading": "Завантаження замовлень…", "count": "Замовлень: {{count}}",
+    "filters": { "regionLabel": "Фільтри замовлень", "search": "Пошук", "searchPlaceholder": "Номер, ім’я, телефон або електронна пошта", "status": "Статус замовлення", "paymentStatus": "Статус оплати", "all": "Усі", "from": "Подано від", "to": "Подано до", "timezone": "Дати інтерпретуються за робочим часовим поясом Європа/Софія.", "apply": "Застосувати фільтри", "clear": "Очистити", "invalid": "Деякі некоректні фільтри пропущено. Перевірте показані значення." },
+    "list": { "orderNumber": "Замовлення", "submittedAt": "Подано", "customer": "Клієнт", "phone": "Телефон", "total": "Поточна сума", "orderStatus": "Статус замовлення", "paymentStatus": "Статус оплати", "open": "Відкрити замовлення" },
+    "empty": { "title": "Замовлень ще немає", "description": "Гостьові замовлення з’являться тут після оформлення." },
+    "noResults": { "title": "Збігів не знайдено", "description": "Змініть або очистьте фільтри, щоб побачити інші замовлення." },
+    "pagination": { "label": "Сторінки замовлень", "previous": "Попередня", "next": "Наступна", "status": "Сторінка {{page}} з {{pages}}" },
+    "detail": {
+      "back": "Назад до замовлень", "submittedAt": "Подано", "updatedAt": "Остання зміна", "approvedAt": "Схвалено", "rejectedAt": "Відхилено", "cancelledAt": "Скасовано", "completedAt": "Завершено", "paymentUpdatedAt": "Статус оплати оновлено", "paidAt": "Оплачено", "refundedAt": "Кошти повернено", "original": "Початкове подання клієнта", "originalDescription": "Редакція 1 є постійною та доступна лише для читання.",
+      "current": "Поточне замовлення", "currentDescription": "Остання збережена редакція замовлення.", "history": "Історія редакцій", "audit": "Історія аудиту", "revision": "Редакція {{number}}", "currentRevision": "Поточна редакція",
+      "customer": "Дані клієнта", "delivery": "Доставка й оплата", "products": "Товари", "pricing": "Підсумок вартості", "lifecycle": "Життєвий цикл замовлення й оплати",
+      "name": "Ім’я", "phone": "Телефон", "email": "Електронна пошта", "city": "Місто", "deliveryAddress": "Адреса доставки", "note": "Примітка клієнта", "noNote": "Примітки немає", "paymentMethod": "Спосіб оплати",
+      "sku": "SKU", "quantity": "Кількість", "unitPrice": "Ціна за одиницю з ПДВ", "promotion": "Акція", "noPromotion": "Без акції", "vat": "ПДВ", "lineTotal": "Сума позиції",
+      "adjustments": "Коригування позиції", "noAdjustments": "Без коригувань", "reason": "Внутрішня причина", "actor": "Відповідальна особа", "createdAt": "Створено", "subtotal": "Каталожна проміжна сума",
+      "promotionDiscount": "Акційна знижка", "itemAdjustments": "Коригування позицій", "orderAdjustments": "Коригування замовлення", "net": "Сума без ПДВ", "vatTotal": "Загальний ПДВ", "total": "Загалом з ПДВ", "guest": "Гостьовий клієнт", "timezone": "Європа/Софія"
+    },
+    "editor": {
+      "title": "Редагувати поточне замовлення", "description": "Збереження створює одну повну незмінну редакцію. Зміни дозволені лише до підтвердження.",
+      "save": "Зберегти зміни", "saving": "Збереження…", "addProduct": "Додати доступний товар", "productSearch": "Пошук товару", "productSearchPlaceholder": "Назва товару або SKU",
+      "search": "Шукати товари", "searching": "Пошук товарів…", "noProducts": "Доступних товарів за цим запитом немає.", "add": "Додати товар", "remove": "Видалити товар", "addAdjustment": "Додати коригування",
+      "removeAdjustment": "Видалити коригування", "adjustmentDirection": "Тип коригування", "discount": "Знижка", "surcharge": "Доплата", "amount": "Сума з ПДВ у EUR", "reason": "Внутрішня причина",
+      "provisional": "Попередні суми чернетки", "provisionalUnavailable": "Заповніть коректні кількості й коригування для попереднього розрахунку.", "unsaved": "Є незбережені зміни замовлення.",
+      "staleHelp": "Інший адміністратор змінив замовлення. Вашу чернетку збережено.", "reviewLatest": "Переглянути останню версію в новій вкладці", "discardReload": "Відкинути чернетку й перезавантажити",
+      "validationSummary": "Перевірте позначені дані замовлення.", "required": "Це поле обов’язкове.", "invalid": "Введіть коректне значення."
+    },
+    "lifecycle": { "orderTitle": "Статус замовлення", "paymentTitle": "Статус оплати", "orderDescription": "Перехід замовлення не змінює статус оплати.", "paymentDescription": "Перехід оплати не відкриває та не змінює замовлення.", "noTransitions": "Подальших переходів немає.", "unsavedBlocked": "Збережіть або відкиньте зміни вмісту перед зміною статусу.", "confirmTitle": "Підтвердьте зміну статусу", "confirmDescription": "Змінити статус на {{status}}?", "confirm": "Підтвердити", "cancel": "Скасувати", "updating": "Оновлення…" },
+    "history": { "submitted": "Замовлення подано", "contentRevised": "Вміст замовлення змінено", "orderStatusChanged": "Статус замовлення змінено", "paymentStatusChanged": "Статус оплати змінено", "version": "Версія зміни {{version}}", "revisionTransition": "Редакція {{before}} → {{after}}", "changedFields": "Змінені поля", "collectionChange": "{{field}}: {{before}} → {{after}} записів", "valueChange": "{{field}}: {{before}} → {{after}}", "moneyChange": "{{field}}: {{before}} → {{after}}", "unknownChange": "Змінено {{field}}" },
+    "orderStatuses": { "pending_approval": "Очікує підтвердження", "approved": "Підтверджено", "rejected": "Відхилено", "cancelled": "Скасовано", "completed": "Завершено" },
+    "paymentStatuses": { "unpaid": "Не оплачено", "partially_paid": "Частково оплачено", "paid": "Оплачено", "failed": "Помилка", "partially_refunded": "Частково повернено", "refunded": "Повернено" },
+    "paymentMethods": { "cash_on_delivery": "Оплата при доставці", "bank_transfer": "Банківський переказ", "arranged_by_phone": "Узгоджено телефоном" },
+    "results": { "SAVED": "Зміни замовлення збережено.", "ORDER_STATUS_UPDATED": "Статус замовлення оновлено.", "PAYMENT_STATUS_UPDATED": "Статус оплати оновлено.", "INVALID_INPUT": "Деякі дані некоректні. Перевірте чернетку й повторіть спробу.", "FORBIDDEN": "У вас більше немає дозволу на цю дію.", "NOT_FOUND": "Замовлення не знайдено.", "STALE": "Інший адміністратор змінив замовлення. Перегляньте останню версію.", "ORDER_NOT_EDITABLE": "Вміст можна редагувати лише до підтвердження.", "INVALID_STATUS_TRANSITION": "Цей перехід статусу замовлення заборонений.", "INVALID_PAYMENT_TRANSITION": "Цей перехід статусу оплати заборонений.", "TEMPORARY_FAILURE": "Дію не завершено. Чернетку збережено; повторіть спробу." },
+    "fields": { "locale": "Мова замовлення", "customer.name": "Ім’я клієнта", "customer.phone": "Телефон клієнта", "customer.email": "Електронна пошта клієнта", "customer.city": "Місто", "customer.deliveryAddress": "Адреса доставки", "customer.note": "Примітка клієнта", "paymentMethod": "Спосіб оплати", "items": "Товари", "adjustments": "Коригування", "totalGrossMinor": "Загалом з ПДВ", "status": "Статус замовлення", "paymentStatus": "Статус оплати", "order": "Замовлення" }
+  } } }
+}

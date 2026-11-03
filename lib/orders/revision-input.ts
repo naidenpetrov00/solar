@@ -1,6 +1,6 @@
 import "server-only";
 
-import { isCatalogLocale, isUuid } from "@/lib/catalog/model";
+import { isUuid } from "@/lib/catalog/model";
 import { OrderError } from "@/lib/orders/errors";
 import {
   isOrderPaymentMethod,
@@ -18,7 +18,6 @@ export function normalizeRevisionInput(input: ReviseOrderInput) {
     !isUuid(input.orderId) ||
     !Number.isInteger(input.expectedVersion) ||
     input.expectedVersion < 1 ||
-    !isCatalogLocale(input.locale) ||
     !isOrderPaymentMethod(input.paymentMethod) ||
     input.lines.length < 1 ||
     input.lines.length > maximumOrderItems

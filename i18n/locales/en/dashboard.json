@@ -7,7 +7,8 @@
         "overview": "Overview",
       "catalog": "Catalog",
       "promotions": "Promotions",
-        "users": "Users"
+        "users": "Users",
+        "orders": "Orders"
       },
       "overview": {
         "title": "Overview",

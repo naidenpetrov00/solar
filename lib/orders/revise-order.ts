@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { salesOrder, salesOrderAuditEvent } from "@/db/schema";
-import type { CatalogLocale } from "@/lib/catalog/model";
+import { isCatalogLocale } from "@/lib/catalog/model";
 import { getOrderActor } from "@/lib/orders/actor-repository";
 import { snapshotCatalogOrderItems } from "@/lib/orders/catalog-snapshot";
 import { prepareRevisionCalculation } from "@/lib/orders/calculation";
@@ -33,18 +33,18 @@ export async function reviseOrder(rawInput: ReviseOrderInput) {
     if (order.mutationVersion !== rawInput.expectedVersion) {
       throw new OrderError("STALE");
     }
-    if (
-      order.status === "rejected" ||
-      order.status === "cancelled" ||
-      order.status === "completed"
-    ) {
-      throw new OrderError("TERMINAL_ORDER");
+    if (order.status !== "pending_approval") {
+      throw new OrderError("ORDER_NOT_EDITABLE");
     }
     const current = await loadOrderRevisionAggregate(
       transaction,
       order.id,
       order.currentRevisionNumber,
     );
+    if (!isCatalogLocale(current.revision.locale)) {
+      throw new OrderError("INVALID_INPUT");
+    }
+    const orderLocale = current.revision.locale;
     const currentByLineKey = new Map(
       current.items.map((item) => [item.lineKey, item]),
     );
@@ -53,7 +53,7 @@ export async function reviseOrder(rawInput: ReviseOrderInput) {
     );
     const freshCatalog = await snapshotCatalogOrderItems(
       transaction,
-      rawInput.locale as CatalogLocale,
+      orderLocale,
       newProductIds,
       new Date(),
     );
@@ -93,7 +93,7 @@ export async function reviseOrder(rawInput: ReviseOrderInput) {
       orderAdjustments,
     });
     const changes = buildRevisionChanges(current, {
-      locale: rawInput.locale,
+      locale: orderLocale,
       customer,
       paymentMethod: rawInput.paymentMethod,
       calculation,
@@ -105,7 +105,7 @@ export async function reviseOrder(rawInput: ReviseOrderInput) {
       orderId: order.id,
       revisionNumber: nextRevision,
       revisionKind: "administrator_edit",
-      locale: rawInput.locale,
+      locale: orderLocale,
       customer,
       paymentMethod: rawInput.paymentMethod,
       calculation,

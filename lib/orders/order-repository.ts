@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 
 import {
   salesOrder,
@@ -82,4 +82,47 @@ export async function loadOrderAggregate(
     .where(eq(salesOrderAuditEvent.orderId, orderId))
     .orderBy(asc(salesOrderAuditEvent.mutationVersion));
   return { order, ...content, events };
+}
+
+export async function loadOrderHistoryAggregate(
+  executor: OrderExecutor,
+  orderId: string,
+) {
+  const [order] = await executor
+    .select()
+    .from(salesOrder)
+    .where(eq(salesOrder.id, orderId))
+    .limit(1);
+  if (!order) throw new OrderError("NOT_FOUND");
+  const revisions = await executor
+    .select()
+    .from(salesOrderRevision)
+    .where(eq(salesOrderRevision.orderId, orderId))
+    .orderBy(asc(salesOrderRevision.revisionNumber));
+  if (!revisions.length) throw new OrderError("NOT_FOUND");
+  const revisionIds = revisions.map(({ id }) => id);
+  const [items, adjustments, events] = await Promise.all([
+    executor
+      .select()
+      .from(salesOrderItemSnapshot)
+      .where(inArray(salesOrderItemSnapshot.revisionId, revisionIds))
+      .orderBy(
+        asc(salesOrderItemSnapshot.revisionId),
+        asc(salesOrderItemSnapshot.position),
+      ),
+    executor
+      .select()
+      .from(salesOrderPriceAdjustment)
+      .where(inArray(salesOrderPriceAdjustment.revisionId, revisionIds))
+      .orderBy(
+        asc(salesOrderPriceAdjustment.revisionId),
+        asc(salesOrderPriceAdjustment.createdAt),
+      ),
+    executor
+      .select()
+      .from(salesOrderAuditEvent)
+      .where(eq(salesOrderAuditEvent.orderId, orderId))
+      .orderBy(asc(salesOrderAuditEvent.mutationVersion)),
+  ]);
+  return { order, revisions, items, adjustments, events };
 }

@@ -32,8 +32,13 @@ function normalizedText(
   return normalized;
 }
 
-function technicalNormalization(value: string) {
+export function normalizeOrderSearchText(value: string) {
   return value.normalize("NFKC").toLocaleLowerCase("en-US");
+}
+
+export function normalizeOrderPhoneSearch(value: string) {
+  const digits = value.replace(/\D/gu, "");
+  return digits ? `${value.trim().startsWith("+") ? "+" : ""}${digits}` : "";
 }
 
 export function normalizeOrderCustomer(input: OrderCustomerInput) {
@@ -56,7 +61,7 @@ export function normalizeOrderCustomer(input: OrderCustomerInput) {
   const note = input.note?.trim();
   return {
     name,
-    nameNormalized: technicalNormalization(name),
+    nameNormalized: normalizeOrderSearchText(name),
     phone,
     phoneNormalized,
     email,
@@ -64,7 +69,7 @@ export function normalizeOrderCustomer(input: OrderCustomerInput) {
     city,
     cityNormalized: city.toLocaleLowerCase("en-US"),
     deliveryAddress,
-    deliveryAddressNormalized: technicalNormalization(deliveryAddress),
+    deliveryAddressNormalized: normalizeOrderSearchText(deliveryAddress),
     note: note ? normalizedText(note, 1, 2000, "note") : null,
   };
 }

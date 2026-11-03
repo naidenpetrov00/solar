@@ -44,7 +44,6 @@ export type ReviseOrderInput = {
   actorId: string;
   orderId: string;
   expectedVersion: number;
-  locale: CatalogLocale;
   customer: OrderCustomerInput;
   paymentMethod: OrderPaymentMethod;
   lines: OrderRevisionLineInput[];

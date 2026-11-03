@@ -5,8 +5,8 @@ export type OrderErrorCode =
   | "INVALID_PAYMENT_TRANSITION"
   | "INVALID_STATUS_TRANSITION"
   | "NOT_FOUND"
-  | "STALE"
-  | "TERMINAL_ORDER";
+  | "ORDER_NOT_EDITABLE"
+  | "STALE";
 
 export class OrderError extends Error {
   constructor(

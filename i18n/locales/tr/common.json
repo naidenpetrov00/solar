@@ -139,6 +139,10 @@
       "storageUnavailable": "Sepet değişiklikleri bu tarayıcıda kaydedilmeyecek.",
       "priceNote": "Gösterilen fiyatlara KDV dahildir."
     },
+    "dashboard": {
+      "orders": { "title": "Siparişler", "description": "Müşteri siparişlerini inceleyin ve yönetin." },
+      "orderDetail": { "title": "Sipariş ayrıntıları", "description": "Sipariş içeriğini, yaşam döngüsünü, ödeme durumunu ve geçmişini inceleyin." }
+    },
     "contact": {
       "title": "İletişim"
     }

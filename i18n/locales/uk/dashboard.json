@@ -7,7 +7,8 @@
         "overview": "Огляд",
       "catalog": "Каталог",
       "promotions": "Акції",
-        "users": "Користувачі"
+        "users": "Користувачі",
+        "orders": "Замовлення"
       },
       "overview": {
         "title": "Огляд",

@@ -139,6 +139,10 @@
       "storageUnavailable": "Cart changes will not be saved in this browser.",
       "priceNote": "Displayed prices include VAT."
     },
+    "dashboard": {
+      "orders": { "title": "Orders", "description": "Review and manage customer orders." },
+      "orderDetail": { "title": "Order details", "description": "Review order contents, lifecycle, payment status, and history." }
+    },
     "contact": {
       "title": "Contact"
     }

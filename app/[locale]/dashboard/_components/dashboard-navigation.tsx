@@ -16,6 +16,9 @@ export function DashboardNavigation({
   items: DashboardNavigationItem[];
 }) {
   const pathname = usePathname();
+  const activeHref = items
+    .filter((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))
+    .toSorted((left, right) => right.href.length - left.href.length)[0]?.href;
 
   return (
     <nav aria-label={ariaLabel}>
@@ -24,7 +27,7 @@ export function DashboardNavigation({
           key={item.href}
           className="dashboard-rail-link"
           href={item.href}
-          aria-current={pathname === item.href ? "page" : undefined}
+          aria-current={item.href === activeHref ? "page" : undefined}
         >
           {item.label}
         </Link>
