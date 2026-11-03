@@ -5,6 +5,7 @@ import {
   dashboardRouteSlug,
   dashboardUsersRouteSlug,
   dashboardOrdersRouteSlug,
+  dashboardOrderRecipientsRouteSlug,
   localizedPath,
 } from "../_lib/routes";
 import { DashboardNavigation } from "./_components/dashboard-navigation";
@@ -53,6 +54,10 @@ export default async function DashboardLayout({
           {
             href: localizedPath(locale, dashboardOrdersRouteSlug),
             label: t("dashboard:pages.dashboard.navigation.orders"),
+          },
+          {
+            href: localizedPath(locale, dashboardOrderRecipientsRouteSlug),
+            label: t("dashboard:pages.dashboard.navigation.orderRecipients"),
           },
         ]
       : []),

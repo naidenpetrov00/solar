@@ -11,6 +11,9 @@ import { transitionOrderStatus } from "@/lib/orders/transition-order";
 import { transitionPaymentStatus } from "@/lib/orders/transition-payment";
 import { isOrderPaymentStatus, isOrderStatus } from "@/lib/orders/model";
 import { AuthorizationError } from "@/lib/permission-policy";
+import { scheduleOrderNotificationDispatch } from "@/lib/order-notifications/after-kick";
+import { OrderNotificationError } from "@/lib/order-notifications/errors";
+import { retryOrderNotification } from "@/lib/order-notifications/manual-retry";
 import {
   dashboardOrderRouteSlug,
   dashboardOrdersRouteSlug,
@@ -39,6 +42,17 @@ function actionError(error: unknown): OrderActionResult {
     return { status: "error", code: "FORBIDDEN" };
   }
   if (!(error instanceof OrderError)) {
+    if (error instanceof OrderNotificationError) {
+      const notificationCode = {
+        FORBIDDEN: "FORBIDDEN",
+        INVALID_INPUT: "INVALID_INPUT",
+        NOT_FOUND: "NOT_FOUND",
+        STALE: "STALE",
+        NOT_RETRYABLE: "NOTIFICATION_NOT_RETRYABLE",
+        DUPLICATE_ACTIVE_EMAIL: "INVALID_INPUT",
+      } as const;
+      return { status: "error", code: notificationCode[error.code] };
+    }
     return { status: "error", code: "TEMPORARY_FAILURE" };
   }
   const supported: OrderActionCode[] = [
@@ -56,6 +70,38 @@ function actionError(error: unknown): OrderActionResult {
       ? error.code as OrderActionCode
       : "INVALID_INPUT",
   };
+}
+
+export async function retryOrderNotificationAction(
+  _previous: OrderActionResult,
+  data: FormData,
+): Promise<OrderActionResult> {
+  const orderId = text(data, "orderId");
+  const notificationId = text(data, "notificationId");
+  const expectedVersion = version(data);
+  if (
+    !isUuid(orderId) ||
+    !isUuid(notificationId) ||
+    expectedVersion === null
+  ) return { status: "error", code: "INVALID_INPUT" };
+  try {
+    const actor = await requireUser();
+    const result = await retryOrderNotification({
+      actorId: actor.id,
+      orderId,
+      notificationId,
+      expectedVersion,
+    });
+    revalidateOrder(text(data, "dashboardLocale"), orderId);
+    scheduleOrderNotificationDispatch();
+    return {
+      status: "success",
+      code: "NOTIFICATION_RETRY_QUEUED",
+      mutationVersion: result.mutationVersion,
+    };
+  } catch (error) {
+    return actionError(error);
+  }
 }
 
 function revalidateOrder(locale: string, orderId: string) {
@@ -125,6 +171,13 @@ export async function transitionOrderAction(
       expectedVersion,
       status,
     });
+    if (
+      status === "approved" ||
+      status === "rejected" ||
+      status === "cancelled"
+    ) {
+      scheduleOrderNotificationDispatch();
+    }
     revalidateOrder(text(data, "dashboardLocale"), orderId);
     return {
       status: "success",

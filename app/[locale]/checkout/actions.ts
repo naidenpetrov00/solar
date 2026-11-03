@@ -9,6 +9,7 @@ import {
   orderConfirmationMaxAgeSeconds,
 } from "@/lib/orders/confirmation-token";
 import { OrderError } from "@/lib/orders/errors";
+import { scheduleOrderNotificationDispatch } from "@/lib/order-notifications/after-kick";
 import type { GuestOrderInput } from "@/lib/orders/types";
 import { assertCustomerPolicyReadiness } from "@/lib/legal/policy-facts";
 import { localizedPath } from "../_lib/routes";
@@ -71,6 +72,7 @@ export async function submitGuestOrderAction(
   if (!input) return { status: "cart_stale" };
   try {
     const created = await createGuestOrder(input);
+    scheduleOrderNotificationDispatch();
     const cookieStore = await cookies();
     cookieStore.set(orderConfirmationCookieName, createOrderConfirmationToken(created.orderNumber), {
       httpOnly: true,

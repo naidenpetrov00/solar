@@ -3,7 +3,11 @@ import "server-only";
 import { getT } from "@/i18n.server";
 import type { EmailMessage } from "@/lib/email/delivery";
 import { resolveAuthEmailLocale } from "@/lib/email/auth-email-locale";
-import { createSmtpEmailTransport } from "@/lib/email/smtp-transport";
+import { createEmailTransport } from "@/lib/email/transport";
+import {
+  escapeEmailHtml,
+  renderEmailFrame,
+} from "@/lib/email/template-frame";
 import { requireServerEnvironmentVariable } from "@/lib/server-env";
 
 type AuthEmailPurpose = "verification" | "password_reset";
@@ -15,17 +19,8 @@ export class EmailDeliveryError extends Error {
   }
 }
 
-const emailTransport = createSmtpEmailTransport();
+const emailTransport = createEmailTransport();
 const applicationUrl = requireServerEnvironmentVariable("BETTER_AUTH_URL");
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
 
 async function buildAuthEmail(
   purpose: AuthEmailPurpose,
@@ -45,7 +40,7 @@ async function buildAuthEmail(
   const action = t(`${key}.action`);
   const expiry = t(`${key}.expiry`);
   const ignore = t(`${key}.ignore`);
-  const safeUrl = escapeHtml(url);
+  const safeUrl = escapeEmailHtml(url);
 
   return {
     subject,
@@ -58,17 +53,13 @@ async function buildAuthEmail(
       expiry,
       ignore,
     ].join("\n"),
-    html: [
-      '<div style="margin:0;background:#f4f3ee;padding:32px 20px;color:#11130f;font-family:Arial,Helvetica,sans-serif">',
-      '<div style="margin:0 auto;max-width:560px;background:#ffffff;padding:32px">',
-      `<h1 style="margin:0 0 20px;font-size:30px;line-height:1.1">${escapeHtml(title)}</h1>`,
-      `<p style="margin:0 0 24px;font-size:16px;line-height:1.6">${escapeHtml(introduction)}</p>`,
-      `<p style="margin:0 0 24px"><a href="${safeUrl}" style="display:inline-block;background:#fcd34d;color:#11130f;padding:13px 18px;text-decoration:none;font-weight:700">${escapeHtml(action)}</a></p>`,
-      `<p style="margin:0 0 12px;font-size:14px;line-height:1.6;color:#5d625a">${escapeHtml(expiry)}</p>`,
-      `<p style="margin:0;font-size:14px;line-height:1.6;color:#5d625a">${escapeHtml(ignore)}</p>`,
-      "</div>",
-      "</div>",
-    ].join(""),
+    html: renderEmailFrame([
+      `<h1 style="margin:0 0 20px;font-size:30px;line-height:1.1">${escapeEmailHtml(title)}</h1>`,
+      `<p style="margin:0 0 24px;font-size:16px;line-height:1.6">${escapeEmailHtml(introduction)}</p>`,
+      `<p style="margin:0 0 24px"><a href="${safeUrl}" style="display:inline-block;background:#fcd34d;color:#11130f;padding:13px 18px;text-decoration:none;font-weight:700">${escapeEmailHtml(action)}</a></p>`,
+      `<p style="margin:0 0 12px;font-size:14px;line-height:1.6;color:#5d625a">${escapeEmailHtml(expiry)}</p>`,
+      `<p style="margin:0;font-size:14px;line-height:1.6;color:#5d625a">${escapeEmailHtml(ignore)}</p>`,
+    ].join("")),
   };
 }
 
@@ -80,9 +71,9 @@ async function deliverAuthEmail(
 ) {
   try {
     const message = await buildAuthEmail(purpose, url);
-    const delivered = await emailTransport.send({ recipient, ...message });
+    const delivery = await emailTransport.send({ recipient, ...message });
 
-    if (delivered) {
+    if (delivery.status === "sent") {
       return true;
     }
   } catch {

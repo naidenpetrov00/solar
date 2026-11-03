@@ -8,7 +8,8 @@
       "catalog": "Katalog",
       "promotions": "Promosyonlar",
         "users": "Kullanıcılar",
-        "orders": "Siparişler"
+        "orders": "Siparişler",
+        "orderRecipients": "E-posta alıcıları"
       },
       "overview": {
         "title": "Genel bakış",

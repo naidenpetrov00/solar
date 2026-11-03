@@ -4,6 +4,11 @@ import type {
   OrderPaymentStatus,
   OrderStatus,
 } from "@/lib/orders/model";
+import type {
+  OrderNotificationErrorCode,
+  OrderNotificationKind,
+  OrderNotificationStatus,
+} from "@/lib/order-notifications/model";
 
 export type OrdersLabels = {
   title: string;
@@ -133,6 +138,38 @@ export type OrdersLabels = {
     confirm: string;
     cancel: string;
     updating: string;
+  };
+  emailDelivery: {
+    title: string;
+    description: string;
+    manageRecipients: string;
+    empty: string;
+    kind: string;
+    recipient: string;
+    recipientType: string;
+    customer: string;
+    internal: string;
+    templateVersion: string;
+    revision: string;
+    status: string;
+    attempts: string;
+    manualRetries: string;
+    createdAt: string;
+    lastAttemptAt: string;
+    nextAttemptAt: string;
+    sentAt: string;
+    failedAt: string;
+    notAvailable: string;
+    error: string;
+    retry: string;
+    retrying: string;
+    confirmTitle: string;
+    confirmDescription: string;
+    confirm: string;
+    cancel: string;
+    kinds: Record<OrderNotificationKind, string>;
+    statuses: Record<OrderNotificationStatus, string>;
+    errors: Record<OrderNotificationErrorCode, string>;
   };
   history: {
     submitted: string;

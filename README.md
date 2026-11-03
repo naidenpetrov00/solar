@@ -38,6 +38,7 @@ Configuration variables:
 | `PUBLIC_SITE_URL` | Canonical public website origin used by metadata, sitemap, and structured data |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
 | `ORDER_CONFIRMATION_SIGNING_KEY` | Separate high-entropy secret used only to sign short-lived public order-confirmation state; do not reuse an authentication or session secret |
+| `ORDER_NOTIFICATION_DISPATCH_SECRET` | Separate high-entropy bearer secret, at least 32 bytes, used only by the private order-notification dispatcher |
 | `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
 | `BETTER_AUTH_TRUSTED_ORIGINS` | Optional comma-separated additional origins for LAN or preview development, such as the exact URL opened on a phone |
 | `LOCALSTACK_GATEWAY_PORT` | Loopback-only LocalStack S3 gateway port; defaults to `4566` |
@@ -58,7 +59,7 @@ Configuration variables:
 | `SMTP_HOST` | SMTP server hostname; use `127.0.0.1` when Next.js runs on the host |
 | `SMTP_PORT` | SMTP server port; Mailpit uses `1025` locally |
 | `SMTP_SECURE` | Whether SMTP uses implicit TLS; Mailpit uses `false` locally |
-| `SMTP_FROM` | Sender name and address used for authentication emails |
+| `SMTP_FROM` | Sender name and address used for application transactional emails |
 | `SMTP_USERNAME` | Optional SMTP username; production must set it together with `SMTP_PASSWORD` |
 | `SMTP_PASSWORD` | Optional SMTP password; production must set it together with `SMTP_USERNAME` |
 
@@ -317,6 +318,22 @@ Open the loopback-only inbox at `http://localhost:8025`. The local SMTP server l
 When Next.js runs directly on the host, keep `SMTP_HOST=127.0.0.1`. If the application is later placed in the same Compose network, use `SMTP_HOST=mailpit` instead. None of the mail variables should use the `NEXT_PUBLIC_` prefix.
 
 Mailpit is a development capture service, not a production delivery provider. Production still requires a selected SMTP account, a verified sender domain, delivery monitoring, and both SMTP credentials when the provider requires authentication.
+
+## Order notification dispatcher
+
+Order emails use a PostgreSQL transactional outbox. Creating or changing an order stores notification intents in the same database transaction; SMTP delivery happens only after commit and never changes the order result. Delivery is at-least-once: a process failure after SMTP acceptance but before the `sent` update may produce a duplicate message.
+
+Configure `ORDER_NOTIFICATION_DISPATCH_SECRET` independently from authentication and confirmation secrets. A production scheduler must call the private endpoint once per minute over HTTPS:
+
+```sh
+curl --fail --silent --show-error --request POST \
+  --header "Authorization: Bearer $ORDER_NOTIFICATION_DISPATCH_SECRET" \
+  "https://your-production-origin.example/api/internal/order-notifications/dispatch"
+```
+
+The endpoint returns `204` after a safely handled batch, including when there is no work, `401` for invalid credentials, and a bodyless `500` for a batch-level infrastructure failure. Cron monitoring should alert on non-2xx responses. Keep the secret in the scheduler's secret store rather than the crontab command itself.
+
+`after()` may accelerate delivery after an order mutation, but the one-minute scheduler is the recovery mechanism and source of operational reliability. Self-hosted Next.js processes must use graceful shutdown so in-flight requests receive time to finish; draining does not replace the scheduler or the outbox lease recovery.
 
 ## Google OAuth configuration
 

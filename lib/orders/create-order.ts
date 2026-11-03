@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { salesOrder, salesOrderAuditEvent } from "@/db/schema";
+import { enqueueNewOrderNotifications } from "@/lib/order-notifications/enqueue";
 import { snapshotCatalogOrderItems } from "@/lib/orders/catalog-snapshot";
 import { prepareRevisionCalculation } from "@/lib/orders/calculation";
 import { OrderError } from "@/lib/orders/errors";
@@ -75,7 +76,7 @@ export async function createGuestOrder(rawInput: GuestOrderInput) {
         return { snapshot, quantity: item.quantity, adjustments: [] };
       }),
     });
-    await persistOrderRevision(transaction, {
+    const revision = await persistOrderRevision(transaction, {
       orderId: created.id,
       revisionNumber: 1,
       revisionKind: "customer_submission",
@@ -85,17 +86,31 @@ export async function createGuestOrder(rawInput: GuestOrderInput) {
       calculation,
       actor: null,
     });
-    await transaction.insert(salesOrderAuditEvent).values({
+    const [event] = await transaction
+      .insert(salesOrderAuditEvent)
+      .values({
+        orderId: created.id,
+        eventType: "submitted",
+        mutationVersion: 1,
+        toRevisionNumber: 1,
+        toOrderStatus: "pending_approval",
+        toPaymentStatus: "unpaid",
+        changes: [
+          { field: "order", before: null, after: { orderNumber: created.orderNumber } },
+        ],
+        actorKind: "guest",
+      })
+      .returning({ id: salesOrderAuditEvent.id });
+    await enqueueNewOrderNotifications(transaction, {
       orderId: created.id,
-      eventType: "submitted",
-      mutationVersion: 1,
-      toRevisionNumber: 1,
-      toOrderStatus: "pending_approval",
-      toPaymentStatus: "unpaid",
-      changes: [
-        { field: "order", before: null, after: { orderNumber: created.orderNumber } },
-      ],
-      actorKind: "guest",
+      sourceAuditEventId: event.id,
+      revision: {
+        id: revision.id,
+        revisionNumber: 1,
+        locale: input.locale,
+        customerName: input.customer.name,
+        customerEmail: input.customer.email,
+      },
     });
     return { ...created, existing: false };
   });

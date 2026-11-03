@@ -6,6 +6,7 @@ import {
   salesOrder,
   salesOrderAuditEvent,
   salesOrderItemSnapshot,
+  orderNotificationOutbox,
   salesOrderPriceAdjustment,
   salesOrderRevision,
 } from "@/db/schema";
@@ -101,7 +102,7 @@ export async function loadOrderHistoryAggregate(
     .orderBy(asc(salesOrderRevision.revisionNumber));
   if (!revisions.length) throw new OrderError("NOT_FOUND");
   const revisionIds = revisions.map(({ id }) => id);
-  const [items, adjustments, events] = await Promise.all([
+  const [items, adjustments, events, notifications] = await Promise.all([
     executor
       .select()
       .from(salesOrderItemSnapshot)
@@ -123,6 +124,11 @@ export async function loadOrderHistoryAggregate(
       .from(salesOrderAuditEvent)
       .where(eq(salesOrderAuditEvent.orderId, orderId))
       .orderBy(asc(salesOrderAuditEvent.mutationVersion)),
+    executor
+      .select()
+      .from(orderNotificationOutbox)
+      .where(eq(orderNotificationOutbox.orderId, orderId))
+      .orderBy(asc(orderNotificationOutbox.createdAt)),
   ]);
-  return { order, revisions, items, adjustments, events };
+  return { order, revisions, items, adjustments, events, notifications };
 }

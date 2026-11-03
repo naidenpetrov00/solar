@@ -15,11 +15,13 @@ import { localizedAuthPath } from "../../../_lib/auth-routes";
 import { getPrivatePageMetadata } from "../../../_lib/metadata";
 import {
   accessDeniedRouteSlug,
+  dashboardOrderRecipientsRouteSlug,
   dashboardOrderRouteSlug,
   localizedPath,
 } from "../../../_lib/routes";
 import { safeAuthReturnPath } from "../../../_lib/return-paths";
 import { OrderHistory } from "../_components/order-history";
+import { OrderEmailDeliveries } from "../_components/order-email-deliveries";
 import { OrderManagementWorkspace } from "../_components/order-management-workspace";
 import { OrderRevisionView } from "../_components/order-revision-view";
 import { sofiaDateTimeFormatter } from "../order-format";
@@ -66,9 +68,14 @@ async function OrderDetailContent({
   const latestHref = localizedPath(locale, dashboardOrderRouteSlug(order.id));
   return (
     <>
-      <ButtonLink href={backHref} variant="informational" className="dashboard-order-back">
-        {labels.detail.back}
-      </ButtonLink>
+      <div className="dashboard-order-detail-actions">
+        <ButtonLink href={backHref} variant="informational">
+          {labels.detail.back}
+        </ButtonLink>
+        <ButtonLink href={localizedPath(locale, dashboardOrderRecipientsRouteSlug)} variant="informational">
+          {labels.emailDelivery.manageRecipients}
+        </ButtonLink>
+      </div>
       <header className="dashboard-order-header">
         <div><h1>{order.orderNumber}</h1><p>
           {labels.detail.submittedAt}: <time dateTime={order.submittedAt}>{dateFormatter.format(new Date(order.submittedAt))}</time>
@@ -121,6 +128,13 @@ async function OrderDetailContent({
           ) : null}
         </>
       )}
+      <OrderEmailDeliveries
+        orderId={order.id}
+        deliveries={order.emailDeliveries}
+        locale={locale}
+        canManage={canManage}
+        labels={labels}
+      />
       <OrderHistory
         revisions={order.revisions}
         events={order.auditEvents}

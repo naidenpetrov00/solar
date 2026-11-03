@@ -8,7 +8,8 @@
       "catalog": "Каталог",
       "promotions": "Промоции",
         "users": "Потребители",
-        "orders": "Поръчки"
+        "orders": "Поръчки",
+        "orderRecipients": "Имейл получатели"
       },
       "overview": {
         "title": "Преглед",

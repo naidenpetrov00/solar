@@ -6,6 +6,10 @@ import { catalogPromotion } from "@/db/schema/catalog-promotions";
 import { salesOrder, salesOrderRevision } from "@/db/schema/order-core";
 import { salesOrderAuditEvent } from "@/db/schema/order-events";
 import {
+  orderNotificationOutbox,
+  orderNotificationRecipient,
+} from "@/db/schema/order-notifications";
+import {
   salesOrderItemSnapshot,
   salesOrderPriceAdjustment,
 } from "@/db/schema/order-items";
@@ -13,6 +17,7 @@ import {
 export const salesOrderRelations = relations(salesOrder, ({ many }) => ({
   revisions: many(salesOrderRevision),
   events: many(salesOrderAuditEvent),
+  notifications: many(orderNotificationOutbox),
 }));
 
 export const salesOrderRevisionRelations = relations(
@@ -78,6 +83,33 @@ export const salesOrderAuditEventRelations = relations(
     actor: one(user, {
       fields: [salesOrderAuditEvent.actorUserId],
       references: [user.id],
+    }),
+  }),
+);
+
+export const orderNotificationRecipientRelations = relations(
+  orderNotificationRecipient,
+  ({ many }) => ({ notifications: many(orderNotificationOutbox) }),
+);
+
+export const orderNotificationOutboxRelations = relations(
+  orderNotificationOutbox,
+  ({ one }) => ({
+    order: one(salesOrder, {
+      fields: [orderNotificationOutbox.orderId],
+      references: [salesOrder.id],
+    }),
+    sourceEvent: one(salesOrderAuditEvent, {
+      fields: [orderNotificationOutbox.sourceAuditEventId],
+      references: [salesOrderAuditEvent.id],
+    }),
+    revision: one(salesOrderRevision, {
+      fields: [orderNotificationOutbox.revisionId],
+      references: [salesOrderRevision.id],
+    }),
+    recipientConfiguration: one(orderNotificationRecipient, {
+      fields: [orderNotificationOutbox.recipientConfigurationId],
+      references: [orderNotificationRecipient.id],
     }),
   }),
 );

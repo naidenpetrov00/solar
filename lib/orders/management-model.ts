@@ -4,6 +4,12 @@ import type {
   OrderPaymentStatus,
   OrderStatus,
 } from "@/lib/orders/model";
+import type {
+  OrderNotificationErrorCode,
+  OrderNotificationFailureDisposition,
+  OrderNotificationKind,
+  OrderNotificationStatus,
+} from "@/lib/order-notifications/model";
 
 export const managedOrdersPageSize = 25;
 export const managedOrdersMaximumPage = 10_000;
@@ -165,6 +171,29 @@ export type ManagedOrderDetail = {
   currentRevision: ManagedOrderRevision;
   revisions: ManagedOrderRevision[];
   auditEvents: ManagedOrderAuditEvent[];
+  emailDeliveries: ManagedOrderEmailDelivery[];
+};
+
+export type ManagedOrderEmailDelivery = {
+  id: string;
+  notificationKind: OrderNotificationKind;
+  recipientType: "customer" | "internal";
+  recipientName: string;
+  recipientEmail: string;
+  templateVersion: number;
+  revisionNumber: number;
+  status: OrderNotificationStatus;
+  attemptCount: number;
+  manualRetryCount: number;
+  mutationVersion: number;
+  lastErrorCode: OrderNotificationErrorCode | null;
+  failureDisposition: OrderNotificationFailureDisposition | null;
+  canRetry: boolean;
+  createdAt: string;
+  lastAttemptAt: string | null;
+  nextAttemptAt: string | null;
+  sentAt: string | null;
+  failedAt: string | null;
 };
 
 export type EligibleOrderProduct = {

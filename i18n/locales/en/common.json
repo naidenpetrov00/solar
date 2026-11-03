@@ -141,7 +141,8 @@
     },
     "dashboard": {
       "orders": { "title": "Orders", "description": "Review and manage customer orders." },
-      "orderDetail": { "title": "Order details", "description": "Review order contents, lifecycle, payment status, and history." }
+      "orderDetail": { "title": "Order details", "description": "Review order contents, lifecycle, payment status, and history." },
+      "orderRecipients": { "title": "Order recipients", "description": "Manage internal recipients of new-order notifications." }
     },
     "contact": {
       "title": "Contact"

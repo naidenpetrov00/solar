@@ -141,7 +141,8 @@
     },
     "dashboard": {
       "orders": { "title": "Siparişler", "description": "Müşteri siparişlerini inceleyin ve yönetin." },
-      "orderDetail": { "title": "Sipariş ayrıntıları", "description": "Sipariş içeriğini, yaşam döngüsünü, ödeme durumunu ve geçmişini inceleyin." }
+      "orderDetail": { "title": "Sipariş ayrıntıları", "description": "Sipariş içeriğini, yaşam döngüsünü, ödeme durumunu ve geçmişini inceleyin." },
+      "orderRecipients": { "title": "Sipariş alıcıları", "description": "Yeni sipariş bildirimlerinin dahili alıcılarını yönetin." }
     },
     "contact": {
       "title": "İletişim"

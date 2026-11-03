@@ -2,6 +2,11 @@ import "server-only";
 
 import { db } from "@/db";
 import { isCatalogLocale } from "@/lib/catalog/model";
+import {
+  isOrderNotificationErrorCode,
+  isOrderNotificationKind,
+  isOrderNotificationStatus,
+} from "@/lib/order-notifications/model";
 import { getOrderActor } from "@/lib/orders/actor-repository";
 import { OrderError } from "@/lib/orders/errors";
 import type {
@@ -240,6 +245,55 @@ export async function getManagedOrderDetail(
           changes: auditChanges(event.changes),
           actor: auditActor(event),
           occurredAt: event.occurredAt.toISOString(),
+        };
+      }),
+      emailDeliveries: aggregate.notifications.map((notification) => {
+        if (
+          !isOrderNotificationKind(notification.notificationKind) ||
+          !isOrderNotificationStatus(notification.status) ||
+          (notification.lastErrorCode !== null &&
+            !isOrderNotificationErrorCode(notification.lastErrorCode)) ||
+          (notification.failureDisposition !== null &&
+            notification.failureDisposition !== "permanent" &&
+            notification.failureDisposition !== "retry_exhausted") ||
+          (notification.recipientType !== "customer" &&
+            notification.recipientType !== "internal")
+        ) {
+          throw new OrderError("INVALID_INPUT");
+        }
+        const recipientName =
+          notification.recipientType === "customer"
+            ? notification.customerRecipientName
+            : notification.internalRecipientName;
+        const recipientEmail =
+          notification.recipientType === "customer"
+            ? notification.customerRecipientEmail
+            : notification.internalRecipientEmail;
+        if (!recipientName || !recipientEmail) {
+          throw new OrderError("INVALID_INPUT");
+        }
+        return {
+          id: notification.id,
+          notificationKind: notification.notificationKind,
+          recipientType: notification.recipientType,
+          recipientName,
+          recipientEmail,
+          templateVersion: notification.templateVersion,
+          revisionNumber: notification.revisionNumber,
+          status: notification.status,
+          attemptCount: notification.attemptCount,
+          manualRetryCount: notification.manualRetryCount,
+          mutationVersion: notification.mutationVersion,
+          lastErrorCode: notification.lastErrorCode,
+          failureDisposition: notification.failureDisposition,
+          canRetry:
+            notification.status === "failed" &&
+            notification.failureDisposition === "retry_exhausted",
+          createdAt: notification.createdAt.toISOString(),
+          lastAttemptAt: notification.lastAttemptAt?.toISOString() ?? null,
+          nextAttemptAt: notification.nextAttemptAt?.toISOString() ?? null,
+          sentAt: notification.sentAt?.toISOString() ?? null,
+          failedAt: notification.failedAt?.toISOString() ?? null,
         };
       }),
     };
