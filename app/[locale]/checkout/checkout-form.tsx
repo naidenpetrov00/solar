@@ -91,6 +91,13 @@ export function CheckoutForm({
       : result.status === "temporary_failure"
         ? labels.errors.temporaryFailure
         : null;
+  const requiredDetailsComplete =
+    draft.name.trim().length > 0 &&
+    draft.phone.trim().length > 0 &&
+    draft.email.trim().length > 0 &&
+    draft.city.trim().length > 0 &&
+    draft.deliveryAddress.trim().length > 0 &&
+    draft.privacyAcknowledged;
 
   if (!draftReady || !submissionKey) return <p className="checkout-state" role="status">{labels.loading}</p>;
 
@@ -100,7 +107,11 @@ export function CheckoutForm({
       className="checkout-form"
       noValidate
       aria-busy={pending}
-      onSubmit={() => {
+      onSubmit={(event) => {
+        if (!requiredDetailsComplete) {
+          event.preventDefault();
+          return;
+        }
         submittedItems.current = items.map((item) => ({ ...item }));
       }}
     >
@@ -128,7 +139,7 @@ export function CheckoutForm({
         <CheckoutFields draft={draft} errors={fieldErrors} labels={labels} privacyHref={privacyHref} termsHref={termsHref} update={update} />
         <div className="checkout-submit">
           <p>{labels.form.pendingConfirmation}</p>
-          <Button type="submit" disabled={pending} fullWidth>
+          <Button type="submit" disabled={pending || !requiredDetailsComplete} fullWidth>
             {pending ? labels.form.placingOrder : labels.form.placeOrder}
           </Button>
           <span className="sr-only" role="status" aria-live="polite">

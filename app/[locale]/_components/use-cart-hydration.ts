@@ -41,18 +41,17 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
         active = false;
       };
     }
-    const controller = new AbortController();
+    let active = true;
     const query = new URLSearchParams({ locale });
     const requestedIds = itemIds.split(",");
     requestedIds.forEach((id) => query.append("id", id));
     queueMicrotask(() => {
-      if (controller.signal.aborted) return;
+      if (!active) return;
       setHydrating(true);
       setHydrationError(false);
     });
 
     fetch(`/api/catalog/cart?${query.toString()}`, {
-      signal: controller.signal,
       cache: "no-store",
     })
       .then(async (response) => {
@@ -63,6 +62,7 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
         }>;
       })
       .then(({ products: hydratedProducts, refreshAfterMs: nextRefresh }) => {
+        if (!active) return;
         const validIds = new Set(hydratedProducts.map(({ id }) => id));
         const removed = requestedIds.length - validIds.size;
         setProducts(hydratedProducts);
@@ -72,18 +72,19 @@ export function useCartHydration(locale: string, unavailableRemoved: string) {
           setAnnouncement(unavailableRemoved);
         }
       })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError")
-          return;
+      .catch(() => {
+        if (!active) return;
         setProducts([]);
         setRefreshAfterMs(null);
         setHydrationError(true);
       })
       .finally(() => {
-        if (!controller.signal.aborted) setHydrating(false);
+        if (active) setHydrating(false);
       });
 
-    return () => controller.abort();
+    return () => {
+      active = false;
+    };
   }, [
     hydrationAttempt,
     itemIds,
