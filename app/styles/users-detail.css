@@ -84,6 +84,63 @@
   margin-top: 2rem;
 }
 
+.dashboard-user-order-email-preference {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-user-order-email-preference h3,
+.dashboard-user-order-email-preference p {
+  margin: 0;
+}
+
+.dashboard-user-order-email-preference h3 {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dashboard-user-order-email-preference > p,
+.dashboard-user-order-email-preference form > p {
+  color: var(--dashboard-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.dashboard-user-order-email-preference form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dashboard-user-order-email-toggle {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.dashboard-user-order-email-toggle input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #fcd34d;
+}
+
+.dashboard-user-order-email-toggle input:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 3px;
+}
+
+.dashboard-user-order-email-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
 .dashboard-user-actions h3 {
   font-size: 0.78rem;
   letter-spacing: 0.06em;

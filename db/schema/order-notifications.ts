@@ -11,6 +11,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
+import { user } from "@/db/schema/auth";
 import { salesOrder, salesOrderRevision } from "@/db/schema/order-core";
 import { salesOrderAuditEvent } from "@/db/schema/order-events";
 
@@ -18,6 +19,9 @@ export const orderNotificationRecipient = pgTable(
   "order_notification_recipient",
   {
     id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
     name: text("name").notNull(),
     email: text("email").notNull(),
     emailNormalized: text("email_normalized").notNull(),
@@ -32,12 +36,10 @@ export const orderNotificationRecipient = pgTable(
       .notNull(),
   },
   (table) => [
-    uniqueIndex("order_notification_recipient_active_email_idx")
-      .on(table.emailNormalized)
-      .where(sql`${table.active} = true`),
-    index("order_notification_recipient_active_name_idx").on(
+    uniqueIndex("order_notification_recipient_user_idx").on(table.userId),
+    index("order_notification_recipient_active_user_idx").on(
       table.active,
-      table.name,
+      table.userId,
     ),
     check(
       "order_notification_recipient_values_check",

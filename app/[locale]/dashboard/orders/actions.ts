@@ -49,7 +49,6 @@ function actionError(error: unknown): OrderActionResult {
         NOT_FOUND: "NOT_FOUND",
         STALE: "STALE",
         NOT_RETRYABLE: "NOTIFICATION_NOT_RETRYABLE",
-        DUPLICATE_ACTIVE_EMAIL: "INVALID_INPUT",
       } as const;
       return { status: "error", code: notificationCode[error.code] };
     }

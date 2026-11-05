@@ -8,8 +8,7 @@
       "catalog": "Catalog",
       "promotions": "Promotions",
         "users": "Users",
-        "orders": "Orders",
-        "orderRecipients": "Email recipients"
+        "orders": "Orders"
       },
       "overview": {
         "title": "Overview",

@@ -38,7 +38,8 @@
         },
         "roles": {
           "customer": "Customer",
-          "administrator": "Administrator"
+          "administrator": "Administrator",
+          "admin": "Owner"
         },
         "verification": {
           "verified": "Verified",
@@ -63,6 +64,17 @@
           "promote": "Promote to administrator",
           "demote": "Demote to customer",
           "working": "Working…"
+        },
+        "orderEmails": {
+          "title": "New-order emails",
+          "label": "Receives emails for new orders.",
+          "help": "Available only to roles that can view orders. A blocked account or one that loses this permission automatically stops receiving future notifications.",
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "save": "Save setting",
+          "saving": "Saving…",
+          "discard": "Discard change",
+          "unsaved": "You have unsaved changes to order-email settings."
         },
         "confirmations": {
           "cancel": "Cancel",
@@ -114,6 +126,7 @@
           "resetSent": "The password-reset email was sent.",
           "promoted": "The account was promoted and its sessions were revoked.",
           "demoted": "The account was demoted and its sessions were revoked.",
+          "orderEmailPreferenceSaved": "The new-order email setting was saved.",
           "administratorInvited": "The administrator account was created and its secure setup email was sent.",
           "administratorCreatedDeliveryFailed": "The administrator account was created, but the setup email could not be delivered. Open the account and resend the password-reset email.",
           "invalidInput": "The request was not valid. Review the information and try again.",

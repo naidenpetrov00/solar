@@ -5,11 +5,13 @@ import type { UsersWorkspaceLabels } from "./users-feedback";
 export function UsersLedger({
   users,
   selectedId,
+  selectionDisabled,
   labels,
   selectUser,
 }: {
   users: ManagedUser[];
   selectedId: string | null;
+  selectionDisabled: boolean;
   labels: UsersWorkspaceLabels;
   selectUser: (candidate: ManagedUser, invoker: HTMLButtonElement) => void;
 }) {
@@ -52,6 +54,7 @@ export function UsersLedger({
                   type="button"
                   className="dashboard-users-select"
                   variant="informational"
+                  disabled={selectionDisabled}
                   aria-pressed={selectedId === candidate.id}
                   onClick={(event) =>
                     selectUser(candidate, event.currentTarget)
@@ -86,6 +89,7 @@ export function UsersLedger({
             <Button
               type="button"
               variant="secondary"
+              disabled={selectionDisabled}
               aria-pressed={selectedId === candidate.id}
               onClick={(event) => selectUser(candidate, event.currentTarget)}
             >

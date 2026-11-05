@@ -4,7 +4,9 @@ import type {
   ManagedUser,
   ManagedUserAction,
 } from "@/lib/user-management-model";
+import type { UserActionResult } from "../user-action-model";
 import type { UsersWorkspaceLabels } from "./users-feedback";
+import { UserOrderEmailPreference } from "./user-order-email-preference";
 
 export function UserDetail({
   selected,
@@ -13,6 +15,16 @@ export function UserDetail({
   detailHeadingRef,
   onClose,
   openConfirmation,
+  locale,
+  preferenceDraft,
+  preferencePending,
+  preferenceActionPending,
+  preferenceResult,
+  preferenceErrorRef,
+  preferenceAction,
+  onPreferenceChange,
+  onPreferenceSubmit,
+  onPreferenceDiscard,
 }: {
   selected: ManagedUser | null;
   labels: UsersWorkspaceLabels;
@@ -24,6 +36,16 @@ export function UserDetail({
     user: ManagedUser,
     event: MouseEvent<HTMLButtonElement>,
   ) => void;
+  locale: string;
+  preferenceDraft: boolean;
+  preferencePending: boolean;
+  preferenceActionPending: boolean;
+  preferenceResult: UserActionResult;
+  preferenceErrorRef: RefObject<HTMLParagraphElement | null>;
+  preferenceAction: (formData: FormData) => void;
+  onPreferenceChange: (enabled: boolean) => void;
+  onPreferenceSubmit: () => void;
+  onPreferenceDiscard: () => void;
 }) {
   return (
     <aside className="dashboard-user-detail" aria-live="polite">
@@ -33,6 +55,7 @@ export function UserDetail({
             type="button"
             className="dashboard-user-detail-back"
             variant="informational"
+            disabled={preferenceActionPending}
             onClick={() => {
               onClose();
             }}
@@ -85,29 +108,48 @@ export function UserDetail({
               <dd>{dateFormatter.format(new Date(selected.updatedAt))}</dd>
             </div>
           </dl>
-          <section
-            className="dashboard-user-actions"
-            aria-labelledby="dashboard-user-actions-title"
-          >
-            <h3 id="dashboard-user-actions-title">{labels.actionsTitle}</h3>
-            <div>
-              {selected.actions.map((action) => (
-                <Button
-                  key={action}
-                  type="button"
-                  variant="secondary"
-                  tone={
-                    action === "block" || action === "demote"
-                      ? "danger"
-                      : "default"
-                  }
-                  onClick={(event) => openConfirmation(action, selected, event)}
-                >
-                  {labels.actions[action]}
-                </Button>
-              ))}
-            </div>
-          </section>
+          <UserOrderEmailPreference
+            user={selected}
+            enabled={preferenceDraft}
+            locale={locale}
+            pending={preferencePending}
+            actionPending={preferenceActionPending}
+            result={preferenceResult}
+            errorRef={preferenceErrorRef}
+            action={preferenceAction}
+            onChange={onPreferenceChange}
+            onSubmit={onPreferenceSubmit}
+            onDiscard={onPreferenceDiscard}
+            labels={labels}
+          />
+          {selected.actions.length > 0 ? (
+            <section
+              className="dashboard-user-actions"
+              aria-labelledby="dashboard-user-actions-title"
+            >
+              <h3 id="dashboard-user-actions-title">{labels.actionsTitle}</h3>
+              <div>
+                {selected.actions.map((action) => (
+                  <Button
+                    key={action}
+                    type="button"
+                    variant="secondary"
+                    tone={
+                      action === "block" || action === "demote"
+                        ? "danger"
+                        : "default"
+                    }
+                    disabled={preferenceActionPending}
+                    onClick={(event) =>
+                      openConfirmation(action, selected, event)
+                    }
+                  >
+                    {labels.actions[action]}
+                  </Button>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </>
       ) : (
         <div className="dashboard-user-detail-empty">

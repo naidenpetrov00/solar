@@ -92,6 +92,13 @@
       "when": 1793719068321,
       "tag": "0012_add-order-notification-outbox",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1793810102657,
+      "tag": "0013_link-order-email-recipients-to-users",
+      "breakpoints": true
     }
   ]
 }

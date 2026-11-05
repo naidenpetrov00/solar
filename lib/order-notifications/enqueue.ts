@@ -5,9 +5,12 @@ import { eq } from "drizzle-orm";
 import {
   orderNotificationOutbox,
   orderNotificationRecipient,
+  user,
 } from "@/db/schema";
 import { orderNotificationTemplateVersion } from "@/lib/order-notifications/model";
+import { usableOrderNotificationUser } from "@/lib/order-notifications/user-recipient";
 import type { OrderTransaction } from "@/lib/orders/repository-types";
+import { hasPermission } from "@/lib/permission-policy";
 
 type RevisionRecipient = {
   id: string;
@@ -62,16 +65,30 @@ export async function enqueueNewOrderNotifications(
   const recipients = await transaction
     .select({
       id: orderNotificationRecipient.id,
-      name: orderNotificationRecipient.name,
-      email: orderNotificationRecipient.email,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      blocked: user.banned,
     })
     .from(orderNotificationRecipient)
+    .innerJoin(user, eq(orderNotificationRecipient.userId, user.id))
     .where(eq(orderNotificationRecipient.active, true));
-  if (!recipients.length) return;
+  const eligibleRecipients = recipients.flatMap((recipient) => {
+    if (
+      recipient.blocked === true ||
+      !hasPermission(recipient.role, "order:view")
+    ) {
+      return [];
+    }
+
+    const snapshot = usableOrderNotificationUser(recipient);
+    return snapshot ? [{ id: recipient.id, ...snapshot }] : [];
+  });
+  if (!eligibleRecipients.length) return;
   await transaction
     .insert(orderNotificationOutbox)
     .values(
-      recipients.map((recipient) => ({
+      eligibleRecipients.map((recipient) => ({
         orderId: input.orderId,
         sourceAuditEventId: input.sourceAuditEventId,
         revisionId: input.revision.id,

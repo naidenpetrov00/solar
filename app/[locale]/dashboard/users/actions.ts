@@ -8,6 +8,7 @@ import {
   revokeManagedUserSessions,
   setManagedUserBlocked,
 } from "@/lib/user-management-account";
+import { setManagedUserOrderEmailPreference } from "@/lib/user-management-order-emails";
 import { sendManagedPasswordReset } from "@/lib/user-management-recovery";
 import { dashboardUsersRouteSlug, localizedPath } from "../../_lib/routes";
 import { localizedPasswordResetCallbackPath } from "../../_lib/auth-routes";
@@ -20,6 +21,48 @@ import {
   validTimestamp,
   type UserActionResult,
 } from "./user-action-model";
+
+export async function manageUserOrderEmailPreferenceAction(
+  _previous: UserActionResult,
+  formData: FormData,
+): Promise<UserActionResult> {
+  const targetId = stringValue(formData, "targetId");
+  const expectedVersionValue = stringValue(formData, "expectedVersion");
+  const enabledValue = stringValue(formData, "enabled");
+  const locale = stringValue(formData, "locale");
+  const expectedVersion = Number(expectedVersionValue);
+
+  if (
+    !validTargetId(targetId) ||
+    !Number.isSafeInteger(expectedVersion) ||
+    expectedVersion < 0 ||
+    (enabledValue !== "true" && enabledValue !== "false") ||
+    !isSupportedLocale(locale)
+  ) {
+    return { status: "error", code: "INVALID_INPUT", targetId };
+  }
+
+  try {
+    const actor = await requireUser();
+    const result = await setManagedUserOrderEmailPreference({
+      actorId: actor.id,
+      targetId,
+      expectedVersion,
+      enabled: enabledValue === "true",
+    });
+
+    revalidatePath(localizedPath(locale, dashboardUsersRouteSlug));
+    return {
+      status: "success",
+      code: "ORDER_EMAIL_PREFERENCE_SAVED",
+      targetId,
+      mutationVersion: result.mutationVersion,
+    };
+  } catch (error) {
+    return errorResult(error, targetId);
+  }
+}
+
 export async function manageUserAction(
   _previous: UserActionResult,
   formData: FormData,

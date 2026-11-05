@@ -1,4 +1,4 @@
-import type { ManageableRole } from "@/lib/permission-policy";
+import type { AppRole } from "@/lib/auth-roles";
 
 export const USERS_PAGE_SIZE = 25;
 export const USERS_MAX_PAGE = 10_000;
@@ -17,12 +17,17 @@ export type ManagedUser = {
   id: string;
   name: string;
   email: string;
-  role: ManageableRole;
+  role: AppRole;
   emailVerified: boolean;
   blocked: boolean;
   createdAt: string;
   updatedAt: string;
   actions: ManagedUserAction[];
+  orderEmailPreference: {
+    enabled: boolean;
+    mutationVersion: number;
+    canManage: boolean;
+  } | null;
 };
 
 export type ManagedUsersPage = {

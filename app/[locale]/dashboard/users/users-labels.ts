@@ -23,6 +23,7 @@ export function getUsersWorkspaceLabels(
     roles: {
       customer: t("users:pages.dashboard.users.roles.customer"),
       administrator: t("users:pages.dashboard.users.roles.administrator"),
+      admin: t("users:pages.dashboard.users.roles.admin"),
     },
     verificationStates: {
       verified: t("users:pages.dashboard.users.verification.verified"),
@@ -99,6 +100,17 @@ export function getUsersWorkspaceLabels(
     },
     cancel: t("users:pages.dashboard.users.confirmations.cancel"),
     working: t("users:pages.dashboard.users.actions.working"),
+    orderEmails: {
+      title: t("users:pages.dashboard.users.orderEmails.title"),
+      label: t("users:pages.dashboard.users.orderEmails.label"),
+      help: t("users:pages.dashboard.users.orderEmails.help"),
+      enabled: t("users:pages.dashboard.users.orderEmails.enabled"),
+      disabled: t("users:pages.dashboard.users.orderEmails.disabled"),
+      save: t("users:pages.dashboard.users.orderEmails.save"),
+      saving: t("users:pages.dashboard.users.orderEmails.saving"),
+      discard: t("users:pages.dashboard.users.orderEmails.discard"),
+      unsaved: t("users:pages.dashboard.users.orderEmails.unsaved"),
+    },
     invite: {
       open: t("users:pages.dashboard.users.invite.open"),
       title: t("users:pages.dashboard.users.invite.title"),
@@ -124,6 +136,9 @@ export function getUsersWorkspaceLabels(
       RESET_SENT: t("users:pages.dashboard.users.results.resetSent"),
       PROMOTED: t("users:pages.dashboard.users.results.promoted"),
       DEMOTED: t("users:pages.dashboard.users.results.demoted"),
+      ORDER_EMAIL_PREFERENCE_SAVED: t(
+        "users:pages.dashboard.users.results.orderEmailPreferenceSaved",
+      ),
       ADMINISTRATOR_INVITED: t(
         "users:pages.dashboard.users.results.administratorInvited",
       ),

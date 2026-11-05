@@ -3,9 +3,13 @@ import "server-only";
 import { and, asc, count, desc, eq, ilike, inArray, or } from "drizzle-orm";
 
 import { db } from "@/db";
-import { user } from "@/db/schema";
+import { orderNotificationRecipient, user } from "@/db/schema";
 import type { AppRole } from "@/lib/auth-roles";
-import { hasPermission, isAppRole } from "@/lib/permission-policy";
+import {
+  canManageUser,
+  hasPermission,
+  isAppRole,
+} from "@/lib/permission-policy";
 import type { ManageableRole } from "@/lib/permission-policy";
 import {
   USERS_MAX_PAGE,
@@ -91,7 +95,13 @@ export async function listManagedUsers(
   }
 
   const query = normalizeUsersQuery(search);
-  const rolePredicate = inArray(user.role, roles);
+  const manageableRolePredicate = inArray(user.role, roles);
+  const rolePredicate = actorRole === "admin"
+    ? or(
+        manageableRolePredicate,
+        and(eq(user.id, actorId), eq(user.role, "admin")),
+      )
+    : manageableRolePredicate;
   const pattern = `%${escapeLikePattern(query)}%`;
   const searchPredicate = query
     ? or(ilike(user.name, pattern), ilike(user.email, pattern))
@@ -115,8 +125,14 @@ export async function listManagedUsers(
       blocked: user.banned,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+      orderEmailEnabled: orderNotificationRecipient.active,
+      orderEmailMutationVersion: orderNotificationRecipient.mutationVersion,
     })
     .from(user)
+    .leftJoin(
+      orderNotificationRecipient,
+      eq(orderNotificationRecipient.userId, user.id),
+    )
     .where(predicate)
     .orderBy(desc(user.createdAt), asc(user.id))
     .limit(USERS_PAGE_SIZE)
@@ -124,9 +140,18 @@ export async function listManagedUsers(
 
   return {
     users: rows.flatMap((row) => {
-      if (row.role !== "customer" && row.role !== "administrator") {
+      if (!isAppRole(row.role)) {
         return [];
       }
+      const isSelfAdmin =
+        actorRole === "admin" && row.role === "admin" && row.id === actorId;
+      if (row.role === "admin" && !isSelfAdmin) return [];
+      const actions = row.role === "admin"
+        ? []
+        : actionsFor(actorRole, {
+            role: row.role,
+            blocked: row.blocked,
+          });
 
       return [
         {
@@ -138,10 +163,16 @@ export async function listManagedUsers(
           blocked: row.blocked === true,
           createdAt: row.createdAt.toISOString(),
           updatedAt: row.updatedAt.toISOString(),
-          actions: actionsFor(actorRole, {
-            role: row.role,
-            blocked: row.blocked,
-          }),
+          actions,
+          orderEmailPreference: hasPermission(row.role, "order:view")
+            ? {
+                enabled: row.orderEmailEnabled === true,
+                mutationVersion: row.orderEmailMutationVersion ?? 0,
+                canManage:
+                  isSelfAdmin ||
+                  canManageUser(actorRole, row.role, "update"),
+              }
+            : null,
         },
       ];
     }),

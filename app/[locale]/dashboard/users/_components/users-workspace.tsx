@@ -27,6 +27,7 @@ import {
 } from "./users-dialogs";
 import { UsersLedger } from "./users-ledger";
 import { UserDetail } from "./user-detail";
+import { useUserOrderEmailPreferences } from "./use-user-order-email-preferences";
 
 export function UsersWorkspace({
   users,
@@ -65,6 +66,10 @@ export function UsersWorkspace({
   const inviteErrorRef = useRef<HTMLParagraphElement>(null);
   const selected =
     users.find((candidate) => candidate.id === selectedId) ?? null;
+  const orderEmails = useUserOrderEmailPreferences({
+    users,
+    unsavedMessage: labels.orderEmails.unsaved,
+  });
   const dateFormatter = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
     timeZone: "UTC",
@@ -98,6 +103,7 @@ export function UsersWorkspace({
   }, [inviteResult, router]);
 
   const selectUser = (candidate: ManagedUser, invoker: HTMLButtonElement) => {
+    if (orderEmails.locked) return;
     lastInvokerRef.current = invoker;
     setSelectedId(candidate.id);
   };
@@ -125,6 +131,7 @@ export function UsersWorkspace({
           <Button
             type="button"
             className="dashboard-users-primary-action"
+            disabled={orderEmails.locked}
             onClick={(event) => {
               lastInvokerRef.current = event.currentTarget;
               setInviteResultAtOpen(inviteResult);
@@ -139,6 +146,9 @@ export function UsersWorkspace({
       {managementResult.status === "success" ? (
         <ResultMessage result={managementResult} labels={labels} />
       ) : null}
+      {orderEmails.result.status === "success" ? (
+        <ResultMessage result={orderEmails.result} labels={labels} />
+      ) : null}
       {inviteResult.status === "success" ||
       inviteResult.status === "warning" ? (
         <ResultMessage result={inviteResult} labels={labels} />
@@ -151,6 +161,7 @@ export function UsersWorkspace({
         <UsersLedger
           users={users}
           selectedId={selectedId}
+          selectionDisabled={orderEmails.locked}
           labels={labels}
           selectUser={selectUser}
         />
@@ -161,10 +172,28 @@ export function UsersWorkspace({
           dateFormatter={dateFormatter}
           detailHeadingRef={detailHeadingRef}
           onClose={() => {
+            if (orderEmails.locked) return;
             setSelectedId(null);
             restoreInvokerFocus();
           }}
           openConfirmation={openConfirmation}
+          locale={locale}
+          preferenceDraft={orderEmails.draftFor(selected)}
+          preferencePending={orderEmails.isPending(selected?.id)}
+          preferenceActionPending={orderEmails.locked}
+          preferenceResult={orderEmails.result}
+          preferenceErrorRef={orderEmails.errorRef}
+          preferenceAction={orderEmails.action}
+          onPreferenceChange={(enabled) => {
+            if (!selected) return;
+            orderEmails.change(selected.id, enabled);
+          }}
+          onPreferenceSubmit={() => {
+            if (selected) orderEmails.submit(selected.id);
+          }}
+          onPreferenceDiscard={() => {
+            if (selected) orderEmails.discard(selected);
+          }}
         />
       </div>
 

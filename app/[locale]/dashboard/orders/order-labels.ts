@@ -142,7 +142,6 @@ export type OrdersLabels = {
   emailDelivery: {
     title: string;
     description: string;
-    manageRecipients: string;
     empty: string;
     kind: string;
     recipient: string;

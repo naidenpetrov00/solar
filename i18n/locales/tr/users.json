@@ -38,7 +38,8 @@
         },
         "roles": {
           "customer": "Müşteri",
-          "administrator": "Yönetici"
+          "administrator": "Yönetici",
+          "admin": "Sahip"
         },
         "verification": {
           "verified": "Doğrulandı",
@@ -63,6 +64,17 @@
           "promote": "Yönetici yap",
           "demote": "Müşteri yap",
           "working": "İşleniyor…"
+        },
+        "orderEmails": {
+          "title": "Yeni sipariş e-postaları",
+          "label": "Yeni siparişler için e-posta alır.",
+          "help": "Yalnızca siparişleri görüntüleyebilen roller için kullanılabilir. Engellenen veya bu izni kaybeden hesap gelecekteki bildirimleri otomatik olarak almayı bırakır.",
+          "enabled": "Etkin",
+          "disabled": "Devre dışı",
+          "save": "Ayarı kaydet",
+          "saving": "Kaydediliyor…",
+          "discard": "Değişikliği iptal et",
+          "unsaved": "Sipariş e-postası ayarlarında kaydedilmemiş değişiklikleriniz var."
         },
         "confirmations": {
           "cancel": "İptal",
@@ -114,6 +126,7 @@
           "resetSent": "Parola sıfırlama e-postası gönderildi.",
           "promoted": "Hesap yönetici yapıldı ve oturumları iptal edildi.",
           "demoted": "Hesap müşteri yapıldı ve oturumları iptal edildi.",
+          "orderEmailPreferenceSaved": "Yeni sipariş e-postası ayarı kaydedildi.",
           "administratorInvited": "Yönetici hesabı oluşturuldu ve güvenli kurulum e-postası gönderildi.",
           "administratorCreatedDeliveryFailed": "Yönetici hesabı oluşturuldu ancak kurulum e-postası teslim edilemedi. Hesabı açıp parola sıfırlama e-postasını yeniden gönderin.",
           "invalidInput": "İstek geçerli değil. Bilgileri kontrol edip tekrar deneyin.",

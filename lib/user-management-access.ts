@@ -56,6 +56,7 @@ export async function lockActorAndTarget(
   const [target] = await transaction
     .select({
       id: user.id,
+      name: user.name,
       email: user.email,
       role: user.role,
       blocked: user.banned,

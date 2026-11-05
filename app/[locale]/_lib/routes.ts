@@ -17,7 +17,6 @@ export const dashboardCatalogRouteSlug = "dashboard/catalog";
 export const dashboardPromotionsRouteSlug = "dashboard/catalog/promotions";
 export const dashboardUsersRouteSlug = "dashboard/users";
 export const dashboardOrdersRouteSlug = "dashboard/orders";
-export const dashboardOrderRecipientsRouteSlug = "dashboard/orders/recipients";
 export const accessDeniedRouteSlug = "access-denied";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
@@ -27,10 +26,7 @@ export function dashboardOrderRouteSlug(orderId: string) {
 }
 
 export function isDashboardOrderRouteSlug(slug: string) {
-  if (
-    slug === dashboardOrdersRouteSlug ||
-    slug === dashboardOrderRecipientsRouteSlug
-  ) return true;
+  if (slug === dashboardOrdersRouteSlug) return true;
   const prefix = `${dashboardOrdersRouteSlug}/`;
   return slug.startsWith(prefix) && uuidPattern.test(slug.slice(prefix.length));
 }

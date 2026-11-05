@@ -15,7 +15,6 @@ import { localizedAuthPath } from "../../../_lib/auth-routes";
 import { getPrivatePageMetadata } from "../../../_lib/metadata";
 import {
   accessDeniedRouteSlug,
-  dashboardOrderRecipientsRouteSlug,
   dashboardOrderRouteSlug,
   localizedPath,
 } from "../../../_lib/routes";
@@ -71,9 +70,6 @@ async function OrderDetailContent({
       <div className="dashboard-order-detail-actions">
         <ButtonLink href={backHref} variant="informational">
           {labels.detail.back}
-        </ButtonLink>
-        <ButtonLink href={localizedPath(locale, dashboardOrderRecipientsRouteSlug)} variant="informational">
-          {labels.emailDelivery.manageRecipients}
         </ButtonLink>
       </div>
       <header className="dashboard-order-header">

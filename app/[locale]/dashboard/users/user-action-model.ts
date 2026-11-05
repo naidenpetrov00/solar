@@ -13,6 +13,7 @@ export type UserActionResult = {
     | "RESET_SENT"
     | "PROMOTED"
     | "DEMOTED"
+    | "ORDER_EMAIL_PREFERENCE_SAVED"
     | "ADMINISTRATOR_INVITED"
     | "ADMINISTRATOR_CREATED_DELIVERY_FAILED"
     | "INVALID_INPUT"
@@ -23,6 +24,7 @@ export type UserActionResult = {
     | "EMAIL_EXISTS"
     | "DELIVERY_FAILED";
   targetId?: string;
+  mutationVersion?: number;
 };
 
 export function stringValue(formData: FormData, key: string) {

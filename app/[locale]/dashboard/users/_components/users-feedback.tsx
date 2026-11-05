@@ -34,6 +34,17 @@ export type UsersWorkspaceLabels = {
   confirmations: Record<ManagedUserAction, ConfirmationLabels>;
   cancel: string;
   working: string;
+  orderEmails: {
+    title: string;
+    label: string;
+    help: string;
+    enabled: string;
+    disabled: string;
+    save: string;
+    saving: string;
+    discard: string;
+    unsaved: string;
+  };
   invite: {
     open: string;
     title: string;

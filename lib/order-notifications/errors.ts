@@ -1,5 +1,4 @@
 export type OrderNotificationErrorCode =
-  | "DUPLICATE_ACTIVE_EMAIL"
   | "FORBIDDEN"
   | "INVALID_INPUT"
   | "NOT_FOUND"

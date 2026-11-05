@@ -89,7 +89,13 @@ export const salesOrderAuditEventRelations = relations(
 
 export const orderNotificationRecipientRelations = relations(
   orderNotificationRecipient,
-  ({ many }) => ({ notifications: many(orderNotificationOutbox) }),
+  ({ one, many }) => ({
+    user: one(user, {
+      fields: [orderNotificationRecipient.userId],
+      references: [user.id],
+    }),
+    notifications: many(orderNotificationOutbox),
+  }),
 );
 
 export const orderNotificationOutboxRelations = relations(
