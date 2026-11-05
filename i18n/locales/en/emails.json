@@ -28,6 +28,13 @@
           "paymentMethods": { "cash_on_delivery": "Cash on delivery", "bank_transfer": "Bank transfer", "arranged_by_phone": "Arranged by phone" }
         },
         "internal": { "customerDetails": "Customer and delivery details", "customerName": "Name", "phone": "Phone", "email": "Email", "city": "City", "deliveryAddress": "Delivery address", "note": "Customer note", "noNote": "No note", "openOrder": "Open order" }
+      },
+      "v2": {
+        "customer_order_received": { "subject": "We received order {{orderNumber}}", "title": "Your order was received", "introduction": "We received your order and it is pending confirmation by our team.", "closing": "No online payment was taken. Our team will contact you to confirm the order." },
+        "customer_order_approved": { "subject": "Order {{orderNumber}} is confirmed", "title": "Your order is confirmed", "introduction": "Our team confirmed the order contents shown below.", "closing": "No online payment was taken through the website." },
+        "customer_order_rejected": { "subject": "Update for order {{orderNumber}}", "title": "The order was not approved", "introduction": "The order was reviewed and was not approved.", "closing": "No online payment was taken through the website." },
+        "customer_order_cancelled": { "subject": "Order {{orderNumber}} was cancelled", "title": "The order was cancelled", "introduction": "The order has been marked as cancelled.", "closing": "This message does not contain payment-refund information." },
+        "common": { "orderNumber": "Order number", "paymentMethod": "Payment method", "items": "Products", "product": "Product", "quantity": "Quantity", "unitPrice": "VAT-inclusive unit price", "lineTotal": "Line total", "promotion": "Promotion", "subtotal": "Catalog subtotal", "promotionDiscount": "Promotion discount", "itemAdjustments": "Item adjustments", "orderAdjustments": "Order adjustments", "net": "Net total", "vat": "VAT", "total": "VAT-inclusive total", "viewOrder": "View order", "paymentMethods": { "cash_on_delivery": "Cash on delivery", "bank_transfer": "Bank transfer", "arranged_by_phone": "Arranged by phone" } }
       }
     }
   }

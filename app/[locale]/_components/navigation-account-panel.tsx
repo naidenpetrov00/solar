@@ -7,9 +7,10 @@ import type { NavigationProps, NavigationUser } from "./navigation-model";
 type AccountLabels = Pick<
   NavigationProps,
   | "accountMenuLabel"
+  | "accountNavigationLabel"
   | "canViewDashboard"
-  | "dashboardNavigationLabel"
   | "dashboardLabel"
+  | "myOrdersLabel"
   | "signingOutLabel"
   | "signOutLabel"
 >;
@@ -24,9 +25,10 @@ export function NavigationAccountPanel({
   logoutPending,
   onSignOut,
   accountMenuLabel,
+  accountNavigationLabel,
   canViewDashboard,
-  dashboardNavigationLabel,
   dashboardLabel,
+  myOrdersLabel,
   signingOutLabel,
   signOutLabel,
 }: AccountLabels & {
@@ -55,11 +57,25 @@ export function NavigationAccountPanel({
           {user.email}
         </p>
       </div>
-      {canViewDashboard ? (
-        <nav
-          className="site-account-dashboard-navigation border-b py-3"
-          aria-label={dashboardNavigationLabel}
+      <nav className="site-account-dashboard-navigation border-b py-3" aria-label={accountNavigationLabel}>
+        <Link
+          className="site-account-dashboard flex min-h-11 items-center justify-between gap-3 rounded-md px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+          href={localizedPath(locale, "account/orders")}
+          aria-current={
+            activeSlug === "account/orders"
+              ? "page"
+              : activeSlug.startsWith("account/orders/")
+                ? "location"
+                : undefined
+          }
+          onClick={closeMenus}
         >
+          <span>{myOrdersLabel}</span>
+          <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14M14 7l5 5-5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+        {canViewDashboard ? (
           <Link
             className="site-account-dashboard flex min-h-11 items-center justify-between gap-3 rounded-md px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
             href={localizedPath(locale, "dashboard")}
@@ -88,8 +104,8 @@ export function NavigationAccountPanel({
               />
             </svg>
           </Link>
-        </nav>
-      ) : null}
+        ) : null}
+      </nav>
       {logoutError ? (
         <p className="site-account-error" role="alert">
           {logoutError}

@@ -21,6 +21,7 @@ export type CustomerOrderSummary = {
   paymentStatus: OrderPaymentStatus;
   currency: "EUR";
   totalGrossMinor: string;
+  itemCount: number;
 };
 
 export type CustomerOrdersPage = {

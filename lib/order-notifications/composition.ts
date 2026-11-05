@@ -66,7 +66,13 @@ function validateIntent(row: OutboxRow) {
   if (
     !isOrderNotificationKind(row.notificationKind) ||
     !isCatalogLocale(row.locale) ||
-    row.templateVersion !== 1
+    (row.recipientType === "internal" && row.templateVersion !== 1) ||
+    (row.recipientType === "customer" &&
+      row.templateVersion !== 1 &&
+      row.templateVersion !== 2) ||
+    (row.recipientType !== "customer" && row.recipientType !== "internal") ||
+    (row.templateVersion === 1 && row.customerViewOrderUrl !== null) ||
+    (row.recipientType === "internal" && row.customerViewOrderUrl !== null)
   ) {
     throw new NotificationCompositionError("TEMPLATE_UNSUPPORTED", false);
   }
@@ -209,6 +215,13 @@ export async function composeOrderNotification(
   ];
 
   if (intent.recipientType === "customer") {
+    if (intent.templateVersion === 2 && intent.customerViewOrderUrl) {
+      const viewOrder = tr(`${base}.common.viewOrder`);
+      plain.push("", `${viewOrder}: ${intent.customerViewOrderUrl}`);
+      html.push(
+        `<p style="margin:24px 0 0"><a href="${escapeEmailHtml(intent.customerViewOrderUrl)}" style="display:inline-block;background:#fcd34d;color:#11130f;padding:13px 18px;text-decoration:none;font-weight:700">${escapeEmailHtml(viewOrder)}</a></p>`,
+      );
+    }
     plain.push("", tr(`${kindBase}.closing`));
     html.push(paragraph(tr(`${kindBase}.closing`)));
   } else {

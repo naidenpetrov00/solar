@@ -132,6 +132,7 @@ export async function createCheckoutOrder(
     await enqueueNewOrderNotifications(transaction, {
       orderId: created.id,
       sourceAuditEventId: event.id,
+      customerUserId,
       revision: {
         id: revision.id,
         revisionNumber: 1,

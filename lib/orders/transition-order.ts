@@ -93,6 +93,7 @@ export async function transitionOrderStatus(
       await enqueueOrderStatusNotification(transaction, {
         orderId: order.id,
         sourceAuditEventId: event.id,
+        customerUserId: order.customerUserId,
         status: input.status,
         revision: {
           id: revision.id,

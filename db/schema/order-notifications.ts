@@ -76,6 +76,7 @@ export const orderNotificationOutbox = pgTable(
     ),
     customerRecipientName: text("customer_recipient_name"),
     customerRecipientEmail: text("customer_recipient_email"),
+    customerViewOrderUrl: text("customer_view_order_url"),
     internalRecipientName: text("internal_recipient_name"),
     internalRecipientEmail: text("internal_recipient_email"),
     status: text("status").default("pending").notNull(),
@@ -154,6 +155,13 @@ export const orderNotificationOutbox = pgTable(
         AND ${table.cycleAttemptCount} >= 0
         AND ${table.attemptCount} >= ${table.cycleAttemptCount}
         AND ${table.manualRetryCount} >= 0`,
+    ),
+    check(
+      "order_notification_outbox_customer_view_order_url_check",
+      sql`${table.customerViewOrderUrl} IS NULL OR (
+        ${table.recipientType} = 'customer'
+        AND ${table.templateVersion} = 2
+      )`,
     ),
     check(
       "order_notification_outbox_recipient_values_check",

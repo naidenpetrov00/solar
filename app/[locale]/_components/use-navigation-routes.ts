@@ -2,6 +2,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import {
   isAuthRouteSlug,
   isDashboardOrderRouteSlug,
+  isCustomerOrderRouteSlug,
   isLocaleEquivalentSlug,
   localizedPath,
 } from "../_lib/routes";
@@ -37,7 +38,7 @@ export function useNavigationRoutes(locale: string, routes: NavigationRoute[]) {
     activeSlug.startsWith("shop/") ||
     activeSlug.startsWith("products/");
   const localizedRoute = (targetLocale: string) =>
-    isDashboardOrderRouteSlug(activeSlug)
+    isDashboardOrderRouteSlug(activeSlug) || isCustomerOrderRouteSlug(activeSlug)
       ? localizedReturnPath(locale, targetLocale, currentPath)
       : isCatalogEntity
       ? `/api/catalog/locale-route?${new URLSearchParams({

@@ -20,6 +20,7 @@ const i18nConfig = {
     "privacy",
     "terms",
     "orders",
+    "customerOrders",
   ],
   localeInPath: true,
   localeParamName: "locale",

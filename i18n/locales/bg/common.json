@@ -14,6 +14,7 @@
     "signIn": "Вход",
     "createAccount": "Създаване на акаунт",
     "account": "Акаунт",
+    "myOrders": "Моите поръчки",
     "dashboard": "Табло",
     "signOut": "Изход",
     "signingOut": "Излизане…",
@@ -31,7 +32,8 @@
     "accountMenu": "Меню на акаунта",
     "openAccountMenu": "Отвори менюто на акаунта",
     "closeAccountMenu": "Затвори менюто на акаунта",
-    "dashboardNavigation": "Навигация на таблото"
+    "dashboardNavigation": "Навигация на таблото",
+    "accountNavigation": "Навигация на акаунта"
   },
   "languages": {
     "bg": "Български",

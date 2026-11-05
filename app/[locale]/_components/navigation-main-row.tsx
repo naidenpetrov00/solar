@@ -26,8 +26,9 @@ export function NavigationMainRow({
     signInLabel,
     signUpLabel,
     accountLabel,
+    myOrdersLabel,
     dashboardLabel,
-    dashboardNavigationLabel,
+    accountNavigationLabel,
     canViewDashboard,
     signOutLabel,
     signingOutLabel,
@@ -143,8 +144,9 @@ export function NavigationMainRow({
           logoutPending={logoutPending}
           onSignOut={handleSignOut}
           accountMenuLabel={accountMenuLabel}
+          accountNavigationLabel={accountNavigationLabel}
+          myOrdersLabel={myOrdersLabel}
           canViewDashboard={canViewDashboard}
-          dashboardNavigationLabel={dashboardNavigationLabel}
           dashboardLabel={dashboardLabel}
           signingOutLabel={signingOutLabel}
           signOutLabel={signOutLabel}

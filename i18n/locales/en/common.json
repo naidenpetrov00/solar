@@ -14,6 +14,7 @@
     "signIn": "Sign in",
     "createAccount": "Create account",
     "account": "Account",
+    "myOrders": "My orders",
     "dashboard": "Dashboard",
     "signOut": "Sign out",
     "signingOut": "Signing out…",
@@ -31,7 +32,8 @@
     "accountMenu": "Account menu",
     "openAccountMenu": "Open account menu",
     "closeAccountMenu": "Close account menu",
-    "dashboardNavigation": "Dashboard navigation"
+    "dashboardNavigation": "Dashboard navigation",
+    "accountNavigation": "Account navigation"
   },
   "languages": {
     "bg": "Bulgarian",

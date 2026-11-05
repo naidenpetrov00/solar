@@ -29,7 +29,8 @@ export type OrderNotificationFailureDisposition =
   | "permanent"
   | "retry_exhausted";
 
-export const orderNotificationTemplateVersion = 1;
+export const customerOrderNotificationTemplateVersion = 2;
+export const internalOrderNotificationTemplateVersion = 1;
 export const orderNotificationBatchSize = 10;
 export const orderNotificationMaximumBatchSize = 25;
 export const orderNotificationLeaseMilliseconds = 10 * 60 * 1_000;

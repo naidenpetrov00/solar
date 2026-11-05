@@ -119,8 +119,10 @@ export default async function LocaleLayout({
             signInLabel={t("navigation.signIn")}
             signUpLabel={t("navigation.createAccount")}
             accountLabel={t("navigation.account")}
+            myOrdersLabel={t("navigation.myOrders")}
             dashboardLabel={t("navigation.dashboard")}
             dashboardNavigationLabel={t("accessibility.dashboardNavigation")}
+            accountNavigationLabel={t("accessibility.accountNavigation")}
             canViewDashboard={canViewDashboard}
             signOutLabel={t("navigation.signOut")}
             signingOutLabel={t("navigation.signingOut")}

@@ -3,7 +3,11 @@ import "server-only";
 import { and, count, desc, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { salesOrder, salesOrderRevision } from "@/db/schema";
+import {
+  salesOrder,
+  salesOrderItemSnapshot,
+  salesOrderRevision,
+} from "@/db/schema";
 import { requireUser } from "@/lib/authorization";
 import {
   customerOrdersMaximumPage,
@@ -51,10 +55,26 @@ export async function listCurrentCustomerOrders(
         paymentStatus: salesOrder.paymentStatus,
         currency: salesOrderRevision.currency,
         totalGrossMinor: salesOrderRevision.totalGrossMinor,
+        itemCount: count(salesOrderItemSnapshot.id),
       })
       .from(salesOrder)
       .innerJoin(salesOrderRevision, currentRevision)
+      .leftJoin(
+        salesOrderItemSnapshot,
+        eq(salesOrderItemSnapshot.revisionId, salesOrderRevision.id),
+      )
       .where(owner)
+      .groupBy(
+        salesOrder.id,
+        salesOrder.orderNumber,
+        salesOrder.submittedAt,
+        salesOrder.updatedAt,
+        salesOrder.status,
+        salesOrder.paymentStatus,
+        salesOrderRevision.currency,
+        salesOrderRevision.totalGrossMinor,
+        salesOrder.orderNumberSequence,
+      )
       .orderBy(desc(salesOrder.submittedAt), desc(salesOrder.orderNumberSequence))
       .limit(customerOrdersPageSize)
       .offset((page - 1) * customerOrdersPageSize);
@@ -79,6 +99,7 @@ export async function listCurrentCustomerOrders(
           paymentStatus: row.paymentStatus,
           currency: row.currency,
           totalGrossMinor: row.totalGrossMinor.toString(),
+          itemCount: row.itemCount,
         };
       }),
     };

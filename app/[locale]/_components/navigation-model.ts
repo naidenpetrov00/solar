@@ -24,8 +24,10 @@ export type NavigationProps = {
   signInLabel: string;
   signUpLabel: string;
   accountLabel: string;
+  myOrdersLabel: string;
   dashboardLabel: string;
   dashboardNavigationLabel: string;
+  accountNavigationLabel: string;
   canViewDashboard: boolean;
   signOutLabel: string;
   signingOutLabel: string;

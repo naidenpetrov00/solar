@@ -28,6 +28,13 @@
           "paymentMethods": { "cash_on_delivery": "Оплата при доставці", "bank_transfer": "Банківський переказ", "arranged_by_phone": "Узгоджується телефоном" }
         },
         "internal": { "customerDetails": "Дані клієнта й доставки", "customerName": "Ім’я", "phone": "Телефон", "email": "Електронна пошта", "city": "Місто", "deliveryAddress": "Адреса доставки", "note": "Примітка клієнта", "noNote": "Немає примітки", "openOrder": "Відкрити замовлення" }
+      },
+      "v2": {
+        "customer_order_received": { "subject": "Ми отримали замовлення {{orderNumber}}", "title": "Ваше замовлення отримано", "introduction": "Ми отримали ваше замовлення; воно очікує підтвердження нашою командою.", "closing": "Онлайн-оплату не було здійснено. Наша команда зв’яжеться з вами, щоб підтвердити замовлення." },
+        "customer_order_approved": { "subject": "Замовлення {{orderNumber}} підтверджено", "title": "Ваше замовлення підтверджено", "introduction": "Наша команда підтвердила вміст замовлення, наведений нижче.", "closing": "Онлайн-оплату через сайт не було здійснено." },
+        "customer_order_rejected": { "subject": "Оновлення щодо замовлення {{orderNumber}}", "title": "Замовлення не схвалено", "introduction": "Замовлення переглянуто й не схвалено.", "closing": "Онлайн-оплату через сайт не було здійснено." },
+        "customer_order_cancelled": { "subject": "Замовлення {{orderNumber}} скасовано", "title": "Замовлення скасовано", "introduction": "Замовлення позначено як скасоване.", "closing": "Це повідомлення не містить інформації про повернення платежу." },
+        "common": { "orderNumber": "Номер замовлення", "paymentMethod": "Спосіб оплати", "items": "Товари", "product": "Товар", "quantity": "Кількість", "unitPrice": "Ціна одиниці з ПДВ", "lineTotal": "Сума рядка", "promotion": "Акція", "subtotal": "Проміжна сума каталогу", "promotionDiscount": "Акційна знижка", "itemAdjustments": "Коригування товарів", "orderAdjustments": "Коригування замовлення", "net": "Сума без ПДВ", "vat": "ПДВ", "total": "Загальна сума з ПДВ", "viewOrder": "Переглянути замовлення", "paymentMethods": { "cash_on_delivery": "Оплата при доставці", "bank_transfer": "Банківський переказ", "arranged_by_phone": "Узгоджується телефоном" } }
       }
     }
   }

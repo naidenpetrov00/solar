@@ -28,6 +28,13 @@
           "paymentMethods": { "cash_on_delivery": "Kapıda ödeme", "bank_transfer": "Banka havalesi", "arranged_by_phone": "Telefonla kararlaştırılacak" }
         },
         "internal": { "customerDetails": "Müşteri ve teslimat bilgileri", "customerName": "Ad", "phone": "Telefon", "email": "E-posta", "city": "Şehir", "deliveryAddress": "Teslimat adresi", "note": "Müşteri notu", "noNote": "Not yok", "openOrder": "Siparişi aç" }
+      },
+      "v2": {
+        "customer_order_received": { "subject": "{{orderNumber}} numaralı siparişi aldık", "title": "Siparişiniz alındı", "introduction": "Siparişinizi aldık; ekibimizin onayını bekliyor.", "closing": "Çevrimiçi ödeme alınmadı. Ekibimiz siparişi onaylamak için sizinle iletişime geçecektir." },
+        "customer_order_approved": { "subject": "{{orderNumber}} numaralı sipariş onaylandı", "title": "Siparişiniz onaylandı", "introduction": "Ekibimiz aşağıda gösterilen sipariş içeriğini onayladı.", "closing": "Web sitesi üzerinden çevrimiçi ödeme alınmadı." },
+        "customer_order_rejected": { "subject": "{{orderNumber}} numaralı sipariş hakkında güncelleme", "title": "Sipariş onaylanmadı", "introduction": "Sipariş incelendi ve onaylanmadı.", "closing": "Web sitesi üzerinden çevrimiçi ödeme alınmadı." },
+        "customer_order_cancelled": { "subject": "{{orderNumber}} numaralı sipariş iptal edildi", "title": "Sipariş iptal edildi", "introduction": "Sipariş iptal edildi olarak işaretlendi.", "closing": "Bu mesaj ödeme iadesi bilgisi içermez." },
+        "common": { "orderNumber": "Sipariş numarası", "paymentMethod": "Ödeme yöntemi", "items": "Ürünler", "product": "Ürün", "quantity": "Adet", "unitPrice": "KDV dahil birim fiyat", "lineTotal": "Satır toplamı", "promotion": "Kampanya", "subtotal": "Katalog ara toplamı", "promotionDiscount": "Kampanya indirimi", "itemAdjustments": "Ürün düzeltmeleri", "orderAdjustments": "Sipariş düzeltmeleri", "net": "Net toplam", "vat": "KDV", "total": "KDV dahil toplam", "viewOrder": "Siparişi görüntüle", "paymentMethods": { "cash_on_delivery": "Kapıda ödeme", "bank_transfer": "Banka havalesi", "arranged_by_phone": "Telefonla kararlaştırılacak" } }
       }
     }
   }

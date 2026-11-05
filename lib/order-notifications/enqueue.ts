@@ -7,10 +7,14 @@ import {
   orderNotificationRecipient,
   user,
 } from "@/db/schema";
-import { orderNotificationTemplateVersion } from "@/lib/order-notifications/model";
+import {
+  customerOrderNotificationTemplateVersion,
+  internalOrderNotificationTemplateVersion,
+} from "@/lib/order-notifications/model";
 import { usableOrderNotificationUser } from "@/lib/order-notifications/user-recipient";
 import type { OrderTransaction } from "@/lib/orders/repository-types";
 import { hasPermission } from "@/lib/permission-policy";
+import { getPublicSiteUrl } from "@/lib/server-env";
 
 type RevisionRecipient = {
   id: string;
@@ -20,12 +24,26 @@ type RevisionRecipient = {
   customerEmail: string;
 };
 
+function customerViewOrderUrl(
+  locale: string,
+  orderId: string,
+  customerUserId: string | null,
+) {
+  if (!customerUserId) return null;
+  const slug = `account/orders/${orderId}`;
+  return new URL(
+    locale === "bg" ? `/${slug}` : `/${locale}/${slug}`,
+    getPublicSiteUrl(),
+  ).toString();
+}
+
 async function insertCustomerIntent(
   transaction: OrderTransaction,
   input: {
     orderId: string;
     sourceAuditEventId: string;
     revision: RevisionRecipient;
+    customerUserId: string | null;
     kind:
       | "customer_order_received"
       | "customer_order_approved"
@@ -43,9 +61,14 @@ async function insertCustomerIntent(
       locale: input.revision.locale,
       notificationKind: input.kind,
       recipientType: "customer",
-      templateVersion: orderNotificationTemplateVersion,
+      templateVersion: customerOrderNotificationTemplateVersion,
       customerRecipientName: input.revision.customerName,
       customerRecipientEmail: input.revision.customerEmail,
+      customerViewOrderUrl: customerViewOrderUrl(
+        input.revision.locale,
+        input.orderId,
+        input.customerUserId,
+      ),
     })
     .onConflictDoNothing();
 }
@@ -56,6 +79,7 @@ export async function enqueueNewOrderNotifications(
     orderId: string;
     sourceAuditEventId: string;
     revision: RevisionRecipient;
+    customerUserId: string | null;
   },
 ) {
   await insertCustomerIntent(transaction, {
@@ -96,7 +120,7 @@ export async function enqueueNewOrderNotifications(
         locale: input.revision.locale,
         notificationKind: "internal_new_order" as const,
         recipientType: "internal" as const,
-        templateVersion: orderNotificationTemplateVersion,
+        templateVersion: internalOrderNotificationTemplateVersion,
         recipientConfigurationId: recipient.id,
         internalRecipientName: recipient.name,
         internalRecipientEmail: recipient.email,
@@ -111,6 +135,7 @@ export async function enqueueOrderStatusNotification(
     orderId: string;
     sourceAuditEventId: string;
     revision: RevisionRecipient;
+    customerUserId: string | null;
     status: "approved" | "rejected" | "cancelled";
   },
 ) {
@@ -118,6 +143,7 @@ export async function enqueueOrderStatusNotification(
     orderId: input.orderId,
     sourceAuditEventId: input.sourceAuditEventId,
     revision: input.revision,
+    customerUserId: input.customerUserId,
     kind: `customer_order_${input.status}`,
   });
 }
