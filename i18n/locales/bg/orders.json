@@ -1,0 +1,67 @@
+{
+  "pages": { "dashboard": { "orders": {
+    "title": "Поръчки",
+    "description": "Преглеждайте клиентските поръчки, договаряйте съдържанието на чакащите поръчки и управлявайте отделно статуса на поръчката и плащането.",
+    "loading": "Зареждане на поръчките…", "count": "{{count}} поръчки",
+    "filters": {
+      "regionLabel": "Филтри за поръчки", "search": "Търсене", "searchPlaceholder": "Номер, име, телефон или имейл",
+      "status": "Статус на поръчката", "paymentStatus": "Статус на плащането", "all": "Всички", "from": "Подадена от",
+      "to": "Подадена до", "timezone": "Датите се интерпретират по служебната часова зона Европа/София.", "apply": "Приложи филтрите", "clear": "Изчисти", "invalid": "Някои невалидни филтри бяха пропуснати. Прегледайте показаните стойности."
+    },
+    "list": { "orderNumber": "Поръчка", "submittedAt": "Подадена", "customer": "Клиент", "phone": "Телефон", "total": "Текуща сума", "orderStatus": "Статус на поръчката", "paymentStatus": "Статус на плащането", "open": "Отвори поръчката" },
+    "empty": { "title": "Все още няма поръчки", "description": "Клиентските поръчки ще се появят тук след подаването им." },
+    "noResults": { "title": "Няма съвпадащи поръчки", "description": "Променете или изчистете филтрите, за да видите други поръчки." },
+    "pagination": { "label": "Страници с поръчки", "previous": "Предишна", "next": "Следваща", "status": "Страница {{page}} от {{pages}}" },
+    "detail": {
+      "back": "Назад към поръчките", "submittedAt": "Подадена", "updatedAt": "Последна промяна", "approvedAt": "Одобрена", "rejectedAt": "Отхвърлена", "cancelledAt": "Отказана", "completedAt": "Завършена", "paymentUpdatedAt": "Статусът на плащането е променен", "paidAt": "Платена", "refundedAt": "Възстановена сума", "original": "Оригинално подаване от клиента",
+      "originalDescription": "Ревизия 1 е постоянна и само за четене.", "current": "Текуща поръчка", "currentDescription": "Последната запазена ревизия на поръчката.",
+      "history": "История на ревизиите", "audit": "Одитна история", "revision": "Ревизия {{number}}", "currentRevision": "Текуща ревизия",
+      "customer": "Данни за клиента", "delivery": "Доставка и плащане", "products": "Продукти", "pricing": "Обобщение на цената", "lifecycle": "Жизнен цикъл на поръчката и плащането",
+      "name": "Име", "phone": "Телефон", "email": "Имейл", "city": "Град", "deliveryAddress": "Адрес за доставка", "note": "Бележка от клиента", "noNote": "Няма бележка",
+      "paymentMethod": "Начин на плащане", "sku": "SKU", "quantity": "Количество", "unitPrice": "Единична цена с ДДС", "promotion": "Промоция", "noPromotion": "Без промоция",
+      "vat": "ДДС", "lineTotal": "Общо за реда", "adjustments": "Корекции по продукт", "noAdjustments": "Няма корекции", "reason": "Вътрешна причина", "actor": "Отговорно лице",
+      "createdAt": "Създадена", "subtotal": "Каталожна междинна сума", "promotionDiscount": "Промоционална отстъпка", "itemAdjustments": "Корекции по продукти",
+      "orderAdjustments": "Корекции на поръчката", "net": "Данъчна основа", "vatTotal": "Общо ДДС", "total": "Общо с ДДС", "guest": "Гост клиент", "customerActor": "Клиентски профил", "administratorActor": "Администратор", "timezone": "Европа/София"
+    },
+    "editor": {
+      "title": "Редактиране на текущата поръчка", "description": "Запазването създава една пълна неизменяема ревизия. Промени са позволени само докато поръчката чака одобрение.",
+      "save": "Запази промените", "saving": "Запазване…", "addProduct": "Добавяне на допустим продукт", "productSearch": "Търсене на продукт", "productSearchPlaceholder": "Име на продукт или SKU",
+      "search": "Търси продукти", "searching": "Търсене…", "noProducts": "Няма допустими продукти за това търсене.", "add": "Добави продукт", "remove": "Премахни продукт",
+      "addAdjustment": "Добави корекция", "removeAdjustment": "Премахни корекцията", "adjustmentDirection": "Вид корекция", "discount": "Отстъпка", "surcharge": "Надценка",
+      "amount": "Сума с ДДС в EUR", "reason": "Вътрешна причина", "provisional": "Предварителни суми на черновата", "provisionalUnavailable": "Попълнете валидни количества и корекции, за да видите предварителните суми.",
+      "unsaved": "Имате незапазени промени по поръчката.", "staleHelp": "Друг администратор е променил поръчката. Черновата ви е запазена.", "reviewLatest": "Прегледай последната версия в нов раздел",
+      "discardReload": "Отхвърли черновата и презареди", "validationSummary": "Прегледайте отбелязаните данни за поръчката.", "required": "Полето е задължително.", "invalid": "Въведете валидна стойност."
+    },
+    "lifecycle": {
+      "orderTitle": "Статус на поръчката", "paymentTitle": "Статус на плащането", "orderDescription": "Промяната на поръчката не променя статуса на плащането.",
+      "paymentDescription": "Промените на плащането не отварят и не променят поръчката.", "noTransitions": "Няма други допустими преходи.", "unsavedBlocked": "Запазете или отхвърлете промените по съдържанието преди промяна на статус.",
+      "confirmTitle": "Потвърдете промяната на статуса", "confirmDescription": "Да се промени ли статусът на {{status}}?", "confirm": "Потвърди", "cancel": "Отказ", "updating": "Обновяване…"
+    },
+    "emailDelivery": {
+      "title": "Имейл известия", "description": "История на съхранените намерения и опитите за доставка за тази поръчка.", "empty": "За тази поръчка няма създадени имейл известия.", "kind": "Вид", "recipient": "Получател", "recipientType": "Тип получател", "customer": "Клиент", "internal": "Вътрешен получател", "templateVersion": "Версия на шаблона", "revision": "Ревизия", "status": "Статус", "attempts": "Общо опити", "manualRetries": "Ръчни повторения", "createdAt": "Създадено", "lastAttemptAt": "Последен опит", "nextAttemptAt": "Следващ опит", "sentAt": "Изпратено", "failedAt": "Неуспешно", "notAvailable": "—", "error": "Причина", "retry": "Повтори доставката", "retrying": "Планиране…", "confirmTitle": "Повторно изпращане", "confirmDescription": "Известието ще бъде изпратено отново към първоначално записания адрес.", "confirm": "Планирай повторение", "cancel": "Отказ",
+      "kinds": { "customer_order_received": "Получена поръчка — клиент", "customer_order_approved": "Одобрена поръчка — клиент", "customer_order_rejected": "Отхвърлена поръчка — клиент", "customer_order_cancelled": "Отказана поръчка — клиент", "internal_new_order": "Нова поръчка — вътрешно" },
+      "statuses": { "pending": "Чака изпращане", "processing": "Обработва се", "sent": "Изпратено", "failed": "Неуспешно" },
+      "errors": { "SMTP_TEMPORARY": "Временен проблем при имейл доставката.", "SMTP_PERMANENT": "Имейл доставката е окончателно отказана.", "COMPOSITION_FAILED": "Временен проблем при съставяне на съобщението.", "TEMPLATE_UNSUPPORTED": "Версията на шаблона не се поддържа.", "SNAPSHOT_INVALID": "Съхранените данни за известието са невалидни." }
+    },
+    "history": {
+      "submitted": "Поръчката е подадена", "contentRevised": "Съдържанието е редактирано", "orderStatusChanged": "Статусът на поръчката е променен", "paymentStatusChanged": "Статусът на плащането е променен",
+      "version": "Версия на промяната {{version}}", "revisionTransition": "Ревизия {{before}} → {{after}}", "changedFields": "Променени полета", "collectionChange": "{{field}}: {{before}} → {{after}} записа",
+      "valueChange": "{{field}}: {{before}} → {{after}}", "moneyChange": "{{field}}: {{before}} → {{after}}", "unknownChange": "Промяна в {{field}}"
+    },
+    "orderStatuses": { "pending_approval": "Чака одобрение", "approved": "Одобрена", "rejected": "Отхвърлена", "cancelled": "Отказана", "completed": "Завършена" },
+    "paymentStatuses": { "unpaid": "Неплатена", "partially_paid": "Частично платена", "paid": "Платена", "failed": "Неуспешно плащане", "partially_refunded": "Частично възстановена", "refunded": "Възстановена" },
+    "paymentMethods": { "cash_on_delivery": "Наложен платеж", "bank_transfer": "Банков превод", "arranged_by_phone": "Уговорено по телефон" },
+    "results": {
+      "SAVED": "Промените по поръчката са запазени.", "ORDER_STATUS_UPDATED": "Статусът на поръчката е обновен.", "PAYMENT_STATUS_UPDATED": "Статусът на плащането е обновен.", "NOTIFICATION_RETRY_QUEUED": "Известието е планирано за повторно изпращане.", "NOTIFICATION_NOT_RETRYABLE": "Това известие не може да бъде изпратено повторно.",
+      "INVALID_INPUT": "Някои данни са невалидни. Прегледайте черновата и опитайте отново.", "FORBIDDEN": "Вече нямате разрешение за това действие.", "NOT_FOUND": "Поръчката не е намерена.",
+      "STALE": "Друг администратор е променил поръчката. Прегледайте последната версия.", "ORDER_NOT_EDITABLE": "Съдържанието може да се редактира само докато поръчката чака одобрение.",
+      "INVALID_STATUS_TRANSITION": "Този преход на поръчката не е позволен.", "INVALID_PAYMENT_TRANSITION": "Този преход на плащането не е позволен.",
+      "TEMPORARY_FAILURE": "Действието не бе завършено. Черновата е запазена; опитайте отново."
+    },
+    "fields": {
+      "locale": "Език на поръчката", "customer.name": "Име на клиента", "customer.phone": "Телефон на клиента", "customer.email": "Имейл на клиента", "customer.city": "Град",
+      "customer.deliveryAddress": "Адрес за доставка", "customer.note": "Бележка от клиента", "paymentMethod": "Начин на плащане", "items": "Продукти", "adjustments": "Корекции",
+      "totalGrossMinor": "Общо с ДДС", "status": "Статус на поръчката", "paymentStatus": "Статус на плащането", "order": "Поръчка"
+    }
+  } } }
+}

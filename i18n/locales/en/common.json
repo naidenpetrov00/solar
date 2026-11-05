@@ -8,13 +8,13 @@
     "home": "Home",
     "shop": "Shop",
     "projects": "Projects",
-    "packages": "Packages",
     "cart": "Cart",
     "contact": "Contact",
     "requestQuote": "Request a quote",
     "signIn": "Sign in",
     "createAccount": "Create account",
     "account": "Account",
+    "myOrders": "My orders",
     "dashboard": "Dashboard",
     "signOut": "Sign out",
     "signingOut": "Signing out…",
@@ -32,7 +32,8 @@
     "accountMenu": "Account menu",
     "openAccountMenu": "Open account menu",
     "closeAccountMenu": "Close account menu",
-    "dashboardNavigation": "Dashboard navigation"
+    "dashboardNavigation": "Dashboard navigation",
+    "accountNavigation": "Account navigation"
   },
   "languages": {
     "bg": "Bulgarian",
@@ -40,161 +41,7 @@
     "tr": "Turkish",
     "uk": "Ukrainian"
   },
-  "emails": {
-    "verification": {
-      "subject": "Verify your email address",
-      "title": "Verify your email address",
-      "introduction": "Confirm the email address used for your Solar account.",
-      "action": "Verify email",
-      "expiry": "This link is valid for 1 hour.",
-      "ignore": "If you did not create an account, you can ignore this email."
-    },
-    "passwordReset": {
-      "subject": "Reset your Solar password",
-      "title": "Reset your password",
-      "introduction": "Use the secure link below to choose a new password for your Solar account.",
-      "action": "Set a new password",
-      "expiry": "This link is valid for 1 hour.",
-      "ignore": "If you did not request a password reset, you can ignore this email."
-    }
-  },
   "pages": {
-    "dashboard": {
-      "title": "Dashboard",
-      "description": "A central workspace for the site's administration tools.",
-      "navigation": {
-        "overview": "Overview",
-        "users": "Users"
-      },
-      "overview": {
-        "title": "Overview",
-        "description": "The administration foundation is ready. Additional tools can be added here as they are needed."
-      },
-      "users": {
-        "title": "Users",
-        "description": "Manage customer access and, as the owner, administrator accounts.",
-        "search": {
-          "regionLabel": "Search users",
-          "label": "Search by name or email",
-          "placeholder": "Name or email",
-          "submit": "Search",
-          "clear": "Clear"
-        },
-        "list": {
-          "count": "{{count}} accounts",
-          "selectUser": "View account"
-        },
-        "empty": {
-          "title": "No manageable accounts",
-          "description": "Accounts you are allowed to manage will appear here.",
-          "searchTitle": "No matching accounts",
-          "searchDescription": "Try a different name or email address."
-        },
-        "pagination": {
-          "label": "Users pagination",
-          "previous": "Previous",
-          "next": "Next",
-          "status": "Page {{page}} of {{pages}}"
-        },
-        "fields": {
-          "name": "Name",
-          "email": "Email",
-          "role": "Role",
-          "verification": "Email verification",
-          "status": "Account status",
-          "createdAt": "Created",
-          "updatedAt": "Last updated"
-        },
-        "roles": {
-          "customer": "Customer",
-          "administrator": "Administrator"
-        },
-        "verification": {
-          "verified": "Verified",
-          "unverified": "Not verified"
-        },
-        "status": {
-          "active": "Active",
-          "blocked": "Blocked"
-        },
-        "detail": {
-          "title": "Account details",
-          "noSelectionTitle": "Select an account",
-          "noSelectionDescription": "Choose an account from the ledger to review its details and available actions.",
-          "backToUsers": "Back to users"
-        },
-        "actions": {
-          "title": "Account actions",
-          "block": "Block account",
-          "unblock": "Unblock account",
-          "revokeSessions": "Revoke all sessions",
-          "sendPasswordReset": "Send password reset",
-          "promote": "Promote to administrator",
-          "demote": "Demote to customer",
-          "working": "Working…"
-        },
-        "confirmations": {
-          "cancel": "Cancel",
-          "block": {
-            "title": "Block this account?",
-            "description": "The account will be unable to sign in and all current sessions will end.",
-            "confirm": "Block account"
-          },
-          "unblock": {
-            "title": "Unblock this account?",
-            "description": "The account will be allowed to sign in again.",
-            "confirm": "Unblock account"
-          },
-          "revokeSessions": {
-            "title": "Revoke all sessions?",
-            "description": "Every signed-in device for this account will need to sign in again.",
-            "confirm": "Revoke sessions"
-          },
-          "sendPasswordReset": {
-            "title": "Send a password-reset email?",
-            "description": "A time-limited setup link will be sent to this account. No password will be shown or set here.",
-            "confirm": "Send email"
-          },
-          "promote": {
-            "title": "Promote to administrator?",
-            "description": "This account will gain customer-management access. Existing sessions will end before the new role can take effect.",
-            "confirm": "Promote account"
-          },
-          "demote": {
-            "title": "Demote to customer?",
-            "description": "This account will lose administrator access. Existing sessions will end immediately.",
-            "confirm": "Demote account"
-          }
-        },
-        "invite": {
-          "open": "Invite administrator",
-          "title": "Invite an administrator",
-          "description": "Create the account without a password and send a secure, time-limited setup link. The recipient chooses their own password.",
-          "name": "Name",
-          "email": "Email",
-          "language": "Invitation language",
-          "submit": "Create and send invitation",
-          "submitting": "Creating invitation…"
-        },
-        "results": {
-          "blocked": "The account is blocked and its sessions were revoked.",
-          "unblocked": "The account is unblocked.",
-          "sessionsRevoked": "All sessions for this account were revoked.",
-          "resetSent": "The password-reset email was sent.",
-          "promoted": "The account was promoted and its sessions were revoked.",
-          "demoted": "The account was demoted and its sessions were revoked.",
-          "administratorInvited": "The administrator account was created and its secure setup email was sent.",
-          "administratorCreatedDeliveryFailed": "The administrator account was created, but the setup email could not be delivered. Open the account and resend the password-reset email.",
-          "invalidInput": "The request was not valid. Review the information and try again.",
-          "forbidden": "You no longer have permission to perform this action.",
-          "notFound": "The account no longer exists or cannot be managed.",
-          "stale": "The account changed after you opened it. Refresh the page and review the latest details.",
-          "rateLimited": "An email was sent recently. Wait a moment before trying again.",
-          "emailExists": "An account with this email already exists.",
-          "deliveryFailed": "The email could not be delivered. Try again later."
-        }
-      }
-    },
     "accessDenied": {
       "title": "Access denied",
       "description": "This account does not have permission to access the administration dashboard.",
@@ -214,271 +61,92 @@
         "businessTitle": "Business"
       },
       "residential": {
-        "introduction": "Explore four clear starting points for a home solar system. Choose how to describe your energy use, then compare what each package includes.",
-        "input": {
-          "legend": "How would you like to describe your energy use?",
-          "bill": "Monthly electricity bill",
-          "consumption": "Monthly electricity use",
-          "billPlaceholder": "For example, 180 BGN",
-          "consumptionPlaceholder": "For example, 450 kWh",
-          "note": "Your value will support future recommendations. It does not change the packages yet."
-        },
-        "packagesHeading": "Choose a starting point",
-        "packagePrice": "Temporary price",
-        "packagePriceNote": "Temporary value for this local version. Confirm the price when requesting a quote.",
-        "quote": "Request a quote",
-        "packages": {
-          "essentials": {
-            "name": "Solar Essentials",
-            "profile": "For an apartment or lower-use home.",
-            "energyType": "Solar only",
-            "features": [
-              "Solar panels",
-              "Grid-connected inverter"
-            ],
-            "description": "A starting configuration for the home that brings together the core parts of a solar system. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Inverter — to be confirmed",
-              "Battery — not included"
-            ]
-          },
-          "smart": {
-            "name": "Solar Smart",
-            "profile": "For a typical family home.",
-            "energyType": "Solar only",
-            "features": [
-              "Solar panels",
-              "Larger solar array",
-              "Grid-connected inverter"
-            ],
-            "description": "A starting configuration with a larger solar array for a typical family home. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Inverter — to be confirmed",
-              "Battery — not included"
-            ]
-          },
-          "storage": {
-            "name": "Solar Storage",
-            "profile": "For households considering energy storage.",
-            "energyType": "With battery",
-            "features": [
-              "Solar panels",
-              "Hybrid inverter",
-              "Battery"
-            ],
-            "description": "A starting configuration for households considering energy storage. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Hybrid inverter — to be confirmed",
-              "Battery capacity — to be confirmed"
-            ]
-          },
-          "complete": {
-            "name": "Solar Complete",
-            "profile": "For homes with higher electricity use.",
-            "energyType": "With battery",
-            "features": [
-              "Larger solar array",
-              "Hybrid inverter",
-              "Battery"
-            ],
-            "description": "A starting configuration for homes with higher electricity use and energy storage needs. Final quantities and equipment are confirmed after consultation.",
-            "specifications": [
-              "Solar panel quantity — to be confirmed",
-              "Hybrid inverter — to be confirmed",
-              "Battery capacity — to be confirmed"
-            ]
-          }
-        },
-        "viewPackage": "View package",
-        "detailHeading": "Package details",
-        "backToPackages": "Back to packages",
-        "breadcrumbLabel": "Package navigation"
+        "introduction": "Browse the published categories and products to find a suitable starting point for your home.",
+        "catalogCta": "Explore the catalog"
       }
     },
     "shop": {
-      "heroImageAlt": "Aerial view of rows of photovoltaic panels",
-      "title": "Shop",
-      "description": "Browse solar packages and choose a starting point for your home.",
+      "title": "Catalog",
+      "description": "Browse published product categories and find a suitable solution for your project.",
       "categories": "Categories",
-      "categoryNavigation": "Product categories",
-      "addToCart": "Add to cart",
-      "addedToCart": "Added to cart",
-      "addNamedToCart": "Add {{name}} to cart"
-    },
-    "projects": {
-      "title": "Projects"
-    },
-    "packages": {
-      "title": "Packages"
+      "categoryNavigation": "Shop categories",
+      "allProducts": "All products",
+      "expandCategory": "Show subcategories of {{category}}",
+      "collapseCategory": "Hide subcategories of {{category}}",
+      "products": "Products",
+      "filters": "Filters",
+      "clearFilters": "Clear filters",
+      "minimum": "Minimum",
+      "maximum": "Maximum",
+      "updatingResults": "Updating products…",
+      "sortBy": "Sort by",
+      "sortNameAsc": "Name: A–Z",
+      "sortNameDesc": "Name: Z–A",
+      "sortPriceAsc": "Price: low to high",
+      "sortPriceDesc": "Price: high to low",
+      "resultCount_one": "{{count}} product",
+      "resultCount_few": "{{count}} products",
+      "resultCount_many": "{{count}} products",
+      "resultCount_other": "{{count}} products",
+      "noMatches": "No products match the selected filters.",
+      "emptyCatalog": "There are no published categories at the moment.",
+      "emptyProducts": "There are no published products in this category yet.",
+      "priceOnRequest": "Price on request",
+      "priceFrom": "From",
+      "savePercentage": "Save {percentage}%",
+      "vatIncluded": "Price includes VAT",
+      "addToCart": "Buy",
+      "addedToCart": "Added",
+      "addNamedToCart": "Buy {{name}}",
+      "inStock": "In stock",
+      "outOfStock": "Out of stock",
+      "enquire": "Send an enquiry",
+      "breadcrumbLabel": "Catalog navigation",
+      "yes": "Yes",
+      "no": "No",
+      "brand": "Brand",
+      "model": "Model",
+      "specifications": "Specifications",
+      "gallery": "Gallery",
+      "previousImage": "Previous image",
+      "nextImage": "Next image",
+      "imagePosition": "Image {{current}} of {{total}}",
+      "selectImage": "Show image {{current}} of {{total}}",
+      "noImage": "No image available",
+      "relatedCategories": "More relevant categories",
+      "documents": "Documents",
+      "downloadDocument": "Download document"
     },
     "cart": {
       "title": "Cart",
-      "description": "Review your selected solar packages and temporary total.",
+      "description": "Review your selected products and total.",
       "loading": "Loading cart…",
       "empty": "Your cart is empty",
-      "emptyDescription": "Browse solar packages to add a starting point.",
-      "continueShopping": "Back to Shop",
-      "itemCount": "Total items",
+      "emptyDescription": "Add an available product from the catalog to see it here.",
+      "continueShopping": "Continue to the catalog",
+      "buy": "Buy",
+      "itemCount": "Items",
       "quantity": "Quantity",
-      "unitPrice": "Temporary unit price",
-      "lineTotal": "Line total",
-      "total": "Temporary total",
+      "unitPrice": "Unit price",
+      "lineTotal": "Item total",
+      "total": "Total",
       "increaseQuantity": "Increase quantity",
       "decreaseQuantity": "Decrease quantity",
       "removeItem": "Remove",
-      "quantityChanged": "quantity updated",
-      "itemRemoved": "removed from cart",
-      "storageUnavailable": "Cart changes cannot be saved in this browser."
+      "quantityChanged": "Quantity changed",
+      "itemRemoved": "Item removed",
+      "unavailableRemoved": "Unavailable products were removed from your cart.",
+      "hydrationFailed": "The cart cannot be refreshed right now. Please try again.",
+      "retry": "Retry",
+      "storageUnavailable": "Cart changes will not be saved in this browser.",
+      "priceNote": "Displayed prices include VAT."
+    },
+    "dashboard": {
+      "orders": { "title": "Orders", "description": "Review and manage customer orders." },
+      "orderDetail": { "title": "Order details", "description": "Review order contents, lifecycle, payment status, and history." }
     },
     "contact": {
       "title": "Contact"
-    },
-    "auth": {
-      "common": {
-        "backToSignIn": "Back to sign in"
-      },
-      "google": {
-        "continue": "Continue with Google",
-        "unavailable": "Google sign-in is not available right now.",
-        "redirecting": "Taking you to Google…",
-        "failureTitle": "Google sign-in could not be completed",
-        "failureDescription": "Try again, or use your email address and password.",
-        "emailNotFoundTitle": "Google did not provide an email address",
-        "emailNotFoundDescription": "Choose another sign-in method or make sure your Google account can share an email address.",
-        "emailNotVerifiedTitle": "Verify your email to continue with Google",
-        "emailNotVerifiedDescription": "We sent a verification link to your email address. Open it, then try Google sign-in again.",
-        "accountNotLinkedTitle": "Verify your existing account before using Google",
-        "accountNotLinkedDescription": "For security, Google cannot be connected to an unverified password account. Resetting your password does not verify your email address.",
-        "passwordRecovery": "Forgot your password?",
-        "recoverySteps": {
-          "resetPassword": "Reset your password",
-          "signIn": "Sign in with your new password.",
-          "verifyEmail": "Complete or resend email verification; resetting your password alone does not verify your email address.",
-          "retry": "Try Google sign-in again."
-        }
-      },
-      "facebook": {
-        "continue": "Continue with Facebook",
-        "unavailable": "Facebook sign-in is not available right now.",
-        "redirecting": "Taking you to Facebook…",
-        "failureTitle": "Facebook sign-in could not be completed",
-        "failureDescription": "Try again, or use your email address and password.",
-        "emailNotFoundTitle": "Facebook did not provide an email address",
-        "emailNotFoundDescription": "Allow Facebook to share your email address, or choose another sign-in method.",
-        "emailNotVerifiedTitle": "Verify your email to continue with Facebook",
-        "emailNotVerifiedDescription": "We sent a verification link to your email address. Open it, then try Facebook sign-in again.",
-        "accountNotLinkedTitle": "Facebook sign-in could not be completed",
-        "accountNotLinkedDescription": "To protect your account, continue with your email address and password.",
-        "passwordRecovery": "Forgot your password?"
-      },
-      "fields": {
-        "name": "Name",
-        "email": "Email address",
-        "password": "Password",
-        "newPassword": "New password",
-        "confirmPassword": "Confirm password",
-        "passwordHint": "Use between 8 and 128 characters."
-      },
-      "errors": {
-        "validationSummary": "Check the highlighted information and try again.",
-        "nameRequired": "Enter your name.",
-        "nameLength": "Name must be between 2 and 100 characters.",
-        "emailRequired": "Enter your email address.",
-        "emailInvalid": "Enter a valid email address.",
-        "passwordRequired": "Enter your password.",
-        "passwordLength": "Password must be between 8 and 128 characters.",
-        "passwordMismatch": "The passwords do not match.",
-        "invalidCredentials": "The email address or password is incorrect.",
-        "rateLimited": "Too many attempts. Wait a moment and try again.",
-        "signInFailed": "We could not sign you in. Try again.",
-        "signUpFailed": "We could not create the account. Check your details or try again later.",
-        "verificationRequestFailed": "We could not request another verification email. Try again.",
-        "recoveryRequestFailed": "We could not accept the recovery request. Try again.",
-        "resetTokenInvalid": "This reset link is invalid or has expired.",
-        "resetFailed": "We could not reset the password. Try again."
-      },
-      "signIn": {
-        "title": "Sign in",
-        "description": "Use your email address and password to continue.",
-        "submit": "Sign in",
-        "submitting": "Signing in…",
-        "forgotPassword": "Forgot your password?",
-        "unverifiedTitle": "Verify your email before signing in",
-        "unverifiedDescription": "This account still needs email verification. Request another link if the first message did not arrive.",
-        "tryAnotherEmail": "Use a different email address",
-        "noAccount": "Need an account?",
-        "createAccount": "Create one"
-      },
-      "signUp": {
-        "title": "Create your account",
-        "description": "Register with an email address and password, then verify your email to sign in.",
-        "submit": "Create account",
-        "submitting": "Creating account…",
-        "checkEmailTitle": "Check your email",
-        "checkEmailDescription": "We accepted your registration. Open the verification link in the email to activate sign-in.",
-        "deliveryHelp": "If the message does not arrive, use the resend action below. You do not need to recreate your account.",
-        "hasAccount": "Already have an account?",
-        "signIn": "Sign in"
-      },
-      "verificationRequest": {
-        "submit": "Resend verification email",
-        "submitting": "Requesting another email…",
-        "accepted": "If an account at that address needs verification, a new link has been sent."
-      },
-      "forgotPassword": {
-        "title": "Forgot password",
-        "description": "Enter your email address to request a secure password-reset link.",
-        "submit": "Send reset link",
-        "submitting": "Requesting reset link…",
-        "successTitle": "Check your email",
-        "successDescription": "If an account exists for that address, we sent a password-reset link. It is valid for 1 hour."
-      },
-      "resetPassword": {
-        "title": "Set a new password",
-        "description": "A valid reset link is required before a password can be changed.",
-        "invalidOrExpiredTitle": "Reset link invalid or expired",
-        "invalidOrExpiredDescription": "This reset link cannot be used. Request a new link to continue.",
-        "failureTitle": "Password reset could not continue",
-        "failureDescription": "We could not validate this reset link. Request a new link and try again.",
-        "requestAnother": "Request another reset link",
-        "submit": "Save new password",
-        "submitting": "Saving password…",
-        "successTitle": "Password updated",
-        "successDescription": "Your new password is ready to use. Other active sessions have been signed out."
-      },
-      "verifyEmail": {
-        "title": "Email verification",
-        "description": "Confirm your email before signing in to your account.",
-        "states": {
-          "initial": {
-            "title": "Request a verification link",
-            "description": "Enter your email address and we will send a new verification link if the account needs one."
-          },
-          "success": {
-            "title": "Email verified",
-            "description": "Your email address has been verified."
-          },
-          "expired": {
-            "title": "Verification link expired",
-            "description": "This verification link is no longer valid. Request another link below."
-          },
-          "invalid": {
-            "title": "Invalid verification link",
-            "description": "This verification link cannot be used. Request another link below."
-          },
-          "failure": {
-            "title": "Email could not be verified",
-            "description": "The verification could not be completed. Request another link and try again."
-          }
-        }
-      }
-    },
-    "solarPackages": {
-      "title": "Solar packages",
-      "description": "Explore starting points for a home solar system."
     }
   }
 }

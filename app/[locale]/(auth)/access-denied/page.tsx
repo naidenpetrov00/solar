@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ButtonLink } from "@/components/button";
 
 import { getT } from "@/i18n.server";
 import { AuthShell } from "../_components/auth-shell";
 import { getPrivatePageMetadata } from "../../_lib/metadata";
-import {
-  accessDeniedRouteSlug,
-  localizedPath,
-} from "../../_lib/routes";
+import { accessDeniedRouteSlug, localizedPath } from "../../_lib/routes";
 
 export async function generateMetadata({
   params,
@@ -31,9 +28,9 @@ export default async function AccessDeniedPage({
       title={t("pages.accessDenied.title")}
       description={t("pages.accessDenied.description")}
     >
-      <Link className="auth-primary-action" href={localizedPath(locale)}>
+      <ButtonLink href={localizedPath(locale)}>
         {t("pages.accessDenied.returnHome")}
-      </Link>
+      </ButtonLink>
     </AuthShell>
   );
 }

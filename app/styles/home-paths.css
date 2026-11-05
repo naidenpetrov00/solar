@@ -1,0 +1,92 @@
+.welcome-paths {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 3;
+  display: grid;
+  border-top: 1px solid rgba(255, 255, 255, 0.44);
+}
+
+.welcome-path {
+  display: flex;
+  min-height: 5.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.15rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  font-size: clamp(1.2rem, 4.8vw, 1.65rem);
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  text-decoration: none;
+  animation: welcome-path-arrive 700ms 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition:
+    background-color 260ms ease,
+    color 260ms ease;
+}
+
+.welcome-path:nth-child(2) {
+  animation-delay: 520ms;
+}
+
+.welcome-path svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: 0 0 auto;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.welcome-path:hover,
+.welcome-path:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.welcome-path:hover svg,
+.welcome-path:focus-visible svg {
+  transform: translateX(0.4rem);
+}
+
+.welcome-path:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: -4px;
+}
+
+.welcome-destination {
+  display: flex;
+  min-height: 76svh;
+  padding: clamp(5rem, 12vw, 10rem) clamp(1.25rem, 6vw, 6rem);
+  scroll-margin-block-start: 2rem;
+  background: var(--destination-background);
+  color: var(--destination-foreground);
+  transition:
+    background-color 250ms ease,
+    color 250ms ease;
+}
+
+.welcome-destination-residential {
+  --destination-background: #f4f3ee;
+  --destination-foreground: #11130f;
+  align-items: flex-start;
+}
+
+.welcome-destination-business {
+  --destination-background: #e7ebe5;
+  --destination-foreground: #11130f;
+  min-height: 84svh;
+  align-items: flex-end;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.welcome-destination-title {
+  max-width: 12ch;
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}

@@ -5,10 +5,8 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/authorization";
 import { getPageMetadata } from "../../_lib/metadata";
-import {
-  safeAuthReturnPath,
-  type AuthRouteSlug,
-} from "../../_lib/routes";
+import { safeAuthReturnPath } from "../../_lib/return-paths";
+import type { AuthRouteSlug } from "../../_lib/routes";
 
 export type AuthSearchParams = Record<string, string | string[] | undefined>;
 

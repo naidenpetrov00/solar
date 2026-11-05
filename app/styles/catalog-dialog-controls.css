@@ -1,0 +1,110 @@
+.dashboard-catalog-dialog {
+  width: min(calc(100% - 2rem), 34rem);
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: 1px solid var(--dashboard-foreground);
+  border-radius: 0;
+  background: var(--dashboard-surface, #fff);
+  color: var(--dashboard-foreground, #11130f);
+  overflow: auto;
+}
+
+.dashboard-catalog-dialog::backdrop {
+  background: rgb(0 0 0 / 0.7);
+}
+
+.dashboard-catalog-dialog form {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.dashboard-catalog-dialog h2 {
+  font-size: 1.55rem;
+  letter-spacing: -0.025em;
+}
+
+.dashboard-catalog-dialog > form > p {
+  color: var(--dashboard-muted, #5f665d);
+  line-height: 1.55;
+}
+
+.dashboard-catalog-slug-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.dashboard-catalog-create-section {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1.25rem 0;
+  border: 1px solid var(--dashboard-rule);
+  border-inline: 0;
+}
+
+.dashboard-catalog-create-section > h3 {
+  font-size: 1rem;
+}
+
+.dashboard-catalog-dialog-actions {
+  margin-top: 0.5rem;
+}
+
+.dashboard-catalog-dialog-issues {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding-inline-start: 1.25rem;
+  color: #b91c1c;
+  line-height: 1.5;
+}
+
+.dashboard-catalog-save-issues {
+  width: 100%;
+}
+
+.dashboard-catalog-save-issues:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+.dashboard-catalog-tree a:focus-visible,
+.dashboard-catalog-view-switch a:focus-visible,
+.dashboard-catalog-product-list a:focus-visible,
+.dashboard-catalog-primary-link:focus-visible,
+.dashboard-catalog-back-link:focus-visible,
+.dashboard-catalog-tree button:focus-visible,
+.dashboard-catalog-editor button:focus-visible,
+.dashboard-catalog-editor input:focus-visible,
+.dashboard-catalog-editor textarea:focus-visible,
+.dashboard-catalog-editor select:focus-visible,
+.dashboard-catalog-dialog button:focus-visible,
+.dashboard-catalog-dialog input:focus-visible,
+.dashboard-catalog-dialog textarea:focus-visible,
+.dashboard-catalog-dialog select:focus-visible,
+.dashboard-catalog-section > summary:focus-visible,
+.dashboard-catalog-mobile-back:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+@media (min-width: 70rem) {
+  .dashboard-catalog-workspace {
+    grid-template-columns: minmax(20rem, 0.72fr) minmax(34rem, 1.5fr);
+  }
+
+  .dashboard-catalog-tree {
+    padding-inline-end: 1.5rem;
+    border-inline-end: 1px solid var(--dashboard-rule);
+  }
+
+  .dashboard-catalog-detail {
+    padding-inline-start: 2rem;
+  }
+
+  .dashboard-catalog-mobile-back {
+    display: none;
+  }
+}

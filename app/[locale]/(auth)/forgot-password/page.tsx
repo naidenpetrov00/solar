@@ -11,9 +11,13 @@ import {
 import {
   localizedAuthPath,
   localizedPasswordResetCallbackPath,
-} from "../../_lib/routes";
+} from "../../_lib/auth-routes";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
   return getAuthPageMetadata(locale, "forgot-password", "auth.forgotPassword");
 }
@@ -27,28 +31,36 @@ export default async function ForgotPasswordPage({
 }) {
   const [{ locale }, query] = await Promise.all([params, searchParams]);
   const returnTo = await getSignedOutReturnPath(locale, query.returnTo);
-  const { t } = await getT("common", { lng: locale });
+  const { t } = await getT(["common", "auth"], { lng: locale });
   const signInHref = localizedAuthPath(locale, "sign-in", returnTo);
 
   return (
     <AuthShell
-      title={t("pages.auth.forgotPassword.title")}
-      description={t("pages.auth.forgotPassword.description")}
-      footer={<p><Link href={signInHref}>{t("pages.auth.common.backToSignIn")}</Link></p>}
+      title={t("auth:pages.auth.forgotPassword.title")}
+      description={t("auth:pages.auth.forgotPassword.description")}
+      footer={
+        <p>
+          <Link href={signInHref}>
+            {t("auth:pages.auth.common.backToSignIn")}
+          </Link>
+        </p>
+      }
     >
       <ForgotPasswordForm
         resetCallbackURL={localizedPasswordResetCallbackPath(locale, returnTo)}
         labels={{
-          email: t("pages.auth.fields.email"),
-          submit: t("pages.auth.forgotPassword.submit"),
-          submitting: t("pages.auth.forgotPassword.submitting"),
-          validationSummary: t("pages.auth.errors.validationSummary"),
-          emailRequired: t("pages.auth.errors.emailRequired"),
-          emailInvalid: t("pages.auth.errors.emailInvalid"),
-          rateLimited: t("pages.auth.errors.rateLimited"),
-          genericError: t("pages.auth.errors.recoveryRequestFailed"),
-          successTitle: t("pages.auth.forgotPassword.successTitle"),
-          successDescription: t("pages.auth.forgotPassword.successDescription"),
+          email: t("auth:pages.auth.fields.email"),
+          submit: t("auth:pages.auth.forgotPassword.submit"),
+          submitting: t("auth:pages.auth.forgotPassword.submitting"),
+          validationSummary: t("auth:pages.auth.errors.validationSummary"),
+          emailRequired: t("auth:pages.auth.errors.emailRequired"),
+          emailInvalid: t("auth:pages.auth.errors.emailInvalid"),
+          rateLimited: t("auth:pages.auth.errors.rateLimited"),
+          genericError: t("auth:pages.auth.errors.recoveryRequestFailed"),
+          successTitle: t("auth:pages.auth.forgotPassword.successTitle"),
+          successDescription: t(
+            "auth:pages.auth.forgotPassword.successDescription",
+          ),
         }}
       />
     </AuthShell>

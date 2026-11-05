@@ -1,0 +1,25 @@
+export type CartLabels = {
+  loading: string;
+  empty: string;
+  emptyDescription: string;
+  continueShopping: string;
+  buy: string;
+  itemCount: string;
+  quantity: string;
+  unitPrice: string;
+  lineTotal: string;
+  total: string;
+  increaseQuantity: string;
+  decreaseQuantity: string;
+  removeItem: string;
+  quantityChanged: string;
+  itemRemoved: string;
+  unavailableRemoved: string;
+  hydrationFailed: string;
+  retry: string;
+  storageUnavailable: string;
+  priceNote: string;
+  priceFrom: string;
+  savePercentage: string;
+  vatIncluded: string;
+};

@@ -7,13 +7,19 @@ const sections = ["", "residential", "business"] as const;
 export function HomepageHashSync() {
   useEffect(() => {
     const elements = sections.map((id) =>
-      id ? document.getElementById(id) : document.querySelector(".welcome-hero"),
+      id
+        ? document.getElementById(id)
+        : document.querySelector(".welcome-hero"),
     );
 
     const updateHash = (id: (typeof sections)[number]) => {
       const hash = id ? `#${id}` : "";
       if (window.location.hash !== hash) {
-        window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${hash}`);
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${window.location.search}${hash}`,
+        );
       }
     };
 
@@ -53,6 +59,7 @@ export function HomepageHashSync() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          if (!(entry.target instanceof HTMLElement)) return;
           entry.target.dataset.motionState = entry.isIntersecting
             ? "visible"
             : "hidden";
@@ -89,7 +96,10 @@ export function HomepageHashSync() {
         const bounds = title.getBoundingClientRect();
         const viewProgress = Math.min(
           1,
-          Math.max(0, (viewportHeight - bounds.top) / (viewportHeight + bounds.height)),
+          Math.max(
+            0,
+            (viewportHeight - bounds.top) / (viewportHeight + bounds.height),
+          ),
         );
         const travelProgress =
           viewProgress < 0.2

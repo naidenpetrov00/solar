@@ -1,0 +1,170 @@
+.dashboard-catalog-category-picker-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 3.25rem;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--dashboard-rule);
+  background: var(--dashboard-surface);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.dashboard-catalog-category-picker-row:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--dashboard-foreground) 38%,
+    var(--dashboard-rule)
+  );
+  background: color-mix(
+    in srgb,
+    var(--dashboard-foreground) 3.5%,
+    var(--dashboard-surface)
+  );
+}
+
+.dashboard-catalog-category-picker-row[data-primary="true"] {
+  border-color: color-mix(in srgb, #f59e0b 62%, var(--dashboard-rule));
+  background: color-mix(in srgb, #f59e0b 9%, var(--dashboard-surface));
+  box-shadow: inset 0.2rem 0 #f59e0b;
+}
+
+.dashboard-catalog-category-picker-row[data-additional="true"] {
+  border-color: color-mix(
+    in srgb,
+    var(--dashboard-foreground) 50%,
+    var(--dashboard-rule)
+  );
+  background: color-mix(
+    in srgb,
+    var(--dashboard-foreground) 5%,
+    var(--dashboard-surface)
+  );
+  box-shadow: inset 0.2rem 0 var(--dashboard-foreground);
+}
+
+.dashboard-catalog-category-node {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+}
+
+.dashboard-catalog-category-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+  font-weight: 680;
+  line-height: 1.35;
+}
+
+.dashboard-catalog-category-toggle,
+.dashboard-catalog-category-toggle-spacer {
+  display: inline-grid;
+  width: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  place-items: center;
+}
+
+.dashboard-catalog-category-toggle {
+  padding: 0;
+  color: var(--dashboard-muted);
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.dashboard-catalog-category-toggle:hover {
+  color: var(--dashboard-foreground);
+  border-color: var(--dashboard-rule);
+  background: color-mix(in srgb, var(--dashboard-foreground) 6%, transparent);
+}
+
+.dashboard-catalog-category-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.dashboard-catalog-category-role,
+.dashboard-catalog-category-role-action {
+  min-height: 2.25rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.72rem;
+}
+
+.dashboard-catalog-category-role {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+}
+
+.dashboard-catalog-category-role-primary {
+  border-color: color-mix(in srgb, #f59e0b 55%, var(--dashboard-rule));
+  background: color-mix(in srgb, #f59e0b 16%, transparent);
+  color: var(--dashboard-foreground);
+}
+
+.dashboard-catalog-category-role-additional[aria-pressed="true"] {
+  border-color: var(--dashboard-foreground);
+  background: var(--dashboard-foreground);
+  color: var(--dashboard-surface);
+}
+
+.dashboard-catalog-category-role-action {
+  min-height: 2.5rem;
+}
+
+.dashboard-catalog-category-toggle:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: -2px;
+}
+
+.dashboard-catalog-url-preview {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--dashboard-muted);
+  font-family: inherit;
+  font-size: 0.78rem;
+}
+
+.dashboard-catalog-price-counterpart {
+  display: block;
+  font-weight: 700;
+}
+
+.dashboard-catalog-title-guidance {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border-inline-start: 0.2rem solid #f59e0b;
+  background: color-mix(in srgb, #f59e0b 7%, transparent);
+}
+
+.dashboard-catalog-title-guidance p,
+.dashboard-catalog-title-guidance small {
+  color: var(--dashboard-muted);
+  line-height: 1.5;
+}
+
+.dashboard-catalog-title-guidance button {
+  width: max-content;
+  max-width: 100%;
+  margin-top: 0.35rem;
+}
+
+.dashboard-catalog-slug-update {
+  width: max-content;
+  max-width: 100%;
+  min-height: 2.5rem;
+  padding-inline: 0.8rem;
+  border: 1px solid var(--dashboard-rule);
+  background: transparent;
+  color: var(--dashboard-foreground);
+  font-weight: 750;
+}

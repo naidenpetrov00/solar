@@ -1,0 +1,42 @@
+.dashboard-catalog-product-specifications,
+.dashboard-catalog-media-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-catalog-product-specification,
+.dashboard-catalog-media-item {
+  display: grid;
+  min-width: 0;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid var(--dashboard-rule);
+  overflow-wrap: anywhere;
+}
+
+.dashboard-catalog-product-specification-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dashboard-catalog-product-specification-heading h3 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.dashboard-catalog-media-preview {
+  display: block;
+  width: min(100%, 24rem);
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  border: 1px solid var(--dashboard-rule);
+  background: color-mix(in srgb, var(--dashboard-foreground) 4%, var(--dashboard-surface));
+}
+
+.dashboard-catalog-media-item progress,
+.dashboard-catalog-media-item input[type="file"] {
+  max-width: 100%;
+}

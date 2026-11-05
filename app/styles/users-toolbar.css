@@ -1,0 +1,140 @@
+/* Users follows the Operate language: a ruled ledger paired with a focused detail plane. */
+.dashboard-users-main {
+  width: min(100%, 96rem);
+}
+
+.dashboard-users-introduction {
+  max-width: 62rem;
+}
+
+.dashboard-users-introduction > div {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-users-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-users-search {
+  display: grid;
+  flex: 1;
+  gap: 0.55rem;
+  max-width: 48rem;
+}
+
+.dashboard-users-search label,
+.dashboard-users-field label {
+  color: var(--dashboard-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dashboard-users-search > div {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+}
+
+.dashboard-users-search input,
+.dashboard-users-field input,
+.dashboard-users-field select {
+  min-width: 0;
+  min-height: 2.75rem;
+  border: 1px solid var(--dashboard-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--dashboard-foreground);
+  font: inherit;
+}
+
+.dashboard-users-search input {
+  flex: 1;
+  padding-inline: 0.85rem;
+}
+
+.dashboard-users-search button,
+.dashboard-users-search a,
+.dashboard-users-primary-action,
+.dashboard-users-pagination a,
+.dashboard-user-actions button,
+.dashboard-users-dialog button,
+.dashboard-user-detail-back {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--dashboard-foreground);
+  border-radius: 0;
+  background: transparent;
+  color: var(--dashboard-foreground);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dashboard-users-search button,
+.dashboard-users-search a,
+.dashboard-users-primary-action,
+.dashboard-users-pagination a {
+  padding-inline: 1rem;
+}
+
+.dashboard-users-search button,
+.dashboard-users-primary-action {
+  background: var(--dashboard-foreground);
+  color: var(--dashboard-surface);
+}
+
+.dashboard-users-search button:hover,
+.dashboard-users-primary-action:hover,
+.dashboard-users-dialog button[type="submit"]:hover {
+  background: #fcd34d;
+  color: #11130f;
+}
+
+.dashboard-users-search a {
+  border-color: transparent;
+  color: var(--dashboard-muted);
+}
+
+.dashboard-users-search a:hover,
+.dashboard-users-pagination a:hover,
+.dashboard-user-actions button:hover,
+.dashboard-user-detail-back:hover {
+  color: var(--dashboard-foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.dashboard-users-count {
+  margin: 0;
+  color: var(--dashboard-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.dashboard-users-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.dashboard-users-heading-row h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}

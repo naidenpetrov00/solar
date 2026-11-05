@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Button } from "@/components/button";
 
 import { authClient } from "@/lib/auth-client";
 import { validateEmail } from "@/lib/auth-validation";
@@ -132,9 +133,9 @@ export function ForgotPasswordForm({
         ) : null}
       </div>
 
-      <button className="auth-primary-action" type="submit" disabled={pending}>
+      <Button type="submit" disabled={pending}>
         {pending ? labels.submitting : labels.submit}
-      </button>
+      </Button>
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pending ? labels.submitting : ""}
       </p>

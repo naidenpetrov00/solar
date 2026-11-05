@@ -1,0 +1,67 @@
+@media (max-width: 63.999rem) {
+  .catalog-category-index,
+  .catalog-category-products,
+  .catalog-related-categories {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .catalog-product-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .catalog-hero {
+    min-height: 28rem;
+  }
+
+  .catalog-hero::after {
+    background: rgba(5, 8, 7, 0.74);
+  }
+
+  .shop-hero-media img {
+    object-position: 58% center;
+  }
+
+  .catalog-shell {
+    padding-inline: 1.25rem;
+  }
+
+  .catalog-category-index a,
+  .catalog-category-heading,
+  .catalog-product-row-link {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .catalog-category-index a {
+    gap: 0.65rem;
+  }
+
+  .catalog-category-index a svg {
+    position: absolute;
+    top: 1.6rem;
+    right: 0;
+  }
+
+  .catalog-category-index a span {
+    padding-inline-end: 2rem;
+  }
+
+  .catalog-product-row-media {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-category-index svg,
+  .catalog-inline-link svg,
+  .shop-add-button {
+    transition: none;
+  }
+
+  .catalog-category-index a:hover svg,
+  .catalog-product-row-link:hover .catalog-inline-link svg {
+    transform: none;
+  }
+}

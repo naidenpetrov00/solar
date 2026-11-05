@@ -1,0 +1,117 @@
+@media (min-width: 70rem) {
+  .dashboard-users-workspace {
+    grid-template-columns: minmax(0, 1.45fr) minmax(20rem, 0.75fr);
+  }
+
+  .dashboard-user-detail {
+    min-height: 34rem;
+    border-left: 1px solid var(--dashboard-rule);
+  }
+}
+
+@media (max-width: 69.999rem) {
+  .dashboard-users-ledger table {
+    display: none;
+  }
+
+  .dashboard-users-mobile-list {
+    display: block;
+  }
+
+  .dashboard-users-mobile-list li + li {
+    border-top: 1px solid var(--dashboard-rule);
+  }
+
+  .dashboard-users-mobile-list button {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(7rem, 0.65fr);
+    gap: 1rem;
+    width: 100%;
+    min-height: 4.75rem;
+    padding: 0.9rem 0.25rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .dashboard-users-mobile-list button > span {
+    display: grid;
+    align-content: center;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .dashboard-users-mobile-list button > span:last-child {
+    text-align: right;
+  }
+
+  .dashboard-users-mobile-list strong,
+  .dashboard-users-mobile-list small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dashboard-users-mobile-list small {
+    color: var(--dashboard-muted);
+  }
+
+  .dashboard-users-workspace[data-detail-open="false"] .dashboard-user-detail,
+  .dashboard-users-workspace[data-detail-open="true"] .dashboard-users-ledger {
+    display: none;
+  }
+
+  .dashboard-users-workspace[data-detail-open="true"]
+    .dashboard-user-detail-back {
+    display: inline-flex;
+  }
+
+  .dashboard-user-detail header {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 39.999rem) {
+  .dashboard-users-toolbar,
+  .dashboard-users-search > div,
+  .dashboard-users-heading-row {
+    align-items: stretch;
+  }
+
+  .dashboard-users-toolbar,
+  .dashboard-users-heading-row {
+    flex-direction: column;
+  }
+
+  .dashboard-users-search > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard-users-search input {
+    grid-column: 1 / -1;
+  }
+
+  .dashboard-users-primary-action {
+    width: 100%;
+  }
+
+  .dashboard-user-actions > div,
+  .dashboard-users-dialog-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-user-actions button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-users-dialog,
+  .dashboard-users-dialog::backdrop {
+    animation: none;
+  }
+}

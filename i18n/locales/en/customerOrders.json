@@ -1,0 +1,13 @@
+{
+  "page": {
+    "listTitle": "My orders",
+    "listDescription": "Review the current status and details of orders placed through your account.",
+    "detailTitle": "Order details",
+    "detailDescription": "Review the current details and status of your order.",
+    "list": { "title": "My orders", "description": "Review the current status and details of orders placed through your account.", "orderNumber": "Order number", "submittedAt": "Submitted", "orderStatus": "Order status", "paymentStatus": "Payment status", "total": "VAT-inclusive total", "items": "Items", "itemCount_one": "{{count}} item", "itemCount_few": "{{count}} items", "itemCount_many": "{{count}} items", "itemCount_other": "{{count}} items", "emptyTitle": "No account orders yet", "emptyDescription": "Orders placed while signed in will appear here.", "shop": "Browse the shop", "page": "Page {{page}} of {{pages}}", "previous": "Previous", "next": "Next", "viewOrder": "View order" },
+    "detail": { "back": "Back to my orders", "submittedAt": "Submitted", "updatedAt": "Last updated", "paymentUpdatedAt": "Payment status updated", "customerDelivery": "Customer and delivery", "customerName": "Name", "phone": "Phone", "email": "Email", "city": "City", "deliveryAddress": "Delivery address", "note": "Your note", "noNote": "No note", "paymentMethod": "Payment method", "items": "Items", "sku": "SKU", "quantity": "Quantity", "unitPrice": "VAT-inclusive unit price", "lineTotal": "VAT-inclusive line total", "promotion": "Promotion", "totals": "Order totals", "subtotal": "VAT-inclusive subtotal", "promotionDiscount": "Promotion discount", "adjustments": "Adjustments", "total": "Final VAT-inclusive total", "includedVat": "Included VAT", "timeline": "Order timeline", "timelineSubmitted": "Order submitted", "timelineApproved": "Order approved", "timelineRejected": "Order not approved", "timelineCancelled": "Order cancelled", "timelineCompleted": "Order completed", "timelinePaid": "Payment recorded", "timelineRefunded": "Refund recorded", "timelinePaymentUpdated": "Payment status updated" },
+    "orderStatuses": { "pending_approval": "Pending confirmation", "approved": "Approved", "rejected": "Not approved", "cancelled": "Cancelled", "completed": "Completed" },
+    "paymentStatuses": { "unpaid": "Unpaid", "partially_paid": "Partially paid", "paid": "Paid", "failed": "Payment failed", "partially_refunded": "Partially refunded", "refunded": "Refunded" },
+    "paymentMethods": { "cash_on_delivery": "Cash on delivery", "bank_transfer": "Bank transfer", "arranged_by_phone": "Arranged by phone" }
+  }
+}

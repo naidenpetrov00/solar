@@ -1,0 +1,78 @@
+{
+  "pages": { "dashboard": { "orders": {
+    "title": "Orders",
+    "description": "Review customer orders, negotiate pending contents, and manage order and payment status separately.",
+    "loading": "Loading orders…",
+    "count": "{{count}} orders",
+    "filters": {
+      "regionLabel": "Order filters", "search": "Search", "searchPlaceholder": "Order number, name, phone, or email",
+      "status": "Order status", "paymentStatus": "Payment status", "all": "All", "from": "Submitted from",
+      "to": "Submitted to", "timezone": "Dates use the Europe/Sofia business timezone.", "apply": "Apply filters", "clear": "Clear", "invalid": "Some invalid filters were ignored. Review the displayed filter values."
+    },
+    "list": {
+      "orderNumber": "Order", "submittedAt": "Submitted", "customer": "Customer", "phone": "Phone",
+      "total": "Current total", "orderStatus": "Order status", "paymentStatus": "Payment status", "open": "Open order"
+    },
+    "empty": { "title": "No orders yet", "description": "Customer orders will appear here after they are placed." },
+    "noResults": { "title": "No matching orders", "description": "Change or clear the filters to see other orders." },
+    "pagination": { "label": "Order pages", "previous": "Previous", "next": "Next", "status": "Page {{page}} of {{pages}}" },
+    "detail": {
+      "back": "Back to orders", "submittedAt": "Submitted", "updatedAt": "Last updated", "approvedAt": "Approved", "rejectedAt": "Rejected", "cancelledAt": "Cancelled", "completedAt": "Completed", "paymentUpdatedAt": "Payment status updated", "paidAt": "Paid", "refundedAt": "Refunded", "original": "Original customer submission",
+      "originalDescription": "Revision 1 is permanent and read-only.", "current": "Current order", "currentDescription": "The latest persisted order revision.",
+      "history": "Revision history", "audit": "Audit history", "revision": "Revision {{number}}", "currentRevision": "Current revision",
+      "customer": "Customer information", "delivery": "Delivery and payment", "products": "Products", "pricing": "Pricing summary",
+      "lifecycle": "Order and payment lifecycle", "name": "Name", "phone": "Phone", "email": "Email", "city": "City",
+      "deliveryAddress": "Delivery address", "note": "Customer note", "noNote": "No note", "paymentMethod": "Payment method",
+      "sku": "SKU", "quantity": "Quantity", "unitPrice": "VAT-inclusive unit price", "promotion": "Promotion", "noPromotion": "No promotion",
+      "vat": "VAT", "lineTotal": "Line total", "adjustments": "Item adjustments", "noAdjustments": "No adjustments",
+      "reason": "Internal reason", "actor": "Responsible person", "createdAt": "Created", "subtotal": "Catalog subtotal",
+      "promotionDiscount": "Promotion discount", "itemAdjustments": "Item adjustments", "orderAdjustments": "Order adjustments",
+      "net": "Net total", "vatTotal": "VAT total", "total": "VAT-inclusive total", "guest": "Guest customer", "customerActor": "Customer account", "administratorActor": "Administrator", "timezone": "Europe/Sofia"
+    },
+    "editor": {
+      "title": "Edit current order", "description": "Saving creates one complete immutable revision. Changes are allowed only while approval is pending.",
+      "save": "Save order changes", "saving": "Saving changes…", "addProduct": "Add an eligible product", "productSearch": "Product search",
+      "productSearchPlaceholder": "Product title or SKU", "search": "Search products", "searching": "Searching products…",
+      "noProducts": "No eligible products match this search.", "add": "Add product", "remove": "Remove product",
+      "addAdjustment": "Add adjustment", "removeAdjustment": "Remove adjustment", "adjustmentDirection": "Adjustment type",
+      "discount": "Discount", "surcharge": "Surcharge", "amount": "VAT-inclusive amount in EUR", "reason": "Internal reason",
+      "provisional": "Provisional draft totals", "provisionalUnavailable": "Complete valid quantities and adjustments to preview totals.",
+      "unsaved": "You have unsaved order changes.", "staleHelp": "Another administrator changed this order. Your draft has been kept.",
+      "reviewLatest": "Review latest in a new tab", "discardReload": "Discard draft and reload", "validationSummary": "Review the highlighted order information.",
+      "required": "This field is required.", "invalid": "Enter a valid value."
+    },
+    "lifecycle": {
+      "orderTitle": "Order status", "paymentTitle": "Payment status", "orderDescription": "Order lifecycle transitions do not change payment status.",
+      "paymentDescription": "Payment transitions do not reopen or modify the order.", "noTransitions": "No further transitions are available.",
+      "unsavedBlocked": "Save or discard content changes before changing lifecycle status.", "confirmTitle": "Confirm status change",
+      "confirmDescription": "Change the status to {{status}}?", "confirm": "Confirm change", "cancel": "Cancel", "updating": "Updating…"
+    },
+    "emailDelivery": {
+      "title": "Email notifications", "description": "Stored notification intents and delivery attempts for this order.", "empty": "No email notifications were created for this order.", "kind": "Type", "recipient": "Recipient", "recipientType": "Recipient type", "customer": "Customer", "internal": "Internal recipient", "templateVersion": "Template version", "revision": "Revision", "status": "Status", "attempts": "Total attempts", "manualRetries": "Manual retries", "createdAt": "Created", "lastAttemptAt": "Last attempt", "nextAttemptAt": "Next attempt", "sentAt": "Sent", "failedAt": "Failed", "notAvailable": "—", "error": "Reason", "retry": "Retry delivery", "retrying": "Queueing…", "confirmTitle": "Retry email delivery", "confirmDescription": "The notification will be sent again to the originally recorded address.", "confirm": "Queue retry", "cancel": "Cancel",
+      "kinds": { "customer_order_received": "Order received — customer", "customer_order_approved": "Order approved — customer", "customer_order_rejected": "Order rejected — customer", "customer_order_cancelled": "Order cancelled — customer", "internal_new_order": "New order — internal" },
+      "statuses": { "pending": "Pending", "processing": "Processing", "sent": "Sent", "failed": "Failed" },
+      "errors": { "SMTP_TEMPORARY": "A temporary email-delivery problem occurred.", "SMTP_PERMANENT": "Email delivery was permanently rejected.", "COMPOSITION_FAILED": "A temporary message-composition problem occurred.", "TEMPLATE_UNSUPPORTED": "The template version is unsupported.", "SNAPSHOT_INVALID": "The stored notification data is invalid." }
+    },
+    "history": {
+      "submitted": "Order submitted", "contentRevised": "Order contents revised", "orderStatusChanged": "Order status changed",
+      "paymentStatusChanged": "Payment status changed", "version": "Mutation version {{version}}", "revisionTransition": "Revision {{before}} → {{after}}",
+      "changedFields": "Changed fields", "collectionChange": "{{field}}: {{before}} → {{after}} entries",
+      "valueChange": "{{field}}: {{before}} → {{after}}", "moneyChange": "{{field}}: {{before}} → {{after}}", "unknownChange": "{{field}} changed"
+    },
+    "orderStatuses": { "pending_approval": "Pending approval", "approved": "Approved", "rejected": "Rejected", "cancelled": "Cancelled", "completed": "Completed" },
+    "paymentStatuses": { "unpaid": "Unpaid", "partially_paid": "Partially paid", "paid": "Paid", "failed": "Failed", "partially_refunded": "Partially refunded", "refunded": "Refunded" },
+    "paymentMethods": { "cash_on_delivery": "Cash on delivery", "bank_transfer": "Bank transfer", "arranged_by_phone": "Arranged by phone" },
+    "results": {
+      "SAVED": "Order changes were saved.", "ORDER_STATUS_UPDATED": "Order status was updated.", "PAYMENT_STATUS_UPDATED": "Payment status was updated.", "NOTIFICATION_RETRY_QUEUED": "The notification was queued for another delivery attempt.", "NOTIFICATION_NOT_RETRYABLE": "This notification cannot be retried.",
+      "INVALID_INPUT": "Some order information is invalid. Review the draft and try again.", "FORBIDDEN": "You no longer have permission for this action.",
+      "NOT_FOUND": "The order could not be found.", "STALE": "Another administrator changed this order. Review the latest version before retrying.",
+      "ORDER_NOT_EDITABLE": "Order contents can be edited only while approval is pending.", "INVALID_STATUS_TRANSITION": "This order-status transition is not allowed.",
+      "INVALID_PAYMENT_TRANSITION": "This payment-status transition is not allowed.", "TEMPORARY_FAILURE": "The action could not be completed. Your draft has been kept; try again."
+    },
+    "fields": {
+      "locale": "Order language", "customer.name": "Customer name", "customer.phone": "Customer phone", "customer.email": "Customer email",
+      "customer.city": "City", "customer.deliveryAddress": "Delivery address", "customer.note": "Customer note", "paymentMethod": "Payment method",
+      "items": "Products", "adjustments": "Adjustments", "totalGrossMinor": "VAT-inclusive total", "status": "Order status", "paymentStatus": "Payment status", "order": "Order"
+    }
+  } } }
+}

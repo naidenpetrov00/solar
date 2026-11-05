@@ -3,7 +3,6 @@ import { getT } from "@/i18n.server";
 import { CartContents } from "../_components/cart-contents";
 import { getPageMetadata } from "../_lib/metadata";
 import { localizedPath } from "../_lib/routes";
-import { shopProducts } from "../_lib/shop-catalog";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -13,13 +12,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function CartPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const { t } = await getT("common", { lng: locale });
-  const products = shopProducts.map((product) => ({
-    id: product.id,
-    name: t(product.nameKey),
-    href: localizedPath(locale, product.href),
-    priceBgn: product.priceBgn,
-  }));
-
   return (
     <main id="main-content" className="cart-page">
       <div className="cart-page-inner">
@@ -29,13 +21,14 @@ export default async function CartPage({ params }: { params: Promise<{ locale: s
         </header>
         <CartContents
           locale={locale}
-          products={products}
           shopHref={localizedPath(locale, "shop")}
+          checkoutHref={localizedPath(locale, "checkout")}
           labels={{
             loading: t("pages.cart.loading"),
             empty: t("pages.cart.empty"),
             emptyDescription: t("pages.cart.emptyDescription"),
             continueShopping: t("pages.cart.continueShopping"),
+            buy: t("pages.cart.buy"),
             itemCount: t("pages.cart.itemCount"),
             quantity: t("pages.cart.quantity"),
             unitPrice: t("pages.cart.unitPrice"),
@@ -46,8 +39,14 @@ export default async function CartPage({ params }: { params: Promise<{ locale: s
             removeItem: t("pages.cart.removeItem"),
             quantityChanged: t("pages.cart.quantityChanged"),
             itemRemoved: t("pages.cart.itemRemoved"),
+            unavailableRemoved: t("pages.cart.unavailableRemoved"),
+            hydrationFailed: t("pages.cart.hydrationFailed"),
+            retry: t("pages.cart.retry"),
             storageUnavailable: t("pages.cart.storageUnavailable"),
-            priceNote: t("pages.home.residential.packagePriceNote"),
+            priceNote: t("pages.cart.priceNote"),
+            priceFrom: t("pages.shop.priceFrom"),
+            savePercentage: t("pages.shop.savePercentage"),
+            vatIncluded: t("pages.shop.vatIncluded"),
           }}
         />
       </div>

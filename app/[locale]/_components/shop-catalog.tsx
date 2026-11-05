@@ -1,104 +1,181 @@
-import Link from "next/link";
-import Image from "next/image";
+import { Suspense, type ReactNode } from "react";
+
 import { getT } from "@/i18n.server";
-import { AddToCartButton } from "./add-to-cart-button";
-import { formatBgnPrice, shopCategories } from "../_lib/shop-catalog";
-import { localizedPath } from "../_lib/routes";
+import type {
+  PublicCatalogCategory,
+  PublicCatalogCategoryNode,
+  PublicCatalogListing,
+  PublicCatalogSort,
+} from "@/lib/catalog/public-types";
+import {
+  CatalogClearFilters,
+  CatalogSortControl,
+} from "./catalog-query-controls";
+import { ProductList } from "./catalog-product-list";
+import { CatalogSidebar } from "./catalog-sidebar";
+import { CatalogMedia } from "./catalog-media";
 
-type Props = { locale: string; categorySlug?: string };
+type BrowseProps = {
+  locale: string;
+  categories: PublicCatalogCategoryNode[];
+  listing: PublicCatalogListing;
+  title?: string;
+  introduction?: string;
+  currentCategory?: PublicCatalogCategory;
+  breadcrumbs?: ReactNode;
+  detailedContent?: string | null;
+};
 
-export async function ShopCatalog({ locale, categorySlug }: Props) {
+async function CatalogBrowse({
+  locale,
+  categories,
+  listing,
+  title,
+  introduction,
+  currentCategory,
+  breadcrumbs,
+  detailedContent,
+}: BrowseProps) {
   const { t } = await getT("common", { lng: locale });
-  const activeCategory = shopCategories.find((category) => category.slug === categorySlug);
-  const visibleCategories = activeCategory ? [activeCategory] : shopCategories;
+  const sortOptions: Record<PublicCatalogSort, string> = {
+    "name-asc": t("pages.shop.sortNameAsc"),
+    "name-desc": t("pages.shop.sortNameDesc"),
+    "price-asc": t("pages.shop.sortPriceAsc"),
+    "price-desc": t("pages.shop.sortPriceDesc"),
+  };
+  const filterLabels = {
+    clear: t("pages.shop.clearFilters"),
+    minimum: t("pages.shop.minimum"),
+    maximum: t("pages.shop.maximum"),
+    yes: t("pages.shop.yes"),
+    no: t("pages.shop.no"),
+    updating: t("pages.shop.updatingResults"),
+  };
 
   return (
-    <main id="main-content" className={activeCategory ? "shop-page" : "shop-page shop-page-variant-b"}>
-      <header className="shop-introduction">
-        <div className="shop-introduction-copy">
-          <h1>{t(activeCategory?.titleKey ?? "pages.shop.title")}</h1>
-          <p>{t(activeCategory?.descriptionKey ?? "pages.shop.description")}</p>
-        </div>
-        {!activeCategory && (
-          <div className="shop-hero-media">
-            {/* Temporary licensed image already used on the welcome page. Replace with verified project photography when available. */}
-            <Image
-              src="/images/welcome-solar-hero.jpg"
-              alt={t("pages.shop.heroImageAlt")}
-              fill
-              preload
-              sizes="100vw"
-            />
-          </div>
-        )}
-      </header>
-      <div className="shop-layout">
-        <nav aria-label={t("pages.shop.categoryNavigation")} className="shop-categories">
-          <h2>{t("pages.shop.categories")}</h2>
-          <ul>
-            {shopCategories.map((category) => (
-              <li key={category.slug}>
-                <Link
-                  href={localizedPath(locale, `shop/${category.slug}`)}
-                  aria-current={categorySlug === category.slug ? "page" : undefined}
-                >
-                  {t(category.titleKey)}
-                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="shop-results">
-          {visibleCategories.map((category) => (
-            <section aria-labelledby={`shop-category-${category.slug}`} key={category.slug}>
-              <div className="shop-results-heading">
-                <h2 id={`shop-category-${category.slug}`}>{t(category.titleKey)}</h2>
-                <p>{t("pages.home.residential.packagePriceNote")}</p>
+    <main id="main-content" className="shop-page">
+      <div className="catalog-shell">
+        {breadcrumbs}
+        <header className="catalog-page-heading">
+          {currentCategory?.cover ? (
+            <figure className="catalog-category-cover">
+              <CatalogMedia
+                reference={currentCategory.cover.reference}
+                altText={currentCategory.cover.altText}
+                source="managed"
+                width={currentCategory.cover.width}
+                height={currentCategory.cover.height}
+                sizes="(max-width: 64rem) 100vw, 90rem"
+                preload
+              />
+            </figure>
+          ) : null}
+          <h1>{title ?? t("pages.shop.title")}</h1>
+          <p>{introduction ?? t("pages.shop.description")}</p>
+        </header>
+        <div className="catalog-commerce-layout">
+          <CatalogSidebar
+            locale={locale}
+            categories={categories}
+            currentCategoryId={currentCategory?.id}
+            facets={listing.facets}
+            hasActiveFilters={listing.hasActiveFilters}
+            categoriesLabel={t("pages.shop.categories")}
+            categoryNavigationLabel={t("pages.shop.categoryNavigation")}
+            allProductsLabel={t("pages.shop.allProducts")}
+            expandCategoryLabel={t("pages.shop.expandCategory")}
+            collapseCategoryLabel={t("pages.shop.collapseCategory")}
+            filtersLabel={t("pages.shop.filters")}
+            filterLabels={filterLabels}
+          />
+          <section className="catalog-results" aria-labelledby="catalog-results-title">
+            <h2 id="catalog-results-title" className="sr-only">
+              {t("pages.shop.products")}
+            </h2>
+            <div className="catalog-results-toolbar">
+              <p role="status">
+                {t("pages.shop.resultCount", { count: listing.resultCount })}
+              </p>
+              <Suspense fallback={null}>
+                <CatalogSortControl
+                  value={listing.sort}
+                  label={t("pages.shop.sortBy")}
+                  options={sortOptions}
+                  updating={t("pages.shop.updatingResults")}
+                />
+              </Suspense>
+            </div>
+            {listing.resultCount > 0 ? (
+              <ProductList locale={locale} products={listing.products} />
+            ) : (
+              <div className="catalog-empty-results">
+                <h2>
+                  {listing.hasActiveFilters
+                    ? t("pages.shop.noMatches")
+                    : t(
+                        currentCategory
+                          ? "pages.shop.emptyProducts"
+                          : "pages.shop.emptyCatalog",
+                      )}
+                </h2>
+                {listing.hasActiveFilters ? (
+                  <Suspense fallback={null}>
+                    <CatalogClearFilters label={t("pages.shop.clearFilters")} />
+                  </Suspense>
+                ) : null}
               </div>
-              <div className="residential-package-grid shop-product-grid">
-                {category.products.map((product) => {
-                  const name = t(product.nameKey);
-                  return (
-                    <article className="residential-package-card shop-product-card" key={product.id}>
-                      <Link
-                        className="residential-package-card-link"
-                        href={localizedPath(locale, product.href)}
-                        scroll
-                        transitionTypes={["package-detail"]}
-                      >
-                        <div aria-hidden="true" className="residential-package-visual" />
-                        <div className="residential-package-card-content">
-                          <p className="residential-package-type">{t(product.energyTypeKey)}</p>
-                          <h3>{name}</h3>
-                          <p className="residential-package-profile">{t(product.profileKey)}</p>
-                          <span className="residential-package-card-action">
-                            {t("pages.home.residential.viewPackage")}
-                            <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                          </span>
-                        </div>
-                      </Link>
-                      <div className="shop-product-purchase">
-                        <p className="residential-package-price">
-                          <span>{t("pages.home.residential.packagePrice")}</span>
-                          <strong>{formatBgnPrice(locale, product.priceBgn)}</strong>
-                        </p>
-                        <AddToCartButton
-                          id={product.id}
-                          name={name}
-                          addLabel={t("pages.shop.addToCart")}
-                          addedLabel={t("pages.shop.addedToCart")}
-                          accessibleLabel={t("pages.shop.addNamedToCart", { name })}
-                        />
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+            )}
+            {detailedContent ? (
+              <div className="catalog-category-description">{detailedContent}</div>
+            ) : null}
+          </section>
         </div>
       </div>
     </main>
+  );
+}
+
+export function CatalogLanding({
+  locale,
+  categories,
+  listing,
+}: {
+  locale: string;
+  categories: PublicCatalogCategoryNode[];
+  listing: PublicCatalogListing;
+}) {
+  return (
+    <CatalogBrowse
+      locale={locale}
+      categories={categories}
+      listing={listing}
+    />
+  );
+}
+
+export function CatalogCategoryView({
+  locale,
+  categories,
+  category,
+  listing,
+  breadcrumbs,
+}: {
+  locale: string;
+  categories: PublicCatalogCategoryNode[];
+  category: PublicCatalogCategory;
+  listing: PublicCatalogListing;
+  breadcrumbs: ReactNode;
+}) {
+  return (
+    <CatalogBrowse
+      locale={locale}
+      categories={categories}
+      listing={listing}
+      title={category.name}
+      introduction={category.introduction}
+      currentCategory={category}
+      breadcrumbs={breadcrumbs}
+      detailedContent={category.detailedContent}
+    />
   );
 }

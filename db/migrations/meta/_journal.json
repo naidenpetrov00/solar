@@ -22,6 +22,97 @@
       "when": 1791966440867,
       "tag": "0002_add_administrator_role",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792053456685,
+      "tag": "0003_useful_giant_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792415523617,
+      "tag": "0004_localized_category_slugs",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792482961485,
+      "tag": "0005_lying_spitfire",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792500243306,
+      "tag": "0006_light_leopardon",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792502306060,
+      "tag": "0007_material_shard",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793184000000,
+      "tag": "0008_portable_catalog_media",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793369406118,
+      "tag": "0009_pink_freak",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793438937787,
+      "tag": "0010_bizarre_post",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793439721332,
+      "tag": "0011_ancient_misty_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1793719068321,
+      "tag": "0012_add-order-notification-outbox",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1793810102657,
+      "tag": "0013_link-order-email-recipients-to-users",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1793868630489,
+      "tag": "0014_add-order-customer-ownership",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1793874166351,
+      "tag": "0015_add-customer-order-email-link",
+      "breakpoints": true
     }
   ]
 }

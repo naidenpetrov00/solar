@@ -1,18 +1,12 @@
-import { getT } from "@/i18n.server";
-import { PageTitle } from "../_components/page-title";
-import { getPageMetadata } from "../_lib/metadata";
+import { permanentRedirect } from "next/navigation";
 
-export async function generateMetadata({
+import { localizedPath } from "../_lib/routes";
+
+export default async function PackagesRedirect({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  return getPageMetadata(locale, "packages", "packages");
-}
-
-export default async function PackagesPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  const { t } = await getT("common", { lng: locale });
-  return <PageTitle title={t("pages.packages.title")} />;
+  permanentRedirect(localizedPath(locale, "shop"));
 }

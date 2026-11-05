@@ -1,0 +1,103 @@
+.dashboard-catalog-section > form,
+.dashboard-catalog-section > .dashboard-catalog-specification-list {
+  padding-bottom: 1.5rem;
+}
+
+.dashboard-catalog-section > form {
+  container-type: inline-size;
+}
+
+.dashboard-catalog-field,
+.dashboard-catalog-dialog label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.dashboard-catalog-field + .dashboard-catalog-field,
+.dashboard-catalog-language-panel
+  .dashboard-catalog-field
+  + .dashboard-catalog-seo-fields,
+.dashboard-catalog-seo-fields + .dashboard-catalog-field,
+.dashboard-catalog-dialog label + label {
+  margin-top: 1.1rem;
+}
+
+.dashboard-catalog-product-form-grid > .dashboard-catalog-field,
+.dashboard-catalog-product-commerce-grid > .dashboard-catalog-field {
+  align-content: start;
+  margin-top: 0;
+}
+
+.dashboard-catalog-field-heading label,
+.dashboard-catalog-dialog label > span,
+.dashboard-catalog-option-heading strong {
+  color: var(--dashboard-foreground);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.dashboard-catalog-field input,
+.dashboard-catalog-field textarea,
+.dashboard-catalog-field select,
+.dashboard-catalog-dialog input,
+.dashboard-catalog-dialog textarea,
+.dashboard-catalog-dialog select,
+.dashboard-catalog-option input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--dashboard-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--dashboard-foreground);
+  font: inherit;
+}
+
+.dashboard-select-control {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.dashboard-select-control > .dashboard-select {
+  width: 100%;
+  padding-inline-end: 2.75rem;
+  appearance: none;
+  cursor: pointer;
+}
+
+.dashboard-select-control > svg {
+  position: absolute;
+  top: 50%;
+  inset-inline-end: 0.85rem;
+  transform: translateY(-50%);
+  color: var(--dashboard-muted);
+  pointer-events: none;
+}
+
+.dashboard-select-control > .dashboard-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.dashboard-select-control:has(.dashboard-select:focus-visible) > svg {
+  color: #f59e0b;
+}
+
+.dashboard-catalog-field input[readonly] {
+  background: color-mix(in srgb, var(--dashboard-muted) 7%, transparent);
+  color: var(--dashboard-muted);
+}
+
+.dashboard-catalog-field textarea,
+.dashboard-catalog-dialog textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.dashboard-catalog-field-error {
+  color: #b91c1c;
+  font-weight: 700;
+}

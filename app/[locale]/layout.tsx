@@ -3,9 +3,15 @@ import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import { I18nProvider } from "next-i18next/client";
 import { getResources, getT, generateI18nStaticParams } from "@/i18n.server";
-import { getCurrentUser, hasPermission } from "@/lib/authorization";
+import { getCurrentUser } from "@/lib/authorization";
+import { hasPermission } from "@/lib/permission-policy";
+import { getPublicSiteUrl } from "@/lib/server-env";
 import { Navigation } from "./_components/navigation";
-import { routeDefinitions, supportedLocales } from "./_lib/routes";
+import {
+  openGraphLocale,
+  routeDefinitions,
+  supportedLocales,
+} from "./_lib/routes";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -26,6 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { t, lng } = await getT("common");
 
   return {
+    metadataBase: getPublicSiteUrl(),
     title: t("metadata.title"),
     description: t("metadata.description"),
     alternates: {
@@ -34,12 +41,13 @@ export async function generateMetadata(): Promise<Metadata> {
         en: "/en",
         tr: "/tr",
         uk: "/uk",
+        "x-default": "/",
       },
     },
     openGraph: {
       title: t("metadata.title"),
       description: t("metadata.description"),
-      locale: lng,
+      locale: openGraphLocale(lng),
       type: "website",
     },
   };
@@ -58,7 +66,8 @@ export default async function LocaleLayout({
     getCurrentUser(),
   ]);
   const savedTheme = cookieStore.get("solar-theme")?.value;
-  const initialTheme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : undefined;
+  const initialTheme =
+    savedTheme === "light" || savedTheme === "dark" ? savedTheme : undefined;
   const { t, i18n } = await getT("common", { lng: locale });
   const resources = getResources(i18n, ["common"], [locale, "bg"]);
   const navigationRoutes = routeDefinitions.map(({ slug, key }) => ({
@@ -71,10 +80,7 @@ export default async function LocaleLayout({
       t(`languages.${supportedLocale}`),
     ]),
   );
-  const canViewDashboard = hasPermission(
-    currentUser?.role,
-    "dashboard:view",
-  );
+  const canViewDashboard = hasPermission(currentUser?.role, "dashboard:view");
 
   return (
     <html
@@ -102,15 +108,21 @@ export default async function LocaleLayout({
             themeLabel={t("accessibility.themeLabel")}
             themeLight={t("accessibility.themeLight")}
             themeDark={t("accessibility.themeDark")}
-            user={currentUser ? {
-              name: currentUser.name.trim() || currentUser.email,
-              email: currentUser.email,
-            } : undefined}
+            user={
+              currentUser
+                ? {
+                    name: currentUser.name.trim() || currentUser.email,
+                    email: currentUser.email,
+                  }
+                : undefined
+            }
             signInLabel={t("navigation.signIn")}
             signUpLabel={t("navigation.createAccount")}
             accountLabel={t("navigation.account")}
+            myOrdersLabel={t("navigation.myOrders")}
             dashboardLabel={t("navigation.dashboard")}
             dashboardNavigationLabel={t("accessibility.dashboardNavigation")}
+            accountNavigationLabel={t("accessibility.accountNavigation")}
             canViewDashboard={canViewDashboard}
             signOutLabel={t("navigation.signOut")}
             signingOutLabel={t("navigation.signingOut")}

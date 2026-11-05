@@ -1,10 +1,7 @@
 import "server-only";
 
-import {
-  localizedPath,
-  supportedLocales,
-  type SupportedLocale,
-} from "@/app/[locale]/_lib/routes";
+import { localizedPath, supportedLocales } from "@/app/[locale]/_lib/routes";
+import type { SupportedLocale } from "@/app/[locale]/_lib/routes";
 
 type AuthEmailCallbackRoute = "verify-email" | "reset-password";
 

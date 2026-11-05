@@ -1,0 +1,55 @@
+/* Catalog management extends the dashboard's ruled, high-contrast operating surface. */
+.dashboard-catalog-main {
+  width: min(100%, 104rem);
+}
+
+.dashboard-catalog-introduction {
+  max-width: 62rem;
+}
+
+.dashboard-catalog-readonly {
+  margin: 2rem 0 0;
+  padding: 0.85rem 1rem;
+  border-inline-start: 0.25rem solid #f59e0b;
+  background: color-mix(in srgb, #f59e0b 12%, transparent);
+  color: var(--dashboard-foreground);
+  line-height: 1.5;
+}
+
+.dashboard-catalog-workspace {
+  display: grid;
+  min-height: 38rem;
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  border-block: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-tree,
+.dashboard-catalog-detail {
+  min-width: 0;
+  padding-block: 1.5rem;
+}
+
+.dashboard-catalog-tree-heading,
+.dashboard-catalog-editor-header,
+.dashboard-catalog-form-actions,
+.dashboard-catalog-dialog-actions,
+.dashboard-catalog-options-heading,
+.dashboard-catalog-option-heading,
+.dashboard-catalog-field-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-catalog-tree h2,
+.dashboard-catalog-editor h2,
+.dashboard-catalog-editor h3,
+.dashboard-catalog-tree p,
+.dashboard-catalog-editor p,
+.dashboard-catalog-editor dl,
+.dashboard-catalog-dialog h2,
+.dashboard-catalog-dialog p,
+.dashboard-catalog-dialog dl {
+  margin: 0;
+}

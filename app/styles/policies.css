@@ -1,0 +1,21 @@
+.policy-page { min-height: 70vh; padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 6vw, 6rem); background: var(--page-background); color: var(--page-foreground); }
+.policy-document { display: grid; gap: clamp(2.5rem, 5vw, 4rem); width: min(100%, 74ch); margin-inline: auto; }
+.policy-heading { display: grid; gap: 1rem; }
+.policy-heading h1 { margin: 0; font-size: clamp(2.75rem, 7vw, 5.5rem); font-weight: 600; letter-spacing: -0.04em; line-height: 0.96; text-wrap: balance; }
+.policy-heading p, .policy-document section p, .policy-document li { line-height: 1.65; }
+.policy-heading p { max-width: 62ch; margin: 0; font-size: 1.05rem; }
+.policy-incomplete { padding: 1rem; border: 1px solid currentColor; }
+.policy-incomplete p { margin: 0; font-weight: 600; line-height: 1.55; }
+.policy-document section { display: grid; gap: 1rem; scroll-margin-top: 6rem; }
+.policy-document h2 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.25rem); letter-spacing: -0.025em; }
+.policy-document section p, .policy-document ul { margin: 0; }
+.policy-document ul { display: grid; gap: 0.65rem; padding-left: 1.25rem; }
+.policy-document dl { display: grid; margin: 0; border-top: 1px solid currentColor; }
+.policy-document dl > div { display: grid; gap: 0.35rem; padding: 1rem 0; border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent); }
+.policy-document dt { font-weight: 650; }
+.policy-document dd { margin: 0; line-height: 1.55; }
+.policy-missing { font-style: italic; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 0.2em; }
+.policy-document a { color: inherit; font-weight: 650; text-underline-offset: 0.2em; }
+@media (min-width: 48rem) {
+  .policy-document dl > div { grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1fr); gap: 2rem; }
+}

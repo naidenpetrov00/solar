@@ -3,11 +3,20 @@ import "server-only";
 type ServerEnvironmentVariable =
   | "DATABASE_URL"
   | "BETTER_AUTH_SECRET"
+  | "ORDER_CONFIRMATION_SIGNING_KEY"
+  | "ORDER_NOTIFICATION_DISPATCH_SECRET"
   | "BETTER_AUTH_URL"
+  | "PUBLIC_SITE_URL"
   | "SMTP_HOST"
   | "SMTP_PORT"
   | "SMTP_SECURE"
-  | "SMTP_FROM";
+  | "SMTP_FROM"
+  | "CATALOG_STORAGE_PUBLIC_BASE_URL"
+  | "CATALOG_STORAGE_S3_ENDPOINT"
+  | "CATALOG_STORAGE_S3_REGION"
+  | "CATALOG_STORAGE_S3_BUCKET"
+  | "CATALOG_STORAGE_S3_ACCESS_KEY_ID"
+  | "CATALOG_STORAGE_S3_SECRET_ACCESS_KEY";
 
 export function requireServerEnvironmentVariable(
   name: ServerEnvironmentVariable,
@@ -19,6 +28,30 @@ export function requireServerEnvironmentVariable(
   }
 
   return value;
+}
+
+export function getPublicSiteUrl(): URL {
+  const value = requireServerEnvironmentVariable("PUBLIC_SITE_URL");
+  let url: URL;
+
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error("PUBLIC_SITE_URL must be an absolute HTTP(S) URL.");
+  }
+
+  if (
+    (url.protocol !== "http:" && url.protocol !== "https:") ||
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash ||
+    (url.pathname !== "/" && url.pathname !== "")
+  ) {
+    throw new Error("PUBLIC_SITE_URL must be an HTTP(S) origin without credentials, a path, a query, or a hash.");
+  }
+
+  return new URL(url.origin);
 }
 
 export type SmtpEnvironment = {

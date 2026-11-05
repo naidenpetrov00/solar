@@ -1,6 +1,6 @@
 # Solar website
 
-Public solar-installation website built with Next.js. This repository also contains the milestone-one server-side identity and database foundation.
+Public solar-installation website built with Next.js, including a database-driven multilingual catalog, cart, customer authentication, and administration dashboard.
 
 ## Local prerequisites
 
@@ -8,7 +8,7 @@ Public solar-installation website built with Next.js. This repository also conta
 - npm
 - Docker Desktop or another Docker Engine with Docker Compose
 
-The Compose file provisions PostgreSQL and Mailpit for local development only. They are not production infrastructure, and Docker does not need to be running for schema generation or static validation.
+The Compose file provisions PostgreSQL, Mailpit, and development-only LocalStack S3 object storage. They are not production infrastructure, and Docker does not need to be running for schema generation or static validation.
 
 ## Environment configuration
 
@@ -35,8 +35,21 @@ Configuration variables:
 | `POSTGRES_PASSWORD` | Local container database password |
 | `POSTGRES_PORT` | Host port bound to PostgreSQL |
 | `DATABASE_URL` | PostgreSQL connection string used by the application and Drizzle |
+| `PUBLIC_SITE_URL` | Canonical public website origin used by metadata, sitemap, and structured data |
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
-| `BETTER_AUTH_URL` | Canonical application origin, such as `http://localhost:3000` locally |
+| `ORDER_CONFIRMATION_SIGNING_KEY` | Separate high-entropy secret used only to sign short-lived public order-confirmation state; do not reuse an authentication or session secret |
+| `ORDER_NOTIFICATION_DISPATCH_SECRET` | Separate high-entropy bearer secret, at least 32 bytes, used only by the private order-notification dispatcher |
+| `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
+| `BETTER_AUTH_TRUSTED_ORIGINS` | Optional comma-separated additional origins for LAN or preview development, such as the exact URL opened on a phone |
+| `LOCALSTACK_GATEWAY_PORT` | Loopback-only LocalStack S3 gateway port; defaults to `4566` |
+| `LOCALSTACK_BIND_ADDRESS` | LocalStack host bind address; keep `127.0.0.1` by default and use `0.0.0.0` only for trusted LAN testing |
+| `CATALOG_STORAGE_BROWSER_ORIGIN` | Exact browser origin added to local object-storage CORS for LAN testing |
+| `CATALOG_STORAGE_PUBLIC_BASE_URL` | Public base URL serving immutable `catalog/assets/` objects; local LocalStack uses path-style addressing |
+| `CATALOG_STORAGE_S3_ENDPOINT` | Server-only S3-compatible endpoint; local LocalStack or production Hetzner Object Storage |
+| `CATALOG_STORAGE_S3_REGION` | S3-compatible region matching the bucket location |
+| `CATALOG_STORAGE_S3_BUCKET` | Bucket used only for catalog-managed public assets and private pending uploads |
+| `CATALOG_STORAGE_S3_ACCESS_KEY_ID` | LocalStack uses `test`; production uses a server-only least-privilege object-storage access key |
+| `CATALOG_STORAGE_S3_SECRET_ACCESS_KEY` | LocalStack uses `test`; production uses a server-only object-storage secret key |
 | `GOOGLE_CLIENT_ID` | Optional Google OAuth client ID; enable it together with `GOOGLE_CLIENT_SECRET` |
 | `GOOGLE_CLIENT_SECRET` | Optional Google OAuth client secret; never expose it to browser code |
 | `FACEBOOK_CLIENT_ID` | Optional Facebook app ID; enable it together with `FACEBOOK_CLIENT_SECRET` |
@@ -46,7 +59,7 @@ Configuration variables:
 | `SMTP_HOST` | SMTP server hostname; use `127.0.0.1` when Next.js runs on the host |
 | `SMTP_PORT` | SMTP server port; Mailpit uses `1025` locally |
 | `SMTP_SECURE` | Whether SMTP uses implicit TLS; Mailpit uses `false` locally |
-| `SMTP_FROM` | Sender name and address used for authentication emails |
+| `SMTP_FROM` | Sender name and address used for application transactional emails |
 | `SMTP_USERNAME` | Optional SMTP username; production must set it together with `SMTP_PASSWORD` |
 | `SMTP_PASSWORD` | Optional SMTP password; production must set it together with `SMTP_USERNAME` |
 
@@ -72,11 +85,43 @@ Stop the container while preserving the named volume:
 docker compose down
 ```
 
-The following command deletes both the local PostgreSQL data and Mailpit's stored emails. Use it only when a deliberate reset is required:
+The following command deletes local PostgreSQL data, Mailpit's stored emails, and LocalStack objects. Use it only when a deliberate reset is required:
 
 ```powershell
 docker compose down --volumes
 ```
+
+## Local object storage
+
+Running the full local stack starts the LocalStack S3 emulator alongside PostgreSQL and Mailpit:
+
+```powershell
+docker compose up -d
+docker compose ps
+docker compose logs object-storage
+```
+
+The LocalStack READY hook creates the `solar-catalog` bucket and applies the reviewed public-read, CORS, and lifecycle configuration idempotently. A successful startup log includes `LocalStack catalog bucket 'solar-catalog' is ready.` The S3 gateway is available at `http://127.0.0.1:4566`; this S3-only archive has no local management console, and the catalog dashboard remains the media-management interface.
+
+For testing from a phone on the same LAN, loopback addresses are not usable: on the phone, `127.0.0.1` means the phone itself. Set `LOCALSTACK_BIND_ADDRESS=0.0.0.0`, replace `127.0.0.1` with the development computer's LAN IP in `CATALOG_STORAGE_PUBLIC_BASE_URL` and `CATALOG_STORAGE_S3_ENDPOINT`, and set `CATALOG_STORAGE_BROWSER_ORIGIN` to the exact browser origin, for example `http://192.168.1.123:3000`. Recreate the object-storage service after changing these values so the port binding and CORS policy are applied. Keep this LAN exposure limited to a trusted private network and return `LOCALSTACK_BIND_ADDRESS` to `127.0.0.1` afterward.
+
+Check the emulator health from PowerShell with:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:4566/_localstack/health
+```
+
+The local bucket keeps `catalog/pending/*` private and exposes only `catalog/assets/*` for anonymous download. Direct browser POST uploads are allowed from both local Next.js origins. A lifecycle rule expires pending objects after two days and never applies to final assets. To reapply the local bucket baseline after changing bootstrap assets, recreate the emulator:
+
+```powershell
+docker compose up -d --force-recreate object-storage
+```
+
+`docker compose down` preserves the PostgreSQL, Mailpit, and LocalStack volumes. Do not reset PostgreSQL or LocalStack independently: catalog rows can then point to missing local objects, or objects can be left unreferenced. Use the full `down --volumes` reset above when a clean local catalog is required.
+
+Local development uses LocalStack's conventional `test`/`test` signing credentials. They are emulator values, not secrets or a substitute for production access control. Production must use restricted Hetzner Object Storage credentials through the same S3-compatible adapter and immutable provider/key model.
+
+The pinned `s3-community-archive` image is frozen and receives no security updates. It is intentionally bound to loopback for local development only and must not be exposed publicly, used in production, or treated as proof of exact Hetzner behavior. Moving to another S3-compatible development or production service changes configuration, not stored provider/key data or catalog code.
 
 ## Drizzle schema and migrations
 
@@ -89,7 +134,9 @@ npm run db:migrate
 The schema is split by ownership:
 
 - `db/schema/auth.ts` contains the Better Auth identity, session, account, verification, and Admin plugin fields.
+- `db/schema/catalog-*.ts` separates category, specification, product, and media tables from their relations.
 - `db/schema/profiles.ts` contains application-owned profile data separately from authentication records.
+- `db/schema/order-*.ts` contains persistent order revisions, item snapshots, adjustments, lifecycle state, and audit history.
 - `db/schema/index.ts` exposes the complete Drizzle schema.
 
 After an intentional schema change, generate and review a new migration:
@@ -153,7 +200,92 @@ When both Facebook OAuth variables are configured, the same localized pages also
 
 Better Auth's installed version enables its built-in limiter by default in production, including stricter limits for sign-in and sign-up routes. A later milestone must still review and configure persistent rate limiting suitable for the final self-hosted or multi-instance deployment.
 
-The customer profile menu and logout experience are available. An admin interface is not included yet.
+The customer profile menu and logout experience are available. The administration dashboard includes user and database-driven catalog management for authorized roles.
+
+## Database-driven catalog
+
+The public shop, product routes, category routes, and cart read from the PostgreSQL catalog. Catalog categories have Bulgarian and English route slugs; Turkish and Ukrainian use the project's established locale fallback rules. Product slugs are unique within the locale-aware routing model. A slug may change only before the record's first publication; `published_at` records that first publication permanently and is retained when an item is unpublished, archived, or restored.
+
+Products receive an immutable, database-generated SKU such as `PRD-000001`. Optional brand, GTIN/EAN, and MPN values are stored directly on the product. Brand is non-localized, GTIN/EAN is checksum-validated by the server domain, and MPN is not globally unique.
+
+Prices are stored as EUR integer minor units. Administrator input may be VAT-inclusive or VAT-exclusive, but the fixed catalog VAT rate is 20 percent and the public VAT-inclusive amount is calculated with integer half-up rounding. Direct-purchase products require an exact price and manual `in_stock` or `out_of_stock` availability. Enquiry products have no availability value and may use exact, from, or price-on-request presentation.
+
+Normal catalog management uses draft, published, and archived lifecycle states and exposes no hard-delete command. Foreign keys protect referenced data, while reviewed migrations and deliberate maintenance may delete records in dependency-safe order. Category cycles beyond direct self-parenting are prevented by the transactional catalog management service rather than database triggers.
+
+Both `administrator` and `admin` roles have `catalog:view` and `catalog:manage`; customers have neither. There is no separate publishing role in this milestone.
+
+## Persistent order domain
+
+Orders use an internal UUID and a separate generated customer-facing order number. Checkout submissions are stored as immutable revision 1 snapshots containing customer and delivery data, payment method, localized product identity, catalog and promotion pricing, VAT, quantities, and totals. Administrator content changes append complete revisions; they do not rewrite the original submission or earlier history.
+
+The stable order record may reference the Better Auth user that submitted checkout. This relationship is nullable for guest orders, is derived only from the trusted server session, and is never inferred from the checkout email address. Deleting an account clears the relationship without deleting the order or its immutable customer snapshots. Submission audit events record `guest` for unauthenticated checkout and `customer` with a trusted actor snapshot for authenticated checkout; later administrative mutations continue to record `administrator` actors.
+
+Order lifecycle status and payment status are independent. Rejected, cancelled, and completed orders cannot have their contents or lifecycle status changed, but authorized payment transitions remain possible and are recorded separately. Every administrator mutation uses optimistic concurrency and appends an audit event with the actor snapshot and meaningful before/after data. Orders are not deleted as a consequence of rejection, cancellation, or completion.
+
+All order money is stored as EUR integer minor units and calculated on the server with integer VAT rounding. Public cart prices are advisory: order creation reloads eligible catalog products and active promotions transactionally before persisting snapshots. Both `administrator` and `admin` roles have `order:view` and `order:manage`; customers have neither.
+
+## Checkout and customer policies
+
+The localized checkout sends only customer-entered details, product IDs and quantities, payment method, locale, and an idempotency key to the server-owned order service. When a valid account session exists, the server associates the new order with that stable user ID; browser input cannot provide ownership, and matching account and checkout email addresses never claim an order. A successful submission clears only the submitted cart items and uses a short-lived, purpose-signed confirmation cookie containing the order number and expiry; there is no public order lookup.
+
+Verified operator, privacy, processor, retention, delivery, cancellation, return, complaint, and contract facts belong in `lib/legal/policy-facts.ts`. Official Bulgarian and EU materials are structural references, not publishable policy copy. Development routes display explicit incomplete markers, while production rendering fails until every required fact is non-empty. Configure `ORDER_CONFIRMATION_SIGNING_KEY` independently from authentication secrets before using checkout.
+
+## Catalog object storage
+
+Managed product images, product PDF documents, and category covers use an application-owned storage boundary backed initially by Hetzner's S3-compatible API. The database stores the logical provider ID and immutable object key, never a Hetzner URL. Browser uploads go directly to the bucket through short-lived signed POST policies; the Next.js server authorizes and verifies uploads but does not proxy file bodies.
+
+Use a dedicated bucket. `catalog/pending/*` must remain private. Anonymous reads may be granted only to `catalog/assets/*`; anonymous list, write, and delete access must remain denied. The application credential needs only the object actions required to create signed uploads, inspect temporary objects, copy them to final keys, and delete owned objects: `s3:PutObject`, `s3:GetObject`, `s3:DeleteObject`, and the equivalent metadata/head access for the two prefixes. Bucket-policy and credential administration should use a separate infrastructure identity.
+
+The bucket CORS policy must name the exact local and production administration origins. Do not use `*` in production. An AWS CLI-compatible example is:
+
+```json
+{
+  "CORSRules": [
+    {
+      "AllowedOrigins": ["http://localhost:3000", "https://www.example.com"],
+      "AllowedMethods": ["POST"],
+      "AllowedHeaders": ["*"],
+      "ExposeHeaders": ["ETag"],
+      "MaxAgeSeconds": 3600
+    }
+  ]
+}
+```
+
+Apply and verify it with a separately configured infrastructure profile, replacing the endpoint, bucket, and file paths:
+
+```powershell
+aws s3api put-bucket-cors --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket --cors-configuration file://catalog-cors.json
+aws s3api get-bucket-cors --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket
+```
+
+Abandoned temporary uploads require this storage-level lifecycle safety net. The prefix filter is deliberate and must never be broadened to `catalog/` or `catalog/assets/`:
+
+```json
+{
+  "Rules": [
+    {
+      "ID": "expire-catalog-pending-after-two-days",
+      "Status": "Enabled",
+      "Filter": { "Prefix": "catalog/pending/" },
+      "Expiration": { "Days": 2 }
+    }
+  ]
+}
+```
+
+Apply and read back the lifecycle configuration:
+
+```powershell
+aws s3api put-bucket-lifecycle-configuration --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket --lifecycle-configuration file://catalog-lifecycle.json
+aws s3api get-bucket-lifecycle-configuration --endpoint-url https://fsn1.your-objectstorage.com --bucket your-catalog-bucket
+```
+
+Verify separately that a test object under `catalog/pending/` expires and that objects under `catalog/assets/` do not match the rule. Application cleanup removes expired upload records and retries deletion tombstones during later media operations; the lifecycle rule guarantees storage cleanup even when no later request occurs.
+
+For local development, use a dedicated non-production S3-compatible bucket or a loopback S3-compatible service and set all six catalog-storage variables. HTTP is accepted only for loopback endpoints outside production. Production endpoints and public bases must use HTTPS. PDF objects are stored with `application/pdf` and attachment disposition; add `X-Content-Type-Options: nosniff` at the CDN or reverse-proxy layer if the direct object service cannot emit it.
+
+Migration order is: review and apply the committed database migration, configure bucket read policy/CORS/lifecycle, deploy server-only credentials, and then deploy the application. Never commit credentials. For a future S3-compatible provider, copy `catalog/assets/*` with identical keys and change the endpoint, region, bucket, public base, and credentials. Pending uploads should be allowed to expire before cutover. A non-S3 provider requires a new adapter behind the same narrow boundary; catalog schema, editor, and public presentation remain unchanged.
 
 ## Database backup expectation
 
@@ -188,6 +320,22 @@ Open the loopback-only inbox at `http://localhost:8025`. The local SMTP server l
 When Next.js runs directly on the host, keep `SMTP_HOST=127.0.0.1`. If the application is later placed in the same Compose network, use `SMTP_HOST=mailpit` instead. None of the mail variables should use the `NEXT_PUBLIC_` prefix.
 
 Mailpit is a development capture service, not a production delivery provider. Production still requires a selected SMTP account, a verified sender domain, delivery monitoring, and both SMTP credentials when the provider requires authentication.
+
+## Order notification dispatcher
+
+Order emails use a PostgreSQL transactional outbox. Creating or changing an order stores notification intents in the same database transaction; SMTP delivery happens only after commit and never changes the order result. Delivery is at-least-once: a process failure after SMTP acceptance but before the `sent` update may produce a duplicate message.
+
+Configure `ORDER_NOTIFICATION_DISPATCH_SECRET` independently from authentication and confirmation secrets. A production scheduler must call the private endpoint once per minute over HTTPS:
+
+```sh
+curl --fail --silent --show-error --request POST \
+  --header "Authorization: Bearer $ORDER_NOTIFICATION_DISPATCH_SECRET" \
+  "https://your-production-origin.example/api/internal/order-notifications/dispatch"
+```
+
+The endpoint returns `204` after a safely handled batch, including when there is no work, `401` for invalid credentials, and a bodyless `500` for a batch-level infrastructure failure. Cron monitoring should alert on non-2xx responses. Keep the secret in the scheduler's secret store rather than the crontab command itself.
+
+`after()` may accelerate delivery after an order mutation, but the one-minute scheduler is the recovery mechanism and source of operational reliability. Self-hosted Next.js processes must use graceful shutdown so in-flight requests receive time to finish; draining does not replace the scheduler or the outbox lease recovery.
 
 ## Google OAuth configuration
 

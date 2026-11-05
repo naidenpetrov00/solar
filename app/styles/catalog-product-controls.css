@@ -1,0 +1,128 @@
+.dashboard-catalog-product-form-grid,
+.dashboard-catalog-product-commerce-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.dashboard-catalog-product-title-editor {
+  display: grid;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-product-category-options {
+  display: grid;
+  gap: 0.7rem;
+  min-width: 0;
+  margin: 0;
+  padding: 1rem 0;
+  border: 0;
+  border-block: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-product-category-options legend,
+.dashboard-catalog-product-specification > label {
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.dashboard-catalog-product-category-options label,
+.dashboard-catalog-media-flags label {
+  display: flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.55rem;
+  width: max-content;
+  max-width: 100%;
+}
+
+.dashboard-catalog-product-category-options input,
+.dashboard-catalog-media-flags input {
+  width: 1.1rem;
+  min-height: 1.1rem;
+}
+
+.dashboard-catalog-product-categories {
+  border-block: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-catalog-product-categories > summary {
+  min-height: 2.75rem;
+  padding-block: 0.8rem;
+  font-size: 0.86rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.dashboard-catalog-product-categories-body,
+.dashboard-catalog-category-role-help,
+.dashboard-catalog-category-picker,
+.dashboard-catalog-custom-options,
+.dashboard-catalog-removed-specifications {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dashboard-catalog-product-categories-body {
+  padding-bottom: 1.25rem;
+}
+
+.dashboard-catalog-product-categories-body > p,
+.dashboard-catalog-category-role-help p,
+.dashboard-catalog-custom-specification > p {
+  margin: 0;
+  color: var(--dashboard-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.dashboard-catalog-category-role-help {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dashboard-catalog-category-picker {
+  padding: 0.75rem;
+  border: 1px solid var(--dashboard-rule);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--dashboard-foreground) 2.5%, transparent),
+      transparent 7rem
+    ),
+    color-mix(in srgb, var(--dashboard-surface) 82%, transparent);
+}
+
+.dashboard-catalog-category-tree-list {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dashboard-catalog-category-tree-list .dashboard-catalog-category-tree-list {
+  margin-block-start: 0.375rem;
+  margin-inline-start: 1.375rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 1px solid
+    color-mix(in srgb, var(--dashboard-foreground) 22%, transparent);
+}
+
+.dashboard-catalog-category-tree-item {
+  position: relative;
+  min-width: 0;
+}
+
+.dashboard-catalog-category-tree-list
+  .dashboard-catalog-category-tree-list
+  > .dashboard-catalog-category-tree-item::before {
+  position: absolute;
+  inset-block-start: 1.5rem;
+  inset-inline-start: -1rem;
+  width: 0.75rem;
+  border-block-start: 1px solid
+    color-mix(in srgb, var(--dashboard-foreground) 22%, transparent);
+  content: "";
+}

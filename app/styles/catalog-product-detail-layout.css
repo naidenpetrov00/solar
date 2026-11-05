@@ -1,0 +1,167 @@
+.catalog-product-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  color: var(--page-foreground);
+}
+
+.catalog-product-detail-media {
+  min-width: 0;
+}
+
+.catalog-product-gallery-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.catalog-product-detail-empty-media {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: color-mix(
+    in srgb,
+    var(--page-foreground) 10%,
+    var(--page-background)
+  );
+}
+
+.catalog-product-detail-copy {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+}
+
+.catalog-product-detail-copy header,
+.catalog-product-detail-commerce,
+.catalog-product-detail-facts,
+.catalog-product-detail-specifications,
+.catalog-product-gallery {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.catalog-product-gallery-viewport {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: color-mix(
+    in srgb,
+    var(--page-foreground) 7%,
+    var(--page-background)
+  );
+  touch-action: pan-y;
+}
+
+.catalog-product-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  border-color: color-mix(in srgb, var(--page-foreground) 28%, transparent);
+  background: var(--page-background);
+  color: var(--page-foreground);
+  transform: translateY(-50%);
+}
+
+.catalog-product-gallery-arrow:hover:not(:disabled) {
+  background: var(--page-foreground);
+  color: var(--page-background);
+}
+
+.catalog-product-gallery-arrow svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.catalog-product-gallery-arrow--previous {
+  left: 1rem;
+}
+
+.catalog-product-gallery-arrow--next {
+  right: 1rem;
+}
+
+.catalog-product-gallery-dots {
+  display: flex;
+  max-width: 100%;
+  justify-content: center;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+
+.catalog-product-gallery-dot.ui-button--informational {
+  flex: 0 0 2.75rem;
+  padding: 0;
+  text-decoration: none;
+}
+
+.catalog-product-gallery-dot.ui-button--informational:hover:not(:disabled) {
+  transform: none;
+}
+
+.catalog-product-gallery-dot span {
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.catalog-product-gallery-dot[aria-current="true"] span {
+  background: currentColor;
+}
+
+.catalog-product-detail h1,
+.catalog-product-detail h2,
+.catalog-product-detail p,
+.catalog-product-detail dl {
+  margin: 0;
+}
+
+.catalog-product-detail h1 {
+  font-size: clamp(2.1rem, 5vw, 4.5rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.catalog-product-detail h2 {
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.catalog-product-detail-summary,
+.catalog-product-detail-description {
+  max-width: 65ch;
+  line-height: 1.6;
+}
+
+.catalog-product-detail-description {
+  white-space: pre-line;
+}
+
+.catalog-product-detail-commerce {
+  gap: 0.25rem;
+  padding-block: 1rem;
+  border-block: 1px solid
+    color-mix(in srgb, var(--page-foreground) 20%, transparent);
+}
+
+.catalog-product-detail-actions {
+  margin-top: 0.75rem;
+}
+
+.catalog-product-detail-commerce strong {
+  font-size: 1.45rem;
+  letter-spacing: -0.025em;
+}
+
+.catalog-product-detail-commerce span,
+.catalog-product-detail-facts dt,
+.catalog-product-detail-specifications dt {
+  color: color-mix(in srgb, var(--page-foreground) 68%, var(--page-background));
+}

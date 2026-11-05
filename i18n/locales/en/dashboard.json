@@ -1,0 +1,19 @@
+{
+  "pages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "A central workspace for the site's administration tools.",
+      "navigation": {
+        "overview": "Overview",
+      "catalog": "Catalog",
+      "promotions": "Promotions",
+        "users": "Users",
+        "orders": "Orders"
+      },
+      "overview": {
+        "title": "Overview",
+        "description": "The administration foundation is ready. Additional tools can be added here as they are needed."
+      }
+    }
+  }
+}

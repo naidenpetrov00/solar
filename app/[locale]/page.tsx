@@ -1,13 +1,11 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import { ButtonLink } from "@/components/button";
 import { getT } from "@/i18n.server";
 import { HomepageDestinationLink } from "./_components/homepage-destination-link";
 import { HomepageHashSync } from "./_components/homepage-hash-sync";
-import { ResidentialConfigurator } from "./_components/residential-configurator";
-import { getSolarPackagePath, solarPackages, temporaryPackagePriceBgn } from "./_lib/solar-packages";
 import { getPageMetadata } from "./_lib/metadata";
 import { localizedPath } from "./_lib/routes";
-import { formatBgnPrice } from "./_lib/shop-catalog";
 
 // Temporary image: https://unsplash.com/photos/n2Q4QtRNeUg (Unsplash License).
 // Replace the file at this path and adjust the focal points here if needed.
@@ -37,17 +35,6 @@ export default async function HomePage({
     "--hero-position-desktop": heroMedia.desktopFocalPoint,
     "--hero-position-mobile": heroMedia.mobileFocalPoint,
   } as CSSProperties;
-  const packages = solarPackages.map(({ id, slug }) => ({
-    id,
-    href: localizedPath(locale, getSolarPackagePath(slug)),
-    name: t(`pages.home.residential.packages.${id}.name`),
-    profile: t(`pages.home.residential.packages.${id}.profile`),
-    energyType: t(`pages.home.residential.packages.${id}.energyType`),
-    specifications: t(`pages.home.residential.packages.${id}.specifications`, {
-      returnObjects: true,
-    }) as string[],
-  }));
-
   return (
     <main id="main-content" className="welcome-page">
       <HomepageHashSync />
@@ -101,25 +88,10 @@ export default async function HomePage({
           <div className="residential-introduction">
             <h2 id="residential-heading">{t("pages.home.sections.residentialTitle")}</h2>
             <p>{t("pages.home.residential.introduction")}</p>
+            <ButtonLink href={localizedPath(locale, "shop")}>
+              {t("pages.home.residential.catalogCta")}
+            </ButtonLink>
           </div>
-          <ResidentialConfigurator
-            labels={{
-              bill: t("pages.home.residential.input.bill"),
-              billPlaceholder: t("pages.home.residential.input.billPlaceholder"),
-              consumption: t("pages.home.residential.input.consumption"),
-              consumptionPlaceholder: t(
-                "pages.home.residential.input.consumptionPlaceholder",
-              ),
-              inputLegend: t("pages.home.residential.input.legend"),
-              inputNote: t("pages.home.residential.input.note"),
-              packagePrice: t("pages.home.residential.packagePrice"),
-              packagePriceNote: t("pages.home.residential.packagePriceNote"),
-              packagePriceValue: formatBgnPrice(locale, temporaryPackagePriceBgn),
-              packagesHeading: t("pages.home.residential.packagesHeading"),
-              viewPackage: t("pages.home.residential.viewPackage"),
-            }}
-            packages={packages}
-          />
         </div>
       </section>
 

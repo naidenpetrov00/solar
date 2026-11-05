@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ButtonLink } from "@/components/button";
 
 type AuthStateProps = {
   title: string;
@@ -24,9 +24,9 @@ export function AuthState({
         <p>{description}</p>
       </div>
       {link ? (
-        <Link className="auth-secondary-action" href={link.href}>
+        <ButtonLink variant="secondary" href={link.href}>
           {link.label}
-        </Link>
+        </ButtonLink>
       ) : null}
     </div>
   );
