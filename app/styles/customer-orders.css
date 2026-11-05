@@ -39,6 +39,7 @@
 .customer-order-items-table th[scope="row"] { font-weight: 650; }
 .customer-order-items-table th[scope="row"] span, .customer-order-items-table td span { display: block; margin-top: .2rem; }
 .customer-order-items-table td strong { display: block; margin-top: .25rem; }
+.customer-order-final-total { font-size: 1.15rem; }
 @media (min-width: 48rem) { .customer-order-header { grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem); } .customer-order-detail-grid { grid-template-columns: minmax(0, 1fr) minmax(16rem, .8fr); } }
 @media (max-width: 47.99rem) { .customer-orders-ledger { display: none; } .customer-orders-mobile-list { display: grid; } }
 @media (max-width: 30rem) { .customer-orders-pagination { grid-template-columns: 1fr 1fr; } .customer-orders-pagination > span:nth-child(2) { grid-column: 1 / -1; grid-row: 1; text-align: center; } .customer-order-timeline li { display: grid; } .customer-order-timeline time { text-align: left; } }

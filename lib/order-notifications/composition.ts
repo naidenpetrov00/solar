@@ -181,15 +181,27 @@ export async function composeOrderNotification(
       return `<tr><td style="padding:10px 12px 10px 0">${escapeEmailHtml(item.localizedTitle)}<br><span style="color:#5d625a">${escapeEmailHtml(item.sku)}</span>${promotion}</td><td style="padding:10px 12px;text-align:center">${item.quantity}</td><td style="padding:10px 12px;text-align:right">${escapeEmailHtml(money(item.finalUnitGrossMinor))}</td><td style="padding:10px 0;text-align:right">${escapeEmailHtml(money(item.lineGrossMinor))}</td></tr>`;
     })
     .join("");
-  const summary = [
-    [tr(`${base}.common.subtotal`), money(revision.catalogSubtotalGrossMinor)],
-    [tr(`${base}.common.promotionDiscount`), money(-revision.promotionDiscountGrossMinor)],
-    [tr(`${base}.common.itemAdjustments`), money(revision.itemAdjustmentGrossMinor)],
-    [tr(`${base}.common.orderAdjustments`), money(revision.orderAdjustmentGrossMinor)],
-    [tr(`${base}.common.net`), money(revision.totalNetMinor)],
-    [tr(`${base}.common.vat`), money(revision.totalVatMinor)],
-    [tr(`${base}.common.total`), money(revision.totalGrossMinor)],
-  ] as const;
+  const summary = intent.recipientType === "customer" && intent.templateVersion === 2
+    ? [
+        [tr(`${base}.common.subtotal`), money(revision.catalogSubtotalGrossMinor)],
+        ...(revision.promotionDiscountGrossMinor !== BigInt(0)
+          ? [[tr(`${base}.common.promotionDiscount`), money(-revision.promotionDiscountGrossMinor)]]
+          : []),
+        ...((revision.itemAdjustmentGrossMinor + revision.orderAdjustmentGrossMinor) !== BigInt(0)
+          ? [[tr(`${base}.common.adjustments`), money(revision.itemAdjustmentGrossMinor + revision.orderAdjustmentGrossMinor)]]
+          : []),
+        [tr(`${base}.common.total`), money(revision.totalGrossMinor)],
+        [tr(`${base}.common.includedVat`), money(revision.totalVatMinor)],
+      ]
+    : [
+        [tr(`${base}.common.subtotal`), money(revision.catalogSubtotalGrossMinor)],
+        [tr(`${base}.common.promotionDiscount`), money(-revision.promotionDiscountGrossMinor)],
+        [tr(`${base}.common.itemAdjustments`), money(revision.itemAdjustmentGrossMinor)],
+        [tr(`${base}.common.orderAdjustments`), money(revision.orderAdjustmentGrossMinor)],
+        [tr(`${base}.common.net`), money(revision.totalNetMinor)],
+        [tr(`${base}.common.vat`), money(revision.totalVatMinor)],
+        [tr(`${base}.common.total`), money(revision.totalGrossMinor)],
+      ];
   const paymentMethod = tr(
     `${base}.common.paymentMethods.${revision.paymentMethod}`,
   );

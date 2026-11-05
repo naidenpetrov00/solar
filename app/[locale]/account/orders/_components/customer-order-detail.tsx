@@ -45,6 +45,21 @@ export function CustomerOrderDetailView({ order, locale, labels }: {
 }) {
   const timelineEntries = timeline(order, labels);
   const money = (minor: string) => formatOrderMoney(locale, minor);
+  const promotionDiscountMinor = BigInt(order.totals.promotionDiscountGrossMinor);
+  const adjustmentMinor =
+    BigInt(order.totals.itemAdjustmentGrossMinor) +
+    BigInt(order.totals.orderAdjustmentGrossMinor);
+  const totalRows: Array<[string, ReactNode]> = [
+    [labels.detail.subtotal, money(order.totals.catalogSubtotalGrossMinor)],
+    ...(promotionDiscountMinor !== BigInt(0)
+      ? [[labels.detail.promotionDiscount, money((-promotionDiscountMinor).toString())] as [string, ReactNode]]
+      : []),
+    ...(adjustmentMinor !== BigInt(0)
+      ? [[labels.detail.adjustments, money(adjustmentMinor.toString())] as [string, ReactNode]]
+      : []),
+    [labels.detail.total, <strong className="customer-order-final-total">{money(order.totals.totalGrossMinor)}</strong>],
+    [labels.detail.includedVat, money(order.totals.totalVatMinor)],
+  ];
   return <>
     <div className="customer-order-back"><ButtonLink href={localizedPath(locale, customerOrdersRouteSlug)} variant="informational">{labels.detail.back}</ButtonLink></div>
     <header className="customer-order-header">
@@ -64,10 +79,8 @@ export function CustomerOrderDetailView({ order, locale, labels }: {
     </section>
     <section className="customer-order-section" aria-labelledby="customer-order-timeline-title"><h2 id="customer-order-timeline-title">{labels.detail.timeline}</h2><ol className="customer-order-timeline">{timelineEntries.map((entry) => <li key={`${entry.key}-${entry.value}`}><strong>{entry.label}</strong><time dateTime={entry.value}>{formatOrderDate(locale, entry.value)}</time></li>)}</ol></section>
     <section className="customer-order-section" aria-labelledby="customer-order-items-title"><h2 id="customer-order-items-title">{labels.detail.items}</h2>
-      <div className="customer-order-items-table"><table><thead><tr><th scope="col">{labels.detail.items}</th><th scope="col">{labels.detail.quantity}</th><th scope="col">{labels.detail.unitGross}</th><th scope="col">{labels.detail.lineGross}</th></tr></thead><tbody>{order.items.map((item) => <tr key={`${item.sku}-${item.title}`}><th scope="row">{item.title}<span>{labels.detail.sku}: {item.sku}</span>{item.promotionLabel ? <span>{labels.detail.promotion}: {item.promotionLabel}</span> : null}<span>{labels.detail.vatRate}: {(item.vatRateBasisPoints / 100).toFixed(2)}%</span></th><td>{item.quantity}</td><td><span>{labels.detail.unitNet}: {money(item.finalUnitNetMinor)}</span><span>{labels.detail.unitVat}: {money(item.finalUnitVatMinor)}</span><strong>{money(item.finalUnitGrossMinor)}</strong></td><td><span>{labels.detail.lineNet}: {money(item.lineNetMinor)}</span><span>{labels.detail.lineVat}: {money(item.lineVatMinor)}</span><strong>{money(item.lineGrossMinor)}</strong></td></tr>)}</tbody></table></div>
+      <div className="customer-order-items-table"><table><thead><tr><th scope="col">{labels.detail.items}</th><th scope="col">{labels.detail.quantity}</th><th scope="col">{labels.detail.unitPrice}</th><th scope="col">{labels.detail.lineTotal}</th></tr></thead><tbody>{order.items.map((item) => <tr key={`${item.sku}-${item.title}`}><th scope="row">{item.title}<span>{labels.detail.sku}: {item.sku}</span>{item.promotionLabel ? <span>{labels.detail.promotion}: {item.promotionLabel}</span> : null}</th><td>{item.quantity}</td><td>{money(item.finalUnitGrossMinor)}</td><td><strong>{money(item.lineGrossMinor)}</strong></td></tr>)}</tbody></table></div>
     </section>
-    <section className="customer-order-section" aria-labelledby="customer-order-totals-title"><h2 id="customer-order-totals-title">{labels.detail.totals}</h2><DefinitionRows rows={[
-      [labels.detail.catalogSubtotal, money(order.totals.catalogSubtotalGrossMinor)], [labels.detail.promotionDiscount, money((-BigInt(order.totals.promotionDiscountGrossMinor)).toString())], [labels.detail.itemAdjustments, money(order.totals.itemAdjustmentGrossMinor)], [labels.detail.itemsNet, money(order.totals.itemsNetMinor)], [labels.detail.itemsVat, money(order.totals.itemsVatMinor)], [labels.detail.itemsGross, money(order.totals.itemsGrossMinor)], [labels.detail.orderAdjustmentNet, money(order.totals.orderAdjustmentNetMinor)], [labels.detail.orderAdjustmentVat, money(order.totals.orderAdjustmentVatMinor)], [labels.detail.orderAdjustmentGross, money(order.totals.orderAdjustmentGrossMinor)], [labels.detail.totalNet, money(order.totals.totalNetMinor)], [labels.detail.totalVat, money(order.totals.totalVatMinor)], [labels.detail.totalGross, <strong>{money(order.totals.totalGrossMinor)}</strong>],
-    ]} /></section>
+    <section className="customer-order-section" aria-labelledby="customer-order-totals-title"><h2 id="customer-order-totals-title">{labels.detail.totals}</h2><DefinitionRows rows={totalRows} /></section>
   </>;
 }
