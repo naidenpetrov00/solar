@@ -14,7 +14,7 @@ export type OrderCustomerInput = {
   note?: string | null;
 };
 
-export type GuestOrderInput = {
+export type CheckoutOrderInput = {
   submissionKey: string;
   locale: CatalogLocale;
   customer: OrderCustomerInput;

@@ -1,3 +1,5 @@
+import type { ManagedOrderActor } from "@/lib/orders/management-model";
+
 export function sofiaDateTimeFormatter(locale: string) {
   return new Intl.DateTimeFormat(locale, {
     year: "numeric",
@@ -8,6 +10,22 @@ export function sofiaDateTimeFormatter(locale: string) {
     timeZone: "Europe/Sofia",
     timeZoneName: "short",
   });
+}
+
+export function formatManagedOrderActor(
+  actor: ManagedOrderActor,
+  labels: {
+    guest: string;
+    customerActor: string;
+    administratorActor: string;
+  },
+) {
+  if (actor.kind === "guest") return labels.guest;
+  const kind =
+    actor.kind === "customer"
+      ? labels.customerActor
+      : labels.administratorActor;
+  return `${kind}: ${actor.name} · ${actor.email}`;
 }
 
 export function formatPercentBasisPoints(value: number, locale: string) {

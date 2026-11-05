@@ -13,7 +13,7 @@ import {
   maximumOrderItems,
 } from "@/lib/orders/model";
 import type {
-  GuestOrderInput,
+  CheckoutOrderInput,
   ManualAdjustmentInput,
   OrderCustomerInput,
 } from "@/lib/orders/types";
@@ -74,7 +74,7 @@ export function normalizeOrderCustomer(input: OrderCustomerInput) {
   };
 }
 
-export function normalizeGuestOrderInput(input: GuestOrderInput) {
+export function normalizeCheckoutOrderInput(input: CheckoutOrderInput) {
   if (!isUuid(input.submissionKey) || !isCatalogLocale(input.locale)) {
     throw new OrderError("INVALID_INPUT", { field: "order" });
   }

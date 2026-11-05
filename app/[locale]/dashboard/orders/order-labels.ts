@@ -94,6 +94,8 @@ export type OrdersLabels = {
     vatTotal: string;
     total: string;
     guest: string;
+    customerActor: string;
+    administratorActor: string;
     timezone: string;
   };
   editor: {

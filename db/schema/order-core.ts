@@ -28,6 +28,9 @@ export const salesOrder = pgTable(
       ),
     submissionKey: uuid("submission_key").notNull(),
     submissionFingerprint: text("submission_fingerprint").notNull(),
+    customerUserId: text("customer_user_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
     status: text("status").default("pending_approval").notNull(),
     paymentStatus: text("payment_status").default("unpaid").notNull(),
     currentRevisionNumber: integer("current_revision_number").default(1).notNull(),
@@ -57,6 +60,9 @@ export const salesOrder = pgTable(
   (table) => [
     uniqueIndex("sales_order_number_idx").on(table.orderNumber),
     uniqueIndex("sales_order_submission_key_idx").on(table.submissionKey),
+    index("sales_order_customer_submitted_idx")
+      .on(table.customerUserId, table.submittedAt, table.orderNumberSequence)
+      .where(sql`${table.customerUserId} IS NOT NULL`),
     index("sales_order_status_submitted_idx").on(table.status, table.submittedAt),
     index("sales_order_payment_status_updated_idx").on(
       table.paymentStatus,

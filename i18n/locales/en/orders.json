@@ -1,7 +1,7 @@
 {
   "pages": { "dashboard": { "orders": {
     "title": "Orders",
-    "description": "Review guest orders, negotiate pending contents, and manage order and payment status separately.",
+    "description": "Review customer orders, negotiate pending contents, and manage order and payment status separately.",
     "loading": "Loading orders…",
     "count": "{{count}} orders",
     "filters": {
@@ -13,7 +13,7 @@
       "orderNumber": "Order", "submittedAt": "Submitted", "customer": "Customer", "phone": "Phone",
       "total": "Current total", "orderStatus": "Order status", "paymentStatus": "Payment status", "open": "Open order"
     },
-    "empty": { "title": "No orders yet", "description": "Guest orders will appear here after they are placed." },
+    "empty": { "title": "No orders yet", "description": "Customer orders will appear here after they are placed." },
     "noResults": { "title": "No matching orders", "description": "Change or clear the filters to see other orders." },
     "pagination": { "label": "Order pages", "previous": "Previous", "next": "Next", "status": "Page {{page}} of {{pages}}" },
     "detail": {
@@ -27,7 +27,7 @@
       "vat": "VAT", "lineTotal": "Line total", "adjustments": "Item adjustments", "noAdjustments": "No adjustments",
       "reason": "Internal reason", "actor": "Responsible person", "createdAt": "Created", "subtotal": "Catalog subtotal",
       "promotionDiscount": "Promotion discount", "itemAdjustments": "Item adjustments", "orderAdjustments": "Order adjustments",
-      "net": "Net total", "vatTotal": "VAT total", "total": "VAT-inclusive total", "guest": "Guest customer", "timezone": "Europe/Sofia"
+      "net": "Net total", "vatTotal": "VAT total", "total": "VAT-inclusive total", "guest": "Guest customer", "customerActor": "Customer account", "administratorActor": "Administrator", "timezone": "Europe/Sofia"
     },
     "editor": {
       "title": "Edit current order", "description": "Saving creates one complete immutable revision. Changes are allowed only while approval is pending.",

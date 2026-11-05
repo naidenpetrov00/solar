@@ -72,6 +72,11 @@ export const salesOrderAuditEvent = pgTable(
         ${table.actorKind} = 'guest'
         AND num_nonnulls(${table.actorUserId}, ${table.actorName}, ${table.actorEmail}, ${table.actorRole}) = 0
       ) OR (
+        ${table.actorKind} = 'customer'
+        AND ${table.actorName} IS NOT NULL
+        AND ${table.actorEmail} IS NOT NULL
+        AND ${table.actorRole} IN ('customer', 'administrator', 'admin')
+      ) OR (
         ${table.actorKind} = 'administrator'
         AND ${table.actorName} IS NOT NULL
         AND ${table.actorEmail} IS NOT NULL

@@ -5,7 +5,10 @@ import type {
   ManagedOrderRevision,
 } from "@/lib/orders/management-model";
 import type { OrdersLabels } from "../order-labels";
-import { sofiaDateTimeFormatter } from "../order-format";
+import {
+  formatManagedOrderActor,
+  sofiaDateTimeFormatter,
+} from "../order-format";
 import { OrderRevisionView } from "./order-revision-view";
 
 function changeDescription(change: ManagedOrderAuditChange, locale: string, labels: OrdersLabels) {
@@ -87,7 +90,7 @@ export function OrderHistory({
         <ol>{events.map((event) => <li key={event.id}>
           <header><strong>{eventTitle(event, labels)}</strong><span>{labels.history.version.replace("{{version}}", String(event.mutationVersion))}</span></header>
           <time dateTime={event.occurredAt}>{dateFormatter.format(new Date(event.occurredAt))}</time>
-          <p>{event.actor.kind === "guest" ? labels.detail.guest : `${event.actor.name} · ${event.actor.email}`}</p>
+          <p>{formatManagedOrderActor(event.actor, labels.detail)}</p>
           {event.fromOrderStatus && event.toOrderStatus ? <p>
             {labels.orderStatuses[event.fromOrderStatus]} → {labels.orderStatuses[event.toOrderStatus]}
           </p> : null}

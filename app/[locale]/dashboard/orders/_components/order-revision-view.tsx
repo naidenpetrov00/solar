@@ -1,7 +1,11 @@
 import { formatCurrencyMinor } from "../../../_lib/catalog-format";
 import type { ManagedOrderRevision } from "@/lib/orders/management-model";
 import type { OrdersLabels } from "../order-labels";
-import { formatPercentBasisPoints, sofiaDateTimeFormatter } from "../order-format";
+import {
+  formatManagedOrderActor,
+  formatPercentBasisPoints,
+  sofiaDateTimeFormatter,
+} from "../order-format";
 
 export function OrderRevisionView({
   revision,
@@ -36,7 +40,7 @@ export function OrderRevisionView({
           <div><dt>{labels.detail.paymentMethod}</dt><dd>{labels.paymentMethods[revision.paymentMethod]}</dd></div>
           <div><dt>{labels.fields.locale}</dt><dd>{revision.locale.toUpperCase()}</dd></div>
           <div><dt>{labels.detail.createdAt}</dt><dd><time dateTime={revision.createdAt}>{dateFormatter.format(new Date(revision.createdAt))}</time></dd></div>
-          <div><dt>{labels.detail.actor}</dt><dd>{revision.actor.kind === "guest" ? labels.detail.guest : `${revision.actor.name} · ${revision.actor.email}`}</dd></div>
+          <div><dt>{labels.detail.actor}</dt><dd>{formatManagedOrderActor(revision.actor, labels.detail)}</dd></div>
         </dl></section>
       </div>
       <section className="dashboard-order-revision-products">

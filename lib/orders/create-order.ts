@@ -8,25 +8,44 @@ import { enqueueNewOrderNotifications } from "@/lib/order-notifications/enqueue"
 import { snapshotCatalogOrderItems } from "@/lib/orders/catalog-snapshot";
 import { prepareRevisionCalculation } from "@/lib/orders/calculation";
 import { OrderError } from "@/lib/orders/errors";
-import { guestOrderFingerprint } from "@/lib/orders/fingerprint";
+import { checkoutOrderFingerprint } from "@/lib/orders/fingerprint";
 import { persistOrderRevision } from "@/lib/orders/persist-revision";
-import type { GuestOrderInput } from "@/lib/orders/types";
-import { normalizeGuestOrderInput } from "@/lib/orders/validation";
+import type { CheckoutOrderInput } from "@/lib/orders/types";
+import { normalizeCheckoutOrderInput } from "@/lib/orders/validation";
+import { isAppRole } from "@/lib/permission-policy";
 
-export async function createGuestOrder(rawInput: GuestOrderInput) {
-  const input = normalizeGuestOrderInput(rawInput);
-  const fingerprint = guestOrderFingerprint({
-    locale: input.locale,
-    paymentMethod: input.paymentMethod,
-    customer: input.customer,
-    items: input.items,
-  });
+type CheckoutActor = {
+  id: string;
+  name: string;
+  email: string;
+  role?: string | null;
+};
+
+export async function createCheckoutOrder(
+  rawInput: CheckoutOrderInput,
+  actor: CheckoutActor | null,
+) {
+  const input = normalizeCheckoutOrderInput(rawInput);
+  if (actor && !isAppRole(actor.role)) {
+    throw new OrderError("INVALID_INPUT");
+  }
+  const customerUserId = actor?.id ?? null;
+  const fingerprint = checkoutOrderFingerprint(
+    {
+      locale: input.locale,
+      paymentMethod: input.paymentMethod,
+      customer: input.customer,
+      items: input.items,
+    },
+    customerUserId,
+  );
   return db.transaction(async (transaction) => {
     const [created] = await transaction
       .insert(salesOrder)
       .values({
         submissionKey: input.submissionKey,
         submissionFingerprint: fingerprint,
+        customerUserId,
       })
       .onConflictDoNothing({ target: salesOrder.submissionKey })
       .returning({
@@ -45,11 +64,16 @@ export async function createGuestOrder(rawInput: GuestOrderInput) {
           paymentStatus: salesOrder.paymentStatus,
           mutationVersion: salesOrder.mutationVersion,
           submissionFingerprint: salesOrder.submissionFingerprint,
+          customerUserId: salesOrder.customerUserId,
         })
         .from(salesOrder)
         .where(eq(salesOrder.submissionKey, input.submissionKey))
         .limit(1);
-      if (!existing || existing.submissionFingerprint !== fingerprint) {
+      if (
+        !existing ||
+        existing.submissionFingerprint !== fingerprint ||
+        existing.customerUserId !== customerUserId
+      ) {
         throw new OrderError("CONFLICT");
       }
       return {
@@ -98,7 +122,11 @@ export async function createGuestOrder(rawInput: GuestOrderInput) {
         changes: [
           { field: "order", before: null, after: { orderNumber: created.orderNumber } },
         ],
-        actorKind: "guest",
+        actorKind: actor ? "customer" : "guest",
+        actorUserId: actor?.id,
+        actorName: actor?.name,
+        actorEmail: actor?.email,
+        actorRole: actor?.role,
       })
       .returning({ id: salesOrderAuditEvent.id });
     await enqueueNewOrderNotifications(transaction, {

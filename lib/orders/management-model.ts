@@ -10,6 +10,7 @@ import type {
   OrderNotificationKind,
   OrderNotificationStatus,
 } from "@/lib/order-notifications/model";
+import type { AppRole } from "@/lib/auth-role-config";
 
 export const managedOrdersPageSize = 25;
 export const managedOrdersMaximumPage = 10_000;
@@ -55,6 +56,12 @@ export type ManagedOrdersPage = ManagedOrdersQuery & {
 export type ManagedOrderActor =
   | { kind: "guest" }
   | {
+      kind: "customer";
+      name: string;
+      email: string;
+      role: AppRole;
+    }
+  | {
       kind: "administrator";
       name: string;
       email: string;
@@ -65,7 +72,7 @@ export type ManagedOrderAdjustment = {
   adjustmentKey: string;
   amountGrossMinor: string;
   reason: string;
-  actor: Exclude<ManagedOrderActor, { kind: "guest" }>;
+  actor: Extract<ManagedOrderActor, { kind: "administrator" }>;
 };
 
 export type ManagedOrderItem = {

@@ -14,7 +14,11 @@ import {
   salesOrderPriceAdjustment,
 } from "@/db/schema/order-items";
 
-export const salesOrderRelations = relations(salesOrder, ({ many }) => ({
+export const salesOrderRelations = relations(salesOrder, ({ one, many }) => ({
+  customerUser: one(user, {
+    fields: [salesOrder.customerUserId],
+    references: [user.id],
+  }),
   revisions: many(salesOrderRevision),
   events: many(salesOrderAuditEvent),
   notifications: many(orderNotificationOutbox),

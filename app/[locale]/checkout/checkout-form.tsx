@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/button";
 import type { CartItem } from "../_components/cart-store";
-import { submitGuestOrderAction } from "./actions";
+import { submitCheckoutOrderAction } from "./actions";
 import { CheckoutFields } from "./checkout-fields";
 import { initialCheckoutActionResult } from "./checkout-action-model";
 import type { CheckoutLabels } from "./checkout-labels";
@@ -38,7 +38,7 @@ export function CheckoutForm({
   onSuccess: (items: CartItem[]) => void;
 }) {
   const router = useRouter();
-  const [result, action, pending] = useActionState(submitGuestOrderAction, initialCheckoutActionResult);
+  const [result, action, pending] = useActionState(submitCheckoutOrderAction, initialCheckoutActionResult);
   const [draft, setDraft] = useState<CheckoutDraft>(emptyCheckoutDraft);
   const [draftReady, setDraftReady] = useState(false);
   const [submissionKey, setSubmissionKey] = useState("");

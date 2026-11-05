@@ -1,10 +1,10 @@
 {
   "pages": { "dashboard": { "orders": {
-    "title": "Siparişler", "description": "Misafir siparişlerini inceleyin, onay bekleyen içerikleri düzenleyin ve sipariş ile ödeme durumlarını ayrı yönetin.",
+    "title": "Siparişler", "description": "Müşteri siparişlerini inceleyin, onay bekleyen içerikleri düzenleyin ve sipariş ile ödeme durumlarını ayrı yönetin.",
     "loading": "Siparişler yükleniyor…", "count": "{{count}} sipariş",
     "filters": { "regionLabel": "Sipariş filtreleri", "search": "Ara", "searchPlaceholder": "Sipariş numarası, ad, telefon veya e-posta", "status": "Sipariş durumu", "paymentStatus": "Ödeme durumu", "all": "Tümü", "from": "Başlangıç tarihi", "to": "Bitiş tarihi", "timezone": "Tarihler Europe/Sofia iş saat dilimine göre yorumlanır.", "apply": "Filtreleri uygula", "clear": "Temizle", "invalid": "Bazı geçersiz filtreler yok sayıldı. Görüntülenen değerleri kontrol edin." },
     "list": { "orderNumber": "Sipariş", "submittedAt": "Gönderildi", "customer": "Müşteri", "phone": "Telefon", "total": "Güncel toplam", "orderStatus": "Sipariş durumu", "paymentStatus": "Ödeme durumu", "open": "Siparişi aç" },
-    "empty": { "title": "Henüz sipariş yok", "description": "Misafir siparişleri verildikten sonra burada görünür." },
+    "empty": { "title": "Henüz sipariş yok", "description": "Müşteri siparişleri verildikten sonra burada görünür." },
     "noResults": { "title": "Eşleşen sipariş yok", "description": "Diğer siparişleri görmek için filtreleri değiştirin veya temizleyin." },
     "pagination": { "label": "Sipariş sayfaları", "previous": "Önceki", "next": "Sonraki", "status": "{{pages}} sayfanın {{page}}. sayfası" },
     "detail": {
@@ -14,7 +14,7 @@
       "name": "Ad", "phone": "Telefon", "email": "E-posta", "city": "Şehir", "deliveryAddress": "Teslimat adresi", "note": "Müşteri notu", "noNote": "Not yok", "paymentMethod": "Ödeme yöntemi",
       "sku": "SKU", "quantity": "Adet", "unitPrice": "KDV dahil birim fiyat", "promotion": "Promosyon", "noPromotion": "Promosyon yok", "vat": "KDV", "lineTotal": "Satır toplamı",
       "adjustments": "Ürün ayarlamaları", "noAdjustments": "Ayarlama yok", "reason": "Dahili gerekçe", "actor": "Sorumlu kişi", "createdAt": "Oluşturuldu", "subtotal": "Katalog ara toplamı",
-      "promotionDiscount": "Promosyon indirimi", "itemAdjustments": "Ürün ayarlamaları", "orderAdjustments": "Sipariş ayarlamaları", "net": "Net toplam", "vatTotal": "KDV toplamı", "total": "KDV dahil toplam", "guest": "Misafir müşteri", "timezone": "Avrupa/Sofya"
+      "promotionDiscount": "Promosyon indirimi", "itemAdjustments": "Ürün ayarlamaları", "orderAdjustments": "Sipariş ayarlamaları", "net": "Net toplam", "vatTotal": "KDV toplamı", "total": "KDV dahil toplam", "guest": "Misafir müşteri", "customerActor": "Müşteri hesabı", "administratorActor": "Yönetici", "timezone": "Avrupa/Sofya"
     },
     "editor": {
       "title": "Güncel siparişi düzenle", "description": "Kaydetme işlemi tek ve eksiksiz, değiştirilemez bir revizyon oluşturur. Değişiklikler yalnızca onay beklerken yapılabilir.",

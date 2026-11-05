@@ -1,7 +1,8 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { createGuestOrder } from "@/lib/orders/create-order";
+import { getCurrentUser } from "@/lib/authorization";
+import { createCheckoutOrder } from "@/lib/orders/create-order";
 import {
   assertOrderConfirmationConfiguration,
   createOrderConfirmationToken,
@@ -10,7 +11,7 @@ import {
 } from "@/lib/orders/confirmation-token";
 import { OrderError } from "@/lib/orders/errors";
 import { scheduleOrderNotificationDispatch } from "@/lib/order-notifications/after-kick";
-import type { GuestOrderInput } from "@/lib/orders/types";
+import type { CheckoutOrderInput } from "@/lib/orders/types";
 import { assertCustomerPolicyReadiness } from "@/lib/legal/policy-facts";
 import { localizedPath } from "../_lib/routes";
 import type {
@@ -23,7 +24,7 @@ function text(data: FormData, key: string) {
   return typeof value === "string" ? value : "";
 }
 
-function inputFrom(data: FormData): GuestOrderInput | null {
+function inputFrom(data: FormData): CheckoutOrderInput | null {
   const productIds = data.getAll("productId");
   const quantities = data.getAll("quantity");
   if (
@@ -34,7 +35,7 @@ function inputFrom(data: FormData): GuestOrderInput | null {
   ) return null;
   return {
     submissionKey: text(data, "submissionKey"),
-    locale: text(data, "locale") as GuestOrderInput["locale"],
+    locale: text(data, "locale") as CheckoutOrderInput["locale"],
     customer: {
       name: text(data, "name"),
       phone: text(data, "phone"),
@@ -43,7 +44,7 @@ function inputFrom(data: FormData): GuestOrderInput | null {
       deliveryAddress: text(data, "deliveryAddress"),
       note: text(data, "note"),
     },
-    paymentMethod: text(data, "paymentMethod") as GuestOrderInput["paymentMethod"],
+    paymentMethod: text(data, "paymentMethod") as CheckoutOrderInput["paymentMethod"],
     items: productIds.map((productId, index) => ({
       productId: productId as string,
       quantity: Number(quantities[index]),
@@ -59,7 +60,7 @@ function invalidField(error: OrderError): CheckoutField | null {
   ].includes(field) ? field as CheckoutField : null;
 }
 
-export async function submitGuestOrderAction(
+export async function submitCheckoutOrderAction(
   _previous: CheckoutActionResult,
   data: FormData,
 ): Promise<CheckoutActionResult> {
@@ -71,7 +72,18 @@ export async function submitGuestOrderAction(
   const input = inputFrom(data);
   if (!input) return { status: "cart_stale" };
   try {
-    const created = await createGuestOrder(input);
+    const currentUser = await getCurrentUser();
+    const created = await createCheckoutOrder(
+      input,
+      currentUser
+        ? {
+            id: currentUser.id,
+            name: currentUser.name,
+            email: currentUser.email,
+            role: currentUser.role,
+          }
+        : null,
+    );
     scheduleOrderNotificationDispatch();
     const cookieStore = await cookies();
     cookieStore.set(orderConfirmationCookieName, createOrderConfirmationToken(created.orderNumber), {

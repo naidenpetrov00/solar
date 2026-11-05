@@ -216,15 +216,17 @@ Both `administrator` and `admin` roles have `catalog:view` and `catalog:manage`;
 
 ## Persistent order domain
 
-Orders use an internal UUID and a separate generated customer-facing order number. Guest submissions are stored as immutable revision 1 snapshots containing customer and delivery data, payment method, localized product identity, catalog and promotion pricing, VAT, quantities, and totals. Administrator content changes append complete revisions; they do not rewrite the original submission or earlier history.
+Orders use an internal UUID and a separate generated customer-facing order number. Checkout submissions are stored as immutable revision 1 snapshots containing customer and delivery data, payment method, localized product identity, catalog and promotion pricing, VAT, quantities, and totals. Administrator content changes append complete revisions; they do not rewrite the original submission or earlier history.
+
+The stable order record may reference the Better Auth user that submitted checkout. This relationship is nullable for guest orders, is derived only from the trusted server session, and is never inferred from the checkout email address. Deleting an account clears the relationship without deleting the order or its immutable customer snapshots. Submission audit events record `guest` for unauthenticated checkout and `customer` with a trusted actor snapshot for authenticated checkout; later administrative mutations continue to record `administrator` actors.
 
 Order lifecycle status and payment status are independent. Rejected, cancelled, and completed orders cannot have their contents or lifecycle status changed, but authorized payment transitions remain possible and are recorded separately. Every administrator mutation uses optimistic concurrency and appends an audit event with the actor snapshot and meaningful before/after data. Orders are not deleted as a consequence of rejection, cancellation, or completion.
 
 All order money is stored as EUR integer minor units and calculated on the server with integer VAT rounding. Public cart prices are advisory: order creation reloads eligible catalog products and active promotions transactionally before persisting snapshots. Both `administrator` and `admin` roles have `order:view` and `order:manage`; customers have neither.
 
-## Guest checkout and customer policies
+## Checkout and customer policies
 
-The localized guest checkout sends only customer-entered details, product IDs and quantities, payment method, locale, and an idempotency key to the server-owned order service. A successful submission clears only the submitted cart items and uses a short-lived, purpose-signed confirmation cookie containing the order number and expiry; there is no public order lookup.
+The localized checkout sends only customer-entered details, product IDs and quantities, payment method, locale, and an idempotency key to the server-owned order service. When a valid account session exists, the server associates the new order with that stable user ID; browser input cannot provide ownership, and matching account and checkout email addresses never claim an order. A successful submission clears only the submitted cart items and uses a short-lived, purpose-signed confirmation cookie containing the order number and expiry; there is no public order lookup.
 
 Verified operator, privacy, processor, retention, delivery, cancellation, return, complaint, and contract facts belong in `lib/legal/policy-facts.ts`. Official Bulgarian and EU materials are structural references, not publishable policy copy. Development routes display explicit incomplete markers, while production rendering fails until every required fact is non-empty. Configure `ORDER_CONFIRMATION_SIGNING_KEY` independently from authentication secrets before using checkout.
 

@@ -2,6 +2,7 @@ import "server-only";
 
 import { db } from "@/db";
 import { isCatalogLocale } from "@/lib/catalog/model";
+import { isAppRole } from "@/lib/permission-policy";
 import {
   isOrderNotificationErrorCode,
   isOrderNotificationKind,
@@ -30,7 +31,7 @@ function administratorActor(row: {
   actorName: string | null;
   actorEmail: string | null;
   actorRole: string | null;
-}): Exclude<ManagedOrderActor, { kind: "guest" }> {
+}): Extract<ManagedOrderActor, { kind: "administrator" }> {
   if (
     !row.actorName ||
     !row.actorEmail ||
@@ -46,8 +47,27 @@ function administratorActor(row: {
   };
 }
 
+function customerActor(row: {
+  actorName: string | null;
+  actorEmail: string | null;
+  actorRole: string | null;
+}): Extract<ManagedOrderActor, { kind: "customer" }> {
+  if (!row.actorName || !row.actorEmail || !isAppRole(row.actorRole)) {
+    throw new OrderError("INVALID_INPUT");
+  }
+  return {
+    kind: "customer",
+    name: row.actorName,
+    email: row.actorEmail,
+    role: row.actorRole,
+  };
+}
+
 function auditActor(row: AuditRow): ManagedOrderActor {
-  return row.actorKind === "guest" ? { kind: "guest" } : administratorActor(row);
+  if (row.actorKind === "guest") return { kind: "guest" };
+  if (row.actorKind === "customer") return customerActor(row);
+  if (row.actorKind === "administrator") return administratorActor(row);
+  throw new OrderError("INVALID_INPUT");
 }
 
 function scalar(value: unknown): string | null | undefined {
@@ -106,19 +126,14 @@ function mapRevision(aggregate: Aggregate, revision: Aggregate["revisions"][numb
   const revisionAdjustments = aggregate.adjustments.filter(
     ({ revisionId }) => revisionId === revision.id,
   );
-  const actorEvent = aggregate.events.find(
-    (event) =>
-      event.eventType === "content_revised" &&
-      event.toRevisionNumber === revision.revisionNumber,
-  );
-  const actor: ManagedOrderActor =
+  const actorEvent = aggregate.events.find((event) =>
     revision.revisionNumber === 1
-      ? { kind: "guest" }
-      : actorEvent
-        ? auditActor(actorEvent)
-        : (() => {
-            throw new OrderError("INVALID_INPUT");
-          })();
+      ? event.eventType === "submitted" && event.toRevisionNumber === 1
+      : event.eventType === "content_revised" &&
+        event.toRevisionNumber === revision.revisionNumber,
+  );
+  if (!actorEvent) throw new OrderError("INVALID_INPUT");
+  const actor = auditActor(actorEvent);
   const mapAdjustment = (
     adjustment: Aggregate["adjustments"][number],
   ): ManagedOrderAdjustment => ({
