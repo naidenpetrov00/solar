@@ -21,10 +21,11 @@ const unsafeIpv4Subnets = [
 for (const [network, prefix] of unsafeIpv4Subnets) {
   unsafeAddresses.addSubnet(network, prefix, "ipv4");
   const octets = network.split(".").map(Number);
-  const translated = `64:ff9b::${((octets[0] << 8) | octets[1]).toString(16)}:${
+  const embeddedIpv4 = `${((octets[0] << 8) | octets[1]).toString(16)}:${
     ((octets[2] << 8) | octets[3]).toString(16)
   }`;
-  unsafeAddresses.addSubnet(translated, 96 + prefix, "ipv6");
+  unsafeAddresses.addSubnet(`64:ff9b::${embeddedIpv4}`, 96 + prefix, "ipv6");
+  unsafeAddresses.addSubnet(`::ffff:${embeddedIpv4}`, 96 + prefix, "ipv6");
 }
 
 for (const [network, prefix] of [
