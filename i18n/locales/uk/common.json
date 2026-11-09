@@ -97,6 +97,7 @@
       "vatIncluded": "Ціна містить ПДВ",
       "addToCart": "Купити",
       "addedToCart": "Додано",
+      "goToCart": "До кошика",
       "addNamedToCart": "Купити {{name}}",
       "inStock": "У наявності",
       "outOfStock": "Немає в наявності",

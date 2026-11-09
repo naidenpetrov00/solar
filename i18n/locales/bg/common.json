@@ -97,6 +97,7 @@
       "vatIncluded": "Цената е с включен ДДС",
       "addToCart": "Купи",
       "addedToCart": "Добавено",
+      "goToCart": "Към количката",
       "addNamedToCart": "Купи {{name}}",
       "inStock": "В наличност",
       "outOfStock": "Няма наличност",
