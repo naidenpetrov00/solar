@@ -3,11 +3,16 @@ import "server-only";
 import { sendNotification } from "web-push";
 
 import { getWebPushEnvironment } from "@/lib/web-push/config";
-import { assertSafePushEndpoint } from "@/lib/web-push/validation";
+import {
+  createSafePushAgent,
+  normalizePushEndpoint,
+  UnsafePushEndpointError,
+} from "@/lib/web-push/validation";
 
 export type WebPushDeliveryResult =
   | { status: "sent" }
   | { status: "gone" }
+  | { status: "unsafe" }
   | { status: "retryable" };
 
 function statusCode(error: unknown) {
@@ -23,13 +28,20 @@ export async function sendWebPush(input: {
   payload: string;
   topic: string;
 }): Promise<WebPushDeliveryResult> {
+  const agent = createSafePushAgent();
+  let endpoint: string;
+  try {
+    endpoint = normalizePushEndpoint(input.endpoint);
+  } catch {
+    agent.destroy();
+    return { status: "unsafe" };
+  }
   try {
     const environment = getWebPushEnvironment();
     if (!environment) return { status: "retryable" };
-    await assertSafePushEndpoint(input.endpoint);
     await sendNotification(
       {
-        endpoint: input.endpoint,
+        endpoint,
         keys: { p256dh: input.p256dh, auth: input.auth },
       },
       input.payload,
@@ -43,12 +55,16 @@ export async function sendWebPush(input: {
         urgency: "normal",
         topic: input.topic,
         timeout: 15_000,
+        agent,
       },
     );
     return { status: "sent" };
   } catch (error) {
+    if (error instanceof UnsafePushEndpointError) return { status: "unsafe" };
     const code = statusCode(error);
     if (code === 404 || code === 410) return { status: "gone" };
     return { status: "retryable" };
+  } finally {
+    agent.destroy();
   }
 }

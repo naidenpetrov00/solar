@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/button";
@@ -8,16 +8,28 @@ import type { useBrowserPush } from "./use-browser-push";
 
 type BrowserPush = ReturnType<typeof useBrowserPush>;
 
-export function BrowserPushPreference({ push }: { push: BrowserPush }) {
+export function BrowserPushPreference({
+  push,
+  fallbackFocusRef,
+}: {
+  push: BrowserPush;
+  fallbackFocusRef: RefObject<HTMLButtonElement | null>;
+}) {
   const { t } = useTranslation("notifications");
   const actionRef = useRef<HTMLButtonElement | null>(null);
   const previousState = useRef(push.state);
   useEffect(() => {
+    let focusFrame: number | undefined;
     if (previousState.current !== "checking" && previousState.current !== push.state) {
-      actionRef.current?.focus();
+      focusFrame = requestAnimationFrame(() => {
+        (actionRef.current ?? fallbackFocusRef.current)?.focus();
+      });
     }
     previousState.current = push.state;
-  }, [push.state]);
+    return () => {
+      if (focusFrame !== undefined) cancelAnimationFrame(focusFrame);
+    };
+  }, [fallbackFocusRef, push.state]);
   const canEnable = ["permission_default", "disabled", "expired", "ownership_mismatch"].includes(push.state);
   const error = push.state === "failure" || push.state === "unconfigured";
   return (

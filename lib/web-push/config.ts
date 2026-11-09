@@ -8,6 +8,7 @@ type WebPushEnvironment = {
   subject: string;
   publicKey: string;
   privateKey: string;
+  dispatchSecret: string;
   keyFingerprint: string;
 };
 
@@ -25,24 +26,43 @@ function validSubject(value: string) {
   }
 }
 
+function isPlaceholderSecret(value: string) {
+  const normalized = value.trim().toLowerCase();
+  return normalized.startsWith("replace-with-") || [
+    "change-me", "changeme", "placeholder", "your-secret", "example", "test", "testing",
+  ].includes(normalized);
+}
+
 export function getWebPushEnvironment(): WebPushEnvironment | null {
   const subject = process.env.WEB_PUSH_VAPID_SUBJECT;
   const publicKey = process.env.WEB_PUSH_VAPID_PUBLIC_KEY;
   const privateKey = process.env.WEB_PUSH_VAPID_PRIVATE_KEY;
-  const values = [subject, publicKey, privateKey];
+  const dispatchSecret = process.env.WEB_PUSH_DISPATCH_SECRET;
+  const values = [subject, publicKey, privateKey, dispatchSecret];
   if (values.every((value) => !value)) return null;
   if (
     !subject ||
     !publicKey ||
     !privateKey ||
+    !dispatchSecret ||
     !validSubject(subject) ||
     !/^[A-Za-z0-9_-]{80,120}$/u.test(publicKey) ||
     !/^[A-Za-z0-9_-]{40,80}$/u.test(privateKey) ||
-    values.some((value) => value?.startsWith("replace-with-"))
+    Buffer.byteLength(dispatchSecret, "utf8") < 32 ||
+    [subject, publicKey, privateKey].some(
+      (value) => value?.startsWith("replace-with-") === true,
+    ) ||
+    isPlaceholderSecret(dispatchSecret)
   ) {
-    throw new Error("Web Push VAPID configuration is incomplete or invalid.");
+    throw new Error("Web Push configuration is incomplete or invalid.");
   }
-  return { subject, publicKey, privateKey, keyFingerprint: fingerprint(publicKey) };
+  return {
+    subject,
+    publicKey,
+    privateKey,
+    dispatchSecret,
+    keyFingerprint: fingerprint(publicKey),
+  };
 }
 
 export function getWebPushPublicConfig(

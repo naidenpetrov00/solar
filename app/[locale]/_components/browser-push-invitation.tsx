@@ -5,6 +5,14 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/button";
 import type { useBrowserPush } from "./use-browser-push";
 
+function focusVisibleNotificationBell() {
+  requestAnimationFrame(() => {
+    Array.from(document.querySelectorAll<HTMLButtonElement>(
+      'button[aria-controls="notification-panel"]',
+    )).find((button) => button.getClientRects().length > 0)?.focus();
+  });
+}
+
 export function BrowserPushInvitation({
   push,
 }: {
@@ -19,11 +27,11 @@ export function BrowserPushInvitation({
   if (!push.invitationVisible) return feedback;
   const enable = async () => {
     await push.enable();
-    requestAnimationFrame(() => {
-      Array.from(document.querySelectorAll<HTMLButtonElement>(
-        'button[aria-controls="notification-panel"]',
-      )).find((button) => button.getClientRects().length > 0)?.focus();
-    });
+    focusVisibleNotificationBell();
+  };
+  const dismiss = () => {
+    push.dismissInvitation();
+    focusVisibleNotificationBell();
   };
   return (
     <aside className="site-push-invitation" aria-labelledby="push-invitation-title">
@@ -35,7 +43,7 @@ export function BrowserPushInvitation({
         <Button type="button" disabled={push.busy} onClick={() => void enable()}>
           {push.busy ? t("push.actions.enabling") : t("push.actions.enable")}
         </Button>
-        <Button type="button" variant="secondary" onClick={push.dismissInvitation}>
+        <Button type="button" variant="secondary" onClick={dismiss}>
           {t("push.actions.dismiss")}
         </Button>
       </div>

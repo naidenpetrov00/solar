@@ -122,7 +122,10 @@ export function NotificationPanel({
           </Button>
         </div>
       </div>
-      <BrowserPushPreference push={center.browserPush} />
+      <BrowserPushPreference
+        push={center.browserPush}
+        fallbackFocusRef={closeButtonRef}
+      />
       <div className="site-notification-toolbar">
         <div className="site-notification-filters" role="group" aria-label={t("filters.label")}>
           <Button type="button" variant="secondary" aria-pressed={center.filter === "unread"} onClick={() => center.setFilter("unread")}>

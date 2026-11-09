@@ -189,6 +189,10 @@ async function deliver(delivery: ClaimedDelivery) {
     await db.update(webPushSubscription).set({ status: "expired", expiredAt: new Date() })
       .where(eq(webPushSubscription.id, context.subscriptionId));
     await finalize(delivery, { status: "failed", code: "SUBSCRIPTION_GONE" });
+  } else if (result.status === "unsafe") {
+    await db.update(webPushSubscription).set({ status: "expired", expiredAt: new Date() })
+      .where(eq(webPushSubscription.id, context.subscriptionId));
+    await finalize(delivery, { status: "cancelled", code: "PAYLOAD_INVALID" });
   } else {
     await finalize(delivery, { status: "failed", code: "PROVIDER_FAILURE", retryable: true });
   }
