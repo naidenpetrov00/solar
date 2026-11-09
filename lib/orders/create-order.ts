@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { salesOrder, salesOrderAuditEvent } from "@/db/schema";
+import { createOrderCreatedNotifications } from "@/lib/in-app-notifications/produce-order-created";
 import { enqueueNewOrderNotifications } from "@/lib/order-notifications/enqueue";
 import { snapshotCatalogOrderItems } from "@/lib/orders/catalog-snapshot";
 import { prepareRevisionCalculation } from "@/lib/orders/calculation";
@@ -140,6 +141,11 @@ export async function createCheckoutOrder(
         customerName: input.customer.name,
         customerEmail: input.customer.email,
       },
+    });
+    await createOrderCreatedNotifications(transaction, {
+      orderId: created.id,
+      orderNumber: created.orderNumber,
+      sourceAuditEventId: event.id,
     });
     return { ...created, existing: false };
   });

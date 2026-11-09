@@ -2,6 +2,7 @@
 @import "./styles/theme-tokens.css";
 @import "./styles/buttons.css";
 @import "./styles/site-header-theme.css";
+@import "./styles/notifications.css";
 @import "./styles/theme-switch.css";
 @import "./styles/foundations.css";
 @import "./styles/home-hero.css";

@@ -5,6 +5,7 @@ import { NavigationDesktopLinks } from "./navigation-desktop-links";
 import { NavigationDesktopControls } from "./navigation-desktop-controls";
 import { NavigationMobileActions } from "./navigation-mobile-actions";
 import type { useNavigationController } from "./use-navigation-controller";
+import { NotificationPanel } from "./notification-panel";
 export function NavigationMainRow({
   props,
   state,
@@ -64,9 +65,17 @@ export function NavigationMainRow({
     languageItemRefs,
     count,
     ready,
+    notificationCenter,
   } = state;
+  const notification = notificationCenter.enabled
+    ? {
+        open: notificationCenter.open,
+        unread: notificationCenter.unread,
+        onToggle: notificationCenter.toggle,
+      }
+    : undefined;
   return (
-    <div className="relative mx-auto flex min-h-[4.5rem] w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
+    <div className="site-navigation-main-row relative mx-auto flex min-h-[4.5rem] w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
       <NavigationBrand
         locale={locale}
         brandLabel={brandLabel}
@@ -92,6 +101,8 @@ export function NavigationMainRow({
         closeMenuLabel={closeMenuLabel}
         setMenuOpen={setMenuOpen}
         setProfileOpen={setProfileOpen}
+        notification={notification}
+        closeNotification={notificationCenter.closeWithoutFocus}
       />
 
       <NavigationDesktopLinks
@@ -132,6 +143,7 @@ export function NavigationMainRow({
         signInLabel={signInLabel}
         signUpLabel={signUpLabel}
         ctaLabel={ctaLabel}
+        notification={notification}
       />
       {user && profileOpen ? (
         <NavigationAccountPanel
@@ -151,6 +163,9 @@ export function NavigationMainRow({
           signingOutLabel={signingOutLabel}
           signOutLabel={signOutLabel}
         />
+      ) : null}
+      {notificationCenter.enabled ? (
+        <NotificationPanel locale={locale} center={notificationCenter} />
       ) : null}
     </div>
   );

@@ -21,6 +21,7 @@ const i18nConfig = {
     "terms",
     "orders",
     "customerOrders",
+    "notifications",
   ],
   localeInPath: true,
   localeParamName: "locale",

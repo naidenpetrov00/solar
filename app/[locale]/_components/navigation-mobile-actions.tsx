@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/button";
 import { localizedPath } from "../_lib/routes";
 import type { NavigationProps } from "./navigation-model";
+import { NotificationBell } from "./notification-bell";
+import type { NotificationUnreadSummary } from "@/lib/in-app-notifications/model";
 
 type MobileActionLabels = Pick<
   NavigationProps,
@@ -29,6 +31,8 @@ export function NavigationMobileActions({
   closeMenuLabel,
   setMenuOpen,
   setProfileOpen,
+  notification,
+  closeNotification,
 }: MobileActionLabels & {
   signedIn: boolean;
   profileOpen: boolean;
@@ -41,9 +45,15 @@ export function NavigationMobileActions({
   menuOpen: boolean;
   setMenuOpen: (update: (open: boolean) => boolean) => void;
   setProfileOpen: (open: boolean) => void;
+  closeNotification: () => void;
+  notification?: {
+    open: boolean;
+    unread: NotificationUnreadSummary;
+    onToggle: (trigger: HTMLButtonElement) => void;
+  };
 }) {
   return (
-    <div className="flex items-center gap-2 xl:hidden">
+    <div className="site-mobile-actions flex items-center gap-2 xl:hidden">
       {signedIn ? (
         <Button
           type="button"
@@ -79,6 +89,7 @@ export function NavigationMobileActions({
           </svg>
         </Button>
       ) : null}
+      {notification ? <NotificationBell {...notification} /> : null}
       <Link
         className="site-cart-link relative inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
         href={localizedPath(locale, "cart")}
@@ -118,6 +129,7 @@ export function NavigationMobileActions({
         aria-label={menuOpen ? closeMenuLabel : menuLabel}
         onClick={() => {
           setProfileOpen(false);
+          closeNotification();
           setMenuOpen((open) => !open);
         }}
       >

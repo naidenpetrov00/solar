@@ -6,18 +6,24 @@ import { useNavigationTheme } from "./use-navigation-theme";
 import { useNavigationRoutes } from "./use-navigation-routes";
 import { useNavigationIndicators } from "./use-navigation-indicators";
 import { useNavigationSession } from "./use-navigation-session";
+import { useNotificationCenter } from "./use-notification-center";
 
 export function useNavigationController(props: NavigationProps) {
   const { locale, initialTheme, themeLight, themeDark, routes, signOutError } =
     props;
   const theme = useNavigationTheme(initialTheme, themeLight, themeDark);
   const route = useNavigationRoutes(locale, routes);
+  const notificationCenter = useNotificationCenter(
+    locale,
+    props.notifications?.unread,
+  );
   const session = useNavigationSession(
     locale,
     route.pathname,
     route.currentSearch,
     route.currentPath,
     signOutError,
+    notificationCenter.closeWithoutFocus,
   );
   const indicators = useNavigationIndicators(
     route.activeNavSlug,
@@ -25,5 +31,21 @@ export function useNavigationController(props: NavigationProps) {
     locale,
   );
   const { count, ready } = useCart();
-  return { ...theme, ...route, ...session, ...indicators, count, ready };
+  const toggleNotifications = (trigger: HTMLButtonElement) => {
+    session.setMenuOpen(false);
+    session.setProfileOpen(false);
+    notificationCenter.toggle(trigger);
+  };
+  return {
+    ...theme,
+    ...route,
+    ...session,
+    ...indicators,
+    count,
+    ready,
+    notificationCenter: {
+      ...notificationCenter,
+      toggle: toggleNotifications,
+    },
+  };
 }

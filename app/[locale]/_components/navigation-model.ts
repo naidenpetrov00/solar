@@ -1,3 +1,5 @@
+import type { NotificationNavigationState } from "@/lib/in-app-notifications/model";
+
 export type NavigationRoute = {
   slug: string;
   label: string;
@@ -29,6 +31,7 @@ export type NavigationProps = {
   dashboardNavigationLabel: string;
   accountNavigationLabel: string;
   canViewDashboard: boolean;
+  notifications?: NotificationNavigationState;
   signOutLabel: string;
   signingOutLabel: string;
   signOutError: string;

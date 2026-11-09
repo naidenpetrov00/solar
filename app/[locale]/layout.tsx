@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { I18nProvider } from "next-i18next/client";
 import { getResources, getT, generateI18nStaticParams } from "@/i18n.server";
 import { getCurrentUser } from "@/lib/authorization";
+import { getNotificationNavigationState } from "@/lib/in-app-notifications/read";
 import { hasPermission } from "@/lib/permission-policy";
 import { getPublicSiteUrl } from "@/lib/server-env";
 import { Navigation } from "./_components/navigation";
@@ -61,15 +62,20 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  const [cookieStore, currentUser] = await Promise.all([
+  const [cookieStore, currentUser, notificationState] = await Promise.all([
     cookies(),
     getCurrentUser(),
+    getNotificationNavigationState(),
   ]);
   const savedTheme = cookieStore.get("solar-theme")?.value;
   const initialTheme =
     savedTheme === "light" || savedTheme === "dark" ? savedTheme : undefined;
-  const { t, i18n } = await getT("common", { lng: locale });
-  const resources = getResources(i18n, ["common"], [locale, "bg"]);
+  const { t, i18n } = await getT(["common", "notifications"], { lng: locale });
+  const resources = getResources(
+    i18n,
+    ["common", "notifications"],
+    [locale, "bg"],
+  );
   const navigationRoutes = routeDefinitions.map(({ slug, key }) => ({
     slug,
     label: t(`navigation.${key}`),
@@ -124,6 +130,9 @@ export default async function LocaleLayout({
             dashboardNavigationLabel={t("accessibility.dashboardNavigation")}
             accountNavigationLabel={t("accessibility.accountNavigation")}
             canViewDashboard={canViewDashboard}
+            notifications={
+              notificationState.eligible ? notificationState : undefined
+            }
             signOutLabel={t("navigation.signOut")}
             signingOutLabel={t("navigation.signingOut")}
             signOutError={t("navigation.signOutError")}
