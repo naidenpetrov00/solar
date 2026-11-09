@@ -14,6 +14,7 @@ import { scheduleOrderNotificationDispatch } from "@/lib/order-notifications/aft
 import type { CheckoutOrderInput } from "@/lib/orders/types";
 import { assertCustomerPolicyReadiness } from "@/lib/legal/policy-facts";
 import { localizedPath } from "../_lib/routes";
+import { scheduleWebPushDispatch } from "@/lib/web-push/after-kick";
 import type {
   CheckoutActionResult,
   CheckoutField,
@@ -85,6 +86,7 @@ export async function submitCheckoutOrderAction(
         : null,
     );
     scheduleOrderNotificationDispatch();
+    scheduleWebPushDispatch();
     const cookieStore = await cookies();
     cookieStore.set(orderConfirmationCookieName, createOrderConfirmationToken(created.orderNumber), {
       httpOnly: true,

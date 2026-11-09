@@ -28,6 +28,10 @@ type NotificationIdentity = {
 type RegistryEntry = NotificationIdentity & {
   permission: AppPermission;
   present: (row: StoredNotification) => NotificationPresentationDto;
+  push?: {
+    titleKey: "push.orderCreated.title";
+    bodyKey: "push.orderCreated.body";
+  };
 };
 
 function orderCreatedPayload(value: unknown) {
@@ -49,6 +53,10 @@ const orderCreated: RegistryEntry = {
   kind: "order_created",
   payloadVersion: 1,
   permission: "order:view",
+  push: {
+    titleKey: "push.orderCreated.title",
+    bodyKey: "push.orderCreated.body",
+  },
   present(row) {
     const payload = orderCreatedPayload(row.payload);
     if (!payload) {
@@ -77,6 +85,27 @@ export function authorizedNotificationIdentities(role: unknown) {
   return notificationEntries
     .filter((entry) => hasPermission(role, entry.permission))
     .map(({ kind, payloadVersion }) => ({ kind, payloadVersion }));
+}
+
+export function authorizedPushNotificationIdentities(role: unknown) {
+  return notificationEntries
+    .filter((entry) => entry.push && hasPermission(role, entry.permission))
+    .map(({ kind, payloadVersion }) => ({ kind, payloadVersion }));
+}
+
+export function presentStoredPushNotification(
+  row: StoredNotification,
+  role: unknown,
+) {
+  const entry = notificationEntries.find(
+    (candidate) =>
+      candidate.kind === row.kind &&
+      candidate.payloadVersion === row.payloadVersion,
+  );
+  if (!entry?.push || !hasPermission(role, entry.permission)) {
+    throw new InAppNotificationError("FORBIDDEN");
+  }
+  return { presentation: entry.present(row), ...entry.push };
 }
 
 export function presentStoredNotification(

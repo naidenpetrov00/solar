@@ -7,6 +7,7 @@ import { Button } from "@/components/button";
 import { NotificationBell } from "./notification-bell";
 import { NotificationItem } from "./notification-item";
 import type { useNotificationCenter } from "./use-notification-center";
+import { BrowserPushPreference } from "./browser-push-preference";
 
 type NotificationCenter = ReturnType<typeof useNotificationCenter>;
 
@@ -121,6 +122,7 @@ export function NotificationPanel({
           </Button>
         </div>
       </div>
+      <BrowserPushPreference push={center.browserPush} />
       <div className="site-notification-toolbar">
         <div className="site-notification-filters" role="group" aria-label={t("filters.label")}>
           <Button type="button" variant="secondary" aria-pressed={center.filter === "unread"} onClick={() => center.setFilter("unread")}>

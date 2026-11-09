@@ -35,6 +35,18 @@
     "unread": "Okunmamış",
     "orderCreated": { "title": "Yeni sipariş {{orderNumber}}", "body": "İncelenmeyi bekliyor." }
   },
+  "push": {
+    "invitation": { "title": "Yeni siparişlerden haberdar olun", "body": "Bu tarayıcı için gizliliği koruyan bildirimleri etkinleştirebilirsiniz. İzin yalnızca düğmeye bastığınızda istenir." },
+    "settings": { "title": "Tarayıcı bildirimleri" },
+    "actions": { "enable": "Bildirimleri etkinleştir", "enabling": "Etkinleştiriliyor…", "disable": "Bu cihazda devre dışı bırak", "disabling": "Devre dışı bırakılıyor…", "dismiss": "Şimdi değil" },
+    "states": {
+      "checking": "Bildirim durumu kontrol ediliyor…", "unsupported": "Bu tarayıcı veya bağlam tarayıcı bildirimlerini desteklemiyor.", "unconfigured": "Tarayıcı bildirimleri geçici olarak kullanılamıyor.",
+      "permission_default": "Bildirimler bu tarayıcıda etkin değil. İzin yalnızca açık bir işlemden sonra istenir.", "enabled": "Bildirimler bu tarayıcıda etkin.", "denied": "Tarayıcı bildirimleri engelledi. İzni site ayarlarından değiştirebilirsiniz.",
+      "disabled": "Bildirimler bu tarayıcıda devre dışı.", "expired": "Aboneliğin süresi doldu veya anahtarı değişti. Yeniden etkinleştirin.", "ownership_mismatch": "Başka bir hesaba ait eski abonelik kaldırıldı. Bu hesap için bildirimleri açıkça etkinleştirin.", "failure": "Durum şu anda yenilenemiyor. Lütfen tekrar deneyin."
+    },
+    "feedback": { "enabled": "Tarayıcı bildirimleri etkinleştirildi.", "disabled": "Tarayıcı bildirimleri bu cihazda devre dışı bırakıldı." },
+    "orderCreated": { "title": "Yeni sipariş", "body": "Bir sipariş inceleme bekliyor." }
+  },
   "relative": {
     "justNow": "az önce",
     "minutes_one": "{{count}} dakika önce", "minutes_few": "{{count}} dakika önce", "minutes_many": "{{count}} dakika önce", "minutes_other": "{{count}} dakika önce",

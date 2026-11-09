@@ -19,6 +19,8 @@ import {
   type NotificationClientError,
 } from "./use-notification-mutations";
 import { useNotificationPolling } from "./use-notification-polling";
+import type { WebPushPublicConfig } from "@/lib/web-push/model";
+import { useBrowserPush } from "./use-browser-push";
 
 type LoadMode = "reset" | "refresh" | "append";
 function aborted(error: unknown) {
@@ -28,8 +30,10 @@ function aborted(error: unknown) {
 export function useNotificationCenter(
   locale: string,
   initialUnread?: NotificationUnreadSummary,
+  webPushConfig?: WebPushPublicConfig,
 ) {
   const router = useRouter();
+  const browserPush = useBrowserPush(locale, webPushConfig);
   const [accessRevoked, setAccessRevoked] = useState(false);
   const enabled = initialUnread !== undefined && !accessRevoked;
   const [open, setOpen] = useState(false);
@@ -54,7 +58,8 @@ export function useNotificationCenter(
     setOpen(false);
     setItems([]);
     setUnread({ count: 0, overflow: false });
-  }, []);
+    void browserPush.cleanupForLogout();
+  }, [browserPush.cleanupForLogout]);
 
   useEffect(() => {
     if (initialUnread) {
@@ -196,5 +201,6 @@ export function useNotificationCenter(
     ...mutations,
     loadMore: () => loadPage("append"),
     retry: resetPage,
+    browserPush,
   };
 }

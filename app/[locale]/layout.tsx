@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/authorization";
 import { getNotificationNavigationState } from "@/lib/in-app-notifications/read";
 import { hasPermission } from "@/lib/permission-policy";
 import { getPublicSiteUrl } from "@/lib/server-env";
+import { getWebPushPublicConfig } from "@/lib/web-push/config";
 import { Navigation } from "./_components/navigation";
 import {
   openGraphLocale,
@@ -132,6 +133,11 @@ export default async function LocaleLayout({
             canViewDashboard={canViewDashboard}
             notifications={
               notificationState.eligible ? notificationState : undefined
+            }
+            webPush={
+              notificationState.eligible && currentUser
+                ? getWebPushPublicConfig(currentUser.id)
+                : undefined
             }
             signOutLabel={t("navigation.signOut")}
             signingOutLabel={t("navigation.signingOut")}

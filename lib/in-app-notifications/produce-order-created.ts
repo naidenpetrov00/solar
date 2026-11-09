@@ -7,6 +7,7 @@ import { appRoles } from "@/lib/auth-role-config";
 import { createOrderCreatedPayload } from "@/lib/in-app-notifications/registry";
 import type { OrderTransaction } from "@/lib/orders/repository-types";
 import { hasPermission } from "@/lib/permission-policy";
+import { enqueueWebPushDeliveries } from "@/lib/web-push/enqueue";
 
 export async function createOrderCreatedNotifications(
   transaction: OrderTransaction,
@@ -39,7 +40,7 @@ export async function createOrderCreatedNotifications(
   const payload = createOrderCreatedPayload(input.orderId, input.orderNumber);
   const deduplicationKey = `order_created:v1:${input.sourceAuditEventId}`;
 
-  await transaction
+  const notifications = await transaction
     .insert(userNotification)
     .values(
       recipients.map(({ id }) => ({
@@ -55,5 +56,10 @@ export async function createOrderCreatedNotifications(
         userNotification.recipientUserId,
         userNotification.deduplicationKey,
       ],
+    })
+    .returning({
+      id: userNotification.id,
+      recipientUserId: userNotification.recipientUserId,
     });
+  await enqueueWebPushDeliveries(transaction, notifications);
 }

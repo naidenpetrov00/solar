@@ -35,6 +35,18 @@
     "unread": "Unread",
     "orderCreated": { "title": "New order {{orderNumber}}", "body": "Awaiting review." }
   },
+  "push": {
+    "invitation": { "title": "Get notified about new orders", "body": "You can enable privacy-safe notifications for this browser. Permission is requested only after you use the button." },
+    "settings": { "title": "Browser notifications" },
+    "actions": { "enable": "Enable notifications", "enabling": "Enabling…", "disable": "Disable on this device", "disabling": "Disabling…", "dismiss": "Not now" },
+    "states": {
+      "checking": "Checking notification status…", "unsupported": "This browser or context does not support browser notifications.", "unconfigured": "Browser notifications are temporarily unavailable.",
+      "permission_default": "Notifications are not enabled for this browser. Permission is requested only after an explicit action.", "enabled": "Notifications are enabled for this browser.", "denied": "The browser has blocked notifications. You can change the permission in the site settings.",
+      "disabled": "Notifications are disabled for this browser.", "expired": "The subscription expired or its key changed. Enable it again.", "ownership_mismatch": "An old subscription from another account was removed. Explicitly enable notifications for this account.", "failure": "The status cannot be refreshed right now. Please try again."
+    },
+    "feedback": { "enabled": "Browser notifications are enabled.", "disabled": "Browser notifications are disabled on this device." },
+    "orderCreated": { "title": "New order", "body": "An order is awaiting review." }
+  },
   "relative": {
     "justNow": "just now",
     "minutes_one": "{{count}} minute ago", "minutes_few": "{{count}} minutes ago", "minutes_many": "{{count}} minutes ago", "minutes_other": "{{count}} minutes ago",

@@ -10,6 +10,7 @@ export function useNavigationSession(
   currentPath: string,
   signOutError: string,
   closeExternal: () => void,
+  cleanupExternal: () => Promise<void>,
 ) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -78,6 +79,7 @@ export function useNavigationSession(
     setLogoutError(null);
 
     try {
+      await cleanupExternal();
       const result = await authClient.signOut();
 
       if (result.error) {

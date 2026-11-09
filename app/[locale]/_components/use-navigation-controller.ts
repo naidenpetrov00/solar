@@ -16,6 +16,7 @@ export function useNavigationController(props: NavigationProps) {
   const notificationCenter = useNotificationCenter(
     locale,
     props.notifications?.unread,
+    props.webPush,
   );
   const session = useNavigationSession(
     locale,
@@ -24,6 +25,7 @@ export function useNavigationController(props: NavigationProps) {
     route.currentPath,
     signOutError,
     notificationCenter.closeWithoutFocus,
+    notificationCenter.browserPush.cleanupForLogout,
   );
   const indicators = useNavigationIndicators(
     route.activeNavSlug,

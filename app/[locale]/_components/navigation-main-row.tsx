@@ -6,6 +6,7 @@ import { NavigationDesktopControls } from "./navigation-desktop-controls";
 import { NavigationMobileActions } from "./navigation-mobile-actions";
 import type { useNavigationController } from "./use-navigation-controller";
 import { NotificationPanel } from "./notification-panel";
+import { BrowserPushInvitation } from "./browser-push-invitation";
 export function NavigationMainRow({
   props,
   state,
@@ -166,6 +167,9 @@ export function NavigationMainRow({
       ) : null}
       {notificationCenter.enabled ? (
         <NotificationPanel locale={locale} center={notificationCenter} />
+      ) : null}
+      {notificationCenter.enabled ? (
+        <BrowserPushInvitation push={notificationCenter.browserPush} />
       ) : null}
     </div>
   );
