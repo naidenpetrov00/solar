@@ -1,0 +1,59 @@
+{
+  "title": "Notifications",
+  "close": "Close",
+  "filters": { "label": "Notification filter", "unread": "Unread", "all": "All" },
+  "actions": { "markAll": "Mark all as read", "loadMore": "Load more", "retry": "Try again" },
+  "badge": {
+    "zero": "Open notifications. No unread notifications.",
+    "count_one": "Open notifications. {{count}} unread notification.",
+    "count_few": "Open notifications. {{count}} unread notifications.",
+    "count_many": "Open notifications. {{count}} unread notifications.",
+    "count_other": "Open notifications. {{count}} unread notifications.",
+    "overflow": "Open notifications. 99 or more unread notifications.",
+    "closeZero": "Close notifications. No unread notifications.",
+    "closeCount_one": "Close notifications. {{count}} unread notification.",
+    "closeCount_few": "Close notifications. {{count}} unread notifications.",
+    "closeCount_many": "Close notifications. {{count}} unread notifications.",
+    "closeCount_other": "Close notifications. {{count}} unread notifications.",
+    "closeOverflow": "Close notifications. 99 or more unread notifications."
+  },
+  "empty": { "unread": "You have no unread notifications.", "all": "You have no notifications yet." },
+  "status": {
+    "loading": "Loading notifications…",
+    "loadingMore": "Loading more notifications…",
+    "markingAll": "Marking notifications as read…",
+    "markedAll": "All notifications are marked as read.",
+    "opening": "Opening notification…"
+  },
+  "errors": {
+    "FORBIDDEN": "You no longer have access to this notification.",
+    "INVALID_INPUT": "This notification cannot be opened.",
+    "NOT_FOUND": "This notification is no longer available.",
+    "TEMPORARY_FAILURE": "Notifications cannot be refreshed right now. Please try again."
+  },
+  "items": {
+    "unread": "Unread",
+    "orderCreated": { "title": "New order {{orderNumber}}", "body": "Awaiting review." }
+  },
+  "push": {
+    "invitation": { "title": "Get notified about new orders", "body": "You can enable privacy-safe notifications for this browser. Permission is requested only after you use the button." },
+    "settings": { "title": "Browser notifications" },
+    "actions": { "enable": "Enable notifications", "enabling": "Enabling…", "disable": "Disable on this device", "disabling": "Disabling…", "dismiss": "Not now" },
+    "states": {
+      "checking": "Checking notification status…", "unsupported": "This browser or context does not support browser notifications.", "unconfigured": "Browser notifications are temporarily unavailable.",
+      "permission_default": "Notifications are not enabled for this browser. Permission is requested only after an explicit action.", "enabled": "Notifications are enabled for this browser.", "denied": "The browser has blocked notifications. You can change the permission in the site settings.",
+      "disabled": "Notifications are disabled for this browser.", "expired": "The subscription expired or its key changed. Enable it again.", "ownership_mismatch": "An old subscription from another account was removed. Explicitly enable notifications for this account.", "failure": "The status cannot be refreshed right now. Please try again."
+    },
+    "feedback": { "enabled": "Browser notifications are enabled.", "disabled": "Browser notifications are disabled on this device." },
+    "orderCreated": { "title": "New order", "body": "An order is awaiting review." }
+  },
+  "relative": {
+    "justNow": "just now",
+    "minutes_one": "{{count}} minute ago", "minutes_few": "{{count}} minutes ago", "minutes_many": "{{count}} minutes ago", "minutes_other": "{{count}} minutes ago",
+    "hours_one": "{{count}} hour ago", "hours_few": "{{count}} hours ago", "hours_many": "{{count}} hours ago", "hours_other": "{{count}} hours ago",
+    "days_one": "{{count}} day ago", "days_few": "{{count}} days ago", "days_many": "{{count}} days ago", "days_other": "{{count}} days ago",
+    "weeks_one": "{{count}} week ago", "weeks_few": "{{count}} weeks ago", "weeks_many": "{{count}} weeks ago", "weeks_other": "{{count}} weeks ago",
+    "months_one": "{{count}} month ago", "months_few": "{{count}} months ago", "months_many": "{{count}} months ago", "months_other": "{{count}} months ago",
+    "years_one": "{{count}} year ago", "years_few": "{{count}} years ago", "years_many": "{{count}} years ago", "years_other": "{{count}} years ago"
+  }
+}

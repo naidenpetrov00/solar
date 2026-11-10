@@ -1,0 +1,59 @@
+{
+  "title": "Bildirimler",
+  "close": "Kapat",
+  "filters": { "label": "Bildirim filtresi", "unread": "Okunmamış", "all": "Tümü" },
+  "actions": { "markAll": "Tümünü okundu olarak işaretle", "loadMore": "Daha fazla yükle", "retry": "Tekrar deneyin" },
+  "badge": {
+    "zero": "Bildirimleri aç. Okunmamış bildirim yok.",
+    "count_one": "Bildirimleri aç. {{count}} okunmamış bildirim.",
+    "count_few": "Bildirimleri aç. {{count}} okunmamış bildirim.",
+    "count_many": "Bildirimleri aç. {{count}} okunmamış bildirim.",
+    "count_other": "Bildirimleri aç. {{count}} okunmamış bildirim.",
+    "overflow": "Bildirimleri aç. 99 veya daha fazla okunmamış bildirim.",
+    "closeZero": "Bildirimleri kapat. Okunmamış bildirim yok.",
+    "closeCount_one": "Bildirimleri kapat. {{count}} okunmamış bildirim.",
+    "closeCount_few": "Bildirimleri kapat. {{count}} okunmamış bildirim.",
+    "closeCount_many": "Bildirimleri kapat. {{count}} okunmamış bildirim.",
+    "closeCount_other": "Bildirimleri kapat. {{count}} okunmamış bildirim.",
+    "closeOverflow": "Bildirimleri kapat. 99 veya daha fazla okunmamış bildirim."
+  },
+  "empty": { "unread": "Okunmamış bildiriminiz yok.", "all": "Henüz bildiriminiz yok." },
+  "status": {
+    "loading": "Bildirimler yükleniyor…",
+    "loadingMore": "Daha fazla bildirim yükleniyor…",
+    "markingAll": "Bildirimler okundu olarak işaretleniyor…",
+    "markedAll": "Tüm bildirimler okundu olarak işaretlendi.",
+    "opening": "Bildirim açılıyor…"
+  },
+  "errors": {
+    "FORBIDDEN": "Artık bu bildirime erişiminiz yok.",
+    "INVALID_INPUT": "Bu bildirim açılamıyor.",
+    "NOT_FOUND": "Bu bildirim artık mevcut değil.",
+    "TEMPORARY_FAILURE": "Bildirimler şu anda yenilenemiyor. Lütfen tekrar deneyin."
+  },
+  "items": {
+    "unread": "Okunmamış",
+    "orderCreated": { "title": "Yeni sipariş {{orderNumber}}", "body": "İncelenmeyi bekliyor." }
+  },
+  "push": {
+    "invitation": { "title": "Yeni siparişlerden haberdar olun", "body": "Bu tarayıcı için gizliliği koruyan bildirimleri etkinleştirebilirsiniz. İzin yalnızca düğmeye bastığınızda istenir." },
+    "settings": { "title": "Tarayıcı bildirimleri" },
+    "actions": { "enable": "Bildirimleri etkinleştir", "enabling": "Etkinleştiriliyor…", "disable": "Bu cihazda devre dışı bırak", "disabling": "Devre dışı bırakılıyor…", "dismiss": "Şimdi değil" },
+    "states": {
+      "checking": "Bildirim durumu kontrol ediliyor…", "unsupported": "Bu tarayıcı veya bağlam tarayıcı bildirimlerini desteklemiyor.", "unconfigured": "Tarayıcı bildirimleri geçici olarak kullanılamıyor.",
+      "permission_default": "Bildirimler bu tarayıcıda etkin değil. İzin yalnızca açık bir işlemden sonra istenir.", "enabled": "Bildirimler bu tarayıcıda etkin.", "denied": "Tarayıcı bildirimleri engelledi. İzni site ayarlarından değiştirebilirsiniz.",
+      "disabled": "Bildirimler bu tarayıcıda devre dışı.", "expired": "Aboneliğin süresi doldu veya anahtarı değişti. Yeniden etkinleştirin.", "ownership_mismatch": "Başka bir hesaba ait eski abonelik kaldırıldı. Bu hesap için bildirimleri açıkça etkinleştirin.", "failure": "Durum şu anda yenilenemiyor. Lütfen tekrar deneyin."
+    },
+    "feedback": { "enabled": "Tarayıcı bildirimleri etkinleştirildi.", "disabled": "Tarayıcı bildirimleri bu cihazda devre dışı bırakıldı." },
+    "orderCreated": { "title": "Yeni sipariş", "body": "Bir sipariş inceleme bekliyor." }
+  },
+  "relative": {
+    "justNow": "az önce",
+    "minutes_one": "{{count}} dakika önce", "minutes_few": "{{count}} dakika önce", "minutes_many": "{{count}} dakika önce", "minutes_other": "{{count}} dakika önce",
+    "hours_one": "{{count}} saat önce", "hours_few": "{{count}} saat önce", "hours_many": "{{count}} saat önce", "hours_other": "{{count}} saat önce",
+    "days_one": "{{count}} gün önce", "days_few": "{{count}} gün önce", "days_many": "{{count}} gün önce", "days_other": "{{count}} gün önce",
+    "weeks_one": "{{count}} hafta önce", "weeks_few": "{{count}} hafta önce", "weeks_many": "{{count}} hafta önce", "weeks_other": "{{count}} hafta önce",
+    "months_one": "{{count}} ay önce", "months_few": "{{count}} ay önce", "months_many": "{{count}} ay önce", "months_other": "{{count}} ay önce",
+    "years_one": "{{count}} yıl önce", "years_few": "{{count}} yıl önce", "years_many": "{{count}} yıl önce", "years_other": "{{count}} yıl önce"
+  }
+}

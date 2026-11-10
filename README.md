@@ -39,6 +39,10 @@ Configuration variables:
 | `BETTER_AUTH_SECRET` | Better Auth signing/encryption secret, at least 32 high-entropy characters |
 | `ORDER_CONFIRMATION_SIGNING_KEY` | Separate high-entropy secret used only to sign short-lived public order-confirmation state; do not reuse an authentication or session secret |
 | `ORDER_NOTIFICATION_DISPATCH_SECRET` | Separate high-entropy bearer secret, at least 32 bytes, used only by the private order-notification dispatcher |
+| `WEB_PUSH_VAPID_SUBJECT` | Optional Web Push contact URI (`mailto:` or HTTPS); configure it with both VAPID keys |
+| `WEB_PUSH_VAPID_PUBLIC_KEY` | Optional URL-safe Base64 VAPID public key, exposed only to eligible signed-in clients |
+| `WEB_PUSH_VAPID_PRIVATE_KEY` | Optional server-only VAPID private key; never expose it to browser code |
+| `WEB_PUSH_DISPATCH_SECRET` | Separate high-entropy bearer secret used only by the private Web Push dispatcher |
 | `BETTER_AUTH_URL` | Better Auth origin, such as `http://localhost:3000` locally; it is not used for public SEO URLs |
 | `BETTER_AUTH_TRUSTED_ORIGINS` | Optional comma-separated additional origins for LAN or preview development, such as the exact URL opened on a phone |
 | `LOCALSTACK_GATEWAY_PORT` | Loopback-only LocalStack S3 gateway port; defaults to `4566` |
@@ -336,6 +340,22 @@ curl --fail --silent --show-error --request POST \
 The endpoint returns `204` after a safely handled batch, including when there is no work, `401` for invalid credentials, and a bodyless `500` for a batch-level infrastructure failure. Cron monitoring should alert on non-2xx responses. Keep the secret in the scheduler's secret store rather than the crontab command itself.
 
 `after()` may accelerate delivery after an order mutation, but the one-minute scheduler is the recovery mechanism and source of operational reliability. Self-hosted Next.js processes must use graceful shutdown so in-flight requests receive time to finish; draining does not replace the scheduler or the outbox lease recovery.
+
+## Browser push dispatcher
+
+Browser push is an optional delivery channel for durable in-app notifications. It requires HTTPS outside local development, the `web-push` package, a VAPID key pair, and all four `WEB_PUSH_*` variables above. Generate and store the key pair in the deployment secret manager; rotating it expires existing browser subscriptions and users must explicitly enable them again. Treat subscription endpoints and keys as server-only credentials: restrict database access, encrypt production database storage and backups, and never include them in logs or client responses.
+
+After installing `web-push`, generate the VAPID pair outside source control with `npx web-push generate-vapid-keys`. Copy the public and private values directly into the deployment secret manager and do not commit the command output.
+
+A production scheduler must call the private endpoint once per minute over HTTPS:
+
+```sh
+curl --fail --silent --show-error --request POST \
+  --header "Authorization: Bearer $WEB_PUSH_DISPATCH_SECRET" \
+  "https://your-production-origin.example/api/internal/push-notifications/dispatch"
+```
+
+Hetzner cron or systemd timers, Vercel-compatible external schedulers, and other platforms can use the same endpoint. Permit outbound HTTPS to browser push services, including `*.push.apple.com` when applicable. Monitor non-2xx responses, use graceful shutdown, and keep the dispatcher secret separate from email and authentication secrets.
 
 ## Google OAuth configuration
 

@@ -113,6 +113,20 @@
       "when": 1793874166351,
       "tag": "0015_add-customer-order-email-link",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1793915000770,
+      "tag": "0016_add-in-app-notifications",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1794226331684,
+      "tag": "0017_add-browser-push-notifications",
+      "breakpoints": true
     }
   ]
 }

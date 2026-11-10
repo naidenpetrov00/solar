@@ -9,6 +9,8 @@ export function useNavigationSession(
   currentSearch: string,
   currentPath: string,
   signOutError: string,
+  closeExternal: () => void,
+  cleanupExternal: () => Promise<void>,
 ) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,6 +23,7 @@ export function useNavigationSession(
   const closeMenus = () => {
     setMenuOpen(false);
     setProfileOpen(false);
+    closeExternal();
   };
 
   useEffect(() => {
@@ -29,16 +32,18 @@ export function useNavigationSession(
       if (!active) return;
       setMenuOpen(false);
       setProfileOpen(false);
+      closeExternal();
     });
     return () => {
       active = false;
     };
-  }, [pathname, currentSearch]);
+  }, [pathname, currentSearch, closeExternal]);
 
   const toggleProfile = (trigger: HTMLButtonElement) => {
     profileTriggerRef.current = trigger;
     setLogoutError(null);
     setMenuOpen(false);
+    closeExternal();
     setProfileOpen((open) => !open);
   };
 
@@ -74,6 +79,7 @@ export function useNavigationSession(
     setLogoutError(null);
 
     try {
+      await cleanupExternal();
       const result = await authClient.signOut();
 
       if (result.error) {

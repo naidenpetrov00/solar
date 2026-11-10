@@ -97,6 +97,7 @@
       "vatIncluded": "Price includes VAT",
       "addToCart": "Buy",
       "addedToCart": "Added",
+      "goToCart": "Go to cart",
       "addNamedToCart": "Buy {{name}}",
       "inStock": "In stock",
       "outOfStock": "Out of stock",

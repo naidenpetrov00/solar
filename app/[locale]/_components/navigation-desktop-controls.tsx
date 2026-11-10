@@ -6,6 +6,8 @@ import { localizedPath } from "../_lib/routes";
 import type { NavigationProps } from "./navigation-model";
 import { NavigationDesktopLanguageSelector } from "./navigation-desktop-language-selector";
 import { NavigationDesktopAccount } from "./navigation-desktop-account";
+import { NotificationBell } from "./notification-bell";
+import type { NotificationUnreadSummary } from "@/lib/in-app-notifications/model";
 
 type DesktopLabels = Pick<
   NavigationProps,
@@ -49,6 +51,7 @@ export function NavigationDesktopControls({
   signInLabel,
   signUpLabel,
   ctaLabel,
+  notification,
 }: DesktopLabels & {
   languageIndicator: { left: number; width: number };
   languageItemRefs: RefObject<Record<string, HTMLAnchorElement | null>>;
@@ -65,6 +68,11 @@ export function NavigationDesktopControls({
   toggleProfile: (trigger: HTMLButtonElement) => void;
   signInHref: string;
   signUpHref: string;
+  notification?: {
+    open: boolean;
+    unread: NotificationUnreadSummary;
+    onToggle: (trigger: HTMLButtonElement) => void;
+  };
 }) {
   return (
     <div className="hidden items-center gap-3 xl:flex">
@@ -118,6 +126,7 @@ export function NavigationDesktopControls({
           </span>
         )}
       </Link>
+      {notification ? <NotificationBell {...notification} /> : null}
       <NavigationDesktopAccount
         user={user}
         profileOpen={profileOpen}

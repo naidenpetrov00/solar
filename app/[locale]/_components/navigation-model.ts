@@ -1,3 +1,6 @@
+import type { NotificationNavigationState } from "@/lib/in-app-notifications/model";
+import type { WebPushPublicConfig } from "@/lib/web-push/model";
+
 export type NavigationRoute = {
   slug: string;
   label: string;
@@ -29,6 +32,8 @@ export type NavigationProps = {
   dashboardNavigationLabel: string;
   accountNavigationLabel: string;
   canViewDashboard: boolean;
+  notifications?: NotificationNavigationState;
+  webPush?: WebPushPublicConfig;
   signOutLabel: string;
   signingOutLabel: string;
   signOutError: string;

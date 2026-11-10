@@ -97,6 +97,7 @@
       "vatIncluded": "Fiyata KDV dahildir",
       "addToCart": "Satın al",
       "addedToCart": "Eklendi",
+      "goToCart": "Sepete git",
       "addNamedToCart": "{{name}} satın al",
       "inStock": "Stokta",
       "outOfStock": "Stokta yok",

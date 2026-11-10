@@ -99,6 +99,8 @@ export default async function ProductPage({ params }: Props) {
         name={product.title}
         addLabel={t("pages.shop.addToCart")}
         addedLabel={t("pages.shop.addedToCart")}
+        cartHref={localizedPath(page.locale, "cart")}
+        cartLabel={t("pages.shop.goToCart")}
         accessibleLabel={t("pages.shop.addNamedToCart", {
           name: product.title,
         })}

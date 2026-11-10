@@ -73,6 +73,8 @@ export async function ProductList({
                   name={product.title}
                   addLabel={t("pages.shop.addToCart")}
                   addedLabel={t("pages.shop.addedToCart")}
+                  cartHref={localizedPath(locale, "cart")}
+                  cartLabel={t("pages.shop.goToCart")}
                   accessibleLabel={t("pages.shop.addNamedToCart", {
                     name: product.title,
                   })}
