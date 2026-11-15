@@ -2,8 +2,10 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 import { ButtonLink } from "@/components/button";
 import { getT } from "@/i18n.server";
-import { HomepageDestinationLink } from "./_components/homepage-destination-link";
-import { HomepageHashSync } from "./_components/homepage-hash-sync";
+import { HomepageArrow } from "./_components/homepage-arrow";
+import { HomepageContact } from "./_components/homepage-contact";
+import { HomepageDirections } from "./_components/homepage-directions";
+import { HomepageProcess } from "./_components/homepage-process";
 import { getPageMetadata } from "./_lib/metadata";
 import { localizedPath } from "./_lib/routes";
 
@@ -35,9 +37,9 @@ export default async function HomePage({
     "--hero-position-desktop": heroMedia.desktopFocalPoint,
     "--hero-position-mobile": heroMedia.mobileFocalPoint,
   } as CSSProperties;
+
   return (
     <main id="main-content" className="welcome-page">
-      <HomepageHashSync />
       <section
         className="welcome-hero"
         aria-labelledby="welcome-heading"
@@ -53,63 +55,77 @@ export default async function HomePage({
         />
 
         <div className="welcome-hero-content">
-          <h1 id="welcome-heading" className="welcome-hero-title">
-            <span className="welcome-hero-title-text">
-              {t("pages.home.hero.headline")}
-            </span>
-          </h1>
-        </div>
-
-        <nav
-          aria-label={t("pages.home.hero.pathsLabel")}
-          className="welcome-paths"
-        >
-          <HomepageDestinationLink className="welcome-path" sectionId="residential">
-            <span>{t("pages.home.hero.homePath")}</span>
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h13M13 6l6 6-6 6" />
-            </svg>
-          </HomepageDestinationLink>
-          <HomepageDestinationLink className="welcome-path" sectionId="business">
-            <span>{t("pages.home.hero.businessPath")}</span>
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h13M13 6l6 6-6 6" />
-            </svg>
-          </HomepageDestinationLink>
-        </nav>
-      </section>
-
-      <section
-        id="residential"
-        className="welcome-destination welcome-destination-residential"
-        aria-labelledby="residential-heading"
-      >
-        <div className="residential-content">
-          <div className="residential-introduction">
-            <h2 id="residential-heading">{t("pages.home.sections.residentialTitle")}</h2>
-            <p>{t("pages.home.residential.introduction")}</p>
-            <ButtonLink href={localizedPath(locale, "shop")}>
-              {t("pages.home.residential.catalogCta")}
-            </ButtonLink>
+          <div className="welcome-hero-copy">
+            <h1 id="welcome-heading" className="welcome-hero-title">
+              <span className="welcome-hero-title-text">
+                {t("pages.home.hero.headline")}
+              </span>
+            </h1>
+            <p className="welcome-hero-summary">
+              {t("pages.home.hero.supporting")}
+            </p>
           </div>
+          <nav
+            aria-label={t("pages.home.hero.pathsLabel")}
+            className="welcome-hero-navigation"
+          >
+            <div className="welcome-primary-paths">
+              <ButtonLink
+                className="welcome-path welcome-path-home"
+                href={localizedPath(locale, "for-home")}
+                variant="secondary"
+              >
+                <span className="welcome-path-content">
+                  <span className="welcome-path-label">
+                    {t("pages.home.hero.homePath")}
+                  </span>
+                  <span className="welcome-path-description">
+                    {t("pages.home.hero.homePathDescription")}
+                  </span>
+                </span>
+                <HomepageArrow />
+              </ButtonLink>
+              <ButtonLink
+                className="welcome-path welcome-path-business"
+                href={localizedPath(locale, "for-business")}
+                variant="secondary"
+              >
+                <span className="welcome-path-content">
+                  <span className="welcome-path-label">
+                    {t("pages.home.hero.businessPath")}
+                  </span>
+                  <span className="welcome-path-description">
+                    {t("pages.home.hero.businessPathDescription")}
+                  </span>
+                </span>
+                <HomepageArrow />
+              </ButtonLink>
+            </div>
+            <div className="welcome-secondary-paths">
+              <ButtonLink
+                className="welcome-utility-path"
+                href={localizedPath(locale, "maintenance")}
+                variant="informational"
+              >
+                <span>{t("pages.home.hero.maintenancePath")}</span>
+                <HomepageArrow />
+              </ButtonLink>
+              <ButtonLink
+                className="welcome-utility-path"
+                href={localizedPath(locale, "shop")}
+                variant="informational"
+              >
+                <span>{t("pages.home.hero.shopPath")}</span>
+                <HomepageArrow />
+              </ButtonLink>
+            </div>
+          </nav>
         </div>
       </section>
 
-      <section
-        id="business"
-        className="welcome-destination welcome-destination-business"
-        aria-labelledby="business-heading"
-      >
-        <h2
-          id="business-heading"
-          className="welcome-destination-title welcome-destination-title-from-right"
-          data-destination-title
-        >
-          <span className="welcome-destination-title-content">
-            {t("pages.home.sections.businessTitle")}
-          </span>
-        </h2>
-      </section>
+      <HomepageDirections locale={locale} t={t} />
+      <HomepageProcess t={t} />
+      <HomepageContact locale={locale} t={t} />
     </main>
   );
 }

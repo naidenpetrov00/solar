@@ -6,6 +6,9 @@
   "navigation": {
     "brand": "Solar",
     "home": "Ana sayfa",
+    "forHome": "Ev için",
+    "forBusiness": "İşletmeler için",
+    "maintenance": "Bakım",
     "shop": "Mağaza",
     "projects": "Projeler",
     "cart": "Sepet",
@@ -48,22 +51,73 @@
       "returnHome": "Ana sayfaya dön"
     },
     "home": {
-      "title": "Evler ve işletmeler için güneş enerjisi sistemleri",
-      "description": "Evler ve işletmeler için güneş enerjisi sistemlerini keşfedin.",
+      "title": "Evler ve işletmeler için güneş enerjisi çözümleri",
+      "description": "Evler ve ticari mülkler için güneş enerjisi sistemi kurulumu, ekipman ve bakım hizmetleri.",
       "hero": {
-        "headline": "Evler ve işletmeler için güneş enerjisi sistemleri kuruyoruz.",
-        "pathsLabel": "Güneş enerjisi çözümü türünü seçin",
+        "headline": "Evler ve işletmeler için güneş enerjisi çözümleri.",
+        "supporting": "Kurulum · ekipman · bakım",
+        "pathsLabel": "Uygun alanı seçin",
         "homePath": "Ev için",
-        "businessPath": "İşletmeler için"
+        "homePathDescription": "Evler ve bahçeler için sistemler.",
+        "businessPath": "İşletmeler için",
+        "businessPathDescription": "Ticari mülkler ve güneş enerjisi santralleri için sistemler.",
+        "maintenancePath": "Bakım",
+        "shopPath": "Mağaza"
       },
-      "sections": {
-        "residentialTitle": "Ev için",
-        "businessTitle": "İşletmeler için"
+      "directions": {
+        "title": "Projenize uygun güneş enerjisi çözümleri",
+        "home": {
+          "title": "Ev için",
+          "description": "Mülkün ve evin ihtiyaçları dikkate alınarak evler ve bahçeler için güneş enerjisi sistemleri.",
+          "cta": "Ev çözümlerini inceleyin"
+        },
+        "business": {
+          "title": "İşletmeler için",
+          "description": "Depolar, salonlar, atölyeler ve diğer ticari mülklerin yanı sıra yatırım amaçlı güneş enerjisi santralleri için sistemler. Ön teknik çözüm hazırlar ve gerekli proje belgelerine destek oluruz.",
+          "cta": "İşletme çözümlerini inceleyin"
+        },
+        "maintenance": {
+          "title": "Bakım",
+          "description": "Temizlik ve saha bakımı, teknik kontroller ve sonrasındaki onarımlar — tek seferlik veya düzenli, başka bir şirket tarafından kurulmuş sistemler dahil.",
+          "cta": "Bakım hizmetlerini inceleyin"
+        },
+        "shop": {
+          "title": "Mağaza",
+          "description": "Konut ve ticari projeler için güneş enerjisi ekipmanları.",
+          "cta": "Mağazaya gidin"
+        }
       },
-      "residential": {
-        "introduction": "Eviniz için uygun bir başlangıç noktası bulmak üzere yayımlanmış kategorileri ve ürünleri inceleyin.",
-        "catalogCta": "Kataloğu inceleyin"
+      "process": {
+        "title": "İlk talepten bakıma kadar",
+        "introduction": "İlk görüşmeden kuruluma ve sonrasındaki bakıma uzanan açık bir süreç.",
+        "documentationNote": "Gerektiğinde gerekli proje belgeleri konusunda destek oluruz.",
+        "steps": {
+          "enquiry": "Talep",
+          "survey": "Saha incelemesi",
+          "proposal": "Teklif",
+          "documentation": "Belgelendirme",
+          "delivery": "Teslimat",
+          "installation": "Kurulum",
+          "maintenance": "Bakım"
+        }
+      },
+      "contact": {
+        "title": "Projenizi konuşalım",
+        "description": "Uygun sonraki adımı belirlemek için bize mülkünüzü ve ihtiyaçlarınızı anlatın.",
+        "cta": "Projenizi görüşün"
       }
+    },
+    "forHome": {
+      "title": "Ev için",
+      "description": "Evler ve bahçeler için güneş enerjisi çözümleri hakkında temel bilgiler."
+    },
+    "forBusiness": {
+      "title": "İşletmeler için",
+      "description": "Ticari mülkler ve yatırım amaçlı güneş enerjisi santralleri için çözümler hakkında temel bilgiler."
+    },
+    "maintenance": {
+      "title": "Bakım",
+      "description": "Güneş enerjisi tesislerinin temizliği, teknik bakımı ve onarımı hakkında temel bilgiler."
     },
     "shop": {
       "title": "Katalog",
@@ -145,6 +199,10 @@
     "dashboard": {
       "orders": { "title": "Siparişler", "description": "Müşteri siparişlerini inceleyin ve yönetin." },
       "orderDetail": { "title": "Sipariş ayrıntıları", "description": "Sipariş içeriğini, yaşam döngüsünü, ödeme durumunu ve geçmişini inceleyin." }
+    },
+    "projects": {
+      "title": "Projeler",
+      "description": "Güneş enerjisi projeleri hakkında bilgiler."
     },
     "contact": {
       "title": "İletişim"

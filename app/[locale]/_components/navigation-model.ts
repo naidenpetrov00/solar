@@ -4,6 +4,7 @@ import type { WebPushPublicConfig } from "@/lib/web-push/model";
 export type NavigationRoute = {
   slug: string;
   label: string;
+  placement: "home" | "primary" | "contact";
 };
 
 export type NavigationUser = {

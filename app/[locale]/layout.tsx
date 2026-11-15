@@ -77,9 +77,10 @@ export default async function LocaleLayout({
     ["common", "notifications"],
     [locale, "bg"],
   );
-  const navigationRoutes = routeDefinitions.map(({ slug, key }) => ({
+  const navigationRoutes = routeDefinitions.map(({ slug, key, placement }) => ({
     slug,
     label: t(`navigation.${key}`),
+    placement,
   }));
   const languageNames = Object.fromEntries(
     supportedLocales.map((supportedLocale) => [
@@ -106,7 +107,7 @@ export default async function LocaleLayout({
           <Navigation
             locale={locale}
             brandLabel={t("navigation.brand")}
-            ctaLabel={t("navigation.requestQuote")}
+            ctaLabel={t("navigation.contact")}
             cartLabel={t("navigation.cart")}
             menuLabel={t("accessibility.openMenu")}
             closeMenuLabel={t("accessibility.closeMenu")}

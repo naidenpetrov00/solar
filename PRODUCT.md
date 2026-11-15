@@ -24,7 +24,7 @@ This is a public marketing website serving organic, referral, and paid-ad traffi
 
 ## Capabilities and Constraints
 
-- The welcome page provides equal Home and Business paths to same-page sections.
+- The welcome page provides equal Home and Business paths to dedicated localized routes, with Maintenance and Shop visible as secondary direct paths.
 - Bulgarian is the source language; English, Turkish, and Ukrainian are supported.
 - The site uses Next.js App Router, TypeScript, Tailwind CSS, and Vercel.
 - Do not invent pricing, savings, guarantees, certifications, testimonials, performance results, or company statistics.

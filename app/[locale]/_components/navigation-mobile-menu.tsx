@@ -58,7 +58,7 @@ export function NavigationMobileMenu({
   return (
     <div
       id="primary-navigation"
-      className={`${menuOpen ? "block" : "hidden"} site-mobile-navigation site-divider border-t px-5 pb-5 sm:px-8 xl:hidden`}
+      className={`${menuOpen ? "block" : "hidden"} site-mobile-navigation site-divider border-t px-5 pb-5 sm:px-8 2xl:hidden`}
     >
       <nav aria-label={navigationLabel}>
         <ul className="flex flex-col gap-1 pt-3">
@@ -119,6 +119,7 @@ export function NavigationMobileMenu({
               className="site-cta"
               fullWidth
               href={localizedPath(locale, "contact")}
+              aria-current={activeSlug === "contact" ? "page" : undefined}
               onClick={closeMenus}
             >
               {ctaLabel}

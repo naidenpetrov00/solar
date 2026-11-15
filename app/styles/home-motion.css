@@ -1,113 +1,199 @@
-@keyframes welcome-image-settle {
+@keyframes welcome-title-reveal {
   from {
-    filter: brightness(0.84) saturate(0.82);
-    transform: scale(1.045);
+    clip-path: inset(100% 0 0);
+    opacity: 0.7;
+    transform: translateY(1.2em);
   }
   to {
-    filter: brightness(1) saturate(1);
-    transform: scale(1);
-  }
-}
-
-@keyframes welcome-title-arrive {
-  from {
-    opacity: 0.16;
-    clip-path: inset(0 0 38% 0);
-    filter: blur(14px);
-    transform: translateY(2.75rem) scale(0.985);
-  }
-  to {
-    opacity: 1;
     clip-path: inset(0);
-    filter: blur(0);
+    opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes welcome-title-scroll-away {
+@keyframes welcome-summary-reveal {
   from {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0) scale(1);
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.5;
   }
   to {
-    opacity: 0;
-    filter: blur(10px);
-    transform: translateY(-5rem) scale(0.94);
+    clip-path: inset(0);
+    opacity: 1;
   }
 }
 
-@keyframes welcome-path-arrive {
+@keyframes welcome-divider-draw {
   from {
-    opacity: 0.74;
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes welcome-direction-line-draw {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(0.82);
+  }
+}
+
+@keyframes welcome-scene-wipe-forward {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes welcome-scene-wipe-reverse {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes welcome-scene-heading-reveal-from-right {
+  from {
+    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+    transform: translateX(clamp(6.25rem, 8vw, 8.75rem));
+  }
+  to {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes welcome-scene-heading-reveal-from-left {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: translateX(clamp(-8.75rem, -8vw, -6.25rem));
+  }
+  to {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes welcome-scene-heading-reveal-mobile {
+  from {
+    clip-path: inset(0 0 100%);
+    opacity: 0;
     transform: translateY(0.75rem);
   }
   to {
+    clip-path: inset(0);
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@media (max-width: 47.999rem) {
-  .welcome-hero-content {
-    align-items: flex-start;
-    padding: clamp(9rem, 21svh, 12rem) 1.25rem 15.5rem;
+@keyframes welcome-scene-details-reveal {
+  from {
+    clip-path: inset(0 0 100%);
+    opacity: 0;
+    transform: translateY(0.75rem);
   }
-
-  .welcome-paths {
-    inset: auto 1.25rem clamp(2rem, 6svh, 3.5rem);
-  }
-
-  .welcome-path {
-    min-height: 6.25rem;
-    padding: 1.4rem 1.25rem;
-    font-size: clamp(1.35rem, 5.5vw, 1.65rem);
-  }
-
-  .welcome-path:last-child {
-    border-bottom: 0;
+  to {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (min-width: 48rem) {
-  .welcome-hero-image {
-    object-position: var(--hero-position-desktop);
+@media (prefers-reduced-motion: no-preference) {
+  .welcome-hero-title-text {
+    animation: welcome-title-reveal 640ms cubic-bezier(0.16, 1, 0.3, 1)
+      backwards;
   }
 
-  .welcome-hero-content {
-    padding: 10rem 2rem 11.5rem;
+  .welcome-hero-summary {
+    animation: welcome-summary-reveal 480ms 110ms
+      cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
-  .welcome-hero-title {
-    max-width: 12ch;
-    font-size: clamp(4.75rem, 7vw, 6rem);
+  .welcome-primary-paths::after {
+    animation: welcome-divider-draw 520ms 150ms
+      cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
-  .welcome-paths {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .welcome-path .welcome-arrow-line {
+    animation: welcome-direction-line-draw 520ms 190ms
+      cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
-  .welcome-path {
-    min-height: 8rem;
-    padding: 1.5rem max(2rem, calc((100vw - 80rem) / 2 + 2rem));
-    border-bottom: 0;
+  .welcome-direction--motion-ready .welcome-direction-media,
+  .welcome-direction--motion-ready h3,
+  .welcome-direction--motion-ready .welcome-direction-details {
+    animation: none;
   }
 
-  .welcome-path:first-child {
-    border-right: 1px solid rgba(255, 255, 255, 0.28);
+  .welcome-direction--motion-ready:not(.welcome-direction--visible) .welcome-direction-media {
+    clip-path: inset(0 100% 0 0);
   }
 
-  .welcome-path:nth-child(2) {
-    padding-left: clamp(2rem, 5vw, 5rem);
+  .welcome-direction--motion-ready:not(.welcome-direction--visible):nth-child(even) .welcome-direction-media {
+    clip-path: inset(0 0 0 100%);
   }
-}
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .welcome-hero-title {
-      animation: welcome-title-scroll-away 1ms linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 34svh;
+  .welcome-direction--motion-ready:not(.welcome-direction--visible) h3 {
+    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+    transform: translateX(clamp(6.25rem, 8vw, 8.75rem));
+  }
+
+  .welcome-direction--motion-ready:not(.welcome-direction--visible):nth-child(even) h3 {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(clamp(-8.75rem, -8vw, -6.25rem));
+  }
+
+  .welcome-direction--motion-ready:not(.welcome-direction--visible) .welcome-direction-details {
+    clip-path: inset(0 0 100%);
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+
+  .welcome-direction--visible .welcome-direction-media {
+    animation: welcome-scene-wipe-forward 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .welcome-direction--visible:nth-child(even) .welcome-direction-media {
+    animation-name: welcome-scene-wipe-reverse;
+  }
+
+  .welcome-direction--visible h3 {
+    animation: welcome-scene-heading-reveal-from-right 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .welcome-direction--visible:nth-child(even) h3 {
+    animation-name: welcome-scene-heading-reveal-from-left;
+  }
+
+  .welcome-direction--visible .welcome-direction-details {
+    animation: welcome-scene-details-reveal 520ms 100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @media (max-width: 47.99rem) {
+    .welcome-direction--motion-ready:not(.welcome-direction--visible) h3,
+    .welcome-direction--motion-ready:not(.welcome-direction--visible):nth-child(even) h3 {
+      clip-path: inset(0 0 100%);
+      transform: translateY(0.75rem);
+    }
+
+    .welcome-direction--visible h3,
+    .welcome-direction--visible:nth-child(even) h3 {
+      animation-name: welcome-scene-heading-reveal-mobile;
     }
   }
 }
@@ -117,60 +203,31 @@
     scroll-behavior: auto;
   }
 
-  .welcome-hero-image,
-  .welcome-hero-title,
   .welcome-hero-title-text,
-  .welcome-path {
+  .welcome-hero-summary,
+  .welcome-primary-paths::after,
+  .welcome-path .welcome-arrow-line,
+  .welcome-direction-media,
+  .welcome-direction h3,
+  .welcome-direction-details {
     animation: none;
+    clip-path: none;
+    opacity: 1;
+    transform: none;
   }
 
-  .welcome-path,
-  .welcome-path svg,
-  .welcome-destination {
-    transition: none;
-  }
-}
-
-@media (max-width: 47.999rem) and (prefers-reduced-motion: no-preference) {
-  .welcome-destination-title {
-    transform: translateX(var(--destination-title-translate, 0px));
-  }
-}
-@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
-  .welcome-destination-title-content {
-    display: block;
-    transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  .welcome-path::before,
+  .welcome-path::after,
+  .welcome-path-label,
+  .welcome-arrow-line,
+  .welcome-arrow-head {
+    transition-duration: 0.01ms;
   }
 
-  .welcome-destination-title[data-motion-state="hidden"].welcome-destination-title-from-right
-    .welcome-destination-title-content {
-    transform: translateX(110vw);
+  .welcome-path:hover .welcome-path-label,
+  .welcome-path:focus-visible .welcome-path-label,
+  .welcome-arrow-line,
+  .welcome-arrow-head {
+    transform: none;
   }
-
-  .welcome-destination-title[data-motion-state="hidden"].welcome-destination-title-from-left
-    .welcome-destination-title-content {
-    transform: translateX(-110vw);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .welcome-destination-residential {
-    --destination-background: #101511;
-    --destination-foreground: #f3f4ef;
-  }
-
-  :root:not([data-theme]) .welcome-destination-business {
-    --destination-background: #18201a;
-    --destination-foreground: #f3f4ef;
-  }
-}
-
-:root[data-theme="dark"] .welcome-destination-residential {
-  --destination-background: #101511;
-  --destination-foreground: #f3f4ef;
-}
-
-:root[data-theme="dark"] .welcome-destination-business {
-  --destination-background: #18201a;
-  --destination-foreground: #f3f4ef;
 }

@@ -51,10 +51,13 @@ export const publicUtilityRouteSlugs = [
 ] as const;
 
 export const routeDefinitions = [
-  { slug: "", key: "home" },
-  { slug: "shop", key: "shop" },
-  { slug: "projects", key: "projects" },
-  { slug: "contact", key: "contact" },
+  { slug: "", key: "home", placement: "home" },
+  { slug: "for-home", key: "forHome", placement: "primary" },
+  { slug: "for-business", key: "forBusiness", placement: "primary" },
+  { slug: "maintenance", key: "maintenance", placement: "primary" },
+  { slug: "shop", key: "shop", placement: "primary" },
+  { slug: "projects", key: "projects", placement: "primary" },
+  { slug: "contact", key: "contact", placement: "contact" },
 ] as const;
 
 export const authRouteSlugs = [

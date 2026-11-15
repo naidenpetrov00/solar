@@ -46,8 +46,10 @@ components:
     textColor: "{colors.pure-white}"
     typography: "{typography.label}"
     rounded: "{rounded.square}"
-    padding: "18px 20px"
-    height: "84px"
+    layout: "three equal vertical zones; the final zone splits Maintenance and Shop equally"
+    dividers: "1px translucent white"
+    hoverBackgroundColor: "rgba(252, 211, 77, 0.075)"
+    minTargetSize: "44px"
   quote-action:
     backgroundColor: "{colors.solar-accent}"
     textColor: "{colors.ink-text}"
@@ -128,7 +130,9 @@ Large structural regions and destination rails use square edges and precise one-
 
 ### Destination Rails
 
-Large, square-edged anchor rows sit directly on a dark photographic field. They use white text, fine translucent separators, a directional arrow, and a subtle translucent hover surface. Keyboard focus uses the Solar Signal color with an inset outline.
+The Cinematic Gate remains part of the continuous hero photograph rather than becoming a panel or card. On desktop, a thin vertical rule separates the left hero copy from the right Gate. Home and Business occupy two equal structural zones; a third equal-height zone is divided between Maintenance and Shop. Mobile keeps the headline above and the Gate in the lower half of the viewport, preserving the same order and three-zone hierarchy.
+
+All destination regions have transparent default surfaces, square edges, generous internal spacing, white text, directional arrows, and fine translucent one-pixel dividers. Hover and focus may add only a restrained local tint while preserving the photograph. Keyboard focus uses a visible Solar Signal outline, and every destination remains a full-area semantic link with at least a 44px target.
 
 ### Destination Sections
 
@@ -136,7 +140,11 @@ Home and Business sections both use the active page theme for their background a
 
 ### Hero Headline Motion
 
-The headline arrives through a short upward resolution from blur and controlled clipping. In browsers with native scroll timelines, it exits within the first third of a viewport of scrolling—faster than the hero itself—to make the handoff to destination content explicit. Unsupported browsers keep the resolved headline; reduced-motion mode removes both spatial sequences.
+The hero headline uses one short initial upward reveal with controlled clipping, followed by the supporting line and Gate details. It does not depend on scroll position and remains fully resolved after the initial arrival.
+
+The photographic direction scenes use a small client-side IntersectionObserver enhancement. Each scene enters once with a coordinated image wipe, a fixed-duration heading movement from the side of its copy on desktop, and a short delayed reveal for its description and action. Mobile substitutes a compact vertical masked reveal. A scene stops being observed after its first entrance.
+
+Server-rendered images and copy are visible by default. Hidden preparation states are applied only when JavaScript, IntersectionObserver, the required clipping support, and a no-preference motion setting are all available. Unsupported environments and `prefers-reduced-motion` retain an immediately visible, static presentation while hover and keyboard-focus feedback remain available.
 
 ### Primary Actions
 

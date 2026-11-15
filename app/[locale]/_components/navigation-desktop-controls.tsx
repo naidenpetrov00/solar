@@ -75,7 +75,7 @@ export function NavigationDesktopControls({
   };
 }) {
   return (
-    <div className="hidden items-center gap-3 xl:flex">
+    <div className="hidden items-center gap-2 2xl:flex">
       <NavigationDesktopLanguageSelector
         languageLabel={languageLabel}
         languageIndicator={languageIndicator}
@@ -142,6 +142,7 @@ export function NavigationDesktopControls({
       <ButtonLink
         className="site-cta"
         href={localizedPath(locale, "contact")}
+        aria-current={activeSlug === "contact" ? "page" : undefined}
         onClick={closeMenus}
       >
         {ctaLabel}

@@ -25,8 +25,10 @@ export function useNavigationRoutes(locale: string, routes: NavigationRoute[]) {
   const activeSlug =
     pathWithoutLocale === "/" ? "" : pathWithoutLocale.slice(1);
   const isHomePage = activeSlug === "";
-  const homeRoute = routes[0];
-  const interiorRoutes = routes.slice(1);
+  const homeRoute = routes.find((route) => route.placement === "home") ?? routes[0];
+  const interiorRoutes = routes.filter(
+    (route) => route.placement === "primary",
+  );
   const currentSearch = searchParams.toString();
   const currentPath = `${pathname}${currentSearch ? `?${currentSearch}` : ""}`;
   const returnTo = safePublicReturnPath(currentPath, locale);

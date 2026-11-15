@@ -76,7 +76,7 @@ export function NavigationMainRow({
       }
     : undefined;
   return (
-    <div className="site-navigation-main-row relative mx-auto flex min-h-[4.5rem] w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
+    <div className="site-navigation-main-row relative mx-auto flex min-h-[4.5rem] w-full max-w-[90rem] items-center justify-between gap-4 px-5 py-3 sm:px-8 2xl:gap-5">
       <NavigationBrand
         locale={locale}
         brandLabel={brandLabel}

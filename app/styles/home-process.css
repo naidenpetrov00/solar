@@ -1,0 +1,93 @@
+.welcome-process {
+  width: min(100%, 80rem);
+  margin-inline: auto;
+  padding: clamp(3.75rem, 7vw, 5.5rem) 1.25rem;
+}
+
+.welcome-process-introduction {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.welcome-process-introduction h2 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.welcome-process-introduction p {
+  max-width: 50ch;
+  margin: 0;
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  line-height: 1.58;
+}
+
+.welcome-process-introduction .welcome-process-note {
+  margin-top: 1rem;
+  color: color-mix(in srgb, var(--page-foreground) 72%, transparent);
+  font-size: 0.95rem;
+}
+
+.welcome-process-steps {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid
+    color-mix(in srgb, var(--page-foreground) 24%, transparent);
+  counter-reset: process-step;
+  list-style: none;
+}
+
+.welcome-process-steps li {
+  display: grid;
+  min-height: 5.25rem;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  align-items: center;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--page-foreground) 24%, transparent);
+  counter-increment: process-step;
+  font-size: clamp(1.2rem, 2.5vw, 1.65rem);
+  font-weight: 560;
+  letter-spacing: -0.025em;
+}
+
+.welcome-process-steps li::before {
+  color: color-mix(in srgb, var(--page-foreground) 62%, transparent);
+  content: counter(process-step, decimal-leading-zero);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 48rem) {
+  .welcome-process {
+    padding-inline: 2rem;
+  }
+
+  .welcome-process-introduction {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.55fr);
+    align-items: end;
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+
+  .welcome-process-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .welcome-process-steps li:nth-child(even) {
+    border-left: 1px solid
+      color-mix(in srgb, var(--page-foreground) 24%, transparent);
+    padding-left: clamp(1.5rem, 4vw, 4rem);
+  }
+
+  .welcome-process-steps li:last-child {
+    grid-column: 1 / -1;
+    border-left: 0;
+    padding-left: 0;
+  }
+}

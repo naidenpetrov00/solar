@@ -62,14 +62,14 @@ export function NavigationDesktopAccount({
       ) : (
         <div className="flex items-center gap-2">
           <ButtonLink
-            className="site-auth-link"
+            className="site-auth-link whitespace-nowrap"
             variant="informational"
             href={signInHref}
           >
             {signInLabel}
           </ButtonLink>
           <ButtonLink
-            className="site-auth-link site-auth-link-outlined"
+            className="site-auth-link site-auth-link-outlined whitespace-nowrap"
             variant="secondary"
             href={signUpHref}
           >

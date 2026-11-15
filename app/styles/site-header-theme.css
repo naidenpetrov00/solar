@@ -86,6 +86,7 @@
 .site-cta {
   background: var(--accent);
   color: var(--accent-foreground);
+  white-space: nowrap;
 }
 .site-cta:hover {
   background: var(--accent-hover);

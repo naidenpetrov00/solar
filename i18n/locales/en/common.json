@@ -6,6 +6,9 @@
   "navigation": {
     "brand": "Solar",
     "home": "Home",
+    "forHome": "For home",
+    "forBusiness": "For business",
+    "maintenance": "Maintenance",
     "shop": "Shop",
     "projects": "Projects",
     "cart": "Cart",
@@ -48,22 +51,73 @@
       "returnHome": "Return to the home page"
     },
     "home": {
-      "title": "Solar systems for homes and businesses",
-      "description": "Explore solar systems for homes and businesses.",
+      "title": "Solar solutions for homes and businesses",
+      "description": "Solar-system installation, equipment and maintenance for homes and business properties.",
       "hero": {
-        "headline": "We build solar systems for homes and businesses.",
-        "pathsLabel": "Choose a solar solution type",
-        "homePath": "Home",
-        "businessPath": "Business"
+        "headline": "Solar solutions for homes and businesses.",
+        "supporting": "Installation · equipment · maintenance",
+        "pathsLabel": "Choose the right direction",
+        "homePath": "For home",
+        "homePathDescription": "Systems for houses and yards.",
+        "businessPath": "For business",
+        "businessPathDescription": "Systems for business properties and solar parks.",
+        "maintenancePath": "Maintenance",
+        "shopPath": "Shop"
       },
-      "sections": {
-        "residentialTitle": "Home",
-        "businessTitle": "Business"
+      "directions": {
+        "title": "Solar solutions shaped around your project",
+        "home": {
+          "title": "For home",
+          "description": "Solar systems for houses and yards, considered around the property and the household's needs.",
+          "cta": "Explore home solutions"
+        },
+        "business": {
+          "title": "For business",
+          "description": "Systems for warehouses, halls, workshops and other business properties, as well as investor-owned solar parks. We prepare a preliminary technical solution and assist with the required project documentation.",
+          "cta": "Explore business solutions"
+        },
+        "maintenance": {
+          "title": "Maintenance",
+          "description": "Cleaning and grounds care, technical inspections and follow-up repairs — once or on a recurring basis, including installations built by another company.",
+          "cta": "Explore maintenance"
+        },
+        "shop": {
+          "title": "Shop",
+          "description": "Solar equipment for residential and business projects.",
+          "cta": "Go to the shop"
+        }
       },
-      "residential": {
-        "introduction": "Browse the published categories and products to find a suitable starting point for your home.",
-        "catalogCta": "Explore the catalog"
+      "process": {
+        "title": "From enquiry to maintenance",
+        "introduction": "A clear path from the first conversation through installation and the care that follows.",
+        "documentationNote": "Where needed, we assist with the required project documentation.",
+        "steps": {
+          "enquiry": "Enquiry",
+          "survey": "Site survey",
+          "proposal": "Proposal",
+          "documentation": "Documentation",
+          "delivery": "Delivery",
+          "installation": "Installation",
+          "maintenance": "Maintenance"
+        }
+      },
+      "contact": {
+        "title": "Let's discuss your project",
+        "description": "Tell us about the property and what you need so we can agree on the right next step.",
+        "cta": "Discuss your project"
       }
+    },
+    "forHome": {
+      "title": "For home",
+      "description": "Essential information about solar solutions for houses and yards."
+    },
+    "forBusiness": {
+      "title": "For business",
+      "description": "Essential information about solar solutions for business properties and investor-owned solar parks."
+    },
+    "maintenance": {
+      "title": "Maintenance",
+      "description": "Essential information about cleaning, technical maintenance and repairs for solar installations."
     },
     "shop": {
       "title": "Catalog",
@@ -145,6 +199,10 @@
     "dashboard": {
       "orders": { "title": "Orders", "description": "Review and manage customer orders." },
       "orderDetail": { "title": "Order details", "description": "Review order contents, lifecycle, payment status, and history." }
+    },
+    "projects": {
+      "title": "Projects",
+      "description": "Information about solar projects."
     },
     "contact": {
       "title": "Contact"

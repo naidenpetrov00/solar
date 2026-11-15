@@ -6,9 +6,11 @@
 @import "./styles/theme-switch.css";
 @import "./styles/foundations.css";
 @import "./styles/home-hero.css";
-@import "./styles/home-paths.css";
+@import "./styles/home-gate.css";
 @import "./styles/home-motion.css";
 @import "./styles/home-destinations.css";
+@import "./styles/home-process.css";
+@import "./styles/home-contact.css";
 @import "./styles/shop-foundations.css";
 @import "./styles/shop-commerce-layout.css";
 @import "./styles/shop-commerce-filters.css";

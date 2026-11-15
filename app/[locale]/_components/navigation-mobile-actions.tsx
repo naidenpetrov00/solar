@@ -53,7 +53,7 @@ export function NavigationMobileActions({
   };
 }) {
   return (
-    <div className="site-mobile-actions flex items-center gap-2 xl:hidden">
+    <div className="site-mobile-actions flex items-center gap-2 2xl:hidden">
       {signedIn ? (
         <Button
           type="button"

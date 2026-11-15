@@ -23,7 +23,7 @@ export function NavigationDesktopLanguageSelector({
 }) {
   return (
     <nav aria-label={languageLabel}>
-      <ul className="site-divider relative flex items-center gap-1 border-r pr-3">
+      <ul className="site-divider relative flex items-center gap-0.5 border-r pr-2">
         <span
           aria-hidden="true"
           className="site-active-surface pointer-events-none absolute left-0 top-0 z-0 h-10 rounded-md transition-[transform,width] duration-500 ease-out"
@@ -38,7 +38,7 @@ export function NavigationDesktopLanguageSelector({
               ref={(element) => {
                 languageItemRefs.current[targetLocale] = element;
               }}
-              className="site-language relative z-10 inline-flex min-h-10 items-center rounded px-2 text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="site-language relative z-10 inline-flex min-h-10 items-center rounded px-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
               data-active={targetLocale === locale}
               href={localizedRoute(targetLocale)}
               aria-current={targetLocale === locale ? "page" : undefined}

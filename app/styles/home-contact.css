@@ -1,0 +1,46 @@
+.welcome-contact {
+  display: flex;
+  min-height: 66svh;
+  align-items: center;
+  background: var(--home-dark);
+  color: var(--home-dark-foreground);
+}
+
+.welcome-contact-content {
+  display: grid;
+  width: min(100%, 80rem);
+  margin-inline: auto;
+  gap: 2rem;
+  padding: clamp(5rem, 11vw, 9rem) 1.25rem;
+}
+
+.welcome-contact h2 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(3.25rem, 9vw, 6rem);
+  font-weight: 600;
+  line-height: 0.93;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.welcome-contact p {
+  max-width: 48ch;
+  margin: 0 0 2rem;
+  color: var(--home-dark-muted);
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  line-height: 1.58;
+}
+
+.welcome-contact .ui-button {
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .welcome-contact-content {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.55fr);
+    align-items: end;
+    gap: clamp(3rem, 8vw, 9rem);
+    padding-inline: 2rem;
+  }
+}

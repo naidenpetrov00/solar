@@ -23,7 +23,7 @@ export function NavigationDesktopLinks({
   closeMenus: () => void;
 }) {
   return (
-    <nav aria-label={navigationLabel} className="hidden xl:block">
+    <nav aria-label={navigationLabel} className="hidden 2xl:block">
       <ul className="relative flex items-center gap-1">
         <span
           aria-hidden="true"
@@ -39,7 +39,7 @@ export function NavigationDesktopLinks({
               ref={(element) => {
                 desktopNavItemRefs.current[route.slug] = element;
               }}
-              className="site-nav-link relative z-10 inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="site-nav-link relative z-10 inline-flex min-h-11 items-center whitespace-nowrap rounded-md px-2.5 text-[0.8125rem] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
               data-active={isActive(route.slug)}
               href={localizedPath(locale, route.slug)}
               aria-current={
