@@ -108,12 +108,135 @@
       }
     },
     "forHome": {
-      "title": "Ev için",
-      "description": "Evler ve bahçeler için güneş enerjisi çözümleri hakkında temel bilgiler."
+      "title": "Ev için güneş enerjisi çözümleri",
+      "description": "Evde öz tüketim için güneş enerjisi sistemleri ve bağımsız elektrik çözümleri.",
+      "hero": {
+        "headline": "Eviniz için güneş enerjisi çözümleri.",
+        "introduction": "Evde öz tüketim sisteminden eksiksiz bir bağımsız elektrik çözümüne kadar — mülke, tüketim alışkanlıklarına ve teknik değerlendirmeye göre.",
+        "autonomyCta": "Bağımsız evi görüşün",
+        "selfConsumptionCta": "Öz tüketim sistemini görüşün"
+      },
+      "selfConsumption": {
+        "title": "Evin kendi tüketimi için enerji.",
+        "description": "Güneş enerjisi sistemi, evin mevcut ihtiyaçları için elektrik üretir ve mülkün özelliklerine göre planlanır.",
+        "assessment": "Uygun çözüm, tüketim görüşüldükten ve yerinde inceleme yapıldıktan sonra belirlenir.",
+        "cta": "Ev sistemini görüşün"
+      },
+      "autonomy": {
+        "title": "Ev için bağımsız elektrik.",
+        "description": "Eksiksiz çözüm; enerji üretimini, depolamayı ve yönetimi bir araya getirir. Kapasite ve yapılandırma, belirli mülke ve tüketimine göre belirlenir.",
+        "imageAlt": "Ev tipi batarya depolama ve enerji yönetim sistemi.",
+        "parts": {
+          "production": {
+            "title": "Güneş enerjisi üretimi",
+            "description": "Paneller, saha koşullarına ve kullanılabilir alana göre elektrik üretir."
+          },
+          "storage": {
+            "title": "Batarya depolama",
+            "description": "Bataryalar, üretilen enerjinin bir bölümünü üretim saatleri dışında kullanılmak üzere depolar."
+          },
+          "management": {
+            "title": "Enerji yönetimi",
+            "description": "Yönetim sistemi evin enerji üretimini, depolamasını ve tüketimini koordine eder."
+          }
+        },
+        "assessment": "Tam bağımsızlık; sahaya, tüketim profiline, kullanılabilir alana ve teknik değerlendirmeye bağlıdır.",
+        "cta": "Bağımsız evi görüşün",
+        "waterNote": "Eksiksiz bağımsız ev çözümlerinde su temininin bağımsızlığı da görüşülebilir."
+      },
+      "equipment": {
+        "title": "Projeye uygun ekipman.",
+        "introduction": "Ekipman yaklaşımı tüm ev çözümleri için geçerlidir.",
+        "supplied": {
+          "title": "Ekipman tedariği",
+          "description": "Eksiksiz çözümün bir parçası olarak ekipmanı önerebilir ve tedarik edebiliriz."
+        },
+        "customerOwned": {
+          "title": "Önceden satın alınmış ekipman",
+          "description": "Müşterinin satın aldığı ekipmanın kurulumunu, saha incelemesi ile bileşenlerin durumu ve uyumluluğu kontrol edildikten sonra değerlendirebiliriz."
+        }
+      },
+      "journey": {
+        "title": "Talepten sonraki bakıma kadar.",
+        "introduction": "Çözümün hazırlanması, uygulanması ve bakımı için açık bir süreç.",
+        "steps": {
+          "consultation": "Görüşme ve saha incelemesi",
+          "solution": "Teknik çözüm ve teklif",
+          "deliveryInstallation": "Ekipman, teslimat ve kurulum",
+          "documentationMaintenance": "Belgelendirme desteği ve sonraki bakım"
+        }
+      },
+      "support": {
+        "title": "Kurulumdan sonra sistem bakımı.",
+        "description": "Düzenli bakım, ev tipi güneş enerjisi sisteminin zaman içinde güvenilir çalışmasını destekler.",
+        "imageAlt": "Bir fotovoltaik tesiste panellerin temizlenmesi.",
+        "items": {
+          "cleaning": "Panel temizliği",
+          "inspection": "İnceleme ve kontroller",
+          "technical": "Teknik bakım"
+        },
+        "maintenanceCta": "Bakım hizmetlerini inceleyin",
+        "shopCta": "Mağazadaki ekipmanlar"
+      },
+      "closing": {
+        "title": "Eviniz için doğru çözümü görüşelim.",
+        "description": "Hedefinize uygun yönü seçin. Ayrıntılar görüşme ve teknik değerlendirme sonrasında belirlenir.",
+        "installationCta": "Kurulum talebi",
+        "autonomyCta": "Bağımsız ev talebi"
+      }
     },
     "forBusiness": {
-      "title": "İşletmeler için",
-      "description": "Ticari mülkler ve yatırım amaçlı güneş enerjisi santralleri için çözümler hakkında temel bilgiler."
+      "title": "İşletmeler için güneş enerjisi sistemleri",
+      "description": "Ticari mülkler ve yatırım amaçlı güneş enerjisi santralleri için ekipman, kurulum ve belgelendirme desteği sunan sistemler.",
+      "hero": {
+        "headline": "İşletmeler ve yatırım amaçlı güneş enerjisi santralleri için güneş enerjisi sistemleri.",
+        "introduction": "Faaliyetteki ticari mülkler ve elektrik üretip satmaya yönelik santraller için çözümler.",
+        "cta": "İşletme projesini görüşün"
+      },
+      "directions": {
+        "title": "İşletme projeleri için iki yön.",
+        "properties": {
+          "title": "Ticari mülkler için sistemler",
+          "description": "Depolar, salonlar, atölyeler, üretim tesisleri ve diğer ticari mülkler için sahaya ve işletme ihtiyaçlarına göre şekillendirilen güneş enerjisi sistemleri.",
+          "cta": "Ticari mülk sistemi görüşün"
+        },
+        "parks": {
+          "title": "Yatırım amaçlı güneş enerjisi santralleri",
+          "description": "Elektrik üretimi ve satışı için tasarlanan, kapsamı belirli projeye göre tanımlanan yer tipi güneş enerjisi santrali çözümleri.",
+          "imageAlt": "Yer tipi bir fotovoltaik santralde güneş paneli sıraları.",
+          "cta": "Yatırım amaçlı santrali görüşün"
+        }
+      },
+      "scope": {
+        "title": "Teknik yönden kuruluma kadar kapsam.",
+        "introduction": "Çalışma; belirli mülk, gerekli ekipman ve düzenli uygulama süreci etrafında yapılandırılır.",
+        "steps": {
+          "preliminary": "Ön teknik çözüm",
+          "equipment": "Ekipman",
+          "delivery": "Teslimat",
+          "installation": "Kurulum",
+          "documentation": "Gerekli proje belgeleri için destek"
+        },
+        "customerEquipment": "Müşterinin önceden satın aldığı ekipmanın kurulumu, ekipman ve saha teknik incelemesinden sonra değerlendirilebilir."
+      },
+      "maintenance": {
+        "title": "Çalışan sistem için düzenli bakım.",
+        "description": "Bakım, mülkün ihtiyaçlarına göre sahanın ve tesisatın teknik durumunun bakımını kapsar.",
+        "imageAlt": "Bir fotovoltaik tesiste panellerin temizlenmesi.",
+        "items": {
+          "cleaning": "Panel temizliği",
+          "siteCare": "Biçme ve saha bakımı",
+          "inspection": "İnceleme ve kontroller",
+          "technical": "Teknik bakım"
+        },
+        "cta": "Bakım hizmetlerini inceleyin",
+        "shopCta": "Mağazadaki ekipmanlar"
+      },
+      "closing": {
+        "title": "İşletme projenizi görüşelim.",
+        "description": "Uygun sonraki adımı belirlemek için bize mülkü ve projenin amacını anlatın.",
+        "cta": "Talep gönderin"
+      }
     },
     "maintenance": {
       "title": "Bakım",

@@ -23,12 +23,15 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: authOrigins.allowedDevHostnames.length
     ? authOrigins.allowedDevHostnames
     : undefined,
-  images: storagePattern
-    ? {
-        remotePatterns: [storagePattern],
-        dangerouslyAllowLocalIP: allowLocalStorageImage,
-      }
-    : undefined,
+  images: {
+    qualities: [75, 90],
+    ...(storagePattern
+      ? {
+          remotePatterns: [storagePattern],
+          dangerouslyAllowLocalIP: allowLocalStorageImage,
+        }
+      : {}),
+  },
 };
 
 export default nextConfig;

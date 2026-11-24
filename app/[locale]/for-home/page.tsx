@@ -1,6 +1,8 @@
 import { getT } from "@/i18n.server";
-import { PageTitle } from "../_components/page-title";
+import { AudienceScenesMotion } from "../_components/audience-scenes-motion";
 import { getPageMetadata } from "../_lib/metadata";
+import { HomeJourneySupport } from "./_components/home-journey-support";
+import { HomeSolutions } from "./_components/home-solutions";
 
 export async function generateMetadata({
   params,
@@ -26,5 +28,16 @@ export default async function ForHomePage({
 }) {
   const { locale } = await params;
   const { t } = await getT("common", { lng: locale });
-  return <PageTitle title={t("pages.forHome.title")} />;
+
+  return (
+    <main
+      id="main-content"
+      className="audience-page home-audience-page"
+      data-audience-page
+    >
+      <AudienceScenesMotion />
+      <HomeSolutions locale={locale} t={t} />
+      <HomeJourneySupport locale={locale} t={t} />
+    </main>
+  );
 }

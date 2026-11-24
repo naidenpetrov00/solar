@@ -108,12 +108,135 @@
       }
     },
     "forHome": {
-      "title": "For home",
-      "description": "Essential information about solar solutions for houses and yards."
+      "title": "Solar solutions for the home",
+      "description": "Solar systems for household self-consumption and autonomous home electricity solutions.",
+      "hero": {
+        "headline": "Solar solutions for your home.",
+        "introduction": "From a system for household self-consumption to a complete autonomous electricity solution — shaped around the property, consumption and technical assessment.",
+        "autonomyCta": "Discuss an autonomous home",
+        "selfConsumptionCta": "Discuss a self-consumption system"
+      },
+      "selfConsumption": {
+        "title": "Energy for your household consumption.",
+        "description": "A solar system produces electricity for the household’s current needs and is planned around the particular property.",
+        "assessment": "The appropriate solution is established after discussing consumption and surveying the site.",
+        "cta": "Discuss a home system"
+      },
+      "autonomy": {
+        "title": "Autonomous electricity for the home.",
+        "description": "A complete solution combines energy production, storage and management. Capacity and configuration are determined for the specific property and its consumption.",
+        "imageAlt": "Home battery storage and energy management system.",
+        "parts": {
+          "production": {
+            "title": "Solar production",
+            "description": "Panels generate electricity according to site conditions and the available area."
+          },
+          "storage": {
+            "title": "Battery storage",
+            "description": "Batteries store part of the generated energy for use outside production hours."
+          },
+          "management": {
+            "title": "Energy management",
+            "description": "Management coordinates the home’s energy production, storage and consumption."
+          }
+        },
+        "assessment": "Full autonomy depends on the site, consumption profile, available area and technical assessment.",
+        "cta": "Discuss an autonomous home",
+        "waterNote": "For complete autonomous-home solutions, autonomy of the water supply can also be discussed."
+      },
+      "equipment": {
+        "title": "Equipment suited to the project.",
+        "introduction": "The equipment approach applies across all home solutions.",
+        "supplied": {
+          "title": "Equipment supply",
+          "description": "We can propose and supply the equipment as part of the complete solution."
+        },
+        "customerOwned": {
+          "title": "Already purchased equipment",
+          "description": "We can consider installing customer-purchased equipment after inspecting the site and checking the condition and compatibility of the components."
+        }
+      },
+      "journey": {
+        "title": "From enquiry to ongoing care.",
+        "introduction": "A clear sequence for preparing, delivering and maintaining the solution.",
+        "steps": {
+          "consultation": "Consultation and site survey",
+          "solution": "Technical solution and proposal",
+          "deliveryInstallation": "Equipment, delivery and installation",
+          "documentationMaintenance": "Documentation assistance and ongoing maintenance"
+        }
+      },
+      "support": {
+        "title": "Care for the system after installation.",
+        "description": "Periodic care supports the reliable operation of a household solar system over time.",
+        "imageAlt": "Cleaning panels at a photovoltaic installation.",
+        "items": {
+          "cleaning": "Panel cleaning",
+          "inspection": "Inspection and checks",
+          "technical": "Technical maintenance"
+        },
+        "maintenanceCta": "Explore maintenance",
+        "shopCta": "Equipment from the shop"
+      },
+      "closing": {
+        "title": "Let’s discuss the right solution for your home.",
+        "description": "Choose the direction that matches your goal. Details are established through a conversation and technical assessment.",
+        "installationCta": "Installation enquiry",
+        "autonomyCta": "Autonomous-home enquiry"
+      }
     },
     "forBusiness": {
-      "title": "For business",
-      "description": "Essential information about solar solutions for business properties and investor-owned solar parks."
+      "title": "Solar systems for business",
+      "description": "Solar systems for business properties and investor solar parks, including equipment, installation and documentation assistance.",
+      "hero": {
+        "headline": "Solar systems for business and investor solar parks.",
+        "introduction": "Solutions for active business properties and parks intended for electricity production and sale.",
+        "cta": "Discuss a business project"
+      },
+      "directions": {
+        "title": "Two directions for business projects.",
+        "properties": {
+          "title": "Systems for business properties",
+          "description": "Solar systems for warehouses, halls, workshops, production facilities and other business properties, shaped around the site and operational needs.",
+          "cta": "Discuss a system for a business property"
+        },
+        "parks": {
+          "title": "Investor solar parks",
+          "description": "Solutions for ground-mounted solar parks intended for electricity production and sale, with scope defined by the specific project.",
+          "imageAlt": "Rows of solar panels in a ground-mounted photovoltaic park.",
+          "cta": "Discuss an investor solar park"
+        }
+      },
+      "scope": {
+        "title": "From technical direction to installation.",
+        "introduction": "The work is structured around the property, required equipment and orderly delivery.",
+        "steps": {
+          "preliminary": "Preliminary technical solution",
+          "equipment": "Equipment",
+          "delivery": "Delivery",
+          "installation": "Installation",
+          "documentation": "Assistance with the required project documentation"
+        },
+        "customerEquipment": "Installation of equipment already purchased by the customer may be considered after a technical review of the equipment and site."
+      },
+      "maintenance": {
+        "title": "Periodic care for an operating system.",
+        "description": "Maintenance covers the site and the technical condition of the installation according to the property’s needs.",
+        "imageAlt": "Cleaning panels at a photovoltaic installation.",
+        "items": {
+          "cleaning": "Panel cleaning",
+          "siteCare": "Mowing and site care",
+          "inspection": "Inspection and checks",
+          "technical": "Technical maintenance"
+        },
+        "cta": "Explore maintenance",
+        "shopCta": "Equipment from the shop"
+      },
+      "closing": {
+        "title": "Let’s discuss your business project.",
+        "description": "Tell us about the property and project objective so we can establish the appropriate next step.",
+        "cta": "Send an enquiry"
+      }
     },
     "maintenance": {
       "title": "Maintenance",

@@ -1,0 +1,295 @@
+.business-audience-page {
+  background: var(--audience-dark);
+}
+
+.business-audience-hero {
+  display: grid;
+  min-height: calc(100svh - 4.5rem);
+  background: var(--audience-dark);
+  color: #fff;
+}
+
+.business-audience-hero > *,
+.business-maintenance > * {
+  min-width: 0;
+}
+
+.business-audience-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(3.5rem, 9vw, 7rem) 1.25rem;
+}
+
+.business-audience-hero-copy h1 {
+  max-width: 13ch;
+  font-size: clamp(3rem, 10vw, 5rem);
+}
+
+.business-audience-hero-copy p {
+  max-width: 58ch;
+  margin-top: 1.5rem;
+  color: var(--audience-dark-muted);
+  font-size: clamp(1.05rem, 1.8vw, 1.22rem);
+  line-height: 1.62;
+}
+
+.business-audience-hero-copy .ui-button {
+  margin-top: 2rem;
+}
+
+.business-audience-hero-media {
+  position: relative;
+  min-height: clamp(22rem, 75vw, 40rem);
+  overflow: hidden;
+}
+
+.business-audience-hero-media::after,
+.business-park-media::after,
+.business-maintenance-media::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(9, 11, 10, 0.12);
+  content: "";
+}
+
+.business-audience-hero-media img {
+  object-position: 55% center;
+  filter: saturate(0.78) contrast(1.08);
+}
+
+.business-directions {
+  padding-top: clamp(4rem, 9vw, 8rem);
+  background: var(--audience-paper);
+  color: var(--audience-ink);
+}
+
+.business-directions > h2,
+.business-direction-copy,
+.business-scope,
+.business-maintenance-copy {
+  padding-inline: 1.25rem;
+}
+
+.business-directions > h2,
+.business-scope h2,
+.business-maintenance h2 {
+  font-size: clamp(2.2rem, 6.5vw, 4.5rem);
+}
+
+.business-direction-copy {
+  display: grid;
+  margin-top: 3rem;
+}
+
+.business-direction-copy article {
+  padding: 2rem 0;
+  border-top: 1px solid var(--audience-rule);
+}
+
+.business-direction-copy h3 {
+  max-width: 18ch;
+  font-size: clamp(1.65rem, 4vw, 2.5rem);
+}
+
+.business-direction-copy p {
+  max-width: 60ch;
+  margin-top: 1rem;
+  color: var(--audience-muted);
+  line-height: 1.65;
+}
+
+.business-direction-copy .ui-button {
+  margin-top: 1.5rem;
+}
+
+.business-park-media {
+  position: relative;
+  min-height: clamp(20rem, 58vw, 42rem);
+  margin-top: 2rem;
+  overflow: hidden;
+  background: var(--audience-dark);
+}
+
+.business-park-media img {
+  object-position: 50% center;
+  filter: saturate(0.82) contrast(1.08);
+}
+
+.business-scope {
+  padding-block: clamp(4rem, 9vw, 8rem);
+  background: var(--audience-dark);
+  color: #fff;
+}
+
+.business-scope-introduction {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.business-scope-introduction p {
+  max-width: 58ch;
+  color: var(--audience-dark-muted);
+  line-height: 1.65;
+}
+
+.business-scope ol {
+  display: grid;
+  margin: 3rem 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  counter-reset: business-scope;
+  list-style: none;
+}
+
+.business-scope li {
+  display: grid;
+  min-height: 5.75rem;
+  grid-template-columns: 2.75rem 1fr;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+  line-height: 1.35;
+  counter-increment: business-scope;
+}
+
+.business-scope li::before {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  content: counter(business-scope, decimal-leading-zero);
+}
+
+.business-equipment-note {
+  max-width: 70ch;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(252, 211, 77, 0.62);
+  color: var(--audience-dark-muted);
+  line-height: 1.62;
+}
+
+.business-maintenance {
+  display: grid;
+  background: var(--audience-paper);
+  color: var(--audience-ink);
+}
+
+.business-maintenance-media {
+  position: relative;
+  min-height: clamp(22rem, 75vw, 38rem);
+  overflow: hidden;
+}
+
+.business-maintenance-media img {
+  object-position: 58% center;
+  filter: saturate(0.82) contrast(1.06);
+}
+
+.business-maintenance-copy {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+}
+
+.business-maintenance-copy > p {
+  max-width: 58ch;
+  margin-top: 1.25rem;
+  color: var(--audience-muted);
+  line-height: 1.65;
+}
+
+.business-maintenance-copy ul {
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--audience-rule);
+  list-style: none;
+}
+
+.business-maintenance-copy li {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--audience-rule);
+  font-weight: 600;
+}
+
+.business-maintenance-copy .audience-actions {
+  margin-top: 2rem;
+}
+
+@media (min-width: 48rem) {
+  .business-directions > h2,
+  .business-direction-copy,
+  .business-scope,
+  .business-maintenance-copy {
+    padding-inline: max(2rem, calc((100vw - 86rem) / 2 + 2rem));
+  }
+
+  .business-direction-copy {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .business-direction-copy article {
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem;
+    border-bottom: 1px solid var(--audience-rule);
+  }
+
+  .business-direction-copy article p { flex: 1; }
+
+  .business-direction-copy article:first-child {
+    padding-left: 0;
+    border-right: 1px solid var(--audience-rule);
+  }
+
+  .business-scope-introduction {
+    grid-template-columns: minmax(0, 5fr) minmax(20rem, 4fr);
+  }
+
+  .business-scope ol {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .business-scope li {
+    min-height: 9rem;
+    grid-template-columns: 1fr;
+    align-content: space-between;
+    padding: 1.35rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .business-scope li:first-child { padding-left: 0; }
+  .business-scope li:last-child { border-right: 0; }
+}
+
+@media (min-width: 64rem) {
+  .business-audience-hero {
+    grid-template-columns: minmax(32rem, 6fr) minmax(0, 7fr);
+  }
+
+  .business-audience-hero-copy {
+    padding: 5rem clamp(2.5rem, 4vw, 4.5rem) 5rem
+      max(2rem, calc((100vw - 86rem) / 2 + 2rem));
+  }
+
+  .business-audience-hero-copy h1 {
+    font-size: clamp(3.1rem, 3.5vw, 4.2rem);
+  }
+
+  .business-audience-hero-media { min-height: calc(100svh - 4.5rem); }
+
+  .business-maintenance {
+    min-height: 44rem;
+    grid-template-columns: minmax(0, 6fr) minmax(34rem, 7fr);
+  }
+
+  .business-maintenance-copy {
+    align-self: center;
+    padding-right: max(2rem, calc((100vw - 86rem) / 2 + 2rem));
+    padding-left: clamp(2.5rem, 4vw, 4.5rem);
+  }
+
+  .business-maintenance h2 {
+    max-width: 18ch;
+    font-size: clamp(2.75rem, 4vw, 4.5rem);
+  }
+}
