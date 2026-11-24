@@ -1,24 +1,21 @@
 import {
-  MAINTENANCE_PRICE_LABEL_MAX_LENGTH,
+  isMaintenancePriceableServiceCode,
   isMaintenanceServiceCode,
-  maintenanceLocales,
-  type MaintenanceLocale,
-  type MaintenancePriceLabels,
   type MaintenanceServiceInput,
 } from "@/lib/maintenance/model";
 
-export type MaintenanceFieldErrorCode =
-  | "INVALID"
-  | "REQUIRED"
-  | "TOO_LONG";
+const MAXIMUM_PRICE_CENTS = BigInt("9223372036854775807");
+export const MAINTENANCE_PRICE_INPUT_MAX_LENGTH = 20;
 
-type RawMaintenanceServiceInput = Omit<
-  MaintenanceServiceInput,
-  "code" | "oneTimePriceLabels" | "periodicPriceLabels"
-> & {
+export type MaintenanceFieldErrorCode = "INVALID" | "REQUIRED";
+
+export type RawMaintenanceServiceInput = {
   code: unknown;
-  oneTimePriceLabels: Record<MaintenanceLocale, string>;
-  periodicPriceLabels: Record<MaintenanceLocale, string>;
+  isActive: boolean;
+  oneTimeAvailable: boolean;
+  periodicAvailable: boolean;
+  oneTimePrice: string;
+  periodicPrice: string;
 };
 
 export type MaintenanceValidationResult =
@@ -28,50 +25,75 @@ export type MaintenanceValidationResult =
       fieldErrors: Record<string, MaintenanceFieldErrorCode>;
     };
 
-function normalizeLabels(
-  values: Record<MaintenanceLocale, string>,
-  field: "oneTimePriceLabels" | "periodicPriceLabels",
+function parsePositiveEuroCents(value: string) {
+  const normalized = value.trim().replace(",", ".");
+  if (
+    normalized.length > MAINTENANCE_PRICE_INPUT_MAX_LENGTH ||
+    !/^(?:0|[1-9][0-9]*)(?:\.[0-9]{1,2})?$/u.test(normalized)
+  ) {
+    return null;
+  }
+
+  const [whole, fraction = ""] = normalized.split(".");
+  const cents =
+    BigInt(whole) * BigInt(100) + BigInt(fraction.padEnd(2, "0"));
+  return cents > BigInt(0) && cents <= MAXIMUM_PRICE_CENTS ? cents : null;
+}
+
+function validatePrice(
+  available: boolean,
+  rawValue: string,
+  field: "oneTimePrice" | "periodicPrice",
   errors: Record<string, MaintenanceFieldErrorCode>,
-): MaintenancePriceLabels {
-  return Object.fromEntries(
-    maintenanceLocales.map((locale) => {
-      const value = values[locale].trim();
-      if (value.length > MAINTENANCE_PRICE_LABEL_MAX_LENGTH) {
-        errors[`${field}.${locale}`] = "TOO_LONG";
-      }
-      return [locale, value || null];
-    }),
-  ) as MaintenancePriceLabels;
+) {
+  if (!available) return null;
+  if (!rawValue.trim()) {
+    errors[field] = "REQUIRED";
+    return null;
+  }
+
+  const cents = parsePositiveEuroCents(rawValue);
+  if (cents === null) errors[field] = "INVALID";
+  return cents;
+}
+
+export function euroCentsToInput(value: string | null) {
+  if (value === null) return "";
+  const cents = BigInt(value);
+  return `${cents / BigInt(100)}.${String(cents % BigInt(100)).padStart(2, "0")}`;
 }
 
 export function validateMaintenanceServiceInput(
   input: RawMaintenanceServiceInput,
 ): MaintenanceValidationResult {
   const fieldErrors: Record<string, MaintenanceFieldErrorCode> = {};
-  if (!isMaintenanceServiceCode(input.code)) fieldErrors.code = "INVALID";
-
-  const oneTimePriceLabels = normalizeLabels(
-    input.oneTimePriceLabels,
-    "oneTimePriceLabels",
-    fieldErrors,
-  );
-  const periodicPriceLabels = normalizeLabels(
-    input.periodicPriceLabels,
-    "periodicPriceLabels",
-    fieldErrors,
-  );
+  if (!isMaintenanceServiceCode(input.code)) {
+    return { success: false, fieldErrors: { code: "INVALID" } };
+  }
 
   if (input.isActive && !input.oneTimeAvailable && !input.periodicAvailable) {
     fieldErrors.frequency = "REQUIRED";
   }
-  if (input.oneTimeAvailable && !oneTimePriceLabels.bg) {
-    fieldErrors["oneTimePriceLabels.bg"] = "REQUIRED";
-  }
-  if (input.periodicAvailable && !periodicPriceLabels.bg) {
-    fieldErrors["periodicPriceLabels.bg"] = "REQUIRED";
-  }
 
-  if (Object.keys(fieldErrors).length || !isMaintenanceServiceCode(input.code)) {
+  const priceable = isMaintenancePriceableServiceCode(input.code);
+  const oneTimePriceCents = priceable
+    ? validatePrice(
+        input.oneTimeAvailable,
+        input.oneTimePrice,
+        "oneTimePrice",
+        fieldErrors,
+      )
+    : null;
+  const periodicPriceCents = priceable
+    ? validatePrice(
+        input.periodicAvailable,
+        input.periodicPrice,
+        "periodicPrice",
+        fieldErrors,
+      )
+    : null;
+
+  if (Object.keys(fieldErrors).length) {
     return { success: false, fieldErrors };
   }
 
@@ -82,8 +104,8 @@ export function validateMaintenanceServiceInput(
       isActive: input.isActive,
       oneTimeAvailable: input.oneTimeAvailable,
       periodicAvailable: input.periodicAvailable,
-      oneTimePriceLabels,
-      periodicPriceLabels,
+      oneTimePriceCents,
+      periodicPriceCents,
     },
   };
 }

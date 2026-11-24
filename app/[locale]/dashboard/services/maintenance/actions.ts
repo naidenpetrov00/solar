@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 
 import { requireUser } from "@/lib/authorization";
 import { MaintenanceError } from "@/lib/maintenance/errors";
-import { maintenanceLocales } from "@/lib/maintenance/model";
 import { updateMaintenanceService } from "@/lib/maintenance/management";
 import { validateMaintenanceServiceInput } from "@/lib/maintenance/validation";
 import { AuthorizationError, hasPermission } from "@/lib/permission-policy";
@@ -76,18 +75,8 @@ export async function saveMaintenanceServiceAction(
     isActive: booleanValue(data, "isActive"),
     oneTimeAvailable: booleanValue(data, "oneTimeAvailable"),
     periodicAvailable: booleanValue(data, "periodicAvailable"),
-    oneTimePriceLabels: Object.fromEntries(
-      maintenanceLocales.map((candidate) => [
-        candidate,
-        stringValue(data, `oneTimePriceLabels.${candidate}`),
-      ]),
-    ) as Record<(typeof maintenanceLocales)[number], string>,
-    periodicPriceLabels: Object.fromEntries(
-      maintenanceLocales.map((candidate) => [
-        candidate,
-        stringValue(data, `periodicPriceLabels.${candidate}`),
-      ]),
-    ) as Record<(typeof maintenanceLocales)[number], string>,
+    oneTimePrice: stringValue(data, "oneTimePrice"),
+    periodicPrice: stringValue(data, "periodicPrice"),
   };
   const validation = validateMaintenanceServiceInput(input);
 

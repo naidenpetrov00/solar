@@ -1,7 +1,4 @@
-import type {
-  MaintenanceLocale,
-  MaintenanceServiceCode,
-} from "@/lib/maintenance/model";
+import type { MaintenanceServiceCode } from "@/lib/maintenance/model";
 import type { MaintenanceActionCode } from "../action-model";
 
 export type MaintenanceLabels = {
@@ -9,14 +6,14 @@ export type MaintenanceLabels = {
   description: string;
   readOnly: string;
   serviceNames: Record<MaintenanceServiceCode, string>;
-  languages: Record<MaintenanceLocale, string>;
-  localeTabsLabel: string;
+  currency: string;
+  technicalPricing: string;
   fields: {
     isActive: { label: string; help: string };
     oneTimeAvailable: { label: string; help: string };
     periodicAvailable: { label: string; help: string };
-    oneTimePriceLabel: { label: string; help: string };
-    periodicPriceLabel: { label: string; help: string };
+    oneTimePrice: { label: string; help: string };
+    periodicPrice: { label: string; help: string };
   };
   states: { active: string; hidden: string };
   actions: {
@@ -27,7 +24,6 @@ export type MaintenanceLabels = {
   validation: {
     invalid: string;
     required: string;
-    tooLong: string;
     frequency: string;
   };
   results: Record<MaintenanceActionCode, string>;

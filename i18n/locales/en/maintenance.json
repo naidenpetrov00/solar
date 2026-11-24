@@ -3,14 +3,15 @@
     "dashboard": {
       "maintenance": {
         "title": "Maintenance services",
-        "description": "Manage visibility, frequencies, and public price labels for the three fixed services.",
+        "description": "Manage visibility, frequencies, and EUR prices for the three fixed services.",
         "readOnly": "You have view access but cannot change the services.",
         "serviceNames": {
           "panel-cleaning": "Panel cleaning",
           "grounds-care": "Mowing and grounds care",
           "technical-maintenance": "Technical assessment and maintenance"
         },
-        "localeTabsLabel": "Price-label language",
+        "currency": "EUR",
+        "technicalPricing": "Technical maintenance has no editable amount. The public price-after-inspection wording is managed by the application.",
         "fields": {
           "isActive": {
             "label": "Publicly visible",
@@ -24,13 +25,13 @@
             "label": "Periodic service",
             "help": "Periodic maintenance is arranged after consultation and is not an online subscription."
           },
-          "oneTimePriceLabel": {
-            "label": "One-time price label",
-            "help": "The Bulgarian label is required when this frequency is enabled; other languages may remain empty."
+          "oneTimePrice": {
+            "label": "One-time price",
+            "help": "Enter a positive amount with at most two decimal places. Comma and dot separators are accepted."
           },
-          "periodicPriceLabel": {
-            "label": "Periodic price label",
-            "help": "The Bulgarian label is required when this frequency is enabled; other languages may remain empty."
+          "periodicPrice": {
+            "label": "Periodic price",
+            "help": "Enter a positive amount with at most two decimal places. Comma and dot separators are accepted."
           }
         },
         "states": {
@@ -44,8 +45,7 @@
         },
         "validation": {
           "invalid": "The value is invalid.",
-          "required": "This field is required for the enabled frequency.",
-          "tooLong": "Use no more than 200 characters.",
+          "required": "Enter a price for the enabled frequency.",
           "frequency": "An active service must offer at least one frequency."
         },
         "results": {

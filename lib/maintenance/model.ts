@@ -4,24 +4,29 @@ export const maintenanceServiceCodes = [
   "technical-maintenance",
 ] as const;
 
-export const maintenanceLocales = ["bg", "en", "tr", "uk"] as const;
-export const MAINTENANCE_PRICE_LABEL_MAX_LENGTH = 200;
+export const maintenancePriceableServiceCodes = [
+  "panel-cleaning",
+  "grounds-care",
+] as const;
 
 export type MaintenanceServiceCode =
   (typeof maintenanceServiceCodes)[number];
-export type MaintenanceLocale = (typeof maintenanceLocales)[number];
-export type MaintenancePriceLabels = Record<MaintenanceLocale, string | null>;
 
 export type MaintenanceServiceInput = {
   code: MaintenanceServiceCode;
   isActive: boolean;
   oneTimeAvailable: boolean;
   periodicAvailable: boolean;
-  oneTimePriceLabels: MaintenancePriceLabels;
-  periodicPriceLabels: MaintenancePriceLabels;
+  oneTimePriceCents: bigint | null;
+  periodicPriceCents: bigint | null;
 };
 
-export type ManagedMaintenanceService = MaintenanceServiceInput & {
+export type ManagedMaintenanceService = Omit<
+  MaintenanceServiceInput,
+  "oneTimePriceCents" | "periodicPriceCents"
+> & {
+  oneTimePriceCents: string | null;
+  periodicPriceCents: string | null;
   updatedAt: string;
 };
 
@@ -32,7 +37,7 @@ export type ManagedMaintenanceServices = {
 
 export type PublicMaintenanceFrequency = {
   available: boolean;
-  priceLabel: string | null;
+  amountCents: string | null;
 };
 
 export type PublicMaintenanceService = {
@@ -50,9 +55,10 @@ export function isMaintenanceServiceCode(
   );
 }
 
-export function isMaintenanceLocale(value: unknown): value is MaintenanceLocale {
-  return (
-    typeof value === "string" &&
-    (maintenanceLocales as readonly string[]).includes(value)
+export function isMaintenancePriceableServiceCode(
+  value: MaintenanceServiceCode,
+) {
+  return (maintenancePriceableServiceCodes as readonly string[]).includes(
+    value,
   );
 }

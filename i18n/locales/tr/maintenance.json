@@ -3,14 +3,15 @@
     "dashboard": {
       "maintenance": {
         "title": "Bakım hizmetleri",
-        "description": "Üç sabit hizmetin görünürlüğünü, sıklık seçeneklerini ve herkese açık fiyat etiketlerini yönetin.",
+        "description": "Üç sabit hizmetin görünürlüğünü, sıklık seçeneklerini ve avro fiyatlarını yönetin.",
         "readOnly": "Görüntüleme erişiminiz var ancak hizmetleri değiştiremezsiniz.",
         "serviceNames": {
           "panel-cleaning": "Panel temizliği",
           "grounds-care": "Biçme ve arazi bakımı",
           "technical-maintenance": "Teknik değerlendirme ve bakım"
         },
-        "localeTabsLabel": "Fiyat etiketi dili",
+        "currency": "EUR",
+        "technicalPricing": "Teknik bakım için düzenlenebilir bir tutar yoktur. İnceleme sonrası fiyatlandırma metni uygulama tarafından yönetilir.",
         "fields": {
           "isActive": {
             "label": "Herkese açık",
@@ -24,13 +25,13 @@
             "label": "Periyodik hizmet",
             "help": "Periyodik bakım görüşme sonrasında kararlaştırılır ve çevrim içi abonelik değildir."
           },
-          "oneTimePriceLabel": {
-            "label": "Tek seferlik fiyat etiketi",
-            "help": "Bu sıklık etkinse Bulgarca etiket zorunludur; diğer diller boş bırakılabilir."
+          "oneTimePrice": {
+            "label": "Tek seferlik fiyat",
+            "help": "En fazla iki ondalık basamaklı pozitif bir tutar girin. Virgül ve nokta ayırıcıları kabul edilir."
           },
-          "periodicPriceLabel": {
-            "label": "Periyodik fiyat etiketi",
-            "help": "Bu sıklık etkinse Bulgarca etiket zorunludur; diğer diller boş bırakılabilir."
+          "periodicPrice": {
+            "label": "Periyodik fiyat",
+            "help": "En fazla iki ondalık basamaklı pozitif bir tutar girin. Virgül ve nokta ayırıcıları kabul edilir."
           }
         },
         "states": {
@@ -44,8 +45,7 @@
         },
         "validation": {
           "invalid": "Değer geçersiz.",
-          "required": "Etkin sıklık için bu alan zorunludur.",
-          "tooLong": "En fazla 200 karakter kullanın.",
+          "required": "Etkin sıklık için bir fiyat girin.",
           "frequency": "Etkin bir hizmet en az bir sıklık seçeneği sunmalıdır."
         },
         "results": {

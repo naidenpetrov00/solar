@@ -11,7 +11,6 @@ import {
   accessDeniedRouteSlug,
   dashboardMaintenanceRouteSlug,
   localizedPath,
-  supportedLocales,
 } from "../../../_lib/routes";
 import { safeAuthReturnPath } from "../../../_lib/return-paths";
 import type { MaintenanceLabels } from "./_components/maintenance-labels";
@@ -50,7 +49,7 @@ export default async function MaintenanceServicesPage({
     redirect(localizedPath(locale, accessDeniedRouteSlug));
   }
 
-  const translationPromise = getT(["common", "maintenance"], { lng: locale });
+  const translationPromise = getT("maintenance", { lng: locale });
   let workspace;
   try {
     workspace = await getManagedMaintenanceServices(currentUser.id);
@@ -62,17 +61,9 @@ export default async function MaintenanceServicesPage({
   }
 
   const { t } = await translationPromise;
-  const labels = {
-    ...(t("maintenance:pages.dashboard.maintenance", {
-      returnObjects: true,
-    }) as Omit<MaintenanceLabels, "languages">),
-    languages: Object.fromEntries(
-      supportedLocales.map((candidate) => [
-        candidate,
-        t(`common:languages.${candidate}`),
-      ]),
-    ),
-  } as MaintenanceLabels;
+  const labels = t("pages.dashboard.maintenance", {
+    returnObjects: true,
+  }) as MaintenanceLabels;
   return (
     <main id="main-content" className="dashboard-main dashboard-maintenance-main">
       <header className="dashboard-introduction">

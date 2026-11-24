@@ -5,11 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { maintenanceService } from "@/db/schema";
 import { MaintenanceError } from "@/lib/maintenance/errors";
-import {
-  maintenanceLocales,
-  type MaintenancePriceLabels,
-  type MaintenanceServiceCode,
-} from "@/lib/maintenance/model";
+import type { MaintenanceServiceCode } from "@/lib/maintenance/model";
 import {
   assertCompleteMaintenanceServiceSet,
   getMaintenanceActorRole,
@@ -25,24 +21,6 @@ function assertFresh(actual: Date, expected: string) {
   ) {
     throw new MaintenanceError("STALE");
   }
-}
-
-function labelsFromRow(
-  row: typeof maintenanceService.$inferSelect,
-  frequency: "oneTime" | "periodic",
-): MaintenancePriceLabels {
-  const prefix = frequency === "oneTime" ? "oneTime" : "periodic";
-  return Object.fromEntries(
-    maintenanceLocales.map((locale) => {
-      const suffix = `${locale[0].toUpperCase()}${locale.slice(1)}` as
-        | "Bg"
-        | "En"
-        | "Tr"
-        | "Uk";
-      const key = `${prefix}PriceLabel${suffix}` as keyof typeof row;
-      return [locale, row[key] as string | null];
-    }),
-  ) as MaintenancePriceLabels;
 }
 
 async function assertActor(
@@ -70,8 +48,8 @@ export async function getManagedMaintenanceServices(actorId: string) {
       isActive: row.isActive,
       oneTimeAvailable: row.oneTimeAvailable,
       periodicAvailable: row.periodicAvailable,
-      oneTimePriceLabels: labelsFromRow(row, "oneTime"),
-      periodicPriceLabels: labelsFromRow(row, "periodic"),
+      oneTimePriceCents: row.oneTimePriceCents?.toString() ?? null,
+      periodicPriceCents: row.periodicPriceCents?.toString() ?? null,
       updatedAt: row.updatedAt.toISOString(),
     })),
   };
@@ -84,8 +62,8 @@ export async function updateMaintenanceService(input: {
   isActive: boolean;
   oneTimeAvailable: boolean;
   periodicAvailable: boolean;
-  oneTimePriceLabels: Record<(typeof maintenanceLocales)[number], string>;
-  periodicPriceLabels: Record<(typeof maintenanceLocales)[number], string>;
+  oneTimePrice: string;
+  periodicPrice: string;
 }) {
   const result = validateMaintenanceServiceInput(input);
   if (!result.success) {
@@ -107,14 +85,8 @@ export async function updateMaintenanceService(input: {
         isActive: result.data.isActive,
         oneTimeAvailable: result.data.oneTimeAvailable,
         periodicAvailable: result.data.periodicAvailable,
-        oneTimePriceLabelBg: result.data.oneTimePriceLabels.bg,
-        oneTimePriceLabelEn: result.data.oneTimePriceLabels.en,
-        oneTimePriceLabelTr: result.data.oneTimePriceLabels.tr,
-        oneTimePriceLabelUk: result.data.oneTimePriceLabels.uk,
-        periodicPriceLabelBg: result.data.periodicPriceLabels.bg,
-        periodicPriceLabelEn: result.data.periodicPriceLabels.en,
-        periodicPriceLabelTr: result.data.periodicPriceLabels.tr,
-        periodicPriceLabelUk: result.data.periodicPriceLabels.uk,
+        oneTimePriceCents: result.data.oneTimePriceCents,
+        periodicPriceCents: result.data.periodicPriceCents,
         updatedAt,
       })
       .where(eq(maintenanceService.code, result.data.code))

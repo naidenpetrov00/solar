@@ -220,9 +220,9 @@ Both `administrator` and `admin` roles have `catalog:view` and `catalog:manage`;
 
 ## Maintenance service administration
 
-Maintenance administration uses exactly three fixed service codes: `panel-cleaning`, `grounds-care`, and `technical-maintenance`. Their public names and explanatory copy remain in the localization resources; administrators can change only visibility, one-time and periodic availability, and localized price-label text. Price labels are flexible EUR display strings rather than numeric prices or quotation inputs.
+Maintenance administration uses exactly three fixed service codes: `panel-cleaning`, `grounds-care`, and `technical-maintenance`. Their public names and explanatory copy remain in the localization resources; administrators can change only visibility, one-time and periodic availability, and the one-time and periodic EUR amounts for panel cleaning and grounds care. Amounts are stored as positive integer euro cents. Technical maintenance never stores an amount; its future public price-after-inspection wording remains application-owned localized copy.
 
-Both `administrator` and `admin` roles have `maintenance:view` and `maintenance:manage`; customers have neither. The dashboard route is `/dashboard/services/maintenance`. Public maintenance components must use the typed read boundary in `lib/maintenance/public.ts` rather than querying Drizzle directly. That read returns only active services and never substitutes Bulgarian text for a missing non-Bulgarian label.
+Both `administrator` and `admin` roles have `maintenance:view` and `maintenance:manage`; customers have neither. The dashboard route is `/dashboard/services/maintenance`. Public maintenance components must use the typed read boundary in `lib/maintenance/public.ts` rather than querying Drizzle directly. That read returns only active services in canonical order and exposes each frequency as `available` plus an exact decimal-string `amountCents`. It does not format prices, return translated price text, or choose public units.
 
 The fixed records are not created by ordinary reads or dashboard mutations. After the maintenance schema migration has been reviewed and applied, initialize missing records with:
 
@@ -230,7 +230,7 @@ The fixed records are not created by ordinary reads or dashboard mutations. Afte
 npm run maintenance:bootstrap
 ```
 
-The command requires `DATABASE_URL` and is idempotent. It creates only missing fixed records as inactive services with both frequencies disabled and every price label absent. It does not overwrite existing administration or seed example prices.
+The command requires `DATABASE_URL` and is idempotent. It creates only missing fixed records as inactive services with both frequencies disabled and both price amounts null. It does not overwrite existing administration or seed example prices.
 
 ## Persistent order domain
 
