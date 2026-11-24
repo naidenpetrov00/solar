@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getT } from "@/i18n.server";
-import { localizedAlternates, localizedPath } from "./routes";
+import { localizedAlternates, localizedPath, openGraphLocale } from "./routes";
 
 export async function getPageMetadata(
   locale: string,
@@ -22,7 +22,7 @@ export async function getPageMetadata(
     openGraph: {
       title,
       description,
-      locale,
+      locale: openGraphLocale(locale),
       type: "website",
     },
   };

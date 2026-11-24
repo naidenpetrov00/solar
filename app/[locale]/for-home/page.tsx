@@ -10,15 +10,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  return {
-    ...(await getPageMetadata(
-      locale,
-      "for-home",
-      "forHome",
-      "pages.forHome.description",
-    )),
-    robots: { index: false, follow: true },
-  };
+  return getPageMetadata(
+    locale,
+    "for-home",
+    "forHome",
+    "pages.forHome.description",
+  );
 }
 
 export default async function ForHomePage({
