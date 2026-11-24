@@ -18,3 +18,4 @@ export * from "@/db/schema/order-items";
 export * from "@/db/schema/order-events";
 export * from "@/db/schema/order-notifications";
 export * from "@/db/schema/order-relations";
+export * from "@/db/schema/maintenance-services";

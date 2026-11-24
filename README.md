@@ -169,7 +169,7 @@ npm run db:generate
 The authorization model has three roles:
 
 - `customer` is the default public account and has no administration access.
-- `administrator` can access the future dashboard and manage customer accounts only.
+- `administrator` can access the permitted dashboard tools and manage customer accounts, without owner-only administrator management.
 - `admin` is the single owner account and is the only role that can create or manage administrators.
 
 Public email/password and social registration always create `customer` accounts. Browser-controlled payloads cannot select `administrator` or `admin`. The generic Better Auth Admin endpoints remain owner-only because their operation permissions are not target-aware; future administrator workflows must use the centralized application authorization helpers.
@@ -217,6 +217,20 @@ Prices are stored as EUR integer minor units. Administrator input may be VAT-inc
 Normal catalog management uses draft, published, and archived lifecycle states and exposes no hard-delete command. Foreign keys protect referenced data, while reviewed migrations and deliberate maintenance may delete records in dependency-safe order. Category cycles beyond direct self-parenting are prevented by the transactional catalog management service rather than database triggers.
 
 Both `administrator` and `admin` roles have `catalog:view` and `catalog:manage`; customers have neither. There is no separate publishing role in this milestone.
+
+## Maintenance service administration
+
+Maintenance administration uses exactly three fixed service codes: `panel-cleaning`, `grounds-care`, and `technical-maintenance`. Their public names and explanatory copy remain in the localization resources; administrators can change only visibility, one-time and periodic availability, and localized price-label text. Price labels are flexible EUR display strings rather than numeric prices or quotation inputs.
+
+Both `administrator` and `admin` roles have `maintenance:view` and `maintenance:manage`; customers have neither. The dashboard route is `/dashboard/services/maintenance`. Public maintenance components must use the typed read boundary in `lib/maintenance/public.ts` rather than querying Drizzle directly. That read returns only active services and never substitutes Bulgarian text for a missing non-Bulgarian label.
+
+The fixed records are not created by ordinary reads or dashboard mutations. After the maintenance schema migration has been reviewed and applied, initialize missing records with:
+
+```powershell
+npm run maintenance:bootstrap
+```
+
+The command requires `DATABASE_URL` and is idempotent. It creates only missing fixed records as inactive services with both frequencies disabled and every price label absent. It does not overwrite existing administration or seed example prices.
 
 ## Persistent order domain
 

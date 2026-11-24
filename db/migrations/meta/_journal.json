@@ -127,6 +127,13 @@
       "when": 1794226331684,
       "tag": "0017_add-browser-push-notifications",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1795520271256,
+      "tag": "0018_add-maintenance-service-pricing",
+      "breakpoints": true
     }
   ]
 }

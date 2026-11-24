@@ -1,0 +1,62 @@
+{
+  "pages": {
+    "dashboard": {
+      "maintenance": {
+        "title": "Bakım hizmetleri",
+        "description": "Üç sabit hizmetin görünürlüğünü, sıklık seçeneklerini ve herkese açık fiyat etiketlerini yönetin.",
+        "readOnly": "Görüntüleme erişiminiz var ancak hizmetleri değiştiremezsiniz.",
+        "serviceNames": {
+          "panel-cleaning": "Panel temizliği",
+          "grounds-care": "Biçme ve arazi bakımı",
+          "technical-maintenance": "Teknik değerlendirme ve bakım"
+        },
+        "localeTabsLabel": "Fiyat etiketi dili",
+        "fields": {
+          "isActive": {
+            "label": "Herkese açık",
+            "help": "Gizli hizmetler herkese açık okuma arayüzünde döndürülmez."
+          },
+          "oneTimeAvailable": {
+            "label": "Tek seferlik hizmet",
+            "help": "Hizmetin tek seferlik bir seçenek olarak sunulmasını sağlar."
+          },
+          "periodicAvailable": {
+            "label": "Periyodik hizmet",
+            "help": "Periyodik bakım görüşme sonrasında kararlaştırılır ve çevrim içi abonelik değildir."
+          },
+          "oneTimePriceLabel": {
+            "label": "Tek seferlik fiyat etiketi",
+            "help": "Bu sıklık etkinse Bulgarca etiket zorunludur; diğer diller boş bırakılabilir."
+          },
+          "periodicPriceLabel": {
+            "label": "Periyodik fiyat etiketi",
+            "help": "Bu sıklık etkinse Bulgarca etiket zorunludur; diğer diller boş bırakılabilir."
+          }
+        },
+        "states": {
+          "active": "Etkin",
+          "hidden": "Gizli"
+        },
+        "actions": {
+          "save": "Kaydet",
+          "saving": "Kaydediliyor…",
+          "reload": "Yeniden yükle"
+        },
+        "validation": {
+          "invalid": "Değer geçersiz.",
+          "required": "Etkin sıklık için bu alan zorunludur.",
+          "tooLong": "En fazla 200 karakter kullanın.",
+          "frequency": "Etkin bir hizmet en az bir sıklık seçeneği sunmalıdır."
+        },
+        "results": {
+          "SAVED": "Hizmet kaydedildi.",
+          "INVALID_INPUT": "İşaretli alanları kontrol edip yeniden deneyin.",
+          "FORBIDDEN": "Bu değişikliği yapma izniniz yok.",
+          "NOT_FOUND": "Hizmet artık kullanılamıyor.",
+          "STALE": "Hizmet bu sırada değiştirildi. Devam etmeden önce sayfayı yeniden yükleyin.",
+          "INCOMPLETE_FIXED_SET": "Sabit hizmet kümesi tam olarak başlatılmamış."
+        }
+      }
+    }
+  }
+}

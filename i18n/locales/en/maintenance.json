@@ -1,0 +1,62 @@
+{
+  "pages": {
+    "dashboard": {
+      "maintenance": {
+        "title": "Maintenance services",
+        "description": "Manage visibility, frequencies, and public price labels for the three fixed services.",
+        "readOnly": "You have view access but cannot change the services.",
+        "serviceNames": {
+          "panel-cleaning": "Panel cleaning",
+          "grounds-care": "Mowing and grounds care",
+          "technical-maintenance": "Technical assessment and maintenance"
+        },
+        "localeTabsLabel": "Price-label language",
+        "fields": {
+          "isActive": {
+            "label": "Publicly visible",
+            "help": "Hidden services are excluded from the public read interface."
+          },
+          "oneTimeAvailable": {
+            "label": "One-time service",
+            "help": "Allows the service to be presented as a one-time option."
+          },
+          "periodicAvailable": {
+            "label": "Periodic service",
+            "help": "Periodic maintenance is arranged after consultation and is not an online subscription."
+          },
+          "oneTimePriceLabel": {
+            "label": "One-time price label",
+            "help": "The Bulgarian label is required when this frequency is enabled; other languages may remain empty."
+          },
+          "periodicPriceLabel": {
+            "label": "Periodic price label",
+            "help": "The Bulgarian label is required when this frequency is enabled; other languages may remain empty."
+          }
+        },
+        "states": {
+          "active": "Active",
+          "hidden": "Hidden"
+        },
+        "actions": {
+          "save": "Save",
+          "saving": "Saving…",
+          "reload": "Reload"
+        },
+        "validation": {
+          "invalid": "The value is invalid.",
+          "required": "This field is required for the enabled frequency.",
+          "tooLong": "Use no more than 200 characters.",
+          "frequency": "An active service must offer at least one frequency."
+        },
+        "results": {
+          "SAVED": "The service has been saved.",
+          "INVALID_INPUT": "Review the marked fields and try again.",
+          "FORBIDDEN": "You do not have permission to make this change.",
+          "NOT_FOUND": "The service is no longer available.",
+          "STALE": "The service changed in the meantime. Reload the page before continuing.",
+          "INCOMPLETE_FIXED_SET": "The fixed service set has not been initialized completely."
+        }
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
+    "maintenance:bootstrap": "node scripts/bootstrap-maintenance-services.mjs",
     "auth:generate": "node --conditions=react-server ./node_modules/auth/dist/index.mjs generate --config ./lib/auth.ts --output ./db/schema/auth.generated.ts --adapter drizzle --dialect postgresql --yes",
     "auth:check": "node ./node_modules/auth/dist/index.mjs check schema --config ./lib/auth-schema-check.ts",
     "auth:secret": "auth secret",

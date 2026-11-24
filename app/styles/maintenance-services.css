@@ -1,0 +1,225 @@
+.dashboard-maintenance-main {
+  width: min(100%, 84rem);
+}
+
+.dashboard-maintenance-readonly {
+  max-width: 68ch;
+  margin: 2rem 0 0;
+  padding: 0.85rem 0;
+  border-block: 1px solid var(--dashboard-rule);
+  color: var(--dashboard-muted);
+}
+
+.dashboard-maintenance-services {
+  display: grid;
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-maintenance-service {
+  min-width: 0;
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--dashboard-rule);
+}
+
+.dashboard-maintenance-service-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-maintenance-service-heading h2,
+.dashboard-maintenance-result p {
+  margin: 0;
+}
+
+.dashboard-maintenance-service-heading h2 {
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.dashboard-maintenance-service-heading > span {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--dashboard-rule);
+  color: var(--dashboard-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.dashboard-maintenance-service-heading > span[data-active="true"] {
+  border-color: color-mix(in srgb, #15803d 55%, var(--dashboard-rule));
+  color: #166534;
+}
+
+:root[data-theme="dark"]
+  .dashboard-maintenance-service-heading
+  > span[data-active="true"] {
+  color: #bbf7d0;
+}
+
+.dashboard-maintenance-form {
+  margin-top: 1.5rem;
+}
+
+.dashboard-maintenance-form > fieldset,
+.dashboard-maintenance-toggles > fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dashboard-maintenance-toggles,
+.dashboard-maintenance-toggles > fieldset {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dashboard-maintenance-toggles label {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding-block: 0.6rem;
+}
+
+.dashboard-maintenance-toggles input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.1rem 0 0;
+  accent-color: #a16207;
+}
+
+.dashboard-maintenance-toggles label span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.dashboard-maintenance-toggles small,
+.dashboard-maintenance-price-fields small {
+  color: var(--dashboard-muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.dashboard-maintenance-locale-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: 2rem 1.25rem;
+}
+
+.dashboard-maintenance-locale-switch .ui-button {
+  flex: 1 1 7rem;
+  min-height: 2.75rem;
+}
+
+.dashboard-maintenance-locale-switch .ui-button[aria-selected="true"] {
+  border-color: #a16207;
+  box-shadow: inset 0 -0.2rem 0 #a16207;
+}
+
+:root[data-theme="dark"]
+  .dashboard-maintenance-locale-switch
+  .ui-button[aria-selected="true"] {
+  border-color: #fcd34d;
+  box-shadow: inset 0 -0.2rem 0 #fcd34d;
+}
+
+.dashboard-maintenance-price-fields {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-maintenance-price-fields label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dashboard-maintenance-price-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dashboard-maintenance-price-field + .dashboard-maintenance-price-field {
+  margin-top: 0.75rem;
+}
+
+.dashboard-maintenance-price-fields input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--dashboard-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--dashboard-foreground);
+  caret-color: #a16207;
+  font: inherit;
+}
+
+.dashboard-maintenance-price-fields input[aria-invalid="true"] {
+  border-color: #b91c1c;
+}
+
+.dashboard-maintenance-price-fields input:focus-visible,
+.dashboard-maintenance-toggles input:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+.dashboard-maintenance-field-error {
+  margin: 0.15rem 0 0;
+  color: #b91c1c;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+:root[data-theme="dark"] .dashboard-maintenance-field-error {
+  color: #fecaca;
+}
+
+.dashboard-maintenance-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border: 1px solid color-mix(in srgb, #15803d 55%, var(--dashboard-rule));
+  background: color-mix(in srgb, #15803d 8%, transparent);
+}
+
+.dashboard-maintenance-result[data-tone="error"] {
+  border-color: color-mix(in srgb, #b91c1c 60%, var(--dashboard-rule));
+  background: color-mix(in srgb, #b91c1c 8%, transparent);
+}
+
+.dashboard-maintenance-result:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+.dashboard-maintenance-form > fieldset > .ui-button {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 48rem) {
+  .dashboard-maintenance-toggles {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+
+  .dashboard-maintenance-toggles > fieldset {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-maintenance-toggles > fieldset > .dashboard-maintenance-field-error {
+    grid-column: 1 / -1;
+  }
+}
